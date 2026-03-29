@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
 using HarmonyLib;
@@ -7,12 +8,51 @@ using Kingmaker.Blueprints.JsonSystem;
 using Kingmaker.DialogSystem.Blueprints;
 using Kingmaker.Localization;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 
 namespace CraftingSystem
 {
     public static class Helpers
     {
         public static Dictionary<string, string> CustomStrings = new Dictionary<string, string>();
+        public static JObject RawLocalization;
+        
+        // Static GUIDs for our injected strings so they can be reliably referenced
+        public static readonly string CraftingIntroGuid = "fa3e1f7d4e3347bdaeb88a1b6c8baab6";
+
+        public static void LoadLocalization(string modPath)
+        {
+            try {
+                string locFile = Path.Combine(modPath, "Localization.json");
+                if (File.Exists(locFile)) {
+                    string json = File.ReadAllText(locFile);
+                    RawLocalization = JObject.Parse(json);
+                    Main.ModEntry.Logger.Log("Loaded Localization.json successfully.");
+                } else {
+                    Main.ModEntry.Logger.Warning("Localization.json not found!");
+                }
+            } catch (Exception ex) {
+                Main.ModEntry.Logger.Error($"Failed to load Localization.json: {ex.Message}");
+            }
+        }
+
+        public static void ApplyLocalization(string locale)
+        {
+            if (RawLocalization == null) return;
+
+            try {
+                var strings = RawLocalization["strings"];
+                if (strings != null) {
+                    var introToken = strings["dialogue_crafting_intro"];
+                    if (introToken != null) {
+                        string translation = introToken[locale]?.ToString() ?? introToken["enGB"]?.ToString() ?? "Translation Error";
+                        CustomStrings[CraftingIntroGuid] = translation;
+                    }
+                }
+            } catch (Exception ex) {
+                Main.ModEntry.Logger.Error($"Error applying localization for {locale}: {ex.Message}");
+            }
+        }
 
         public static T GetBlueprint<T>(string guid) where T : SimpleBlueprint
         {
@@ -20,12 +60,14 @@ namespace CraftingSystem
             return bp as T;
         }
 
-        public static BlueprintAnswer CreateAnswer(string guid, string name, string text)
+        public static BlueprintAnswer CreateAnswer(string guid, string name, string textKeyParam = null)
         {
             var answer = CreateBlueprint<BlueprintAnswer>(guid, name);
-            // In WOTR, text keys MUST be valid GUID formats, otherwise they are ignored and yield 'Lorem Ipsum'
-            string textKey = Guid.NewGuid().ToString("N");
-            answer.Text = CreateString(textKey, text);
+            // In WOTR, text keys MUST be valid GUID formats. We use our pre-determined GUID.
+            string textKey = textKeyParam ?? CraftingIntroGuid;
+            string fallbackText = CustomStrings.ContainsKey(textKey) ? CustomStrings[textKey] : "Missing Translation";
+            answer.Text = CreateString(textKey, fallbackText);
+            
             answer.ShowOnce = false;
             answer.ShowOnceCurrentDialog = false;
 
@@ -53,7 +95,9 @@ namespace CraftingSystem
             var shared = typeof(LocalizedString).GetField("Shared", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             if (shared != null) shared.SetValue(localizedString, null);
 
-            CustomStrings[key] = text;
+            if (!CustomStrings.ContainsKey(key)) {
+                CustomStrings[key] = text;
+            }
 
             // Try to natively inject right now
             if (LocalizationManager.CurrentPack != null) {
@@ -147,6 +191,7 @@ namespace CraftingSystem
         public static void Postfix()
         {
             if (LocalizationManager.CurrentPack != null) {
+                Helpers.ApplyLocalization(LocalizationManager.CurrentLocale.ToString());
                 Helpers.InjectStringsIntoPack(LocalizationManager.CurrentPack);
             }
         }

@@ -4,6 +4,9 @@ Ajoute un système de création et d'amélioration d'équipement dans le jeu *Pa
 ## État Actuel
 Le mod parvient avec succès à s'injecter dans l'arbre de dialogue natif du jeu (notamment auprès de Wilcer Garms et dans d'autres camps), de façon fluide et stable, sans provoquer de blocages d'interface. La prochaine étape consiste à lier ce dialogue à l'interface de fabrication (UI).
 
+## Choix Technologique d'Interface (UI)
+Le mod utilisera **l'Interface native de Quête (ItemsCollectionDialog)** pour sélectionner les objets à améliorer (plutôt que de devoir recréer une interface Unity de zéro ou d'utiliser le menu UMM hors contexte). Cela permet une intégration complètement organique dans l'esthétique du jeu lorsque vous passez commande à Wilcer ou au Conteur.
+
 ## Fonctionnalités à Implémenter (Roadmap)
 Le mod offrira plusieurs options paramétrables pour convenir à tous les styles de jeu :
 

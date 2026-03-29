@@ -4,6 +4,9 @@ Add a fully featured crafting system to *Pathfinder: Wrath of the Righteous*.
 ## Current State
 The mod successfully injects itself into the game's native dialogue tree (notably with Wilcer Garms and in other camps) in a fluid and stable manner, without causing UI freezes. The next step is to link this dialogue to the crafting User Interface (UI).
 
+## UI Technology Choice
+The mod will utilize the **game's native Quest Insert Item UI (ItemsCollectionDialog)** to select equipment for upgrading (rather than recreating a custom Unity interface from scratch or relying on UMM). This allows for completely natural integration into the game's aesthetic when placing orders with Wilcer or the Storyteller.
+
 ## Planned Features (Roadmap)
 The mod will offer several customizable options to suit different playstyles:
 

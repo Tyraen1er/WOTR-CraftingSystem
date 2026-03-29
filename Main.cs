@@ -5,6 +5,7 @@ using HarmonyLib;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.JsonSystem;
 using Kingmaker.DialogSystem.Blueprints;
+using Kingmaker.Localization;
 using UnityModManagerNet;
 
 namespace CraftingSystem
@@ -21,6 +22,9 @@ namespace CraftingSystem
                 HarmonyInstance = new Harmony(modEntry.Info.Id);
                 HarmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
                 
+                Helpers.LoadLocalization(modEntry.Path);
+                Helpers.ApplyLocalization(LocalizationManager.CurrentLocale.ToString());
+
                 ModEntry.Logger.Log("Crafting System: Mod loaded and Harmony patched.");
                 
                 // In case of reload
@@ -57,7 +61,6 @@ namespace CraftingSystem
         {
             try {
                 int patchedCount = 0;
-                string optionText = "[TEST] Je voudrais fabriquer quelque chose.";
 
                 // Priority targets (GUIDs)
                 string[] targets = new string[] {
@@ -81,11 +84,11 @@ namespace CraftingSystem
                         Main.ModEntry.Logger.Log($"Found target {target} as {bp.GetType().Name} ({bp.name})");
 
                         if (bp is BlueprintAnswersList list) {
-                            if (PatchAnswersList(list, optionText)) patchedCount++;
+                            if (PatchAnswersList(list)) patchedCount++;
                         } 
                         else if (bp is BlueprintDialog dialog) {
                             Main.ModEntry.Logger.Log($"Scanning BlueprintDialog: {bp.name}");
-                            if (ScanDialogUsingReflection(dialog, optionText)) patchedCount++;
+                            if (ScanDialogUsingReflection(dialog)) patchedCount++;
                         }
                     } catch (Exception ex) {
                         Main.ModEntry.Logger.Warning($"Error checking target {target}: {ex.Message}");
@@ -102,7 +105,7 @@ namespace CraftingSystem
             }
         }
 
-        private static bool ScanDialogUsingReflection(BlueprintDialog dialog, string optionText)
+        private static bool ScanDialogUsingReflection(BlueprintDialog dialog)
         {
             bool patchedAtLeastOne = false;
             try {
@@ -152,7 +155,7 @@ namespace CraftingSystem
                             
                             if (ansBp is BlueprintAnswersList list) {
                                 Main.ModEntry.Logger.Log($"Discovered AnswersList from dialog cue: {list.name} ({expectedListGuid})");
-                                if (PatchAnswersList(list, optionText)) patchedAtLeastOne = true;
+                                if (PatchAnswersList(list)) patchedAtLeastOne = true;
                             }
                         }
                     }
@@ -163,12 +166,12 @@ namespace CraftingSystem
             return patchedAtLeastOne;
         }
 
-        private static bool PatchDialog(BlueprintDialog dialog, string optionText)
+        private static bool PatchDialog(BlueprintDialog dialog)
         {
-            return ScanDialogUsingReflection(dialog, optionText);
+            return ScanDialogUsingReflection(dialog);
         }
 
-        private static bool PatchAnswersList(BlueprintAnswersList list, string optionText)
+        private static bool PatchAnswersList(BlueprintAnswersList list)
         {
             if (list == null || list.Answers == null || list.Answers.Count == 0) return false;
             
@@ -179,7 +182,8 @@ namespace CraftingSystem
 
             // Generate a unique GUID for the answer specific to this list so we don't corrupt state!
             string answerGuid = Guid.NewGuid().ToString("N");
-            var answer = Helpers.CreateAnswer(answerGuid, $"CraftingSystem_Answer_{list.name}", optionText);
+            // No optionText passed here; Helpers.CreateAnswer natively handles translation mapping via Localization.json!
+            var answer = Helpers.CreateAnswer(answerGuid, $"CraftingSystem_Answer_{list.name}");
 
             Main.ModEntry.Logger.Log($"[DIAGNOSTIC] Created answer {answer.name} -> AssetGuid: '{answer.AssetGuid}', ThreadSafe: '{answer.AssetGuidThreadSafe}'");
 

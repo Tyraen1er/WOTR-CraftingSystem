@@ -1,0 +1,12 @@
+{
+    "strings": {
+        "dialogue_crafting_intro": {
+            "enGB": "I would like you to do some crafting for me.",
+            "frFR": "Je voudrais que vous fassiez quelques travaux d'artisanat pour moi.",
+            "deDE": "Ich möchte, dass Ihr einige Handwerksarbeiten für mich erledigt.",
+            "ruRU": "Я бы хотел, чтобы вы сделали для меня кое-что ремесленное.",
+            "esES": "Me gustaría que hicieras algunos trabajos de artesanía para mí.",
+            "zhCN": "我希望你能为我做一些手工艺品。"
+        }
+    }
+}

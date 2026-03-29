@@ -46,6 +46,7 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetDir)$(TargetName).dll" DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Mods\CraftingSystem" />
     <Copy SourceFiles="Info.json" DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Mods\CraftingSystem" />
+    <Copy SourceFiles="Localization.json" DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Mods\CraftingSystem" />
   </Target>
 
 </Project>
