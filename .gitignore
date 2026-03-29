@@ -1,0 +1,8 @@
+bin/
+obj/
+lib/
+logsUMM.txt
+WOTR_WoljifRomanceMod/
+*.user
+*.pdb
+*.dll

@@ -1,0 +1,12 @@
+{
+  "Id": "CraftingSystem",
+  "DisplayName": "Crafting System",
+  "Author": "Tyraen1er",
+  "Version": "0.1.0",
+  "ManagerVersion": "0.24.0",
+  "Requirements": [],
+  "AssemblyName": "CraftingSystem.dll",
+  "EntryMethod": "CraftingSystem.Main.Load",
+  "HomePage": "",
+  "Repository": ""
+}
