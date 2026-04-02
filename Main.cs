@@ -23,13 +23,8 @@ namespace CraftingSystem
                 HarmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
                 
                 Helpers.LoadLocalization(modEntry.Path);
-                Helpers.ApplyLocalization(LocalizationManager.CurrentLocale.ToString());
 
                 ModEntry.Logger.Log("Crafting System: Mod loaded and Harmony patched.");
-                
-                // In case of reload
-                ModMain.RegisterDialogChanges();
-                
                 return true;
             } catch (Exception e) {
                 modEntry.Logger.Error($"Crafting System: Failed to load: {e}");
@@ -45,6 +40,14 @@ namespace CraftingSystem
         public static void Postfix()
         {
             try {
+                string locale = "enGB";
+                try {
+                    locale = Kingmaker.Localization.LocalizationManager.CurrentLocale.ToString();
+                } catch {
+                    Main.ModEntry.Logger.Log("LocalizationManager not fully initialized yet.");
+                }
+
+                Helpers.ApplyLocalization(locale);
                 ModMain.RegisterDialogChanges();
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Error in BlueprintsCache.Init: {ex}");
@@ -155,7 +158,7 @@ namespace CraftingSystem
                             
                             if (ansBp is BlueprintAnswersList list) {
                                 Main.ModEntry.Logger.Log($"Discovered AnswersList from dialog cue: {list.name} ({expectedListGuid})");
-                                if (PatchAnswersList(list)) patchedAtLeastOne = true;
+                                if (PatchAnswersList(list, dialog)) patchedAtLeastOne = true;
                             }
                         }
                     }
@@ -171,82 +174,108 @@ namespace CraftingSystem
             return ScanDialogUsingReflection(dialog);
         }
 
-        private static bool PatchAnswersList(BlueprintAnswersList list)
+        private static bool PatchAnswersList(BlueprintAnswersList list, BlueprintDialog parentDialog = null)
         {
-            if (list == null || list.Answers == null || list.Answers.Count == 0) return false;
+            if (list == null || list.Answers == null) return false;
             
-            if (HasAnswer(list, "CraftingSystem_Answer")) {
-                Main.ModEntry.Logger.Log($"List {list.name} already has crafting answer. Skipping duplicate insertion.");
+            if (HasAnswer(list, "CraftingSystem_RootAnswer")) {
                 return false;
             }
 
-            // Generate a unique GUID for the answer specific to this list so we don't corrupt state!
-            string answerGuid = Guid.NewGuid().ToString("N");
-            // No optionText passed here; Helpers.CreateAnswer natively handles translation mapping via Localization.json!
-            var answer = Helpers.CreateAnswer(answerGuid, $"CraftingSystem_Answer_{list.name}");
-
-            Main.ModEntry.Logger.Log($"[DIAGNOSTIC] Created answer {answer.name} -> AssetGuid: '{answer.AssetGuid}', ThreadSafe: '{answer.AssetGuidThreadSafe}'");
-
             try {
-                // Clone the exit strategy of the existing last answer (which is usually the "Leave" button)
-                var exitRef = list.Answers[list.Answers.Count - 1];
-                if (exitRef != null) {
-                    var guidProp = exitRef.GetType().GetProperty("Guid", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic) 
-                                ?? exitRef.GetType().GetProperty("deserializedGuid", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
-                    
-                    if (guidProp != null) {
-                        var guidVal = guidProp.GetValue(exitRef);
-                        if (guidVal != null) {
-                            var exitBp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(guidVal.ToString()));
-                            if (exitBp is BlueprintAnswer exitAnswer) {
-                                // Copy NextCue
-                                var nextCueInfo = exitAnswer.GetType().GetField("NextCue", BindingFlags.Public | BindingFlags.Instance);
-                                if (nextCueInfo != null) {
-                                    nextCueInfo.SetValue(answer, nextCueInfo.GetValue(exitAnswer));
-                                }
-
-                                // Copy OnSelect (CRITICAL for closing the dialogue box!)
-                                var onSelectInfo = exitAnswer.GetType().GetField("OnSelect", BindingFlags.Public | BindingFlags.Instance);
-                                if (onSelectInfo != null) {
-                                    onSelectInfo.SetValue(answer, onSelectInfo.GetValue(exitAnswer));
-                                }
-
-                                Main.ModEntry.Logger.Log($"Successfully cloned exit NextCue & OnSelect properties for {list.name}.");
-                            }
-                        }
-                    }
+                // 1. Determine Speaker (copy from the first cue of the parent dialog)
+                Kingmaker.DialogSystem.DialogSpeaker speaker = null;
+                if (parentDialog != null && parentDialog.FirstCue != null && parentDialog.FirstCue.Cues.Count > 0) {
+                    var firstCueRef = parentDialog.FirstCue.Cues[0];
+                    var firstCue = firstCueRef?.Get() as BlueprintCue;
+                    speaker = firstCue?.Speaker;
                 }
+
+                if (speaker != null) {
+                    Main.ModEntry.Logger.Log($"Extracted Speaker for {list.name}");
+                }
+
+                // 2. Root Answer (Initial option) - We use a stable GUID derived from the list's own GUID
+                string rootAnswerGuid = Helpers.MergeGuid(list.AssetGuid, "root_answer");
+                var rootAnswer = Helpers.CreateAnswer(rootAnswerGuid, $"CraftingSystem_RootAnswer_{list.name}", "dialogue_crafting_intro");
                 
-                // Insert before the last answer (e.g. above "Leave")
-                list.Answers.Insert(Math.Max(0, list.Answers.Count - 1), answer.ToReference<BlueprintAnswerBaseReference>());
-                Main.ModEntry.Logger.Log($"Successfully patched dialogue list: {list.name} ({list.AssetGuid})");
+                // 3. Intro Cue (Wilcer's "Je connais de bons artisans...")
+                string introCueGuid = Helpers.MergeGuid(list.AssetGuid, "intro_cue");
+                var introCue = Helpers.CreateCue(introCueGuid, $"CraftingSystem_IntroCue_{list.name}", "intro_reply", speaker);
+                
+                // 4. Sub-Choices List
+                string subListGuid = Helpers.MergeGuid(list.AssetGuid, "sub_list");
+                var subList = Helpers.CreateAnswersList(subListGuid, $"CraftingSystem_SubList_{list.name}");
+                
+                // 5. Sub-Answers
+                var ansWeapon = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_weapon"), "CraftingSystem_AnsWeapon", "choice_weapon");
+                var ansArmor  = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_armor"),  "CraftingSystem_AnsArmor",  "choice_armor");
+                var ansItem   = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_item"),   "CraftingSystem_AnsItem",   "choice_item");
+                var ansCancel = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_cancel"), "CraftingSystem_AnsCancel", "choice_cancel");
+                
+                // 6. Action: Open the UI window!
+                var uiAction = (OpenItemSelectorAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(OpenItemSelectorAction));
+                uiAction.name = $"CraftingSystem_OpenUI_{list.name}";
+                
+                // Attach UI action to enchantment choices
+                ansWeapon.OnSelect.Actions = new Kingmaker.ElementsSystem.GameAction[] { uiAction };
+                ansArmor.OnSelect.Actions  = new Kingmaker.ElementsSystem.GameAction[] { uiAction };
+                ansItem.OnSelect.Actions   = new Kingmaker.ElementsSystem.GameAction[] { uiAction };
+                
+                // 7. Result Cues
+                var cueCancel    = Helpers.CreateCue(Helpers.MergeGuid(list.AssetGuid, "cue_cancel"), "CraftingSystem_CueCancel", "cancel_reply", speaker);
+                var cueSelection = Helpers.CreateCue(Helpers.MergeGuid(list.AssetGuid, "cue_selection"), "CraftingSystem_CueSelection", "selection_reply", speaker);
+                
+                // --- LINKING ---
+                
+                // Root -> Intro Cue
+                rootAnswer.NextCue.Cues.Add(introCue.ToReference<BlueprintCueBaseReference>());
+                
+                // Intro Cue -> Sub List
+                introCue.Answers.Add(subList.ToReference<BlueprintAnswerBaseReference>());
+                
+                // Sub List -> Sub Answers
+                subList.Answers.Add(ansWeapon.ToReference<BlueprintAnswerBaseReference>());
+                subList.Answers.Add(ansArmor.ToReference<BlueprintAnswerBaseReference>());
+                subList.Answers.Add(ansItem.ToReference<BlueprintAnswerBaseReference>());
+                subList.Answers.Add(ansCancel.ToReference<BlueprintAnswerBaseReference>());
+                
+                // Sub Answers -> Result Cues
+                ansWeapon.NextCue.Cues.Add(cueSelection.ToReference<BlueprintCueBaseReference>());
+                ansArmor.NextCue.Cues.Add(cueSelection.ToReference<BlueprintCueBaseReference>());
+                ansItem.NextCue.Cues.Add(cueSelection.ToReference<BlueprintCueBaseReference>());
+                ansCancel.NextCue.Cues.Add(cueCancel.ToReference<BlueprintCueBaseReference>());
+                
+                // Result Cues -> Loop Back to Native Start
+                if (parentDialog != null && parentDialog.FirstCue != null && parentDialog.FirstCue.Cues.Count > 0) {
+                    var startCueRef = parentDialog.FirstCue.Cues[0];
+                    Main.ModEntry.Logger.Log($"Setting loop-back for completion cues to: {startCueRef.Guid}");
+                    
+                    cueCancel.Continue.Cues.Add(startCueRef);
+                    cueCancel.Continue.Strategy = Kingmaker.DialogSystem.Strategy.First;
+                    
+                    cueSelection.Continue.Cues.Add(startCueRef);
+                    cueSelection.Continue.Strategy = Kingmaker.DialogSystem.Strategy.First;
+                }
+
+                // Inject into target list (above "Leave")
+                int insertIndex = Math.Max(0, list.Answers.Count - 1);
+                list.Answers.Insert(insertIndex, rootAnswer.ToReference<BlueprintAnswerBaseReference>());
+                
+                Main.ModEntry.Logger.Log($"Successfully injected complex crafting tree into {list.name} with UI Action attached.");
                 return true;
             } catch (Exception ex) {
-                Main.ModEntry.Logger.Error($"Failed to insert answer: {ex}");
+                Main.ModEntry.Logger.Error($"Error building dialogue tree for {list.name}: {ex}");
+                return false;
             }
-            return false;
         }
 
-        private static bool HasAnswer(BlueprintAnswersList list, string partialName)
+        private static bool HasAnswer(BlueprintAnswersList list, string nameSubstring)
         {
             if (list.Answers == null) return false;
             foreach (var ansRef in list.Answers) {
-                try {
-                    var bp = ansRef?.Get();
-                    if (bp != null && bp.name != null && bp.name.Contains(partialName)) {
-                        return true;
-                    }
-                } catch { } // Ignore resolution errors for broken other mods
-            }
-            return false;
-        }
-
-
-        private static bool HasAnswer(BlueprintAnswersList list, BlueprintAnswer answer)
-        {
-            if (list.Answers == null) return false;
-            foreach (var a in list.Answers) {
-                if (a != null && a.Guid == answer.AssetGuid) return true;
+                var ans = ansRef.Get();
+                if (ans != null && ans.name != null && ans.name.Contains(nameSubstring)) return true;
             }
             return false;
         }

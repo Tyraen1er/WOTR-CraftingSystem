@@ -41,13 +41,14 @@ namespace CraftingSystem
             if (RawLocalization == null) return;
 
             try {
-                var strings = RawLocalization["strings"];
+                var strings = RawLocalization["strings"] as JObject;
                 if (strings != null) {
-                    var introToken = strings["dialogue_crafting_intro"];
-                    if (introToken != null) {
-                        string translation = introToken[locale]?.ToString() ?? introToken["enGB"]?.ToString() ?? "Translation Error";
-                        CustomStrings[CraftingIntroGuid] = translation;
+                    foreach (var property in strings.Properties()) {
+                        var token = property.Value;
+                        string translation = token[locale]?.ToString() ?? token["enGB"]?.ToString() ?? "Translation Error";
+                        CustomStrings[property.Name] = translation;
                     }
+                    Main.ModEntry.Logger.Log($"Applied localization for {locale}: {CustomStrings.Count} strings.");
                 }
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Error applying localization for {locale}: {ex.Message}");
@@ -147,6 +148,46 @@ namespace CraftingSystem
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Failed to inject custom strings: {ex.Message}");
             }
+        }
+
+        public static BlueprintCue CreateCue(string guid, string name, string textKey, Kingmaker.DialogSystem.DialogSpeaker speaker = null)
+        {
+            var cue = CreateBlueprint<BlueprintCue>(guid, name);
+            string fallbackText = CustomStrings.ContainsKey(textKey) ? CustomStrings[textKey] : "Missing Translation";
+            cue.Text = CreateString(textKey, fallbackText);
+
+            cue.ShowOnce = false;
+            cue.ShowOnceCurrentDialog = false;
+            cue.Conditions = new Kingmaker.ElementsSystem.ConditionsChecker() { Conditions = new Kingmaker.ElementsSystem.Condition[0] };
+            cue.OnShow = new Kingmaker.ElementsSystem.ActionList() { Actions = new Kingmaker.ElementsSystem.GameAction[0] };
+            cue.OnStop = new Kingmaker.ElementsSystem.ActionList() { Actions = new Kingmaker.ElementsSystem.GameAction[0] };
+            cue.Answers = new List<BlueprintAnswerBaseReference>();
+            cue.Continue = new Kingmaker.DialogSystem.CueSelection() { Cues = new List<BlueprintCueBaseReference>() };
+            
+            if (speaker != null) cue.Speaker = speaker;
+            
+            return cue;
+        }
+
+        public static string MergeGuid(BlueprintGuid parent, string suffix)
+        {
+            // Simple deterministic way to generate stable guids for child blueprints
+            using (var md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(parent.ToString() + suffix);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+                return new Guid(hashBytes).ToString("N");
+            }
+        }
+
+        public static BlueprintAnswersList CreateAnswersList(string guid, string name)
+        {
+            var list = CreateBlueprint<BlueprintAnswersList>(guid, name);
+            list.Answers = new List<BlueprintAnswerBaseReference>();
+            list.ShowOnce = false;
+            list.Conditions = new Kingmaker.ElementsSystem.ConditionsChecker() { Conditions = new Kingmaker.ElementsSystem.Condition[0] };
+            
+            return list;
         }
 
         public static T CreateBlueprint<T>(string guid, string name, Action<T> init = null) where T : SimpleBlueprint, new()

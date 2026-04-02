@@ -1,12 +1,68 @@
 {
     "strings": {
         "dialogue_crafting_intro": {
-            "enGB": "I would like you to do some crafting for me.",
-            "frFR": "Je voudrais que vous fassiez quelques travaux d'artisanat pour moi.",
-            "deDE": "Ich möchte, dass Ihr einige Handwerksarbeiten für mich erledigt.",
-            "ruRU": "Я бы хотел, чтобы вы сделали для меня кое-что ремесленное.",
-            "esES": "Me gustaría que hicieras algunos trabajos de artesanía para mí.",
-            "zhCN": "我希望你能为我做一些手工艺品。"
+            "enGB": "« I would like to entrust some work to craftsmen. »",
+            "frFR": "« Je souhaiterais confier un travail à des artisans. »",
+            "deDE": "« Ich möchte Handwerkern einige Arbeiten anvertrauen. »",
+            "ruRU": "« Я хотел бы поручить кое-какую работу мастерам. »",
+            "esES": "« Me gustaría confiar algunos trabajos a los artesanos. »",
+            "zhCN": "« 我想把一些工作委托给工匠。 »"
+        },
+        "intro_reply": {
+            "enGB": "« I know some good craftsmen, but they aren't in Kenabres. However, I can send your orders to specialists in Mendev. What would you like to order? »",
+            "frFR": "« Je connais de bons artisans mais ils ne sont pas à Kénabrès. Je peux cependant envoyer vos commandes à des spécialistes du Mendev. Que souhaitez-vous commander ? »",
+            "deDE": "« Ich kenne ein paar gute Handwerker, aber sie sind nicht in Kenabres. Ich kann Ihre Bestellungen jedoch an Spezialisten in Mendev senden. Was möchten Sie bestellen? »",
+            "ruRU": "« Я знаю нескольких хороших мастеров, но их нет в Кенабресе. Однако я могу отправить ваши заказы специалистам в Мендеве. Что бы вы хотели заказать? »",
+            "esES": "« Conozco a algunos buenos artesanos, pero no están en Kenabres. Sin embargo, puedo enviar sus pedidos a especialistas en Mendev. ¿Qué quiere pedir? »",
+            "zhCN": "« 我认识一些不错的工匠，但他们不在凯纳布雷斯。不过，我可以把您的订单发送给门德夫的专家。您想订购什么？ »"
+        },
+        "choice_weapon": {
+            "enGB": "« I would like to enchant a weapon. »",
+            "frFR": "« Je souhaiterais enchanter une arme. »",
+            "deDE": "« Ich möchte eine Waffe verzaubern. »",
+            "ruRU": "« Я хотел бы зачаровать оружие. »",
+            "esES": "« Me gustaría encantar un arma. »",
+            "zhCN": "« 我想给武器附魔。 »"
+        },
+        "choice_armor": {
+            "enGB": "« I would like to enchant an armor. »",
+            "frFR": "« Je souhaiterais enchanter une armure. »",
+            "deDE": "« Ich möchte eine Rüstung verzaubern. »",
+            "ruRU": "« Я хотел бы зачаровать броню. »",
+            "esES": "« Me gustaría encantar una armadura. »",
+            "zhCN": "« 我想给盔甲附魔。 »"
+        },
+        "choice_item": {
+            "enGB": "« I would like to enchant a magic item. »",
+            "frFR": "« Je souhaiterais enchanter un objet magique. »",
+            "deDE": "« Ich möchte einen magischen Gegenstand verzaubern. »",
+            "ruRU": "« Я хотел бы зачаровать магический предмет. »",
+            "esES": "« Me gustaría encantar un objeto mágico. »",
+            "zhCN": "« 我想给一件魔法物品附魔。 »"
+        },
+        "choice_cancel": {
+            "enGB": "« Nothing for now, forget about it. »",
+            "frFR": "« Rien pour le moment, oubliez ça. »",
+            "deDE": "« Nichts für den Moment, vergessen Sie es. »",
+            "ruRU": "« Пока ничего, забудьте об этом. »",
+            "esES": "« Nada por ahora, olvídelo. »",
+            "zhCN": "« 目前没什么，就此作罢。 »"
+        },
+        "cancel_reply": {
+            "enGB": "« No problem. »",
+            "frFR": "« Aucun soucis. »",
+            "deDE": "« Kein Problem. »",
+            "ruRU": "« Без проблем. »",
+            "esES": "« No hay problema. »",
+            "zhCN": "« 没问题。 »"
+        },
+        "selection_reply": {
+            "enGB": "« I'll see what I can do. »",
+            "frFR": "« Je vais voir ce que je peux faire. »",
+            "deDE": "« Ich werde sehen, was ich tun kann. »",
+            "ruRU": "« Я посмотрю, что можно сделать. »",
+            "esES": "« Veré qué puedo hacer. »",
+            "zhCN": "« 我会看看能做些什么。 »"
         }
     }
 }

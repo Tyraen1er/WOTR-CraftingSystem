@@ -1,1 +1,5 @@
+# 1. Traiter tous les fichiers comme du texte par défaut
 * text=auto
+
+# 2. Forcer le format LF (Linux) pour tous les fichiers texte
+* eol=lf
