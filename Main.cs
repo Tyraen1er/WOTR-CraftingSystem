@@ -277,4 +277,21 @@ namespace CraftingSystem
             } catch { }
         }
     }
+
+    // --- SÉCURITÉ : PRÉSERVER LE NOM LORS D'UN SPLIT ---
+    [HarmonyPatch(typeof(ItemEntity), nameof(ItemEntity.Split))]
+    public static class ItemEntity_Split_Patch
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ItemEntity __instance, ItemEntity __result)
+        {
+            if (__instance == null || __result == null || __instance == __result) return;
+            var originalPart = __instance.Get<ItemPartCustomName>();
+            if (originalPart != null)
+            {
+                var newPart = __result.Ensure<ItemPartCustomName>();
+                newPart.CustomName = originalPart.CustomName;
+            }
+        }
+    }
 }

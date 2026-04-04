@@ -71,10 +71,10 @@ namespace CraftingSystem
             
             string title = "Atelier";
             if (ShowSettings) title = "Configuration";
-            else if (selectedItem != null) title = "Modification : " + selectedItem.Name;
+            else if (selectedItem != null) title = "Détails : " + selectedItem.Name;
             else title = "Sélection d'objet";
             
-            GUILayout.Label(title, GUILayout.Width(350 * scale));
+            GUILayout.Label(title, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(16 * scale) }, GUILayout.ExpandWidth(true));
             
             GUILayout.FlexibleSpace();
             
@@ -126,15 +126,16 @@ namespace CraftingSystem
             if (!items.Any()) GUILayout.Label("\n   (Aucun objet n'est stocké dans l'atelier)");
             else 
             {
-                GUIStyle entryStyle = new GUIStyle(GUI.skin.button) { wordWrap = true };
-                int cols = 3; 
+                GUIStyle entryStyle = new GUIStyle(GUI.skin.button) { wordWrap = true, alignment = TextAnchor.MiddleCenter, fontSize = (int)(14 * scale) };
+                int cols = 2; // Passage à 2 colonnes pour plus de largeur par bouton
                 for (int i = 0; i < items.Count; i += cols)
                 {
                     GUILayout.BeginHorizontal();
                     for (int j = 0; j < cols && (i + j) < items.Count; j++)
                     {
                         var it = items[i + j];
-                        if (GUILayout.Button(it.Name, entryStyle, GUILayout.Width(180 * scale), GUILayout.Height(45 * scale))) 
+                        // Augmentation de la largeur à 280 et de la hauteur à 50
+                        if (GUILayout.Button(it.Name, entryStyle, GUILayout.Width(280 * scale), GUILayout.Height(50 * scale))) 
                         {
                             selectedItem = it;
                             newNameDraft = it.Name;
@@ -153,11 +154,11 @@ namespace CraftingSystem
             // --- SECTION RENOMMAGE (ENCHANTEMENT GRATUIT) ---
             GUILayout.Label("Action Spéciale : Renommer l'objet (Gratuit)");
             GUILayout.BeginHorizontal();
-            newNameDraft = GUILayout.TextField(newNameDraft, GUILayout.ExpandWidth(true));
-            if (GUILayout.Button("Sauvegarder le nom", GUILayout.Width(150 * scale)))
+            newNameDraft = GUILayout.TextField(newNameDraft, GUILayout.ExpandWidth(true), GUILayout.Height(30 * scale));
+            if (GUILayout.Button("Renommer", GUILayout.Width(120 * scale), GUILayout.Height(30 * scale)))
             {
                 RenameItem(selectedItem, newNameDraft);
-                feedbackMessage = "L'objet a été renommé avec succès !";
+                feedbackMessage = "L'objet a été renommé !";
             }
             GUILayout.EndHorizontal();
             
