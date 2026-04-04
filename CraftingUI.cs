@@ -1,11 +1,10 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 using Kingmaker;
 using Kingmaker.Items;
-using Kingmaker.Blueprints.Items.Weapons;
-using Kingmaker.Blueprints.Items.Armors;
 
 namespace CraftingSystem
 {
@@ -13,9 +12,18 @@ namespace CraftingSystem
     {
         public static CraftingUI Instance;
         public bool IsOpen = false;
+        public bool ShowSettings = false;
         
+        // Paramètres
+        public static float CostMultiplier = 1.0f;
+        public static bool InstantCrafting = false; // Slider remplacé par Toggle
+        public static bool EnforcePointsLimit = true;
+        public static bool AllowOwlcatEnchants = false;
+
         private Vector2 scrollPosition;
         private string feedbackMessage = "";
+        private string newNameDraft = "";
+        private ItemEntity selectedItem = null;
         
         private int m_ScalePercent = 100; 
         private const int MIN_SCALE_PERCENT = 100;
@@ -30,30 +38,20 @@ namespace CraftingSystem
             if (!IsOpen) return;
 
             float scale = m_ScalePercent / 100f;
-            float bW = 600f;
-            float bH = 500f;
-            float width = bW * scale;
-            float height = bH * scale;
-
-            Rect windowRect = new Rect(
-                (Screen.width - width) / 2f, 
-                (Screen.height - height) / 2f, 
-                width, 
-                height
-            );
+            float width = 600f * scale;
+            float height = 500f * scale;
+            Rect windowRect = new Rect((Screen.width - width) / 2f, (Screen.height - height) / 2f, width, height);
 
             if (Event.current != null && !windowRect.Contains(Event.current.mousePosition))
             {
-                if (Event.current.type == EventType.MouseDown || 
-                    Event.current.type == EventType.MouseUp || 
-                    Event.current.type == EventType.ScrollWheel)
+                if (Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseUp || Event.current.type == EventType.ScrollWheel)
                 {
                     Event.current.Use();
                 }
             }
             
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
-            GUI.Window(999, windowRect, DrawWindowContent, "Atelier de Wilcer - Sélection d'Équipement");
+            GUI.Window(999, windowRect, DrawWindowContent, "Atelier de Wilcer - Artisanat");
             GUI.FocusWindow(999);
         }
 
@@ -63,97 +61,168 @@ namespace CraftingSystem
 
             if (!string.IsNullOrEmpty(feedbackMessage))
             {
-                GUILayout.Label(feedbackMessage, new GUIStyle(GUI.skin.label) { wordWrap = true, fontSize = 18 });
-                if (GUILayout.Button("OK", GUILayout.Height(40))) feedbackMessage = "";
+                GUILayout.Label(feedbackMessage, new GUIStyle(GUI.skin.label) { wordWrap = true, fontSize = (int)(18 * scale) });
+                if (GUILayout.Button("OK", GUILayout.Height(40 * scale))) feedbackMessage = "";
                 return;
             }
 
             // --- HEADER ---
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Faites votre choix parmi les objets stockés :");
+            
+            string title = "Atelier";
+            if (ShowSettings) title = "Configuration";
+            else if (selectedItem != null) title = "Modification : " + selectedItem.Name;
+            else title = "Sélection d'objet";
+            
+            GUILayout.Label(title, GUILayout.Width(350 * scale));
+            
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Fermer", GUILayout.Width(100))) IsOpen = false;
+            
+            if (selectedItem != null && !ShowSettings)
+            {
+                if (GUILayout.Button("Désélectionner", GUILayout.Width(120 * scale))) 
+                {
+                    selectedItem = null;
+                    newNameDraft = "";
+                }
+            }
+            
+            if (GUILayout.Button(ShowSettings ? "Retour" : "Options", GUILayout.Width(80 * scale)))
+            {
+                ShowSettings = !ShowSettings;
+            }
+            
+            if (GUILayout.Button("Fermer", GUILayout.Width(80 * scale))) IsOpen = false;
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
             
-            // --- GRILLE D'OBJETS ---
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
-            var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
-            var items = workshop?.StashedItems ?? new List<ItemEntity>();
-
-            if (!items.Any()) GUILayout.Label("\n   (Aucun objet n'est stocké)");
-            else 
-            {
-                // On prépare un style de bouton plus grand pour accueillir l'icône + texte
-                GUIStyle entryStyle = new GUIStyle(GUI.skin.button);
-                entryStyle.padding = new RectOffset((int)(55 * scale), 5, 5, 5); // Conserve de la place pour l'icône à gauche
-                entryStyle.wordWrap = true;
-
-                int cols = 3; // Réduit à 3 colonnes pour accueillir les noms plus longs proprement
-                for (int i = 0; i < items.Count; i += cols)
-                {
-                    GUILayout.BeginHorizontal();
-                    for (int j = 0; j < cols && (i + j) < items.Count; j++)
-                    {
-                        var it = items[i + j];
-                        var sprite = it.Blueprint.Icon;
-                        
-                        // Dessine le bouton de base
-                        if (GUILayout.Button(it.Name, entryStyle, GUILayout.Width(180 * scale), GUILayout.Height(60 * scale))) 
-                        {
-                            feedbackMessage = $"Prise en charge de : {it.Name}\n(Enchantement prochainement disponible)";
-                        }
-
-                        // Superpose l'icône extraite de l'Atlas proprement
-                        if (sprite != null && sprite.texture != null)
-                        {
-                            Rect lastRect = GUILayoutUtility.GetLastRect();
-                            // Carré d'icône à gauche
-                            Rect iconRect = new Rect(lastRect.x + 5, lastRect.y + 5, 45 * scale, 45 * scale);
-                            DrawSprite(iconRect, sprite);
-                        }
-                    }
-                    GUILayout.EndHorizontal();
-                }
-            }
-            GUILayout.EndScrollView();
+            if (ShowSettings) DrawSettingsGUI(scale);
+            else if (selectedItem != null) DrawItemModificationGUI(scale);
+            else DrawInventoryGUI(scale);
 
             // --- FOOTER ---
             GUILayout.Space(10);
             GUILayout.BeginHorizontal(GUI.skin.box);
-            GUILayout.Label("Dimension fenêtre :", GUILayout.Width(130));
-            if (GUILayout.Button("-", GUILayout.Width(30))) m_ScalePercent = Math.Max(MIN_SCALE_PERCENT, m_ScalePercent - 10);
-            GUILayout.Label($"{m_ScalePercent}%", GUILayout.Width(50));
-            if (GUILayout.Button("+", GUILayout.Width(30))) 
+            GUILayout.Label("Zoom :", GUILayout.Width(60 * scale));
+            if (GUILayout.Button("-", GUILayout.Width(25 * scale))) m_ScalePercent = Math.Max(MIN_SCALE_PERCENT, m_ScalePercent - 10);
+            GUILayout.Label($"{m_ScalePercent}%", GUILayout.Width(50 * scale));
+            if (GUILayout.Button("+", GUILayout.Width(25 * scale))) 
             {
                 int maxW = (int)(Screen.width / 600f * 100);
                 int maxH = (int)(Screen.height / 500f * 100);
                 m_ScalePercent = Math.Min(Math.Min(maxW, maxH), m_ScalePercent + 10);
             }
             GUILayout.FlexibleSpace();
-            GUILayout.Label("Tooltip : " + GUI.tooltip);
             GUILayout.EndHorizontal();
         }
 
-        /// <summary>
-        /// Dessine une zone de l'atlas spécifiée par un Sprite Unity dans un Rect IMGUI. 
-        /// Crucial dans WOTR car les textures brutes (.texture) pointent souvent vers l'atlas complet (tas de pixels).
-        /// </summary>
-        private void DrawSprite(Rect rect, Sprite sprite)
+        void DrawInventoryGUI(float scale)
         {
-            if (sprite == null || sprite.texture == null) return;
-            
-            // Calcul des UVs normalisés (0.0 à 1.0) par rapport à la texture globale (Atlas)
-            Rect tRect = sprite.rect;
-            float tw = sprite.texture.width;
-            float th = sprite.texture.height;
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
+            var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
+            var items = workshop?.StashedItems ?? new List<ItemEntity>();
 
-            // Note: Unity utilise le bas-gauche (0,0) pour les coordonnées de texture 
-            Rect uv = new Rect(tRect.x / tw, tRect.y / th, tRect.width / tw, tRect.height / th);
-            
-            // On dessine uniquement la portion de l'atlas correspondant au Sprite
-            GUI.DrawTextureWithTexCoords(rect, sprite.texture, uv, true);
+            if (!items.Any()) GUILayout.Label("\n   (Aucun objet n'est stocké dans l'atelier)");
+            else 
+            {
+                GUIStyle entryStyle = new GUIStyle(GUI.skin.button) { wordWrap = true };
+                int cols = 3; 
+                for (int i = 0; i < items.Count; i += cols)
+                {
+                    GUILayout.BeginHorizontal();
+                    for (int j = 0; j < cols && (i + j) < items.Count; j++)
+                    {
+                        var it = items[i + j];
+                        if (GUILayout.Button(it.Name, entryStyle, GUILayout.Width(180 * scale), GUILayout.Height(45 * scale))) 
+                        {
+                            selectedItem = it;
+                            newNameDraft = it.Name;
+                        }
+                    }
+                    GUILayout.EndHorizontal();
+                }
+            }
+            GUILayout.EndScrollView();
         }
+
+        void DrawItemModificationGUI(float scale)
+        {
+            GUILayout.BeginVertical(GUI.skin.box);
+            
+            // --- SECTION RENOMMAGE (ENCHANTEMENT GRATUIT) ---
+            GUILayout.Label("Action Spéciale : Renommer l'objet (Gratuit)");
+            GUILayout.BeginHorizontal();
+            newNameDraft = GUILayout.TextField(newNameDraft, GUILayout.ExpandWidth(true));
+            if (GUILayout.Button("Sauvegarder le nom", GUILayout.Width(150 * scale)))
+            {
+                RenameItem(selectedItem, newNameDraft);
+                feedbackMessage = "L'objet a été renommé avec succès !";
+            }
+            GUILayout.EndHorizontal();
+            
+            GUILayout.Space(20);
+            Div(scale);
+            GUILayout.Space(10);
+            
+            // --- FUTUR : LISTE DES ENCHANTEMENTS (TOYBOX INSPIRATION) ---
+            GUILayout.Label("Enchantements disponibles :");
+            GUILayout.Label("(Analyse des blueprints de ToyBox en cours...)");
+            
+            GUILayout.FlexibleSpace();
+            GUILayout.EndVertical();
+        }
+
+        void DrawSettingsGUI(float scale)
+        {
+            GUILayout.BeginVertical(GUI.skin.box);
+            
+            GUILayout.Label($"Coût de fabrication : {CostMultiplier:F1}x");
+            CostMultiplier = GUILayout.HorizontalSlider(CostMultiplier, 0.1f, 5.0f);
+            
+            GUILayout.Space(20);
+            
+            InstantCrafting = GUILayout.Toggle(InstantCrafting, " Artisanat instantané (Terminé en 0 jours)"); // Slider remplacé par Toggle
+            
+            GUILayout.Space(10);
+            
+            EnforcePointsLimit = GUILayout.Toggle(EnforcePointsLimit, " Appliquer la limite de 10 points (Pathfinder)");
+            
+            GUILayout.Space(10);
+            
+            AllowOwlcatEnchants = GUILayout.Toggle(AllowOwlcatEnchants, " Autoriser les enchantements spéciaux Owlcat / ToyBox");
+            
+            GUILayout.FlexibleSpace();
+            GUILayout.EndVertical();
+        }
+
+        private void Div(float scale)
+        {
+            Rect rect = GUILayoutUtility.GetLastRect();
+            GUI.Box(new Rect(rect.x, rect.y + rect.height + 5, rect.width, 2 * scale), "");
+        }
+
+        private void RenameItem(ItemEntity item, string name)
+        {
+            if (item == null) return;
+            try
+            {
+                // On utilise notre nouveau composant de nom personnalisé (ItemPartCustomName)
+                // Ce composant est attaché à l'entité et survit à la sauvegarde.
+                // Le patch Harmony dans Main.cs s'occupe d'afficher ce nom à la place de l'original.
+                var part = item.Ensure<ItemPartCustomName>();
+                part.CustomName = name;
+                
+                // On force l'identification pour tenter un rafraîchissement immédiat de l'UI du jeu
+                item.Identify();
+                
+                Main.ModEntry.Logger.Log($"[ATELIER] Objet renommé via Part : {name}");
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"Erreur lors du renommage : {ex}");
+            }
+        }
+
     }
 }

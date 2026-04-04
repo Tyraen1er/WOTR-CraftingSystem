@@ -6,6 +6,7 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.JsonSystem;
 using Kingmaker.DialogSystem.Blueprints;
 using Kingmaker.Localization;
+using Kingmaker.Items;
 using UnityModManagerNet;
 
 namespace CraftingSystem
@@ -172,13 +173,10 @@ namespace CraftingSystem
                 var aC = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_cancel"), "CraftingSystem_AnsCancel", "fa3e1f7d4e3347bdaeba8a1b6c8baab1");
                 
                 // [LEGACY_COMPATIBILITY]
-                // Ces GUIDs peuvent être présents dans les sauvegardes existantes (Historique de dialogue).
-                // On les réenregistre "silencieusement" pour satisfaire le chargeur de WOTR.
                 Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_weapon"), "CraftingSystem_Legacy_Weapon", "fa3e1f7d4e3347bdaeb88a1b6c8baab8");
                 Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_armor"),  "CraftingSystem_Legacy_Armor",  "fa3e1f7d4e3347bdaeb88a1b6c8baab8");
                 Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_item"),   "CraftingSystem_Legacy_Item",   "fa3e1f7d4e3347bdaeb88a1b6c8baab8");
                 Helpers.CreateAnswer("bdfc738cca072e29cf4bbcaf21d14546", "CraftingSystem_Ghost_Answer", "fa3e1f7d4e3347bdaeb88a1b6c8baab6");
-                // [/LEGACY_COMPATIBILITY]
                 
                 var actD = (OpenItemSelectorAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(OpenItemSelectorAction));
                 var actM = (OpenStoredItemSelectorAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(OpenStoredItemSelectorAction));
@@ -245,5 +243,38 @@ namespace CraftingSystem
         }
     }
 
-    // Si SelectionManagerPC n'a pas d'Update, on peut essayer SelectionManagerBase ou ignorer si PointerController suffit
+    // --- EMPÊCHER LE STACKING VIA CanBeMerged ---
+    [HarmonyPatch(typeof(ItemEntity), nameof(ItemEntity.CanBeMerged), new Type[] { typeof(ItemEntity) })]
+    public static class ItemEntity_NoMerge_Patch
+    {
+        [HarmonyPrefix]
+        public static bool Prefix(ItemEntity __instance, ItemEntity other, ref bool __result)
+        {
+            // Si l'un des deux items appartient à notre coffre d'artisanat, on interdit la fusion.
+            if ((__instance.Collection != null && __instance.Collection == DeferredInventoryOpener.CraftingBox) ||
+                (other.Collection != null && other.Collection == DeferredInventoryOpener.CraftingBox))
+            {
+                __result = false;
+                return false;
+            }
+            return true;
+        }
+    }
+
+    // --- SUPPORT DU RENOMMAGE PERSISTANT ---
+    [HarmonyPatch(typeof(ItemEntity), "get_Name")]
+    public static class ItemEntity_Name_Patch
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ItemEntity __instance, ref string __result)
+        {
+            try {
+                var part = __instance.Get<ItemPartCustomName>();
+                if (part != null && !string.IsNullOrEmpty(part.CustomName))
+                {
+                    __result = part.CustomName;
+                }
+            } catch { }
+        }
+    }
 }

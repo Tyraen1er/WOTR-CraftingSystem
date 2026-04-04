@@ -9,6 +9,7 @@ using Kingmaker.View;
 using Kingmaker.View.MapObjects;
 using Kingmaker.Items;
 using Kingmaker.UnitLogic; 
+using Kingmaker.EntitySystem;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Equipment;
@@ -18,6 +19,15 @@ using System.Linq;
 
 namespace CraftingSystem
 {
+    // =========================================================================
+    // 0. COMPOSANT DE NOM PERSONNALISÉ (STOCKE LE NOM SUR L'ITEM)
+    // =========================================================================
+    public class ItemPartCustomName : EntityPart
+    {
+        [JsonProperty]
+        public string CustomName;
+    }
+
     // =========================================================================
     // 1. LE COMPOSANT DE SAUVEGARDE SÉCURISÉ (ANTI-CORRUPTION)
     // =========================================================================
@@ -148,6 +158,23 @@ namespace CraftingSystem
         {
             if (collection == CraftingBox)
             {
+                // Règle : Autorise plusieurs objets, mais JAMAIS de stacks.
+                // Si l'utilisateur tente d'en mettre 10 d'un coup, on n'en garde qu'un seul.
+                if (count > 1 || (item != null && item.Count > 1))
+                {
+                    Main.ModEntry.Logger.Log($"[ATELIER] STACK DÉTECTÉ : On ne garde qu'une seule unité de {item.Name}.");
+                    
+                    // On réduit le stack actuel à 1 directement dans la boîte d'artisanat
+                    // Split(amount) réduit l'original et renvoie le surplus dans un nouvel objet
+                    int toReturn = count - 1;
+                    if (toReturn > 0)
+                    {
+                        var leftover = item.Split(toReturn);
+                        Game.Instance.Player.Inventory.Add(leftover);
+                        Main.ModEntry.Logger.Log($"[ATELIER] {toReturn} unités ont été rendues au joueur.");
+                    }
+                }
+
                 bool isWeapon = item.Blueprint is BlueprintItemWeapon;
                 bool isArmor = item.Blueprint is BlueprintItemArmor;
                 // Exclut les potions et parchemins
@@ -160,7 +187,10 @@ namespace CraftingSystem
                 }
                 else
                 {
-                    Main.ModEntry.Logger.Log($"[LOG AJOUT] ACCEPTÉ : '{item.Name}' a été ajouté à la sauvegarde.");
+                    // Pour Empêcher techniquement le stacking ultérieur automatiques entre objets identiques
+                    // On peut forcer un flag ou une propriété mineure pour les différencier.
+                    // Mais le fait de les gérer via une List<ItemEntity> dans l'IMGUI suffit à les voir séparément.
+                    Main.ModEntry.Logger.Log($"[LOG AJOUT] ACCEPTÉ : '{item.Name}' a été ajouté à l'atelier.");
                 }
             }
         }
