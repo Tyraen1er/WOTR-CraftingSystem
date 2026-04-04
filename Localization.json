@@ -1,80 +1,32 @@
 {
     "strings": {
-        "dialogue_crafting_intro": {
-            "enGB": "« I would like to entrust some work to craftsmen. »",
-            "frFR": "« Je souhaiterais confier un travail à des artisans. »",
-            "deDE": "« Ich möchte Handwerkern einige Arbeiten anvertrauen. »",
-            "ruRU": "« Я хотел бы поручить кое-какую работу мастерам. »",
-            "esES": "« Me gustaría confiar algunos trabajos a los artesanos. »",
-            "zhCN": "« 我想把一些工作委托给工匠。 »"
+        "fa3e1f7d4e3347bdaeb88a1b6c8baab6": {
+            "enGB": "« I have work to entrust to your craftsmen. »",
+            "frFR": "« J'ai du travail à confier à vos artisans. »"
         },
-        "intro_reply": {
-            "enGB": "« I know some good craftsmen, but they aren't in Kenabres. However, I can send your orders to specialists in Mendev. What would you like to order? »",
-            "frFR": "« Je connais de bons artisans mais ils ne sont pas à Kénabrès. Je peux cependant envoyer vos commandes à des spécialistes du Mendev. Que souhaitez-vous commander ? »",
-            "deDE": "« Ich kenne ein paar gute Handwerker, aber sie sind nicht in Kenabres. Ich kann Ihre Bestellungen jedoch an Spezialisten in Mendev senden. Was möchten Sie bestellen? »",
-            "ruRU": "« Я знаю нескольких хороших мастеров, но их нет в Кенабресе. Однако я могу отправить ваши заказы специалистам в Мендеве. Что бы вы хотели заказать? »",
-            "esES": "« Conozco a algunos buenos artesanos, pero no están en Kenabres. Sin embargo, puedo enviar sus pedidos a especialistas en Mendev. ¿Qué quiere pedir? »",
-            "zhCN": "« 我认识一些不错的工匠，但他们不在凯纳布雷斯。不过，我可以把您的订单发送给门德夫的专家。您想订购什么？ »"
+        "fa3e1f7d4e3347bdaeb88a1b6c8baab7": {
+            "enGB": "« Of course, the Quartermaster's office is here for that. What is it about exactly? »",
+            "frFR": "« Bien sûr, l'Intendance est là pour ça. De quoi s'agit-il précisément ? »"
         },
-        "choice_weapon": {
-            "enGB": "« I would like to enchant a weapon. »",
-            "frFR": "« Je souhaiterais enchanter une arme. »",
-            "deDE": "« Ich möchte eine Waffe verzaubern. »",
-            "ruRU": "« Я хотел бы зачаровать оружие. »",
-            "esES": "« Me gustaría encantar un arma. »",
-            "zhCN": "« 我想给武器附魔。 »"
+        "fa3e1f7d4e3347bdaeb88a1b6c8baab8": {
+            "enGB": "« Here is some equipment they should take care of. »",
+            "frFR": "« Voici un équipement dont ils doivent s'occuper. »"
         },
-        "choice_armor": {
-            "enGB": "« I would like to enchant an armor. »",
-            "frFR": "« Je souhaiterais enchanter une armure. »",
-            "deDE": "« Ich möchte eine Rüstung verzaubern. »",
-            "ruRU": "« Я хотел бы зачаровать броню. »",
-            "esES": "« Me gustaría encantar una armadura. »",
-            "zhCN": "« 我想给盔甲附魔。 »"
+        "fa3e1f7d4e3347bdaeb88a1b6c8baab9": {
+            "enGB": "« I would like to modify some equipment I already entrusted to you. »",
+            "frFR": "« J'aimerais modifier un équipement que je vous ai confié. »"
         },
-        "choice_item": {
-            "enGB": "« I would like to enchant a magic item. »",
-            "frFR": "« Je souhaiterais enchanter un objet magique. »",
-            "deDE": "« Ich möchte einen magischen Gegenstand verzaubern. »",
-            "ruRU": "« Я хотел бы зачаровать магический предмет. »",
-            "esES": "« Me gustaría encantar un objeto mágico. »",
-            "zhCN": "« 我想给一件魔法物品附魔。 »"
+        "fa3e1f7d4e3347bdaeba8a1b6c8baab1": {
+            "enGB": "« Forget about it. »",
+            "frFR": "« Oubliez ça. »"
         },
-        "choice_cancel": {
-            "enGB": "« Nothing for now, forget about it. »",
-            "frFR": "« Rien pour le moment, oubliez ça. »",
-            "deDE": "« Nichts für den Moment, vergessen Sie es. »",
-            "ruRU": "« Пока ничего, забудьте об этом. »",
-            "esES": "« Nada por ahora, olvídelo. »",
-            "zhCN": "« 目前没什么，就此作罢。 »"
+        "fa3e1f7d4e3347bdaeba8a1b6c8baab2": {
+            "enGB": "« I'm listening. Show me the equipment in question, I'll see that it's sent to the best specialists in Mendev. »",
+            "frFR": "« Je vous écoute. Montrez-moi l'équipement en question, je m'occuperai de le transmettre aux meilleurs spécialistes du Mendev. »"
         },
-        "cancel_reply": {
-            "enGB": "« No problem. »",
-            "frFR": "« Aucun soucis. »",
-            "deDE": "« Kein Problem. »",
-            "ruRU": "« Без проблем. »",
-            "esES": "« No hay problema. »",
-            "zhCN": "« 没问题。 »"
-        },
-        "selection_reply": {
-            "enGB": "« I'll see what I can do. »",
-            "frFR": "« Je vais voir ce que je peux faire. »",
-            "deDE": "« Ich werde sehen, was ich tun kann. »",
-            "ruRU": "« Я посмотрю, что можно сделать. »",
-            "esES": "« Veré qué puedo hacer. »",
-            "zhCN": "« 我会看看能做些什么。 »"
-        },
-        "choice_add_item": {
-            "enGB": "« I want those items to be cared of by for best craftsmen. »",
-            "frFR": "« Je voudrais confier un équipement à vos meilleurs artisans. »",
-        },
-        "choice_modify_item": {
-            "enGB": "« I would like to enchant an item i gave you. »",
-            "frFR": "« Je voudrais enchanter un équipement que je vous ai confié »",
-        },
-        "choice_cancel": {
-            "enGB": "« I changed my mind. »",
-            "frFR": "« J'ai changé d'avis. »",
+        "fa3e1f7d4e3347bdaeba8a1b6c8baab3": {
+            "enGB": "« As you wish. Anything else? »",
+            "frFR": "« Entendu. Je reste à votre disposition si vous changez d'avis. Autre chose ? »"
         }
     }
 }

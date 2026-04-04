@@ -1,11 +1,21 @@
 # WOTR-CraftingSystem
 Add a fully featured crafting system to *Pathfinder: Wrath of the Righteous*.
+ 
+> [!IMPORTANT]
+> **Save Compatibility**: Once this mod is installed and used (items stored with Wilcer, dialogue choices made), your save files will become **dependent** on this mod. Removing the mod after use may cause crashes when loading those saves.
 
 ## Current State
-The mod successfully injects itself into the game's native dialogue tree (notably with Wilcer Garms and in other camps) in a fluid and stable manner, without causing UI freezes. The next step is to link this dialogue to the crafting User Interface (UI).
+The mod is now fully functional for item deposit and retrieval:
+* **Persistent Storage**: Items entrusted to Wilcer Garms are stored in a persistent `UnitPart` attached to the main character, ensuring safety across sessions.
+* **Native UI & IMGUI Hybrid**: Uses the game's native Loot UI for an immersive "Atelier" deposit experience, while leveraging a custom IMGUI selection window for managing stored items.
+* **Item Filtering**: Only valid equipment (weapons, armors, magic items) is accepted into the crafting box; consumables and junk are automatically returned to the player.
+* **Dynamic Dialogue**: A layered dialogue tree allows for intuitive "Give New" vs "Modify Existing" equipment choices.
+* **Secure Input Locking**: Custom Harmony patches prevent character movement and interaction while the modification interface is open.
 
 ## UI Technology Choice
-The mod will utilize the **game's native Quest Insert Item UI (ItemsCollectionDialog)** to select equipment for upgrading (rather than recreating a custom Unity interface from scratch or relying on UMM). This allows for completely natural integration into the game's aesthetic when placing orders with Wilcer or the Storyteller.
+The mod uses a hybrid interface system to provide the best user experience:
+1. **Deposit (Native Loot UI)**: When giving items to Wilcer, we use the game's native inventory container. This preserves the immersive feeling of "handing over" gear to the quartermaster.
+2. **Review & Modify (Custom IMGUI)**: For selecting already entrusted items, we use a custom IMGUI HUD. This interface allows for future modular enchantment options and currently features a dynamic scaling system (100% to screen-fill) and robust input blocking.
 
 ## Planned Features (Roadmap)
 The mod will offer several customizable options to suit different playstyles:
@@ -17,6 +27,7 @@ The mod will offer several customizable options to suit different playstyles:
     * **Instant Crafting**: Option to ignore crafting time and obtain the equipment immediately.
     * **Free Crafting**: Option to completely remove the cost in gold or raw materials.
 * **Equipment Upgrading**: The ability to upgrade existing equipment in the inventory rather than having to forge an entirely new item from scratch (by simply paying the price difference between the old and new enchantment).
+* **Technical Debt Cleanup**: Once the mod reaches a 1.0 stable release, the [LEGACY_COMPATIBILITY] code in `Main.cs` will be removed to ensure a clean codebase for new saves.
 
 ## NPC Crafters (Who does the crafting?)
 The mod relies on specific NPCs to handle your crafting orders. **You do not need to make any skill checks and there is no risk of failure**. You simply place an order and pay the required costs.

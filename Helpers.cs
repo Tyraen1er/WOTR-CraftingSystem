@@ -100,9 +100,10 @@ namespace CraftingSystem
                 CustomStrings[key] = text;
             }
 
-            // Try to natively inject right now
-            if (LocalizationManager.CurrentPack != null) {
-                InjectStringsIntoPack(LocalizationManager.CurrentPack);
+            // Native injection into the current language pack
+            var currentPack = LocalizationManager.CurrentPack;
+            if (currentPack != null) {
+                InjectStringsIntoPack(currentPack);
             }
 
             return localizedString;

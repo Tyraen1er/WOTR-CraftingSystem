@@ -51,17 +51,31 @@ namespace CraftingSystem
     }
 
     // =========================================================================
-    // 2. L'ACTION DE DIALOGUE
+    // 2. LES ACTIONS DE DIALOGUE
     // =========================================================================
+    public enum CraftingWindowMode { None, LootUI, StoredItemIMGUI }
+
     [TypeId("6d3e1f7d4e3347bdaeb88a1b6c8baab6")]
     public class OpenItemSelectorAction : GameAction
     {
-        public override string GetCaption() { return "Ouverture de l'Atelier Persistant"; }
+        public override string GetCaption() { return "Ouverture de l'Atelier (Dépôt)"; }
 
         public override void RunAction()
         {
             DeferredInventoryOpener.Initialize();
-            DeferredInventoryOpener.IsWaiting = true;
+            DeferredInventoryOpener.CurrentMode = CraftingWindowMode.LootUI;
+        }
+    }
+
+    [TypeId("7d3e1f7d4e3347bdaeb88a1b6c8baab7")]
+    public class OpenStoredItemSelectorAction : GameAction
+    {
+        public override string GetCaption() { return "Ouverture de l'Atelier (Modification)"; }
+
+        public override void RunAction()
+        {
+            DeferredInventoryOpener.Initialize();
+            DeferredInventoryOpener.CurrentMode = CraftingWindowMode.StoredItemIMGUI;
         }
     }
 
@@ -70,7 +84,7 @@ namespace CraftingSystem
     // =========================================================================
     public class DeferredInventoryOpener : IDialogFinishHandler, IItemsCollectionHandler
     {
-        public static bool IsWaiting = false;
+        public static CraftingWindowMode CurrentMode = CraftingWindowMode.None;
         public static bool IsCraftingWindowOpen = false; 
 
         public static ItemsCollection CraftingBox
@@ -96,20 +110,36 @@ namespace CraftingSystem
 
         public void HandleDialogFinished(BlueprintDialog dialog, bool success)
         {
-            if (IsWaiting)
+            if (CurrentMode != CraftingWindowMode.None)
             {
-                IsWaiting = false;
+                var mode = CurrentMode;
+                CurrentMode = CraftingWindowMode.None; // Reset
+
                 Observable.Timer(TimeSpan.FromMilliseconds(200)).Subscribe(_ => 
                 {
-                    IsCraftingWindowOpen = true; 
                     var player = Game.Instance.Player.MainCharacter.Value;
-                    EntityViewBase[] targetObjects = new EntityViewBase[] { player.View };
 
-                    Main.ModEntry.Logger.Log($"[UI] Ouverture de l'atelier persistant (Objets en stock : {CraftingBox.Items.Count})");
+                    if (mode == CraftingWindowMode.LootUI)
+                    {
+                        IsCraftingWindowOpen = true; 
+                        EntityViewBase[] targetObjects = new EntityViewBase[] { player.View };
+                        Main.ModEntry.Logger.Log($"[UI] Ouverture de l'atelier persistant (Objets en stock : {CraftingBox.Items.Count})");
 
-                    EventBus.RaiseEvent<ILootInterractionHandler>(h => 
-                        h.HandleLootInterraction(player, targetObjects, LootContainerType.PlayerChest, OnInventoryClosed)
-                    );
+                        EventBus.RaiseEvent<ILootInterractionHandler>(h => 
+                            h.HandleLootInterraction(player, targetObjects, LootContainerType.PlayerChest, OnInventoryClosed)
+                        );
+                    }
+                    else if (mode == CraftingWindowMode.StoredItemIMGUI)
+                    {
+                        Main.ModEntry.Logger.Log("[UI] Tentative d'ouverture de l'IMGUI de modification...");
+                        if (CraftingUI.Instance == null)
+                        {
+                            var go = new UnityEngine.GameObject("CraftingSystem_UI");
+                            UnityEngine.Object.DontDestroyOnLoad(go);
+                            go.AddComponent<CraftingUI>();
+                        }
+                        CraftingUI.Instance.IsOpen = true;
+                    }
                 });
             }
         }

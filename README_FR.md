@@ -1,11 +1,21 @@
 # WOTR-CraftingSystem
 Ajoute un système de création et d'amélioration d'équipement dans le jeu *Pathfinder: Wrath of the Righteous*.
 
+> [!IMPORTANT]
+> **Compatibilité des sauvegardes** : Une fois que ce mod est installé et utilisé (objets confiés à Wilcer, choix de dialogue faits), vos fichiers de sauvegarde deviendront **dépendants** de ce mod. Le supprimer après usage pourrait causer des erreurs irréversibles au chargement.
+
 ## État Actuel
-Le mod parvient avec succès à s'injecter dans l'arbre de dialogue natif du jeu (notamment auprès de Wilcer Garms et dans d'autres camps), de façon fluide et stable, sans provoquer de blocages d'interface. La prochaine étape consiste à lier ce dialogue à l'interface de fabrication (UI).
+Le mod est désormais pleinement fonctionnel pour le dépôt et le retrait d'objets :
+* **Stockage Persistant** : Les objets confiés à Wilcer Garms sont stockés dans une `UnitPart` persistante attachée au personnage principal, garantissant leur sécurité entre les sessions.
+* **Hybride UI Native & IMGUI** : Utilise l'interface native de Loot pour un dépôt d'objets immersif, tout en exploitant une fenêtre IMGUI personnalisée pour la sélection et modification des objets stockés.
+* **Filtrage des Objets** : Seul l'équipement valide (armes, armures, objets magiques) est accepté dans la boîte d'artisanat ; les consommables et le bric-à-brac sont automatiquement rendus au joueur.
+* **Dialogue Dynamique** : Un arbre de dialogue à plusieurs niveaux permet des choix intuitifs entre "Donner un nouvel équipement" et "Modifier un équipement existant".
+* **Blocage des Entrées Sécurisé** : Des patchs Harmony empêchent tout mouvement ou interaction dans le monde 3D tant que l'interface de modification est ouverte.
 
 ## Choix Technologique d'Interface (UI)
-Le mod utilisera **l'Interface native de Quête (ItemsCollectionDialog)** pour sélectionner les objets à améliorer (plutôt que de devoir recréer une interface Unity de zéro ou d'utiliser le menu UMM hors contexte). Cela permet une intégration complètement organique dans l'esthétique du jeu lorsque vous passez commande à Wilcer ou au Conteur.
+Le mod utilise un système d'interface hybride pour offrir la meilleure expérience utilisateur possible :
+1. **Dépôt (UI Native Loot)** : Pour confier des objets à Wilcer, nous utilisons le conteneur d'inventaire natif du jeu. Cela préserve l'immersion de "donner" de l'équipement au quartier-maître.
+2. **Révision & Modification (IMGUI Personnalisée)** : Pour sélectionner les objets déjà confiés, nous utilisons un HUD IMGUI sur mesure. Cette interface permet d'accueillir les futures options d'enchantement modulaires et dispose actuellement d'un système de redimensionnement dynamique (100% à plein écran) et d'un blocage robuste des clics.
 
 ## Fonctionnalités à Implémenter (Roadmap)
 Le mod offrira plusieurs options paramétrables pour convenir à tous les styles de jeu :
@@ -17,6 +27,7 @@ Le mod offrira plusieurs options paramétrables pour convenir à tous les styles
     * **Artisanat instantané** : Option pour ignorer le temps d'artisanat et obtenir l'équipement immédiatement.
     * **Artisanat gratuit** : Option pour supprimer intégralement le coût en pièces d'or ou en matériaux.
 * **Amélioration d'équipement** : Possibilité d'améliorer un équipement déjà existant dans l'inventaire plutôt que de devoir forger un objet entièrement from scratch (en payant simplement la différence de prix entre l'ancien et le nouvel enchantement).
+* **Nettoyage de la Dette Technique** : Une fois que le mod aura atteint une version stable 1.0, le code [LEGACY_COMPATIBILITY] dans `Main.cs` sera supprimé pour garantir une base de code propre pour les nouvelles sauvegardes.
 
 ## PNJ Artisans (Qui fabrique ?)
 Le mod passe par des PNJ spécifiques pour gérer vos commandes d'artisanat. **Vous n'avez aucun jet de compétence à faire et il n'y a aucun risque d'échec de création**, vous passez simplement commande en payant les coûts requis.

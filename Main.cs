@@ -48,6 +48,11 @@ namespace CraftingSystem
                 }
 
                 Helpers.ApplyLocalization(locale);
+                
+                if (Kingmaker.Localization.LocalizationManager.CurrentPack != null) {
+                    Helpers.InjectStringsIntoPack(Kingmaker.Localization.LocalizationManager.CurrentPack);
+                }
+
                 ModMain.RegisterDialogChanges();
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Error in BlueprintsCache.Init: {ex}");
@@ -74,31 +79,18 @@ namespace CraftingSystem
                 foreach (var target in targets) {
                     try {
                         SimpleBlueprint bp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(target));
-                        
-                        if (bp == null) {
-                            Main.ModEntry.Logger.Log($"Target {target} not found in game data.");
-                            continue;
-                        }
-
-                        Main.ModEntry.Logger.Log($"Found target {target} as {bp.GetType().Name} ({bp.name})");
+                        if (bp == null) continue;
 
                         if (bp is BlueprintAnswersList list) {
                             if (PatchAnswersList(list)) patchedCount++;
                         } 
                         else if (bp is BlueprintDialog dialog) {
-                            Main.ModEntry.Logger.Log($"Scanning BlueprintDialog: {bp.name}");
                             if (ScanDialogUsingReflection(dialog)) patchedCount++;
                         }
                     } catch (Exception ex) {
                         Main.ModEntry.Logger.Warning($"Error checking target {target}: {ex.Message}");
                     }
                 }
-
-                if (patchedCount > 0)
-                    Main.ModEntry.Logger.Log($"Success: Added crafting dialogue option to {patchedCount} locations.");
-                else
-                    Main.ModEntry.Logger.Warning("Could not find any suitable dialogue list for Wilcer Garms automatically. Trying common names...");
-
             } catch (Exception e) {
                 Main.ModEntry.Logger.Error($"Exception in RegisterDialogChanges: {e}");
             }
@@ -121,15 +113,12 @@ namespace CraftingSystem
                 foreach (var cueRef in cuesList) {
                     var guidProp = cueRef.GetType().GetProperty("Guid", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) 
                                 ?? cueRef.GetType().GetProperty("deserializedGuid", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    
                     if (guidProp == null) continue;
                     
                     var guidObj = guidProp.GetValue(cueRef);
                     if (guidObj == null) continue;
                     
-                    string cueGuidStr = guidObj.ToString();
-                    var cueBp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(cueGuidStr));
-                    
+                    var cueBp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(guidObj.ToString()));
                     if (cueBp is BlueprintCue cue) {
                         var answersField = cue.GetType().GetField("Answers", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) 
                                         ?? cue.GetType().GetField("m_Answers", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -143,113 +132,87 @@ namespace CraftingSystem
                                            ?? ansRef.GetType().GetProperty("deserializedGuid", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                             if (ansGuidProp == null) continue;
                             
-                            var ansGuidObj = ansGuidProp.GetValue(ansRef);
-                            if (ansGuidObj == null) continue;
-
-                            string expectedListGuid = ansGuidObj.ToString();
-                            var ansBp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(expectedListGuid));
-                            
+                            var ansBp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(ansGuidProp.GetValue(ansRef).ToString()));
                             if (ansBp is BlueprintAnswersList list) {
-                                Main.ModEntry.Logger.Log($"Discovered AnswersList from dialog cue: {list.name} ({expectedListGuid})");
                                 if (PatchAnswersList(list, dialog)) patchedAtLeastOne = true;
                             }
                         }
                     }
                 }
-            } catch (Exception ex) {
-                Main.ModEntry.Logger.Error($"Error scanning dialog tree: {ex}");
-            }
+            } catch { }
             return patchedAtLeastOne;
-        }
-
-        private static bool PatchDialog(BlueprintDialog dialog)
-        {
-            return ScanDialogUsingReflection(dialog);
         }
 
         private static bool PatchAnswersList(BlueprintAnswersList list, BlueprintDialog parentDialog = null)
         {
             if (list == null || list.Answers == null) return false;
-            
-            if (HasAnswer(list, "CraftingSystem_RootAnswer")) {
-                return false;
+            foreach (var ansRef in list.Answers) {
+                var ans = ansRef.Get();
+                if (ans != null && ans.name != null && ans.name.Contains("CraftingSystem_RootAnswer")) return false;
             }
 
             try {
                 Kingmaker.DialogSystem.DialogSpeaker speaker = null;
                 if (parentDialog != null && parentDialog.FirstCue != null && parentDialog.FirstCue.Cues.Count > 0) {
-                    var firstCueRef = parentDialog.FirstCue.Cues[0];
-                    var firstCue = firstCueRef?.Get() as BlueprintCue;
+                    var firstCue = parentDialog.FirstCue.Cues[0].Get() as BlueprintCue;
                     speaker = firstCue?.Speaker;
                 }
 
-                string rootAnswerGuid = Helpers.MergeGuid(list.AssetGuid, "root_answer");
-                var rootAnswer = Helpers.CreateAnswer(rootAnswerGuid, $"CraftingSystem_RootAnswer_{list.name}", "dialogue_crafting_intro");
+                string rAG = Helpers.MergeGuid(list.AssetGuid, "root_answer");
+                var rA = Helpers.CreateAnswer(rAG, $"CraftingSystem_RootAnswer_{list.name}", "fa3e1f7d4e3347bdaeb88a1b6c8baab6");
                 
-                string introCueGuid = Helpers.MergeGuid(list.AssetGuid, "intro_cue");
-                var introCue = Helpers.CreateCue(introCueGuid, $"CraftingSystem_IntroCue_{list.name}", "intro_reply", speaker);
+                string iCG = Helpers.MergeGuid(list.AssetGuid, "intro_cue");
+                var iC = Helpers.CreateCue(iCG, $"CraftingSystem_IntroCue_{list.name}", "fa3e1f7d4e3347bdaeb88a1b6c8baab7", speaker);
                 
-                string subListGuid = Helpers.MergeGuid(list.AssetGuid, "sub_list");
-                var subList = Helpers.CreateAnswersList(subListGuid, $"CraftingSystem_SubList_{list.name}");
+                string sLG = Helpers.MergeGuid(list.AssetGuid, "sub_list");
+                var sL = Helpers.CreateAnswersList(sLG, $"CraftingSystem_SubList_{list.name}");
                 
-                var ansWeapon = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_weapon"), "CraftingSystem_AnsWeapon", "choice_weapon");
-                var ansArmor  = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_armor"),  "CraftingSystem_AnsArmor",  "choice_armor");
-                var ansItem   = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_item"),   "CraftingSystem_AnsItem",   "choice_item");
-                var ansCancel = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_cancel"), "CraftingSystem_AnsCancel", "choice_cancel");
+                var aG = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_give"), "CraftingSystem_AnsGive", "fa3e1f7d4e3347bdaeb88a1b6c8baab8");
+                var aM = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_modify"), "CraftingSystem_AnsModify", "fa3e1f7d4e3347bdaeb88a1b6c8baab9");
+                var aC = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_cancel"), "CraftingSystem_AnsCancel", "fa3e1f7d4e3347bdaeba8a1b6c8baab1");
                 
-                var uiAction = (OpenItemSelectorAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(OpenItemSelectorAction));
-                uiAction.name = $"CraftingSystem_OpenUI_{list.name}";
+                // [LEGACY_COMPATIBILITY]
+                // Ces GUIDs peuvent être présents dans les sauvegardes existantes (Historique de dialogue).
+                // On les réenregistre "silencieusement" pour satisfaire le chargeur de WOTR.
+                Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_weapon"), "CraftingSystem_Legacy_Weapon", "fa3e1f7d4e3347bdaeb88a1b6c8baab8");
+                Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_armor"),  "CraftingSystem_Legacy_Armor",  "fa3e1f7d4e3347bdaeb88a1b6c8baab8");
+                Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_item"),   "CraftingSystem_Legacy_Item",   "fa3e1f7d4e3347bdaeb88a1b6c8baab8");
+                Helpers.CreateAnswer("bdfc738cca072e29cf4bbcaf21d14546", "CraftingSystem_Ghost_Answer", "fa3e1f7d4e3347bdaeb88a1b6c8baab6");
+                // [/LEGACY_COMPATIBILITY]
                 
-                ansWeapon.OnSelect.Actions = new Kingmaker.ElementsSystem.GameAction[] { uiAction };
-                ansArmor.OnSelect.Actions  = new Kingmaker.ElementsSystem.GameAction[] { uiAction };
-                ansItem.OnSelect.Actions   = new Kingmaker.ElementsSystem.GameAction[] { uiAction };
+                var actD = (OpenItemSelectorAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(OpenItemSelectorAction));
+                var actM = (OpenStoredItemSelectorAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(OpenStoredItemSelectorAction));
                 
-                var cueCancel    = Helpers.CreateCue(Helpers.MergeGuid(list.AssetGuid, "cue_cancel"), "CraftingSystem_CueCancel", "cancel_reply", speaker);
-                var cueSelection = Helpers.CreateCue(Helpers.MergeGuid(list.AssetGuid, "cue_selection"), "CraftingSystem_CueSelection", "selection_reply", speaker);
+                aG.OnSelect.Actions = new Kingmaker.ElementsSystem.GameAction[] { actD };
+                aM.OnSelect.Actions = new Kingmaker.ElementsSystem.GameAction[] { actM };
                 
-                rootAnswer.NextCue.Cues.Add(introCue.ToReference<BlueprintCueBaseReference>());
-                introCue.Answers.Add(subList.ToReference<BlueprintAnswerBaseReference>());
-                subList.Answers.Add(ansWeapon.ToReference<BlueprintAnswerBaseReference>());
-                subList.Answers.Add(ansArmor.ToReference<BlueprintAnswerBaseReference>());
-                subList.Answers.Add(ansItem.ToReference<BlueprintAnswerBaseReference>());
-                subList.Answers.Add(ansCancel.ToReference<BlueprintAnswerBaseReference>());
+                var cCan = Helpers.CreateCue(Helpers.MergeGuid(list.AssetGuid, "cue_cancel"), "CraftingSystem_CueCancel", "fa3e1f7d4e3347bdaeba8a1b6c8baab3", speaker);
+                var cSel = Helpers.CreateCue(Helpers.MergeGuid(list.AssetGuid, "cue_selection"), "CraftingSystem_CueSelection", "fa3e1f7d4e3347bdaeba8a1b6c8baab2", speaker);
                 
-                ansWeapon.NextCue.Cues.Add(cueSelection.ToReference<BlueprintCueBaseReference>());
-                ansArmor.NextCue.Cues.Add(cueSelection.ToReference<BlueprintCueBaseReference>());
-                ansItem.NextCue.Cues.Add(cueSelection.ToReference<BlueprintCueBaseReference>());
-                ansCancel.NextCue.Cues.Add(cueCancel.ToReference<BlueprintCueBaseReference>());
+                rA.NextCue.Cues.Add(iC.ToReference<BlueprintCueBaseReference>());
+                iC.Answers.Add(sL.ToReference<BlueprintAnswerBaseReference>());
+                sL.Answers.Add(aG.ToReference<BlueprintAnswerBaseReference>());
+                sL.Answers.Add(aM.ToReference<BlueprintAnswerBaseReference>());
+                sL.Answers.Add(aC.ToReference<BlueprintAnswerBaseReference>());
+                
+                aG.NextCue.Cues.Add(cSel.ToReference<BlueprintCueBaseReference>());
+                aM.NextCue.Cues.Add(cSel.ToReference<BlueprintCueBaseReference>());
+                aC.NextCue.Cues.Add(cCan.ToReference<BlueprintCueBaseReference>());
                 
                 if (parentDialog != null && parentDialog.FirstCue != null && parentDialog.FirstCue.Cues.Count > 0) {
-                    var startCueRef = parentDialog.FirstCue.Cues[0];
-                    cueCancel.Continue.Cues.Add(startCueRef);
-                    cueCancel.Continue.Strategy = Kingmaker.DialogSystem.Strategy.First;
+                    cCan.Continue.Cues.Add(parentDialog.FirstCue.Cues[0]);
+                    cCan.Continue.Strategy = Kingmaker.DialogSystem.Strategy.First;
                 }
 
-                int insertIndex = Math.Max(0, list.Answers.Count - 1);
-                list.Answers.Insert(insertIndex, rootAnswer.ToReference<BlueprintAnswerBaseReference>());
-                
-                Main.ModEntry.Logger.Log($"Successfully injected complex crafting tree into {list.name} with UI Action attached.");
+                list.Answers.Insert(Math.Max(0, list.Answers.Count - 1), rA.ToReference<BlueprintAnswerBaseReference>());
                 return true;
             } catch (Exception ex) {
-                Main.ModEntry.Logger.Error($"Error building dialogue tree for {list.name}: {ex}");
+                Main.ModEntry.Logger.Error($"Error building dialogue: {ex}");
                 return false;
             }
         }
-
-        private static bool HasAnswer(BlueprintAnswersList list, string nameSubstring)
-        {
-            if (list.Answers == null) return false;
-            foreach (var ansRef in list.Answers) {
-                var ans = ansRef.Get();
-                if (ans != null && ans.name != null && ans.name.Contains(nameSubstring)) return true;
-            }
-            return false;
-        }
     }
 
-    // =========================================================================
-    // PATCH : Remplacement du Stash par la Boîte d'Artisanat (Grille Standard)
-    // =========================================================================
     [HarmonyPatch(typeof(Kingmaker.UI.MVVM._VM.Loot.LootVM), MethodType.Constructor, new Type[] { typeof(Kingmaker.UI.MVVM._VM.Loot.LootContextVM.LootWindowMode), typeof(Kingmaker.View.EntityViewBase[]), typeof(Action) })]
     public static class LootVM_Crafting_Patch
     {
@@ -257,41 +220,30 @@ namespace CraftingSystem
         {
             if (DeferredInventoryOpener.IsCraftingWindowOpen)
             {
-                try
+                var mockLoot = new Kingmaker.UI.MVVM._VM.Loot.LootObjectVM("Atelier", "Enchantement", DeferredInventoryOpener.CraftingBox, Kingmaker.UI.MVVM._VM.Loot.LootContextVM.LootWindowMode.PlayerChest, 1);
+                var prop = typeof(Kingmaker.UI.MVVM._VM.Loot.LootVM).GetProperty("LootObjects") ?? typeof(Kingmaker.UI.MVVM._VM.Loot.LootVM).GetProperty("ContextLoot");
+                if (prop != null)
                 {
-                    Main.ModEntry.Logger.Log("[Harmony] Remplacement du coffre par la Boîte d'Artisanat...");
-
-                    var mockLoot = new Kingmaker.UI.MVVM._VM.Loot.LootObjectVM(
-                        "Atelier de Wilcer Garms", 
-                        "Déposez l'arme à enchanter", 
-                        DeferredInventoryOpener.CraftingBox, 
-                        Kingmaker.UI.MVVM._VM.Loot.LootContextVM.LootWindowMode.PlayerChest, 
-                        1
-                    );
-
-                    var lootObjectsProp = typeof(Kingmaker.UI.MVVM._VM.Loot.LootVM).GetProperty("LootObjects", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
-                                       ?? typeof(Kingmaker.UI.MVVM._VM.Loot.LootVM).GetProperty("ContextLoot", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-                    
-                    if (lootObjectsProp != null)
-                    {
-                        var collection = lootObjectsProp.GetValue(__instance);
-                        if (collection != null)
-                        {
-                            var clearMethod = collection.GetType().GetMethod("Clear");
-                            clearMethod?.Invoke(collection, null);
-
-                            var addMethod = collection.GetType().GetMethod("Add");
-                            addMethod?.Invoke(collection, new object[] { mockLoot });
-                            
-                            Main.ModEntry.Logger.Log("[Harmony] Succès : L'UI pointe maintenant vers notre fausse boîte !");
-                        }
+                    var coll = prop.GetValue(__instance);
+                    if (coll != null) {
+                        coll.GetType().GetMethod("Clear")?.Invoke(coll, null);
+                        coll.GetType().GetMethod("Add")?.Invoke(coll, new object[] { mockLoot });
                     }
-                }
-                catch (Exception ex)
-                {
-                    Main.ModEntry.Logger.Error($"Erreur Patch : {ex}");
                 }
             }
         }
     }
+
+    // --- BLOCAGE INPUTS ---
+    [HarmonyPatch(typeof(Kingmaker.Controllers.Clicks.PointerController), "Tick")]
+    public static class PointerController_Block_Patch
+    {
+        public static bool Prefix()
+        {
+            if (CraftingUI.Instance != null && CraftingUI.Instance.IsOpen) return false;
+            return true;
+        }
+    }
+
+    // Si SelectionManagerPC n'a pas d'Update, on peut essayer SelectionManagerBase ou ignorer si PointerController suffit
 }

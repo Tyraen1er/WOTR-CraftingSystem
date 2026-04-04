@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using Kingmaker;
 using Kingmaker.Items;
@@ -8,121 +9,151 @@ using Kingmaker.Blueprints.Items.Armors;
 
 namespace CraftingSystem
 {
-    public enum CraftFilter { Weapon, Armor }
-
     public class CraftingUI : MonoBehaviour
     {
         public static CraftingUI Instance;
         public bool IsOpen = false;
-        public CraftFilter CurrentFilter = CraftFilter.Weapon;
         
         private Vector2 scrollPosition;
         private string feedbackMessage = "";
+        
+        private int m_ScalePercent = 100; 
+        private const int MIN_SCALE_PERCENT = 100;
 
-        void Awake() { Instance = this; }
+        void Awake() 
+        { 
+            Instance = this; 
+        }
 
         void OnGUI()
         {
             if (!IsOpen) return;
 
+            float scale = m_ScalePercent / 100f;
+            float bW = 600f;
+            float bH = 500f;
+            float width = bW * scale;
+            float height = bH * scale;
+
+            Rect windowRect = new Rect(
+                (Screen.width - width) / 2f, 
+                (Screen.height - height) / 2f, 
+                width, 
+                height
+            );
+
+            if (Event.current != null && !windowRect.Contains(Event.current.mousePosition))
+            {
+                if (Event.current.type == EventType.MouseDown || 
+                    Event.current.type == EventType.MouseUp || 
+                    Event.current.type == EventType.ScrollWheel)
+                {
+                    Event.current.Use();
+                }
+            }
+            
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
-            
-            // On élargit un peu la fenêtre pour faire rentrer une belle grille
-            Rect windowRect = new Rect(Screen.width / 2f - 250f, Screen.height / 2f - 300f, 500f, 600f);
-            
-            string titleKey = CurrentFilter == CraftFilter.Weapon ? "ui_title_weapon" : "ui_title_armor";
-            // Helpers.GetText(...) commenté pour compilation minimale
-            GUI.Window(0, windowRect, DrawWindowContent, titleKey);
+            GUI.Window(999, windowRect, DrawWindowContent, "Atelier de Wilcer - Sélection d'Équipement");
+            GUI.FocusWindow(999);
         }
 
         void DrawWindowContent(int windowID)
         {
+            float scale = m_ScalePercent / 100f;
+
             if (!string.IsNullOrEmpty(feedbackMessage))
             {
-                GUILayout.Label(feedbackMessage, new GUIStyle(GUI.skin.label) { wordWrap = true });
-                if (GUILayout.Button("OK", GUILayout.Height(40))) { IsOpen = false; feedbackMessage = ""; }
+                GUILayout.Label(feedbackMessage, new GUIStyle(GUI.skin.label) { wordWrap = true, fontSize = 18 });
+                if (GUILayout.Button("OK", GUILayout.Height(40))) feedbackMessage = "";
                 return;
             }
 
-            // Helpers.GetText(...) commenté pour compilation minimale
-            if (GUILayout.Button("ui_button_close", GUILayout.Height(30)))
-            {
-                // Helpers.GetText(...) commenté pour compilation minimale
-                feedbackMessage = "ui_wilcer_cancel";
-            }
+            // --- HEADER ---
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Faites votre choix parmi les objets stockés :");
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Fermer", GUILayout.Width(100))) IsOpen = false;
+            GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
             
-            // --- DÉBUT DE LA GRILLE D'INVENTAIRE ---
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+            // --- GRILLE D'OBJETS ---
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
+            var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
+            var items = workshop?.StashedItems ?? new List<ItemEntity>();
 
-            var items = Game.Instance.Player.Inventory.Items.Where(item => {
-                if (CurrentFilter == CraftFilter.Weapon) return item.Blueprint is BlueprintItemWeapon bp && !bp.IsNatural;
-                if (CurrentFilter == CraftFilter.Armor) return item.Blueprint is BlueprintItemArmor;
-                return false;
-            }).ToList();
-
-            if (!items.Any()) 
-            {
-                // Helpers.GetText(...) commenté pour compilation minimale
-                GUILayout.Label("ui_no_item");
-            } 
+            if (!items.Any()) GUILayout.Label("\n   (Aucun objet n'est stocké)");
             else 
             {
-                int columns = 6; // Nombre d'objets par ligne
-                int currentItemCount = 0;
+                // On prépare un style de bouton plus grand pour accueillir l'icône + texte
+                GUIStyle entryStyle = new GUIStyle(GUI.skin.button);
+                entryStyle.padding = new RectOffset((int)(55 * scale), 5, 5, 5); // Conserve de la place pour l'icône à gauche
+                entryStyle.wordWrap = true;
 
-                GUILayout.BeginHorizontal(); // On commence la première ligne
-
-                foreach (var item in items) 
+                int cols = 3; // Réduit à 3 colonnes pour accueillir les noms plus longs proprement
+                for (int i = 0; i < items.Count; i += cols)
                 {
-                    // On récupère l'icône native de l'objet
-                    Texture2D icon = item.Blueprint.Icon != null ? item.Blueprint.Icon.texture : null;
-
-                    // On prépare le contenu de la case (L'icône + Le nom caché en "Tooltip" pour le survol)
-                    GUIContent buttonContent = icon != null 
-                        ? new GUIContent(icon, item.Name) 
-                        : new GUIContent(item.Name, item.Name); // Sécurité si l'objet n'a pas d'icône
-
-                    // On dessine un bouton carré de 64x64 pixels
-                    if (GUILayout.Button(buttonContent, GUILayout.Width(64), GUILayout.Height(64))) 
+                    GUILayout.BeginHorizontal();
+                    for (int j = 0; j < cols && (i + j) < items.Count; j++)
                     {
-                        // Helpers.GetText(...) commenté pour compilation minimale
-                        string rawConfirm = "ui_wilcer_confirm";
-                        feedbackMessage = string.Format(rawConfirm, item.Name);
-                    }
+                        var it = items[i + j];
+                        var sprite = it.Blueprint.Icon;
+                        
+                        // Dessine le bouton de base
+                        if (GUILayout.Button(it.Name, entryStyle, GUILayout.Width(180 * scale), GUILayout.Height(60 * scale))) 
+                        {
+                            feedbackMessage = $"Prise en charge de : {it.Name}\n(Enchantement prochainement disponible)";
+                        }
 
-                    currentItemCount++;
-                    
-                    // Si on atteint la limite de colonnes, on passe à la ligne suivante
-                    if (currentItemCount % columns == 0) 
-                    {
-                        GUILayout.EndHorizontal();
-                        GUILayout.BeginHorizontal();
+                        // Superpose l'icône extraite de l'Atlas proprement
+                        if (sprite != null && sprite.texture != null)
+                        {
+                            Rect lastRect = GUILayoutUtility.GetLastRect();
+                            // Carré d'icône à gauche
+                            Rect iconRect = new Rect(lastRect.x + 5, lastRect.y + 5, 45 * scale, 45 * scale);
+                            DrawSprite(iconRect, sprite);
+                        }
                     }
+                    GUILayout.EndHorizontal();
                 }
-                
-                GUILayout.EndHorizontal(); // Fin de la dernière ligne
             }
-
             GUILayout.EndScrollView();
-            // --- FIN DE LA GRILLE ---
 
+            // --- FOOTER ---
             GUILayout.Space(10);
+            GUILayout.BeginHorizontal(GUI.skin.box);
+            GUILayout.Label("Dimension fenêtre :", GUILayout.Width(130));
+            if (GUILayout.Button("-", GUILayout.Width(30))) m_ScalePercent = Math.Max(MIN_SCALE_PERCENT, m_ScalePercent - 10);
+            GUILayout.Label($"{m_ScalePercent}%", GUILayout.Width(50));
+            if (GUILayout.Button("+", GUILayout.Width(30))) 
+            {
+                int maxW = (int)(Screen.width / 600f * 100);
+                int maxH = (int)(Screen.height / 500f * 100);
+                m_ScalePercent = Math.Min(Math.Min(maxW, maxH), m_ScalePercent + 10);
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.Label("Tooltip : " + GUI.tooltip);
+            GUILayout.EndHorizontal();
+        }
 
-            // --- AFFICHAGE DU NOM AU SURVOL (TOOLTIP) ---
-            // Lit le "Tooltip" défini dans le bouton que la souris survole actuellement
-            string hoverText = GUI.tooltip;
-            if (!string.IsNullOrEmpty(hoverText))
-            {
-                // Suppression des références à FontStyle / TextAnchor pour éviter la dépendance à TextRenderingModule
-                GUILayout.Label(hoverText);
-            }
-            else
-            {
-                // Espace vide pour éviter que la fenêtre ne saute quand on enlève la souris
-                GUILayout.Label(" "); 
-            }
+        /// <summary>
+        /// Dessine une zone de l'atlas spécifiée par un Sprite Unity dans un Rect IMGUI. 
+        /// Crucial dans WOTR car les textures brutes (.texture) pointent souvent vers l'atlas complet (tas de pixels).
+        /// </summary>
+        private void DrawSprite(Rect rect, Sprite sprite)
+        {
+            if (sprite == null || sprite.texture == null) return;
+            
+            // Calcul des UVs normalisés (0.0 à 1.0) par rapport à la texture globale (Atlas)
+            Rect tRect = sprite.rect;
+            float tw = sprite.texture.width;
+            float th = sprite.texture.height;
+
+            // Note: Unity utilise le bas-gauche (0,0) pour les coordonnées de texture 
+            Rect uv = new Rect(tRect.x / tw, tRect.y / th, tRect.width / tw, tRect.height / th);
+            
+            // On dessine uniquement la portion de l'atlas correspondant au Sprite
+            GUI.DrawTextureWithTexCoords(rect, sprite.texture, uv, true);
         }
     }
 }
