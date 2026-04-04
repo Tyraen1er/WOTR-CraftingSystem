@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Kingmaker;
 using Kingmaker.ElementsSystem;
 using Kingmaker.Blueprints.JsonSystem;
@@ -7,31 +8,45 @@ using Kingmaker.DialogSystem.Blueprints;
 using Kingmaker.View;
 using Kingmaker.View.MapObjects;
 using Kingmaker.Items;
-using Kingmaker.UnitLogic; // Indispensable pour créer un composant de personnage
+using Kingmaker.UnitLogic; 
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Equipment;
-using Newtonsoft.Json; // Indispensable pour la sauvegarde native
+using Newtonsoft.Json; 
 using UniRx;
 using System.Linq;
 
 namespace CraftingSystem
 {
     // =========================================================================
-    // 1. LE COMPOSANT DE SAUVEGARDE (La magie opère ici)
-    // S'attache au joueur et s'intègre automatiquement dans ses sauvegardes !
+    // 1. LE COMPOSANT DE SAUVEGARDE SÉCURISÉ (ANTI-CORRUPTION)
     // =========================================================================
     public class UnitPartWilcerWorkshop : UnitPart
     {
-        // [JsonProperty] dit au jeu : "N'oublie pas de sauvegarder cette boîte dans le fichier .zks !"
+        // On sauvegarde une LISTE SIMPLE, le jeu adore ça et ne crashera pas.
         [JsonProperty]
-        public ItemsCollection CraftingBox;
+        public List<ItemEntity> StashedItems = new List<ItemEntity>();
+
+        private ItemsCollection _virtualBox;
 
         public ItemsCollection GetBox()
         {
-            if (CraftingBox == null)
-                CraftingBox = new ItemsCollection();
-            return CraftingBox;
+            if (_virtualBox == null)
+            {
+                _virtualBox = new ItemsCollection();
+                foreach (var item in StashedItems) {
+                    if (item != null) _virtualBox.Add(item);
+                }
+            }
+            return _virtualBox;
+        }
+
+        // On appelle ça à la fermeture de l'UI pour mettre à jour la sauvegarde
+        public void SyncFromBox()
+        {
+            if (_virtualBox != null) {
+                StashedItems = _virtualBox.Items.ToList();
+            }
         }
     }
 
@@ -58,14 +73,11 @@ namespace CraftingSystem
         public static bool IsWaiting = false;
         public static bool IsCraftingWindowOpen = false; 
 
-        // Raccourci surpuissant pour toujours pointer vers la boîte du personnage principal
         public static ItemsCollection CraftingBox
         {
             get
             {
                 var mainChar = Game.Instance.Player.MainCharacter.Value;
-                
-                // Ensure<T> crée le sac à dos la première fois, ou le récupère s'il existe déjà !
                 var part = mainChar.Ensure<UnitPartWilcerWorkshop>();
                 return part.GetBox();
             }
@@ -108,9 +120,10 @@ namespace CraftingSystem
             {
                 bool isWeapon = item.Blueprint is BlueprintItemWeapon;
                 bool isArmor = item.Blueprint is BlueprintItemArmor;
-                bool isEquipment = item.Blueprint is BlueprintItemEquipment;
+                // Exclut les potions et parchemins
+                bool isEquipable = item.Blueprint is BlueprintItemEquipment && !(item.Blueprint is BlueprintItemEquipmentUsable);
 
-                if (!isWeapon && !isArmor && !isEquipment)
+                if (!isWeapon && !isArmor && !isEquipable)
                 {
                     Main.ModEntry.Logger.Log($"[LOG AJOUT] REFUS : '{item.Name}' n'est pas un équipement valide.");
                     SpitItemBack(item);
@@ -132,7 +145,8 @@ namespace CraftingSystem
 
         private void SpitItemBack(ItemEntity item)
         {
-            Observable.Timer(TimeSpan.FromMilliseconds(50)).Subscribe(_ => 
+            // Délai raccourci à 10ms pour un rebond visuel quasi-immédiat
+            Observable.Timer(TimeSpan.FromMilliseconds(10)).Subscribe(_ => 
             {
                 if (CraftingBox.Items.Contains(item))
                 {
@@ -146,7 +160,10 @@ namespace CraftingSystem
         {
             IsCraftingWindowOpen = false; 
             
-            Main.ModEntry.Logger.Log($"[UI] Fermeture de l'atelier. Wilcer garde farouchement {CraftingBox.Items.Count} objets en dépôt.");
+            // On synchronise la mémoire volatile vers la sauvegarde du jeu !
+            Game.Instance.Player.MainCharacter.Value.Ensure<UnitPartWilcerWorkshop>().SyncFromBox();
+
+            Main.ModEntry.Logger.Log($"[UI] Fermeture de l'atelier. Wilcer garde {CraftingBox.Items.Count} objets en dépôt.");
             
             if (CraftingBox.Items.Count > 0)
             {
