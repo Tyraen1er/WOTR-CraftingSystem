@@ -15,7 +15,10 @@
     <DefaultItemExcludes>WOTR_WoljifRomanceMod\**;ToyBox-Wrath\**;$(DefaultItemExcludes)</DefaultItemExcludes>
 
     <WrathPath>C:\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed</WrathPath>
+    <ModInstallPath>$(WrathPath)\..\..\Mods\$(AssemblyName)</ModInstallPath>
   </PropertyGroup>
+
+  <Import Project="UserConfig.props" Condition="Exists('LocalConfig.props')" />
 
   <ItemGroup>
     <PackageReference Include="Krafs.Publicizer" Version="2.2.1" PrivateAssets="all" />    <Publicize Include="Assembly-CSharp" />
@@ -83,10 +86,13 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="$(TargetDir)$(TargetName).dll" DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Mods\CraftingSystem" />
-    <Copy SourceFiles="Info.json" DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Mods\CraftingSystem" />
-    <Copy SourceFiles="Localization.json" DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Mods\CraftingSystem" />
+<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+      <ModFiles Include="$(TargetDir)$(TargetName).dll;Info.json;Localization.json" />
+    </ItemGroup>
+    
+    <Copy SourceFiles="@(ModFiles)" DestinationFolder="$(ModInstallPath)" />
+    <Message Text="Mod installé automatiquement dans: $(ModInstallPath)" Importance="high" />
   </Target>
 
 </Project>

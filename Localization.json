@@ -63,6 +63,18 @@
             "ruRU": "« Я посмотрю, что можно сделать. »",
             "esES": "« Veré qué puedo hacer. »",
             "zhCN": "« 我会看看能做些什么。 »"
+        },
+        "choice_add_item": {
+            "enGB": "« I want those items to be cared of by for best craftsmen. »",
+            "frFR": "« Je voudrais confier un équipement à vos meilleurs artisans. »",
+        },
+        "choice_modify_item": {
+            "enGB": "« I would like to enchant an item i gave you. »",
+            "frFR": "« Je voudrais enchanter un équipement que je vous ai confié »",
+        },
+        "choice_cancel": {
+            "enGB": "« I changed my mind. »",
+            "frFR": "« J'ai changé d'avis. »",
         }
     }
 }
