@@ -23,6 +23,8 @@ namespace CraftingSystem
         private Vector2 scrollPosition;
         private string feedbackMessage = "";
         private string newNameDraft = "";
+        private string enchantmentSearch = "";
+        private string selectedCategory = "All";
         private ItemEntity selectedItem = null;
         
         private int m_ScalePercent = 100; 
@@ -168,10 +170,81 @@ namespace CraftingSystem
             
             // --- FUTUR : LISTE DES ENCHANTEMENTS (TOYBOX INSPIRATION) ---
             GUILayout.Label("Enchantements disponibles :");
-            GUILayout.Label("(Analyse des blueprints de ToyBox en cours...)");
+            
+            // --- RECHERCHE ET FILTRES ---
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Recherche :", GUILayout.Width(80 * scale));
+            enchantmentSearch = GUILayout.TextField(enchantmentSearch, GUILayout.Width(150 * scale));
+            GUILayout.EndHorizontal();
+
+            // --- LISTE DES ENCHANTEMENTS ---
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.Height(200 * scale));
+            var available = EnchantmentScanner.GetFor(selectedItem);
+            
+            foreach (var data in available)
+            {
+                if (!string.IsNullOrEmpty(enchantmentSearch) && !data.Name.ToLower().Contains(enchantmentSearch.ToLower())) continue;
+                
+                // Calcul du prix prévisionnel (Pathfinder : Half Market Price)
+                int currentPoints = selectedItem.Enchantments.Sum(e => e.Blueprint.EnchantmentCost);
+                int totalPoints = currentPoints + data.PointCost;
+                
+                long currentCost = (long)currentPoints * currentPoints * 1000;
+                long totalCost = (long)totalPoints * totalPoints * 1000;
+                long costToPay = totalCost - currentCost; 
+                if (data.GoldOverride >= 0) costToPay = data.GoldOverride;
+
+                int days = (int)Math.Max(1, costToPay / 1000);
+                if (data.DaysOverride >= 0) days = data.DaysOverride;
+
+                GUILayout.BeginHorizontal(GUI.skin.box);
+                GUILayout.Label($"{data.Name} (+{data.PointCost})", GUILayout.Width(180 * scale));
+                GUILayout.FlexibleSpace();
+                GUILayout.Label($"{costToPay} po / {days} j", GUILayout.Width(120 * scale));
+                
+                if (GUILayout.Button("Ajouter", GUILayout.Width(100 * scale)))
+                {
+                    TryAddEnchantment(selectedItem, data, (int)costToPay, days);
+                }
+                GUILayout.EndHorizontal();
+            }
+            GUILayout.EndScrollView();
             
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
+        }
+
+        private void TryAddEnchantment(ItemEntity item, EnchantmentData data, int cost, int days)
+        {
+            // Vérification des fonds
+            if (Game.Instance.Player.Money < cost)
+            {
+                feedbackMessage = "Vous n'avez pas assez d'or pour cet enchantement !";
+                return;
+            }
+
+            // Vérification de la limite de 10 points
+            int currentPoints = item.Enchantments.Sum(e => e.Blueprint.EnchantmentCost);
+            if (currentPoints + data.PointCost > 10 && EnforcePointsLimit)
+            {
+                feedbackMessage = "L'objet ne peut pas supporter un bonus supérieur à +10 !";
+                return;
+            }
+
+            // ICI : Demander Confirmation ou Appliquer l'action
+            Game.Instance.Player.Money -= cost;
+            
+            // Application de l'enchantement (sera raffiné prochainement avec une file d'attente)
+            if (data.Blueprint != null)
+            {
+                item.AddEnchantment(data.Blueprint, new Kingmaker.UnitLogic.Mechanics.MechanicsContext(null, null, null));
+                item.Identify();
+                feedbackMessage = $"Succès ! {data.Name} a été ajouté à {item.Name} ({cost} po déduits).";
+            }
+            else
+            {
+                feedbackMessage = "Erreur : Blueprint introuvable dans les données du jeu.";
+            }
         }
 
         void DrawSettingsGUI(float scale)
