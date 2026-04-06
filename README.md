@@ -1,51 +1,32 @@
-# WOTR-CraftingSystem
-Add a fully featured crafting system to *Pathfinder: Wrath of the Righteous*.
- 
-> [!IMPORTANT]
-> **Save Compatibility**: Once this mod is installed and used (items stored with Wilcer, dialogue choices made), your save files will become **dependent** on this mod. Removing the mod after use may cause crashes when loading those saves.
+# Wilcer Workshop - Crafting System (WotR Mod)
 
-## Current State
-The mod is now fully functional for item deposit and retrieval:
-* **Persistent Storage**: Items entrusted to Wilcer Garms are stored in a persistent `UnitPart` attached to the main character, ensuring safety across sessions.
-* **Native UI & IMGUI Hybrid**: Uses the game's native Loot UI for an immersive "Atelier" deposit experience, while leveraging a custom IMGUI selection window for managing stored items.
-* **Item Filtering**: Only valid equipment (weapons, armors, magic items) is accepted into the crafting box; consumables and junk are automatically returned to the player.
-* **Dynamic Dialogue**: A layered dialogue tree allows for intuitive "Give New" vs "Modify Existing" equipment choices.
-* **Secure Input Locking**: Custom Harmony patches prevent character movement and interaction while the modification interface is open.
+Ce mod ajoute un système d'artisanat immersif pour Pathfinder: Wrath of the Righteous, centré sur le personnage de Wilcer Garms.
 
-## UI Technology Choice
-The mod uses a hybrid interface system to provide the best user experience:
-1. **Deposit (Native Loot UI)**: When giving items to Wilcer, we use the game's native inventory container. This preserves the immersive feeling of "handing over" gear to the quartermaster.
-2. **Review & Modify (Custom IMGUI)**: For selecting already entrusted items, we use a custom IMGUI HUD. This interface allows for future modular enchantment options and currently features a dynamic scaling system (100% to screen-fill) and robust input blocking.
+## Fonctionnalités Actuelles
 
-## Planned Features (Roadmap)
-The mod will offer several customizable options to suit different playstyles:
+### 🛠️ Système d'Enchantement Hybride
+- **Scan du Jeu** : Le mod détecte automatiquement tous les enchantements présents dans votre installation (incluant ceux d'autres mods).
+- **Surcharge JSON** : Vous pouvez configurer des coûts spécifiques et des catégories dans `Enchantments.json`. Les données du JSON écrasent les données détectées automatiquement.
+- **Filtrage Granulaire** : Choisissez d'afficher le contenu TTRPG, Owlcat ou celui des autres mods séparément.
 
-* **Ruleset Selection**:
-    * **Pathfinder 1st Edition Rules**: Strict adherence to the tabletop rules (costs, prerequisites, time).
-    * **WOTR (Owlcat) Rules**: An extended mode including the numerous exotic enchantments specifically invented by Owlcat for the video game.
-* **Quality of Life Options (Cheat/QoL)**:
-    * **Instant Crafting**: Option to ignore crafting time and obtain the equipment immediately.
-    * **Free Crafting**: Option to completely remove the cost in gold or raw materials.
-* **Equipment Upgrading**: The ability to upgrade existing equipment in the inventory rather than having to forge an entirely new item from scratch (by simply paying the price difference between the old and new enchantment).
-* **Technical Debt Cleanup**: Once the mod reaches a 1.0 stable release, the [LEGACY_COMPATIBILITY] code in `Main.cs` will be removed to ensure a clean codebase for new saves.
+### ⚖️ Équilibre et Règles (Pathfinder 1e)
+- **Formules Officielles** :
+  - Armes : `(Bonus^2) * 2000 po` (Prix du marché).
+  - Armures : `(Bonus^2) * 1000 po` (Prix du marché).
+  - **Coût de Fabrication** : Le mod facture 50% du prix du marché (Half-Market Price).
+- **Règles d'Altération** : 
+  - Remplacement automatique des anciens bonus (+1 remplacé par +2).
+  - Prérequis de +1 altération minimum avant d'ajouter des capacités spéciales.
+- **Limites Configurables** : Ajustez le bonus total maximum (défaut +10) et le bonus d'altération max (défaut +5) dans les options.
 
-## NPC Crafters (Who does the crafting?)
-The mod relies on specific NPCs to handle your crafting orders. **You do not need to make any skill checks and there is no risk of failure**. You simply place an order and pay the required costs.
-* **Wilcer Garms**: Handles crafting during Act 2, Act 3, and Act 5. (Already implemented).
-* **The Storyteller**: Will handle crafting during Act 4. (Pending implementation).
+### 💠 Gestion de l'Objet
+- **Renommer l'objet** : Gratuit, persistant après sauvegarde et reload.
+- **Retirer des enchantements** : Accessible via la section "Enchantements Appliqués". 
+  - **Note** : Le retrait est actuellement **GRATUIT** (phase de développement).
 
-## Crafting Mechanics (Pathfinder 1e Rules)
-For reference and internal design, here are the tabletop rules from *Pathfinder 1st Edition* that will serve as the foundation for calculating costs and time when placing orders with NPCs:
+## Installation
+1. Installez via Unity Mod Manager.
+2. Parlez à Wilcer Garms (Camp ou Drezen) pour accéder à l'atelier.
 
-### 1. Crafting Costs
-An item's base cost (Market Price) determines the raw material cost demanded by the NPC.
-* **Weapons**: (Total Bonus)² × 2,000 gp.
-* **Armor / Shields**: (Total Bonus)² × 1,000 gp.
-* **Material Cost**: The character pays exactly **half (50%)** of the base item's market price to the craftsman to cover raw materials. An item that costs 4,000 gp to buy will cost 2,000 gp to craft. (The cost of the masterwork base equipment must also be added, which the NPC can supply or the player can provide).
-* **Upgrading**: To ask the craftsman to upgrade a weapon from +1 to +2, you only pay the difference in base materials: ((2² × 2000) - (1² × 2000)) / 2 = 3,000 gp in crafting costs.
-
-### 2. Crafting Time
-Once the gold is paid, the craftsman gets to work. You must wait for the equipment to be ready.
-* **Base Rule**: The craftsman takes **1 full day of work for every 1,000 gp** of the item's base price. (e.g., An item worth 4,000 gp on the market will take 4 days to craft).
-* **Accelerated Crafting**: (To be determined) It may be possible to pay the expert extra to double their working pace.
-* Time passes naturally as you explore the world map or rest in camps. Returning to the NPC after the deadline has passed allows you to retrieve the finished item.
+---
+*Développé pour l'immersion et le respect des règles TTRPG.*

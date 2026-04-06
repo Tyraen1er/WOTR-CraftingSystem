@@ -16,9 +16,14 @@ namespace CraftingSystem
         
         // Paramètres
         public static float CostMultiplier = 1.0f;
-        public static bool InstantCrafting = false; // Slider remplacé par Toggle
+        public static bool InstantCrafting = false;
         public static bool EnforcePointsLimit = true;
-        public static bool AllowOwlcatEnchants = false;
+        public static int MaxTotalBonus = 10;
+        public static int MaxEnhancementBonus = 5;
+        public static bool RequirePlusOneFirst = true;
+
+        public enum SourceFilter { All, TTRPG, Owlcat, Mods }
+        public static SourceFilter CurrentSourceFilter = SourceFilter.All;
 
         private Vector2 scrollPosition;
         private string feedbackMessage = "";
@@ -38,6 +43,13 @@ namespace CraftingSystem
         void OnGUI()
         {
             if (!IsOpen) return;
+
+            // Déclenchement unique de la sync au premier dialogue de la session
+            EnchantmentScanner.StartSync();
+
+            // Vérification des projets terminés à l'ouverture
+            var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
+            workshop?.CheckAndFinishProjects();
 
             float scale = m_ScalePercent / 100f;
             float width = 600f * scale;
@@ -136,8 +148,11 @@ namespace CraftingSystem
                     for (int j = 0; j < cols && (i + j) < items.Count; j++)
                     {
                         var it = items[i + j];
-                        // Augmentation de la largeur à 280 et de la hauteur à 50
-                        if (GUILayout.Button(it.Name, entryStyle, GUILayout.Width(280 * scale), GUILayout.Height(50 * scale))) 
+                        var project = workshop?.ActiveProjects.FirstOrDefault(p => p.Item == it);
+                        string label = it.Name;
+                        if (project != null) label += " (En forge...)";
+
+                        if (GUILayout.Button(label, entryStyle, GUILayout.Width(280 * scale), GUILayout.Height(50 * scale))) 
                         {
                             selectedItem = it;
                             newNameDraft = it.Name;
@@ -151,7 +166,22 @@ namespace CraftingSystem
 
         void DrawItemModificationGUI(float scale)
         {
+            var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
+            var activeProject = workshop?.ActiveProjects.FirstOrDefault(p => p.Item == selectedItem);
+
             GUILayout.BeginVertical(GUI.skin.box);
+
+            if (activeProject != null)
+            {
+                long remainingTicks = activeProject.FinishTimeTicks - Game.Instance.Player.GameTime.Ticks;
+                double remainingDays = Math.Max(0, remainingTicks / (double)TimeSpan.TicksPerDay);
+                GUILayout.Label($"<b>WILCER EST EN TRAIN DE TRAVAILLER SUR CET OBJET</b>", new GUIStyle(GUI.skin.label) { richText = true, alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label($"Temps restant estimé : {remainingDays:F1} jours", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Space(20);
+                if (GUILayout.Button("Fermer", GUILayout.Height(40 * scale))) IsOpen = false;
+                GUILayout.EndVertical();
+                return;
+            }
             
             // --- SECTION RENOMMAGE (ENCHANTEMENT GRATUIT) ---
             GUILayout.Label("Action Spéciale : Renommer l'objet (Gratuit)");
@@ -168,34 +198,62 @@ namespace CraftingSystem
             Div(scale);
             GUILayout.Space(10);
             
-            // --- FUTUR : LISTE DES ENCHANTEMENTS (TOYBOX INSPIRATION) ---
-            GUILayout.Label("Enchantements disponibles :");
+            // --- SECTION : ENCHANTEMENTS DÉJÀ PRÉSENTS ---
+            GUILayout.Label("Enchantements appliqués :", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+            var currentEnchants = selectedItem.Enchantments.ToList();
+            if (!currentEnchants.Any()) 
+            {
+                GUILayout.Label("<i>(Aucun enchantement magique)</i>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(12 * scale) });
+            }
+            else 
+            {
+                foreach (var ench in currentEnchants)
+                {
+                    GUILayout.BeginHorizontal(GUI.skin.box);
+                    GUILayout.Label($"{ench.Blueprint.name} (+{ench.Blueprint.EnchantmentCost})", GUILayout.ExpandWidth(true));
+                    if (GUILayout.Button("Retirer", GUILayout.Width(80 * scale)))
+                    {
+                        selectedItem.RemoveEnchantment(ench);
+                        selectedItem.Identify();
+                        feedbackMessage = $"Enchantement {ench.Blueprint.name} retiré !";
+                    }
+                    GUILayout.EndHorizontal();
+                }
+            }
+
+            GUILayout.Space(20);
+            Div(scale);
+            GUILayout.Space(10);
             
-            // --- RECHERCHE ET FILTRES ---
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Recherche :", GUILayout.Width(80 * scale));
-            enchantmentSearch = GUILayout.TextField(enchantmentSearch, GUILayout.Width(150 * scale));
-            GUILayout.EndHorizontal();
+            // --- SECTION : ENCHANTEMENTS DISPONIBLES ---
+            GUILayout.Label("Enchantements disponibles :", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+
+            // --- RÉCEPTION DU DISCOVERY STATUS ---
+            if (EnchantmentScanner.IsSyncing || !EnchantmentScanner.LastSyncMessage.Contains("réussie"))
+            {
+                GUILayout.Label($"<i>({EnchantmentScanner.LastSyncMessage})</i>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
+            }
 
             // --- LISTE DES ENCHANTEMENTS ---
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.Height(200 * scale));
             var available = EnchantmentScanner.GetFor(selectedItem);
             
             foreach (var data in available)
             {
+                // Filtrage Recherche
                 if (!string.IsNullOrEmpty(enchantmentSearch) && !data.Name.ToLower().Contains(enchantmentSearch.ToLower())) continue;
                 
-                // Calcul du prix prévisionnel (Pathfinder : Half Market Price)
-                int currentPoints = selectedItem.Enchantments.Sum(e => e.Blueprint.EnchantmentCost);
-                int totalPoints = currentPoints + data.PointCost;
+                // Filtrage Source (Granulaire)
+                if (CurrentSourceFilter == SourceFilter.TTRPG && data.Source != "TTRPG") continue;
+                if (CurrentSourceFilter == SourceFilter.Owlcat && data.Source != "TTRPG" && data.Source != "Owlcat") continue;
+                if (CurrentSourceFilter == SourceFilter.Mods && data.Source != "Mod") continue;
                 
-                long currentCost = (long)currentPoints * currentPoints * 1000;
-                long totalCost = (long)totalPoints * totalPoints * 1000;
-                long costToPay = totalCost - currentCost; 
-                if (data.GoldOverride >= 0) costToPay = data.GoldOverride;
-
-                int days = (int)Math.Max(1, costToPay / 1000);
-                if (data.DaysOverride >= 0) days = data.DaysOverride;
+                // Calcul du prix via le Calculator PF1e
+                long costToPay = CraftingCalculator.GetUpgradeCost(selectedItem, data, CostMultiplier);
+                int days = CraftingCalculator.GetCraftingDays(costToPay, InstantCrafting);
+                
+                // Priorité aux Overrides du JSON
+                if (data.GoldOverride >= 0) costToPay = (long)(data.GoldOverride * CostMultiplier);
+                if (data.DaysOverride >= 0) days = (int)data.DaysOverride;
 
                 GUILayout.BeginHorizontal(GUI.skin.box);
                 GUILayout.Label($"{data.Name} (+{data.PointCost})", GUILayout.Width(180 * scale));
@@ -216,34 +274,85 @@ namespace CraftingSystem
 
         private void TryAddEnchantment(ItemEntity item, EnchantmentData data, int cost, int days)
         {
-            // Vérification des fonds
+            if (item == null || data == null) return;
+
+            // 1. Vérification des fonds
             if (Game.Instance.Player.Money < cost)
             {
                 feedbackMessage = "Vous n'avez pas assez d'or pour cet enchantement !";
                 return;
             }
 
-            // Vérification de la limite de 10 points
+            bool isEnhancement = data.Categories.Contains("Enhancement");
             int currentPoints = item.Enchantments.Sum(e => e.Blueprint.EnchantmentCost);
-            if (currentPoints + data.PointCost > 10 && EnforcePointsLimit)
+            
+            // Calcul du bonus d'altération actuel (en cherchant dans notre DB)
+            int currentEnhancement = 0;
+            var currentEnhancementEnchant = item.Enchantments.FirstOrDefault(e => 
+                EnchantmentScanner.MasterList.Any(db => db.Guid == e.Blueprint.AssetGuid.ToString() && db.Categories.Contains("Enhancement"))
+            );
+            if (currentEnhancementEnchant != null) currentEnhancement = currentEnhancementEnchant.Blueprint.EnchantmentCost;
+
+            // 2. Vérification de la limite d'altération (+5 / +X)
+            if (isEnhancement && data.PointCost > MaxEnhancementBonus && EnforcePointsLimit)
             {
-                feedbackMessage = "L'objet ne peut pas supporter un bonus supérieur à +10 !";
+                feedbackMessage = $"Limite d'altération dépassée ! (Max configuré : +{MaxEnhancementBonus})";
                 return;
             }
 
-            // ICI : Demander Confirmation ou Appliquer l'action
+            // 3. Vérification du prérequis +1 (Sauf si c'est justement un bonus d'altération qu'on ajoute)
+            if (!isEnhancement && currentEnhancement < 1 && RequirePlusOneFirst && EnforcePointsLimit)
+            {
+                feedbackMessage = "L'objet doit posséder au moins un bonus d'altération de +1 avant de recevoir des capacités spéciales.";
+                return;
+            }
+
+            // 4. Vérification de la limite totale (+10 / +X)
+            int newTotal = isEnhancement ? (currentPoints - currentEnhancement + data.PointCost) : (currentPoints + data.PointCost);
+            if (newTotal > MaxTotalBonus && EnforcePointsLimit)
+            {
+                feedbackMessage = $"Limite totale de puissance dépassée ! (Max configuré : +{MaxTotalBonus})";
+                return;
+            }
+
+            // --- APPLICATION ---
             Game.Instance.Player.Money -= cost;
             
-            // Application de l'enchantement (sera raffiné prochainement avec une file d'attente)
             if (data.Blueprint != null)
             {
-                item.AddEnchantment(data.Blueprint, new Kingmaker.UnitLogic.Mechanics.MechanicsContext(null, null, null));
-                item.Identify();
-                feedbackMessage = $"Succès ! {data.Name} a été ajouté à {item.Name} ({cost} po déduits).";
+                if (days > 0 && !InstantCrafting)
+                {
+                    // CRÉATION D'UN PROJET (DIFFÉRÉ)
+                    var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
+                    if (workshop != null)
+                    {
+                        var project = new CraftingProject
+                        {
+                            Item = item,
+                            EnchantmentGuid = data.Guid,
+                            FinishTimeTicks = Game.Instance.Player.GameTime.Ticks + (days * TimeSpan.TicksPerDay),
+                            GoldPaid = cost
+                        };
+                        workshop.ActiveProjects.Add(project);
+                        feedbackMessage = $"Wilcer s'est mis au travail ! Il lui faudra environ {days} jours pour terminer. L'or a été encaissé.";
+                    }
+                }
+                else
+                {
+                    // APPLICATION IMMÉDIATE (0 JOURS OU INSTANT)
+                    if (isEnhancement && currentEnhancementEnchant != null)
+                    {
+                        item.RemoveEnchantment(currentEnhancementEnchant);
+                    }
+
+                    item.AddEnchantment(data.Blueprint, new Kingmaker.UnitLogic.Mechanics.MechanicsContext(null, null, null));
+                    item.Identify();
+                    feedbackMessage = $"Succès ! {data.Name} a été appliqué à {item.Name} ({cost} po déduits).";
+                }
             }
             else
             {
-                feedbackMessage = "Erreur : Blueprint introuvable dans les données du jeu.";
+                feedbackMessage = "Erreur : Blueprint introuvable (Sync Error).";
             }
         }
 
@@ -260,11 +369,43 @@ namespace CraftingSystem
             
             GUILayout.Space(10);
             
-            EnforcePointsLimit = GUILayout.Toggle(EnforcePointsLimit, " Appliquer la limite de 10 points (Pathfinder)");
+            EnforcePointsLimit = GUILayout.Toggle(EnforcePointsLimit, " Appliquer les limites de bonus (Pathfinder)");
             
+            if (EnforcePointsLimit)
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Label($" Max Altération : +{MaxEnhancementBonus}", GUILayout.Width(150 * scale));
+                MaxEnhancementBonus = (int)GUILayout.HorizontalSlider(MaxEnhancementBonus, 1, 20, GUILayout.Width(150 * scale));
+                GUILayout.EndHorizontal();
+
+                GUILayout.BeginHorizontal();
+                GUILayout.Label($" Max Total : +{MaxTotalBonus}", GUILayout.Width(150 * scale));
+                MaxTotalBonus = (int)GUILayout.HorizontalSlider(MaxTotalBonus, 1, 50, GUILayout.Width(150 * scale));
+                GUILayout.EndHorizontal();
+
+                RequirePlusOneFirst = GUILayout.Toggle(RequirePlusOneFirst, " Prérequis : +1 Altération minimum");
+            }
+
+            GUILayout.Space(20);
+            
+            GUILayout.Label("Affichage des sources d'enchantement :");
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Toggle(CurrentSourceFilter == SourceFilter.TTRPG, "TTRPG")) CurrentSourceFilter = SourceFilter.TTRPG;
+            if (GUILayout.Toggle(CurrentSourceFilter == SourceFilter.Owlcat, "Owlcat")) CurrentSourceFilter = SourceFilter.Owlcat;
+            if (GUILayout.Toggle(CurrentSourceFilter == SourceFilter.Mods, "Mods")) CurrentSourceFilter = SourceFilter.Mods;
+            if (GUILayout.Toggle(CurrentSourceFilter == SourceFilter.All, "Tout")) CurrentSourceFilter = SourceFilter.All;
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(20);
+            Div(scale);
             GUILayout.Space(10);
             
-            AllowOwlcatEnchants = GUILayout.Toggle(AllowOwlcatEnchants, " Autoriser les enchantements spéciaux Owlcat / ToyBox");
+            GUILayout.Label("Outils de diagnostic :");
+            GUILayout.Label(EnchantmentScanner.LastSyncMessage);
+            if (GUILayout.Button("Forcer la synchronisation (Scan intégral)", GUILayout.Height(30 * scale)))
+            {
+                EnchantmentScanner.ForceSync();
+            }
             
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();

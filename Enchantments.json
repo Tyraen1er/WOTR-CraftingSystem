@@ -212,8 +212,7 @@
     "DESC": "DESC:",
     "POINT_COST": "TODO",
     "GOLD_COST": "TODO",
-    "DAY_COST": "TODO",
-    "CATEGORY": "TODO"
+    "CATEGORIES": "TODO"
   },
   {
     "NAME": "ColdResistance15Enchant",
@@ -1267,7 +1266,7 @@
     "RATING": "10",
     "DESC": "Attacks with this weapon get +1 enhancement bonus on both attack and damage rolls.",
     "POINT_COST": "TODO",
-    "GOLD_COST": "TODO",
+    "GOLD_COST": "2000",
     "DAY_COST": "TODO",
     "CATEGORY": "TODO"
   },
@@ -1279,7 +1278,7 @@
     "RATING": "20",
     "DESC": "Attacks with this weapon get +2 enhancement bonus on both attack and damage rolls.",
     "POINT_COST": "TODO",
-    "GOLD_COST": "TODO",
+    "GOLD_COST": "8000",
     "DAY_COST": "TODO",
     "CATEGORY": "TODO"
   },
@@ -1291,7 +1290,7 @@
     "RATING": "30",
     "DESC": "Attacks with this weapon get +3 enhancement bonus on both attack and damage rolls.",
     "POINT_COST": "TODO",
-    "GOLD_COST": "TODO",
+    "GOLD_COST": "18000",
     "DAY_COST": "TODO",
     "CATEGORY": "TODO"
   },
@@ -1303,7 +1302,7 @@
     "RATING": "40",
     "DESC": "Attacks with this weapon get +4 enhancement bonus on both attack and damage rolls.",
     "POINT_COST": "TODO",
-    "GOLD_COST": "TODO",
+    "GOLD_COST": "32000",
     "DAY_COST": "TODO",
     "CATEGORY": "TODO"
   },
@@ -1315,7 +1314,7 @@
     "RATING": "50",
     "DESC": "Attacks with this weapon get +5 enhancement bonus on both attack and damage rolls.",
     "POINT_COST": "TODO",
-    "GOLD_COST": "TODO",
+    "GOLD_COST": "50000",
     "DAY_COST": "TODO",
     "CATEGORY": "TODO"
   },
@@ -1327,7 +1326,7 @@
     "RATING": "50",
     "DESC": "Attacks with this weapon get a +6 enhancement bonus on both attack and damage rolls.",
     "POINT_COST": "TODO",
-    "GOLD_COST": "TODO",
+    "GOLD_COST": "72000",
     "DAY_COST": "TODO",
     "CATEGORY": "TODO"
   },

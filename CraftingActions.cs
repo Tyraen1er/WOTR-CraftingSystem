@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Kingmaker;
 using Kingmaker.ElementsSystem;
+using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.JsonSystem;
 using Kingmaker.PubSubSystem;
 using Kingmaker.DialogSystem.Blueprints;
@@ -13,6 +14,7 @@ using Kingmaker.EntitySystem;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Equipment;
+using Kingmaker.Blueprints.Items.Ecnchantments;
 using Newtonsoft.Json; 
 using UniRx;
 using System.Linq;
@@ -29,13 +31,32 @@ namespace CraftingSystem
     }
 
     // =========================================================================
+    // 0.B. STRUCTURE D'UN PROJET EN COURS (SAVE-SAFE)
+    // =========================================================================
+    public class CraftingProject
+    {
+        [JsonProperty]
+        public ItemEntity Item; // L'objet stocké chez Wilcer
+        [JsonProperty]
+        public string EnchantmentGuid;
+        [JsonProperty]
+        public long FinishTimeTicks; // Temps du jeu (GameTime) pour la complétion
+        [JsonProperty]
+        public int GoldPaid;
+    }
+
+    // =========================================================================
     // 1. LE COMPOSANT DE SAUVEGARDE SÉCURISÉ (ANTI-CORRUPTION)
     // =========================================================================
     public class UnitPartWilcerWorkshop : UnitPart
     {
-        // On sauvegarde une LISTE SIMPLE, le jeu adore ça et ne crashera pas.
+        // Objets stockés (Inventaire de Wilcer)
         [JsonProperty]
         public List<ItemEntity> StashedItems = new List<ItemEntity>();
+
+        // Projets en cours de fabrication
+        [JsonProperty]
+        public List<CraftingProject> ActiveProjects = new List<CraftingProject>();
 
         private ItemsCollection _virtualBox;
 
@@ -56,6 +77,40 @@ namespace CraftingSystem
         {
             if (_virtualBox != null) {
                 StashedItems = _virtualBox.Items.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Vérifie si des projets sont terminés et les applique.
+        /// </summary>
+        public void CheckAndFinishProjects()
+        {
+            if (!ActiveProjects.Any()) return;
+
+            long currentTime = Game.Instance.Player.GameTime.Ticks;
+            var completed = ActiveProjects.Where(p => p.FinishTimeTicks <= currentTime).ToList();
+
+            foreach (var proj in completed)
+            {
+                try
+                {
+                    var bp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(proj.EnchantmentGuid)) as BlueprintItemEnchantment;
+                    if (bp != null && proj.Item != null)
+                    {
+                        // On vérifie les doublons par sécurité
+                        if (!proj.Item.Enchantments.Any(e => e.Blueprint.AssetGuid == bp.AssetGuid))
+                        {
+                            proj.Item.AddEnchantment(bp, new Kingmaker.UnitLogic.Mechanics.MechanicsContext(null, null, null));
+                            proj.Item.Identify();
+                            Main.ModEntry.Logger.Log($"[ATELIER] Projet terminé : {bp.name} ajouté à {proj.Item.Name}");
+                        }
+                    }
+                    ActiveProjects.Remove(proj);
+                }
+                catch (Exception ex)
+                {
+                    Main.ModEntry.Logger.Error($"Erreur lors de la complétion d'un projet : {ex}");
+                }
             }
         }
     }

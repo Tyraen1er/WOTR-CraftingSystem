@@ -56,7 +56,7 @@ namespace CraftingSystem
 
                 ModMain.RegisterDialogChanges();
                 
-                // --- CHARGEMENT DES ENCHANTEMENTS ---
+                // --- CHARGEMENT SIMPLE JSON AU DÉMARRAGE ---
                 EnchantmentScanner.Load();
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Error in BlueprintsCache.Init: {ex}");
