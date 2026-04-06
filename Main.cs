@@ -8,6 +8,11 @@ using Kingmaker.DialogSystem.Blueprints;
 using Kingmaker.Localization;
 using Kingmaker.Items;
 using UnityModManagerNet;
+using Kingmaker;
+using Kingmaker.PubSubSystem;
+using Kingmaker.UI.Models.Log;
+using Kingmaker.Blueprints.Root;
+using System.Linq;
 
 namespace CraftingSystem
 {
@@ -295,6 +300,39 @@ namespace CraftingSystem
                 var newPart = __result.Ensure<ItemPartCustomName>();
                 newPart.CustomName = originalPart.CustomName;
             }
+        }
+    }
+
+    [HarmonyLib.HarmonyPatch(typeof(Kingmaker.Items.ItemsCollection), nameof(Kingmaker.Items.ItemsCollection.Remove), new Type[] { typeof(Kingmaker.Items.ItemEntity), typeof(int) })]
+    public static class ItemsCollection_Remove_Security_Patch
+    {
+        public static bool Prefix(Kingmaker.Items.ItemsCollection __instance, Kingmaker.Items.ItemEntity item)
+        {
+            // 1. On vérifie si la collection est celle de la forge
+            if (__instance == DeferredInventoryOpener.CraftingBox)
+            {
+                // Accès sécurisé au joueur
+                var player = Kingmaker.Game.Instance.Player.MainCharacter.Value;
+                if (player == null) return true;
+
+                var workshop = player.Get<UnitPartWilcerWorkshop>();
+                
+                // 2. Si l'objet est en cours de forge, on bloque !
+                if (workshop != null && workshop.ActiveProjects.Any(p => p.Item == item))
+                {
+                    // ALERTE VISUELLE (Celle-ci fonctionne toujours, elle est très stable)
+                    Kingmaker.PubSubSystem.EventBus.RaiseEvent<Kingmaker.PubSubSystem.IWarningNotificationUIHandler>(
+                        h => h.HandleWarning("FORGE : Cet équipement est en cours de modification !")
+                    );
+
+                    // LOG SYSTÈME (Pour tes tests)
+                    Main.ModEntry.Logger.Log($"[SÉCURITÉ] Retrait bloqué pour {item.Name} car un projet est actif.");
+
+                    // On annule le retrait (l'objet reste dans la boîte)
+                    return false; 
+                }
+            }
+            return true; // Autorise le retrait pour tout le reste
         }
     }
 }

@@ -18,6 +18,9 @@ using Kingmaker.Blueprints.Items.Ecnchantments;
 using Newtonsoft.Json; 
 using UniRx;
 using System.Linq;
+using Kingmaker.UI.Models.Log;
+using Kingmaker.Blueprints.Root;
+using HarmonyLib;
 
 namespace CraftingSystem
 {
@@ -70,7 +73,7 @@ namespace CraftingSystem
 
         public void CheckAndFinishProjects()
         {
-            Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Début CheckAndFinishProjects. Projets à vérifier : {ActiveProjects.Count}");
+            // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Début CheckAndFinishProjects. Projets à vérifier : {ActiveProjects.Count}");
             if (ActiveProjects.Count == 0) return;
 
             long currentTime = Game.Instance.TimeController.GameTime.Ticks;
@@ -161,7 +164,8 @@ namespace CraftingSystem
             }
 
             // 3. MISE EN FILE D'ATTENTE (PROJET)
-            long ticksPerDay = 24L * 3600L * 10000000L / 6L; 
+            // 🛠️ CORRECTION : On utilise la durée exacte d'un jour définie par le système
+            long ticksPerDay = TimeSpan.TicksPerDay; 
             long finishTime = Game.Instance.Player.GameTime.Ticks + ((long)days * ticksPerDay);
 
             var project = new CraftingProject
@@ -276,6 +280,35 @@ namespace CraftingSystem
         }
 
         public void HandleItemsRemoved(ItemsCollection collection, ItemEntity item, int count) { }
+
+        private void ForceItemBackToForge(ItemEntity item)
+{
+    // On augmente un peu le délai à 100ms pour être sûr que le jeu a fini son propre transfert
+    UniRx.Observable.Timer(TimeSpan.FromMilliseconds(100)).Subscribe(new System.Action<long>(_ => 
+    {
+        try 
+        {
+            if (item.Collection != CraftingBox)
+            {
+                Main.ModEntry.Logger.Log($"[SÉCURITÉ-DEBUG] Récupération de l'objet depuis : {item.Collection?.GetType().Name ?? "Inconnu"}");
+                
+                // On le retire d'où il est
+                item.Collection?.Remove(item);
+                
+                // On le remet dans la forge
+                if (!CraftingBox.Contains(item))
+                {
+                    CraftingBox.Add(item);
+                    Main.ModEntry.Logger.Log($"[SÉCURITÉ-DEBUG] {item.Name} remis de force dans la forge.");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Main.ModEntry.Logger.Error($"[SÉCURITÉ-DEBUG] Erreur lors du retour forcé : {ex.Message}");
+        }
+    }));
+}
 
         private void SpitItemBack(ItemEntity item)
         {
