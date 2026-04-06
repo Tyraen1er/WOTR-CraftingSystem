@@ -60,8 +60,15 @@ namespace CraftingSystem
         /// </summary>
         public static int GetCraftingDays(long gpCost, bool instant = false)
         {
-            if (instant) return 0;
-            return (int)Math.Max(1, Math.Ceiling(gpCost / 1000.0));
+            // Si le cheat de craft instantané est actif (ou si le coût est 0), ça prend 0 jour.
+            if (instant || gpCost <= 0) return 0;
+
+            // On divise le prix par 1000. 
+            // Math.Ceiling permet d'arrondir à l'entier supérieur (ex: 1250 po -> 2 jours).
+            int days = (int)Math.Ceiling(gpCost / 1000.0);
+
+            // On s'assure qu'un objet coûteux prend au minimum 1 jour de travail
+            return Math.Max(1, days);
         }
     }
 }
