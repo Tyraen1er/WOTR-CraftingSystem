@@ -1,5 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- 1. IMPORTATION DU CONFIGURATEUR UTILISATEUR (Optionnel) -->
+  <Import Project="UserConfig.props" Condition="Exists('UserConfig.props')" />
+
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <RootNamespace>CraftingSystem</RootNamespace>
@@ -14,14 +17,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefaultItemExcludes>WOTR_WoljifRomanceMod\**;ToyBox-Wrath\**;$(DefaultItemExcludes)</DefaultItemExcludes>
 
-    <WrathPath>C:\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed</WrathPath>
-    <ModInstallPath>$(WrathPath)\..\..\Mods\$(AssemblyName)</ModInstallPath>
+    <!-- 2. CHEMINS PAR DÉFAUT (Si non définis dans UserConfig.props) -->
+    <WrathPath Condition="'$(WrathPath)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed</WrathPath>
+    <ModInstallPath Condition="'$(ModInstallPath)' == ''">$(WrathPath)\..\..\Mods\$(AssemblyName)</ModInstallPath>
   </PropertyGroup>
 
-  <Import Project="UserConfig.props" Condition="Exists('LocalConfig.props')" />
-
   <ItemGroup>
-    <PackageReference Include="Krafs.Publicizer" Version="2.2.1" PrivateAssets="all" />    <Publicize Include="Assembly-CSharp" />
+    <PackageReference Include="Krafs.Publicizer" Version="2.2.1" PrivateAssets="all" />    
+    <Publicize Include="Assembly-CSharp" />
     <Publicize Include="Owlcat.Runtime.UI" />
   </ItemGroup>
 
@@ -96,7 +99,7 @@
 
 <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
-      <ModFiles Include="$(TargetDir)$(TargetName).dll;Info.json;Localization.json" />
+      <ModFiles Include="$(TargetDir)$(TargetName).dll;Info.json;Localization.json;Enchantments.json" />
     </ItemGroup>
     
     <Copy SourceFiles="@(ModFiles)" DestinationFolder="$(ModInstallPath)" />
