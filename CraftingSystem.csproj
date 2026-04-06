@@ -4,7 +4,7 @@
   <Import Project="UserConfig.props" Condition="Exists('UserConfig.props')" />
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <RootNamespace>CraftingSystem</RootNamespace>
     <AssemblyName>CraftingSystem</AssemblyName>
     <Version>0.1.0</Version>

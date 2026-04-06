@@ -49,3 +49,10 @@ Une fois l'or payé, l'artisan se met au travail. Vous devez attendre que l'équ
 * **Règle de Base** : L'artisan prend **1 jour complet de travail pour chaque tranche de 1 000 po** du prix de base de l'objet. (Ex: Un objet valant 4 000 po au marché mettra 4 jours à être fabriqué).
 * **Vitesse accélérée** : (À déterminer) Il sera potentiellement possible de payer l'expert plus cher pour doubler son rythme de travail.
 * Le temps s'écoule naturellement en explorant la carte du monde ou en se reposant dans les camps. Repasser voir le PNJ une fois le délai écoulé permet de récupérer l'objet terminé.
+
+## Configuration Développeur (Compilation)
+Pour compiler le projet sur un nouvel environnement ou un autre ordinateur :
+1. **UserConfig.props** : Vérifiez que ce fichier existe à la racine du projet.
+2. **Chemins** : Réglez la variable `<WrathPath>` pour qu'elle pointe vers votre propre dossier de jeu `Wrath_Data\Managed`.
+3. **Framework** : Le projet cible le **.NET Framework 4.8**. Assurez-vous d'avoir le SDK correspondant installé.
+4. **Auto-Installation** : Le mod s'installe automatiquement dans votre dossier `Mods` après chaque compilation réussie via la cible `PostBuild` du projet.

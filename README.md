@@ -30,3 +30,10 @@ Ce mod ajoute un système d'artisanat immersif pour Pathfinder: Wrath of the Rig
 
 ---
 *Développé pour l'immersion et le respect des règles TTRPG.*
+
+## Developer Setup (Compilation)
+To compile this project on a new device or environment:
+1. **UserConfig.props**: If missing, create or edit `UserConfig.props` in the root directory.
+2. **Paths**: Set `<WrathPath>` to point to your local `Wrath_Data\Managed` folder.
+3. **Framework**: This project targets **.NET Framework 4.8**. Ensure you have the appropriate SDK installed.
+4. **Auto-Install**: The build process automatically copies the DLL and JSON files to your game's `Mods` folder using the `<ModInstallPath>` defined in your config.
