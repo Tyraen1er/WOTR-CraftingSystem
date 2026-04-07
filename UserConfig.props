@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <!-- Chemin vers le dossier Managed (utilisé pour les HintPath des références) -->
-    <WrathPath></WrathPath>
+    <WrathPath>D:\SteamLibrary\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed</WrathPath>
 
     <!-- Résout vers le dossier racine du jeu \Mods\{AssemblyName} -->
     <ModInstallPath>$(WrathPath)\..\..\Mods\$(AssemblyName)</ModInstallPath>

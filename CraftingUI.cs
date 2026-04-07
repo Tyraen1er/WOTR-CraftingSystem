@@ -2,6 +2,10 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using UnityEngine;
 using Kingmaker;
 using Kingmaker.Items;
@@ -38,9 +42,116 @@ namespace CraftingSystem
         private int m_ScalePercent = 100; 
         private const int MIN_SCALE_PERCENT = 100;
 
+        // Largeurs de boutons (valeurs de base doublées pour UHD)
+        private const float BUTTON_OPTION_WIDTH_BASE = 160f; // anciennement 80
+        private const float BUTTON_CLOSE_WIDTH_BASE  = 80f;  // anciennement 40
+
+        // Auto-scale reference
+        private const float REFERENCE_WIDTH = 2560f;
+        private const float REFERENCE_HEIGHT = 1440f;
+
+        // Settings file
+        private const string SETTINGS_FILENAME = "settings.json";
+
         void Awake() 
         { 
-            Instance = this; 
+            Instance = this;
+            LoadSettings();
+        }
+
+        [DataContract]
+        private class UiSettings
+        {
+            [DataMember] public float CostMultiplier = 1.0f;
+            [DataMember] public bool InstantCrafting = false;
+            [DataMember] public bool EnforcePointsLimit = true;
+            [DataMember] public int MaxTotalBonus = 10;
+            [DataMember] public int MaxEnhancementBonus = 5;
+            [DataMember] public bool RequirePlusOneFirst = true;
+            [DataMember] public int ScalePercent = 100;
+            [DataMember] public float OptionButtonBase = BUTTON_OPTION_WIDTH_BASE;
+            [DataMember] public float CloseButtonBase = BUTTON_CLOSE_WIDTH_BASE;
+            [DataMember] public SourceFilter SourceFilterValue = SourceFilter.All;
+        }
+
+        private void LoadSettings()
+        {
+            try
+            {
+                if (Main.ModEntry == null || string.IsNullOrEmpty(Main.ModEntry.Path)) return;
+                var path = Path.Combine(Main.ModEntry.Path, SETTINGS_FILENAME);
+                if (!File.Exists(path)) return;
+
+                using (var fs = File.OpenRead(path))
+                {
+                    var serializer = new DataContractJsonSerializer(typeof(UiSettings));
+                    var obj = serializer.ReadObject(fs) as UiSettings;
+                    if (obj == null) return;
+
+                    CostMultiplier = obj.CostMultiplier;
+                    InstantCrafting = obj.InstantCrafting;
+                    EnforcePointsLimit = obj.EnforcePointsLimit;
+                    MaxTotalBonus = obj.MaxTotalBonus;
+                    MaxEnhancementBonus = obj.MaxEnhancementBonus;
+                    RequirePlusOneFirst = obj.RequirePlusOneFirst;
+                    if (obj.ScalePercent > 0) m_ScalePercent = obj.ScalePercent;
+                    CurrentSourceFilter = obj.SourceFilterValue;
+                    Main.ModEntry.Logger.Log("[ATELIER] UI settings loaded.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"[ATELIER] Failed to load UI settings: {ex}");
+            }
+        }
+
+        private void SaveSettings()
+        {
+            try
+            {
+                if (Main.ModEntry == null || string.IsNullOrEmpty(Main.ModEntry.Path)) return;
+                var path = Path.Combine(Main.ModEntry.Path, SETTINGS_FILENAME);
+
+                var s = new UiSettings
+                {
+                    CostMultiplier = CostMultiplier,
+                    InstantCrafting = InstantCrafting,
+                    EnforcePointsLimit = EnforcePointsLimit,
+                    MaxTotalBonus = MaxTotalBonus,
+                    MaxEnhancementBonus = MaxEnhancementBonus,
+                    RequirePlusOneFirst = RequirePlusOneFirst,
+                    ScalePercent = m_ScalePercent,
+                    OptionButtonBase = BUTTON_OPTION_WIDTH_BASE,
+                    CloseButtonBase = BUTTON_CLOSE_WIDTH_BASE,
+                    SourceFilterValue = CurrentSourceFilter
+                };
+
+                using (var ms = new MemoryStream())
+                {
+                    var serializer = new DataContractJsonSerializer(typeof(UiSettings));
+                    serializer.WriteObject(ms, s);
+                    ms.Position = 0;
+                    using (var sr = new StreamReader(ms, Encoding.UTF8))
+                    {
+                        var json = sr.ReadToEnd();
+                        File.WriteAllText(path, json);
+                    }
+                }
+                Main.ModEntry.Logger.Log("[ATELIER] UI settings saved.");
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"[ATELIER] Failed to save UI settings: {ex}");
+            }
+        }
+
+        private void UpdateAutoScale()
+        {
+            float resScale = Math.Min(Screen.width / REFERENCE_WIDTH, Screen.height / REFERENCE_HEIGHT);
+            float dpiScale = 1f;
+            try { if (Screen.dpi > 0) dpiScale = Screen.dpi / 96f; } catch { dpiScale = 1f; }
+            float finalScale = Mathf.Clamp(resScale * dpiScale, 0.5f, 2.0f);
+            m_ScalePercent = (int)(finalScale * 100f);
         }
 
         void OnGUI()
@@ -51,13 +162,14 @@ namespace CraftingSystem
                 return;
             }
 
-            // Réinitialisation de la navigation lors de l'ouverture
             if (!lastOpenState)
             {
                 selectedItem = null;
                 ShowSettings = false;
                 lastOpenState = true;
             }
+
+            UpdateAutoScale();
 
             // TOUCHE DE SECOURS : ECHAP pour fermer quoi qu'il arrive
             if (Event.current != null && Event.current.isKey && Event.current.keyCode == KeyCode.Escape)
@@ -123,13 +235,18 @@ namespace CraftingSystem
                     newNameDraft = "";
                 }
             }
-            
-            if (GUILayout.Button(ShowSettings ? "Atelier" : "Options", GUILayout.Width(80 * scale), GUILayout.Height(30 * scale)))
+
+            // calcul largeur adaptative boutons
+            float windowWidth = 800f * scale;
+            float optionWidth = Mathf.Max(BUTTON_OPTION_WIDTH_BASE * scale, windowWidth * 0.14f);
+            float closeWidth  = Mathf.Max(BUTTON_CLOSE_WIDTH_BASE  * scale, windowWidth * 0.06f);
+
+            if (GUILayout.Button(ShowSettings ? "Atelier" : "Options", GUILayout.Width(optionWidth), GUILayout.Height(30 * scale)))
             {
                 ShowSettings = !ShowSettings;
             }
             
-            if (GUILayout.Button("X", GUILayout.Width(40 * scale), GUILayout.Height(30 * scale))) IsOpen = false;
+            if (GUILayout.Button("X", GUILayout.Width(closeWidth), GUILayout.Height(30 * scale))) IsOpen = false;
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
@@ -232,7 +349,6 @@ namespace CraftingSystem
                     {
                         selectedItem.RemoveEnchantment(ench);
                         selectedItem.Identify(); 
-                        //feedbackMessage = $"Enchantement {ench.Blueprint.name} retiré !";
                     }
                     GUILayout.EndHorizontal();
                 }
@@ -261,33 +377,43 @@ namespace CraftingSystem
 
             // --- LISTE DES ENCHANTEMENTS (SCROLLABLE) ---
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
-            var available = EnchantmentScanner.GetFor(selectedItem);
-            
-            foreach (var data in available)
-            {
-                if (!string.IsNullOrEmpty(enchantmentSearch) && !data.Name.ToLower().Contains(enchantmentSearch.ToLower())) continue;
-                
-                if (CurrentSourceFilter == SourceFilter.TTRPG && data.Source != "TTRPG") continue;
-                if (CurrentSourceFilter == SourceFilter.Owlcat && data.Source != "TTRPG" && data.Source != "Owlcat") continue;
-                if (CurrentSourceFilter == SourceFilter.Mods && data.Source != "Mod") continue;
-                
-                long costToPay = CraftingCalculator.GetUpgradeCost(selectedItem, data, CostMultiplier);
-                int days = CraftingCalculator.GetCraftingDays(costToPay, InstantCrafting);
-                
-                if (data.GoldOverride >= 0) costToPay = (long)(data.GoldOverride * CostMultiplier);
-                if (data.DaysOverride >= 0) days = (int)data.DaysOverride;
 
-                GUILayout.BeginHorizontal(GUI.skin.box);
-                GUILayout.Label($"{data.Name} (+{data.PointCost})", GUILayout.Width(180 * scale));
-                GUILayout.FlexibleSpace();
-                GUILayout.Label($"{costToPay} po / {days} j", GUILayout.Width(120 * scale));
-                
-                if (GUILayout.Button("Ajouter", GUILayout.Width(100 * scale)))
-                {
-                    TryAddEnchantment(selectedItem, data, (int)costToPay, days);
-                }
-                GUILayout.EndHorizontal();
+            // Ne pas afficher d'enchantements tant que le scan est en cours.
+            if (EnchantmentScanner.IsSyncing)
+            {
+                GUILayout.Label("Scan en cours — aucun enchantement disponible pour l'instant.", new GUIStyle(GUI.skin.label) { fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
             }
+            else
+            {
+                var available = EnchantmentScanner.GetFor(selectedItem);
+                
+                foreach (var data in available)
+                {
+                    if (!string.IsNullOrEmpty(enchantmentSearch) && !data.Name.ToLower().Contains(enchantmentSearch.ToLower())) continue;
+                    
+                    if (CurrentSourceFilter == SourceFilter.TTRPG && data.Source != "TTRPG") continue;
+                    if (CurrentSourceFilter == SourceFilter.Owlcat && data.Source != "TTRPG" && data.Source != "Owlcat") continue;
+                    if (CurrentSourceFilter == SourceFilter.Mods && data.Source != "Mod") continue;
+                    
+                    long costToPay = CraftingCalculator.GetUpgradeCost(selectedItem, data, CostMultiplier);
+                    int days = CraftingCalculator.GetCraftingDays(costToPay, InstantCrafting);
+                    
+                    if (data.GoldOverride >= 0) costToPay = (long)(data.GoldOverride * CostMultiplier);
+                    if (data.DaysOverride >= 0) days = (int)data.DaysOverride;
+
+                    GUILayout.BeginHorizontal(GUI.skin.box);
+                    GUILayout.Label($"{data.Name} (+{data.PointCost})", GUILayout.Width(180 * scale));
+                    GUILayout.FlexibleSpace();
+                    GUILayout.Label($"{costToPay} po / {days} j", GUILayout.Width(120 * scale));
+                    
+                    if (GUILayout.Button("Ajouter", GUILayout.Width(100 * scale)))
+                    {
+                        TryAddEnchantment(selectedItem, data, (int)costToPay, days);
+                    }
+                    GUILayout.EndHorizontal();
+                }
+            }
+
             GUILayout.EndScrollView();
             
             GUILayout.FlexibleSpace();
@@ -347,6 +473,15 @@ namespace CraftingSystem
 
         void DrawSettingsGUI(float scale)
         {
+            // Capture valeurs précédentes pour détection de modification
+            float prevCostMult = CostMultiplier;
+            bool prevInstant = InstantCrafting;
+            bool prevEnforce = EnforcePointsLimit;
+            int prevMaxEnh = MaxEnhancementBonus;
+            int prevMaxTotal = MaxTotalBonus;
+            bool prevRequirePlus = RequirePlusOneFirst;
+            SourceFilter prevSourceFilter = CurrentSourceFilter;
+
             GUILayout.BeginVertical(GUI.skin.box);
             GUILayout.Label("Réglages de l'Atelier", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
             
@@ -423,6 +558,14 @@ namespace CraftingSystem
             
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
+
+            // Si l'utilisateur a modifié un réglage, on sauvegarde
+            if (prevCostMult != CostMultiplier || prevInstant != InstantCrafting || prevEnforce != EnforcePointsLimit
+                || prevMaxEnh != MaxEnhancementBonus || prevMaxTotal != MaxTotalBonus || prevRequirePlus != RequirePlusOneFirst
+                || prevSourceFilter != CurrentSourceFilter)
+            {
+                SaveSettings();
+            }
         }
 
         private void Div(float scale)

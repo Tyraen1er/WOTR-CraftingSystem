@@ -56,3 +56,8 @@ Pour compiler le projet sur un nouvel environnement ou un autre ordinateur :
 2. **Chemins** : Réglez la variable `<WrathPath>` pour qu'elle pointe vers votre propre dossier de jeu `Wrath_Data\Managed`.
 3. **Framework** : Le projet cible le **.NET Framework 4.8**. Assurez-vous d'avoir le SDK correspondant installé.
 4. **Auto-Installation** : Le mod s'installe automatiquement dans votre dossier `Mods` après chaque compilation réussie via la cible `PostBuild` du projet.
+
+
+
+TODO : 
+Ne lancer la forge qu'après confirmation du joueur afin qu'il puisse prévoir plusieurs enchantement à la fois.
