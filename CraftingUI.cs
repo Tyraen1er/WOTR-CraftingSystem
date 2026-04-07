@@ -53,6 +53,12 @@ namespace CraftingSystem
         // Settings file
         private const string SETTINGS_FILENAME = "settings.json";
 
+        // Sélection multiple
+        private HashSet<string> queuedEnchantGuids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        // Mots clés considérés "spéciaux" (pondération x2 pour le calcul de niveau affiché)
+        private static readonly string[] SpecialEnchantKeywords = new[] { "Holy", "Unholy", "Flaming", "Shocking", "Frost", "Corrosive", "Keen", "Spiked", "Foudre", "Feu", "Glace", "électrique" };
+
         void Awake() 
         { 
             Instance = this;
@@ -233,6 +239,7 @@ namespace CraftingSystem
                 {
                     selectedItem = null;
                     newNameDraft = "";
+                    queuedEnchantGuids.Clear();
                 }
             }
 
@@ -281,6 +288,7 @@ namespace CraftingSystem
                         {
                             selectedItem = it;
                             newNameDraft = it.Name;
+                            queuedEnchantGuids.Clear();
                         }
                     }
                     GUILayout.EndHorizontal();
@@ -358,25 +366,26 @@ namespace CraftingSystem
             Div(scale);
             GUILayout.Space(10);
             
-            // --- RECHERCHE ---
+            // --- RECHERCHE + LISTE (LA SEULE PARTIE SCROLLABLE) ---
             GUILayout.Label("Enchantements disponibles :", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
-            
+
             GUILayout.BeginHorizontal();
             GUILayout.Label("Recherche : ", GUILayout.Width(100 * scale));
             enchantmentSearch = GUILayout.TextField(enchantmentSearch, GUILayout.ExpandWidth(true));
             GUILayout.EndHorizontal();
 
             GUILayout.Space(5);
-            
+
             if (EnchantmentScanner.IsSyncing)
             {
                 GUILayout.Label($"({EnchantmentScanner.LastSyncMessage})", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
             }
-            
+
             GUILayout.Space(5);
 
-            // --- LISTE DES ENCHANTEMENTS (SCROLLABLE) ---
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
+            // Encapsuler la liste dans une box qui prend l'espace restant pour forcer le scroll uniquement à l'intérieur
+            GUILayout.BeginVertical(GUI.skin.box, GUILayout.ExpandHeight(true));
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 
             // Ne pas afficher d'enchantements tant que le scan est en cours.
             if (EnchantmentScanner.IsSyncing)
@@ -402,26 +411,154 @@ namespace CraftingSystem
                     if (data.DaysOverride >= 0) days = (int)data.DaysOverride;
 
                     GUILayout.BeginHorizontal(GUI.skin.box);
-                    GUILayout.Label($"{data.Name} (+{data.PointCost})", GUILayout.Width(180 * scale));
+                    // Checkbox pour sélection multiple
+                    bool isSelected = queuedEnchantGuids.Contains(data.Guid);
+                    bool newSelected = GUILayout.Toggle(isSelected, $"{data.Name} (+{data.PointCost})", GUILayout.Width(300 * scale));
                     GUILayout.FlexibleSpace();
                     GUILayout.Label($"{costToPay} po / {days} j", GUILayout.Width(120 * scale));
                     
-                    if (GUILayout.Button("Ajouter", GUILayout.Width(100 * scale)))
-                    {
-                        TryAddEnchantment(selectedItem, data, (int)costToPay, days);
-                    }
+                    if (newSelected && !isSelected) queuedEnchantGuids.Add(data.Guid);
+                    if (!newSelected && isSelected) queuedEnchantGuids.Remove(data.Guid);
+
                     GUILayout.EndHorizontal();
                 }
             }
 
             GUILayout.EndScrollView();
-            
-            GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
+
+            // --- BLOC FIXE EN BAS : récap + boutons (toujours accessibles) ---
+            GUILayout.Space(8);
+
+            // Calculs récapitulatifs
+            var selectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
+            long totalCost = 0;
+            int totalDays = 0;
+            foreach (var d in selectedList)
+            {
+                long c = CraftingCalculator.GetUpgradeCost(selectedItem, d, CostMultiplier);
+                if (d.GoldOverride >= 0) c = (long)(d.GoldOverride * CostMultiplier);
+                totalCost += c;
+                totalDays += CraftingCalculator.GetCraftingDays(c, InstantCrafting);
+            }
+
+            int currentLevelPoints = CalculateDisplayedEnchantmentPoints(selectedItem);
+            int maxLevel = MaxTotalBonus;
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label($"Niveau actuel : {currentLevelPoints}/{maxLevel}", GUILayout.ExpandWidth(false));
+            GUILayout.FlexibleSpace();
+            GUILayout.Label($"Sélection : {selectedList.Count} — Total : {totalCost} po / ~{totalDays} j", GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(6);
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Valider la sélection", GUILayout.Width(200 * scale), GUILayout.Height(32 * scale)))
+            {
+                string validationError = ValidateSelectionBeforeStart(selectedItem, selectedList, totalCost);
+                if (!string.IsNullOrEmpty(validationError))
+                {
+                    feedbackMessage = validationError;
+                }
+                else
+                {
+                    // Retirer l'or en une fois (préférence : éviter multiple débits partiels)
+                    if (Game.Instance.Player.Money >= totalCost)
+                    {
+                        Game.Instance.Player.Money -= (int)totalCost;
+                        foreach (var d in selectedList)
+                        {
+                            long c = CraftingCalculator.GetUpgradeCost(selectedItem, d, CostMultiplier);
+                            if (d.GoldOverride >= 0) c = (long)(d.GoldOverride * CostMultiplier);
+                            int days = CraftingCalculator.GetCraftingDays(c, InstantCrafting);
+                            CraftingActions.StartCraftingProject(selectedItem, d, (int)c, days);
+                        }
+                        queuedEnchantGuids.Clear();
+                        selectedItem = null;
+                        feedbackMessage = $"Projets lancés : {selectedList.Count} enchantement(s).";
+                    }
+                    else
+                    {
+                        feedbackMessage = "Erreur inattendue : fonds insuffisants au moment du paiement.";
+                    }
+                }
+            }
+
+            if (GUILayout.Button("Annuler la sélection", GUILayout.Width(180 * scale), GUILayout.Height(32 * scale)))
+            {
+                queuedEnchantGuids.Clear();
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndVertical(); // fin du GUI.skin.box du haut
+        }
+
+        private int CalculateDisplayedEnchantmentPoints(ItemEntity item)
+        {
+            if (item == null) return 0;
+            int points = 0;
+            foreach (var e in item.Enchantments)
+            {
+                int baseCost = e.Blueprint.EnchantmentCost;
+                if (baseCost <= 0) baseCost = 0;
+                bool isSpecial = SpecialEnchantKeywords.Any(k => e.Blueprint.name.IndexOf(k, StringComparison.OrdinalIgnoreCase) >= 0);
+                int weight = isSpecial ? 2 : 1;
+                points += baseCost * weight;
+            }
+            return points;
+        }
+
+        private string ValidateSelectionBeforeStart(ItemEntity item, List<EnchantmentData> selectedList, long totalCost)
+        {
+            if (item == null || selectedList == null || selectedList.Count == 0) return "Aucun enchantement sélectionné.";
+
+            // Vérifier fonds
+            if (Game.Instance.Player.Money < totalCost) return "Vous n'avez pas assez d'or pour lancer tous les projets sélectionnés.";
+
+            // Vérifications de points / altérations
+            int currentPoints = item.Enchantments.Sum(e => e.Blueprint.EnchantmentCost);
+            int currentEnhancement = 0;
+            foreach (var e in item.Enchantments)
+            {
+                if (e.Blueprint.name.Contains("Plus") || e.Blueprint is BlueprintWeaponEnchantment we && we.EnchantmentCost > 0 && e.Blueprint.name.StartsWith("Enhancement"))
+                    currentEnhancement = Math.Max(currentEnhancement, e.Blueprint.EnchantmentCost);
+            }
+
+            bool hasMasterwork = item.Enchantments.Any(e => string.Equals(e.Blueprint.AssetGuid.ToString(), "6b38844e2bffbac48b63036b66e735be", StringComparison.OrdinalIgnoreCase));
+            bool hasEnhancementOriginally = currentEnhancement > 0;
+            bool anySelectedEnh = selectedList.Any(d => d.Categories.Contains("Enhancement") || d.PointCost > 0);
+
+            // Si la règle RequirePlusOneFirst est active pour armes => s'assurer qu'on a masterwork ou au moins une altération (soit existante soit sélectionnée)
+            bool isWeapon = item.Blueprint is Kingmaker.Blueprints.Items.Weapons.BlueprintItemWeapon;
+            if (RequirePlusOneFirst && isWeapon)
+            {
+                if (!hasEnhancementOriginally && !anySelectedEnh && !hasMasterwork)
+                    return "Une arme doit être masterwork ou posséder (ou recevoir) une altération (+1) avant d'être enchantée spécial.";
+            }
+
+            // Total points (simple somme des PointCost)
+            int addedPoints = selectedList.Sum(d => d.PointCost);
+            if (EnforcePointsLimit && currentPoints + addedPoints > MaxTotalBonus)
+                return $"Limite de puissance totale dépassée (max +{MaxTotalBonus}).";
+
+            // Max enhancement cap
+            int selectedMaxEnh = 0;
+            foreach (var d in selectedList)
+            {
+                if (d.Categories.Contains("Enhancement") || d.PointCost > 0)
+                    selectedMaxEnh = Math.Max(selectedMaxEnh, d.PointCost);
+            }
+            if (EnforcePointsLimit && Math.Max(currentEnhancement, selectedMaxEnh) > MaxEnhancementBonus)
+                return $"Limite d'altération dépassée (max +{MaxEnhancementBonus}).";
+
+            return null;
         }
 
         private void TryAddEnchantment(ItemEntity item, EnchantmentData data, int cost, int days)
         {
+            // Gardé pour compatibilité (ajout immédiat d'un enchantement)
             if (item == null || data == null) return;
 
             if (Game.Instance.Player.Money < cost)
