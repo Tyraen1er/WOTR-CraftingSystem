@@ -37,3 +37,8 @@ To compile this project on a new device or environment:
 2. **Paths**: Set `<WrathPath>` to point to your local `Wrath_Data\Managed` folder.
 3. **Framework**: This project targets **.NET Framework 4.8**. Ensure you have the appropriate SDK installed.
 4. **Auto-Install**: The build process automatically copies the DLL and JSON files to your game's `Mods` folder using the `<ModInstallPath>` defined in your config.
+
+  TODO : 
+  Tri par catégories
+  Permettre enchantement 0 poids pour tous les items
+  Prérequis item masterwork -> +1 -> tout le reste

@@ -11,6 +11,9 @@ using Kingmaker;
 using Kingmaker.Items;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Items.Ecnchantments;
+using Kingmaker.Blueprints.Items.Weapons;
+using Kingmaker.Blueprints.Items.Armors;
+using Kingmaker.PubSubSystem;
 using UniRx;
  
 namespace CraftingSystem
@@ -33,6 +36,7 @@ namespace CraftingSystem
         public static SourceFilter CurrentSourceFilter = SourceFilter.All;
  
         private Vector2 scrollPosition;
+        private Vector2 titleScrollPosition; // Ajout : pour le défilement horizontal du titre
         public string feedbackMessage = "";
         private string newNameDraft = "";
         private string enchantmentSearch = "";
@@ -42,9 +46,9 @@ namespace CraftingSystem
         private int m_ScalePercent = 100; 
         private const int MIN_SCALE_PERCENT = 100;
  
-        // Largeurs de boutons (valeurs de base doublées pour UHD)
-        private const float BUTTON_OPTION_WIDTH_BASE = 160f; // anciennement 80
-        private const float BUTTON_CLOSE_WIDTH_BASE  = 80f;  // anciennement 40
+        // Largeurs de boutons
+        private const float BUTTON_OPTION_WIDTH_BASE = 160f; 
+        private const float BUTTON_CLOSE_WIDTH_BASE  = 80f;  
  
         // Auto-scale reference
         private const float REFERENCE_WIDTH = 2560f;
@@ -56,7 +60,7 @@ namespace CraftingSystem
         // Sélection multiple
         private HashSet<string> queuedEnchantGuids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
  
-        // Mots clés considérés "spéciaux" (pondération x2 pour le calcul de niveau affiché)
+        // Mots clés considérés "spéciaux"
         private static readonly string[] SpecialEnchantKeywords = new[] { "Holy", "Unholy", "Flaming", "Shocking", "Frost", "Corrosive", "Keen", "Spiked", "Foudre", "Feu", "Glace", "électrique" };
  
         void Awake() 
@@ -102,13 +106,9 @@ namespace CraftingSystem
                     RequirePlusOneFirst = obj.RequirePlusOneFirst;
                     if (obj.ScalePercent > 0) m_ScalePercent = obj.ScalePercent;
                     CurrentSourceFilter = obj.SourceFilterValue;
-                    Main.ModEntry.Logger.Log("[ATELIER] UI settings loaded.");
                 }
             }
-            catch (Exception ex)
-            {
-                Main.ModEntry.Logger.Error($"[ATELIER] Failed to load UI settings: {ex}");
-            }
+            catch (Exception ex) { Main.ModEntry.Logger.Error($"[ATELIER] Failed to load UI settings: {ex}"); }
         }
  
         private void SaveSettings()
@@ -143,12 +143,8 @@ namespace CraftingSystem
                         File.WriteAllText(path, json);
                     }
                 }
-                Main.ModEntry.Logger.Log("[ATELIER] UI settings saved.");
             }
-            catch (Exception ex)
-            {
-                Main.ModEntry.Logger.Error($"[ATELIER] Failed to save UI settings: {ex}");
-            }
+            catch (Exception ex) { Main.ModEntry.Logger.Error($"[ATELIER] Failed to save UI settings: {ex}"); }
         }
  
         private void UpdateAutoScale()
@@ -177,7 +173,6 @@ namespace CraftingSystem
  
             UpdateAutoScale();
  
-            // TOUCHE DE SECOURS : ECHAP pour fermer quoi qu'il arrive
             if (Event.current != null && Event.current.isKey && Event.current.keyCode == KeyCode.Escape)
             {
                 IsOpen = false;
@@ -185,10 +180,8 @@ namespace CraftingSystem
                 return;
             }
  
-            // Déclenchement unique de la sync au premier dialogue de la session
             EnchantmentScanner.StartSync();
  
-            // Vérification des projets terminés à l'ouverture
             var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
             workshop?.CheckAndFinishProjects();
  
@@ -213,15 +206,15 @@ namespace CraftingSystem
         void DrawWindowContent(int windowID)
         {
             float scale = m_ScalePercent / 100f;
- 
+
             if (!string.IsNullOrEmpty(feedbackMessage))
             {
                 GUILayout.Label(feedbackMessage, new GUIStyle(GUI.skin.label) { wordWrap = true, fontSize = (int)(18 * scale) });
                 if (GUILayout.Button("OK", GUILayout.Height(40 * scale))) feedbackMessage = "";
                 return;
             }
- 
-            // --- HEADER ---
+
+            // --- HEADER AVEC DÉFILEMENT POUR TEXTE LONG ---
             GUILayout.BeginHorizontal();
             
             string title = "Atelier";
@@ -229,25 +222,27 @@ namespace CraftingSystem
             else if (selectedItem != null) title = "Détails : " + selectedItem.Name;
             else title = "Sélection d'objet";
             
-            GUILayout.Label(title, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(16 * scale) }, GUILayout.ExpandWidth(true));
+            // Nouveau conteneur défilable pour éviter que le texte pousse les boutons
+            titleScrollPosition = GUILayout.BeginScrollView(titleScrollPosition, GUIStyle.none, GUIStyle.none, GUILayout.ExpandWidth(true), GUILayout.Height(45 * scale));
+            GUILayout.Label(title, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(16 * scale), wordWrap = false });
+            GUILayout.EndScrollView();
             
-            GUILayout.FlexibleSpace();
+            GUILayout.Space(10);
             
             if (selectedItem != null && !ShowSettings)
             {
-                if (GUILayout.Button("<< RETOUR", GUILayout.Width(150 * scale), GUILayout.Height(30 * scale))) 
+                if (GUILayout.Button("<< RETOUR", GUILayout.Width(130 * scale), GUILayout.Height(30 * scale))) 
                 {
                     selectedItem = null;
                     newNameDraft = "";
                     queuedEnchantGuids.Clear();
                 }
             }
- 
-            // calcul largeur adaptative boutons
+
             float windowWidth = 800f * scale;
             float optionWidth = Mathf.Max(BUTTON_OPTION_WIDTH_BASE * scale, windowWidth * 0.14f);
             float closeWidth  = Mathf.Max(BUTTON_CLOSE_WIDTH_BASE  * scale, windowWidth * 0.06f);
- 
+
             if (GUILayout.Button(ShowSettings ? "Atelier" : "Options", GUILayout.Width(optionWidth), GUILayout.Height(30 * scale)))
             {
                 ShowSettings = !ShowSettings;
@@ -255,7 +250,7 @@ namespace CraftingSystem
             
             if (GUILayout.Button("X", GUILayout.Width(closeWidth), GUILayout.Height(30 * scale))) IsOpen = false;
             GUILayout.EndHorizontal();
- 
+
             GUILayout.Space(10);
             
             if (ShowSettings) DrawSettingsGUI(scale);
@@ -272,7 +267,11 @@ namespace CraftingSystem
             if (!items.Any()) GUILayout.Label("\n   (Aucun objet n'est stocké dans l'atelier)");
             else 
             {
-                GUIStyle entryStyle = new GUIStyle(GUI.skin.button) { wordWrap = true, alignment = TextAnchor.MiddleCenter, fontSize = (int)(14 * scale) };
+                GUIStyle entryStyle = new GUIStyle(GUI.skin.button) { 
+                    wordWrap = true, 
+                    alignment = TextAnchor.UpperCenter, // Aligne le texte vers le haut (centré horizontalement)
+                    fontSize = (int)(14 * scale) 
+                };
                 int cols = 2; 
                 for (int i = 0; i < items.Count; i += cols)
                 {
@@ -315,11 +314,32 @@ namespace CraftingSystem
                 GUILayout.EndVertical();
                 return;
             }
+
+            // DÉBUT DU GRAND SCROLLVIEW GLOBAL (Pour tout le contenu dynamique)
+            // On force l'affichage de la barre verticale systématiquement (GUI.skin.verticalScrollbar)
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true, GUILayout.ExpandHeight(true));
             
             // --- SECTION RENOMMAGE (ENCHANTEMENT GRATUIT) ---
             GUILayout.Label("Action Spéciale : Renommer l'objet (Gratuit)");
             GUILayout.BeginHorizontal();
-            newNameDraft = GUILayout.TextField(newNameDraft, GUILayout.ExpandWidth(true), GUILayout.Height(30 * scale));
+            
+            float windowWidth = 800f * scale;
+            float buttonsSpace = (100f + 80f + 25f) * scale;
+            // On ajoute 20px (la largeur de la barre de scroll) au padding pour éviter de créer un scroll horizontal
+            float padding = (45f + 20f) * scale; 
+            float exactTextWidth = windowWidth - buttonsSpace - padding;
+ 
+            GUIStyle textFieldStyle = new GUIStyle(GUI.skin.textField);
+            textFieldStyle.wordWrap = false; 
+ 
+            newNameDraft = GUILayout.TextField(
+                newNameDraft, 
+                textFieldStyle, 
+                GUILayout.Width(exactTextWidth), 
+                GUILayout.Height(30 * scale)
+            );
+            
+            GUILayout.Space(10 * scale);
             
             if (GUILayout.Button("Renommer", GUILayout.Width(100 * scale), GUILayout.Height(30 * scale)))
             {
@@ -329,10 +349,10 @@ namespace CraftingSystem
  
             if (selectedItem != null && GUILayout.Button("Auto", GUILayout.Width(80 * scale), GUILayout.Height(30 * scale)))
             {
-                string baseName = RestoreIntelligentName(selectedItem);
-                RenameItem(selectedItem, baseName);
-                newNameDraft = baseName;
-                feedbackMessage = "Nom mis à jour.";
+                string autoName = GenerateAutoName(selectedItem);
+                RenameItem(selectedItem, autoName);
+                newNameDraft = autoName;
+                feedbackMessage = "Nom automatique généré.";
             }
             GUILayout.EndHorizontal();
             
@@ -351,7 +371,6 @@ namespace CraftingSystem
             {
                 foreach (var ench in currentEnchants)
                 {
-                    // Afficher le point cost tel qu'indiqué dans le JSON/blueprint
                     string guid = ench.Blueprint.AssetGuid.ToString();
                     var overrideData = EnchantmentScanner.GetByGuid(guid);
                     int pointValue = overrideData?.PointCost ?? ench.Blueprint.EnchantmentCost;
@@ -371,7 +390,7 @@ namespace CraftingSystem
             Div(scale);
             GUILayout.Space(10);
             
-            // --- RECHERCHE + LISTE (LA SEULE PARTIE SCROLLABLE) ---
+            // --- RECHERCHE + LISTE ---
             GUILayout.Label("Enchantements disponibles :", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
  
             GUILayout.BeginHorizontal();
@@ -388,11 +407,8 @@ namespace CraftingSystem
  
             GUILayout.Space(5);
  
-            // Encapsuler la liste dans une box qui prend l'espace restant pour forcer le scroll uniquement à l'intérieur
-            GUILayout.BeginVertical(GUI.skin.box, GUILayout.ExpandHeight(true));
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+            GUILayout.BeginVertical(GUI.skin.box); // L'expandHeight est retiré ici car c'est le ScrollView global qui gère l'espace
  
-            // Ne pas afficher d'enchantements tant que le scan est en cours.
             if (EnchantmentScanner.IsSyncing)
             {
                 GUILayout.Label("Scan en cours — aucun enchantement disponible pour l'instant.", new GUIStyle(GUI.skin.label) { fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
@@ -416,10 +432,8 @@ namespace CraftingSystem
                     if (data.DaysOverride >= 0) days = (int)data.DaysOverride;
  
                     GUILayout.BeginHorizontal(GUI.skin.box);
-                    // Checkbox pour sélection multiple
                     bool isSelected = queuedEnchantGuids.Contains(data.Guid);
-                    // Afficher la valeur de points une seule fois, à côté du prix
-                    bool newSelected = GUILayout.Toggle(isSelected, $"{data.Name}", GUILayout.Width(340 * scale));
+                    bool newSelected = GUILayout.Toggle(isSelected, $"{data.Name}", GUILayout.Width(320 * scale)); // Réduit légèrement pour la barre de scroll
                     GUILayout.FlexibleSpace();
                     GUILayout.Label($"{costToPay} po / {days} j   (+{data.PointCost})", GUILayout.Width(220 * scale));
                     
@@ -430,13 +444,14 @@ namespace CraftingSystem
                 }
             }
  
-            GUILayout.EndScrollView();
             GUILayout.EndVertical();
+            GUILayout.EndScrollView(); // FIN DU GRAND SCROLLVIEW
  
-            // --- BLOC FIXE EN BAS : récap + boutons (toujours accessibles) ---
+            // =========================================================================
+            // BLOC FIXE EN BAS (Toujours visible, ne scrolle pas)
+            // =========================================================================
             GUILayout.Space(8);
  
-            // Calculs récapitulatifs
             var selectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
             long totalCost = 0;
             int totalDays = 0;
@@ -455,7 +470,6 @@ namespace CraftingSystem
             GUILayout.BeginHorizontal();
             GUILayout.Label($"Niveau actuel : {currentLevelPoints}/{maxLevel}", GUILayout.ExpandWidth(false));
             GUILayout.FlexibleSpace();
-            // Suppression du nombre d'enchantements sélectionnés ; n'afficher que le total de points sélectionnés
             GUILayout.Label($"Sélection : +{selectedPoints} — Total : {totalCost} po / ~{totalDays} j", GUILayout.ExpandWidth(false));
             GUILayout.EndHorizontal();
  
@@ -471,10 +485,11 @@ namespace CraftingSystem
                 }
                 else
                 {
-                    // Retirer l'or en une fois (préférence : éviter multiple débits partiels)
+                    // Retirer l'or en une fois
                     if (Game.Instance.Player.Money >= totalCost)
                     {
                         Game.Instance.Player.Money -= (int)totalCost;
+                        
                         foreach (var d in selectedList)
                         {
                             long c = CraftingCalculator.GetUpgradeCost(selectedItem, d, CostMultiplier);
@@ -482,6 +497,25 @@ namespace CraftingSystem
                             int days = CraftingCalculator.GetCraftingDays(c, InstantCrafting);
                             CraftingActions.StartCraftingProject(selectedItem, d, (int)c, days);
                         }
+
+                        // =========================================================================
+                        // NOUVEAU : ENVOI DU MESSAGE DANS LE LOG DE COMBAT
+                        // =========================================================================
+                        try 
+                        {
+                            string logText = $"<color=#E2C675>[Atelier]</color> <b>{selectedItem.Name}</b> a été envoyé en forge pour <b>{totalCost} po</b>.";
+                            
+                            // L'interface attend un string, on lui passe directement !
+                            Kingmaker.PubSubSystem.EventBus.RaiseEvent<Kingmaker.PubSubSystem.ILogMessageUIHandler>(
+                                h => h.HandleLogMessage(logText)
+                            );
+                        }
+                        catch (Exception ex)
+                        {
+                            Main.ModEntry.Logger.Error($"[ATELIER] Impossible d'écrire dans le log de combat : {ex.Message}");
+                        }
+                        // =========================================================================
+
                         queuedEnchantGuids.Clear();
                         selectedItem = null;
                         feedbackMessage = $"Projets lancés : {selectedList.Count} enchantement(s).";
@@ -499,17 +533,45 @@ namespace CraftingSystem
             }
             GUILayout.EndHorizontal();
  
-            GUILayout.FlexibleSpace();
-            GUILayout.EndVertical(); // fin du GUI.skin.box du haut
+            GUILayout.EndVertical(); 
         }
  
+        // --- GÉNÉRATEUR MANUEL DE NOM AUTO ---
+        private string GenerateAutoName(ItemEntity item)
+        {
+            if (item == null) return "";
+            string uniqueName = item.Blueprint.m_DisplayNameText;
+            string defaultName = "";
+
+            if (item.Blueprint is BlueprintItemWeapon bpW) defaultName = bpW.Type.DefaultName;
+            else if (item.Blueprint is BlueprintItemArmor bpA) defaultName = bpA.Type.DefaultName;
+
+            string name = "";
+            if (string.IsNullOrEmpty(uniqueName)) 
+            {
+                name = item.GetEnchantmentPrefixes() + defaultName + item.GetEnchantmentSuffixes();
+            } 
+            else 
+            {
+                var suffixes = item.GetCustomEnchantmentSuffixes();
+                if (System.Text.RegularExpressions.Regex.Match(suffixes, @"\+\d").Success) 
+                {
+                    name = item.GetCustomEnchantmentPrefixes() + System.Text.RegularExpressions.Regex.Replace(uniqueName, @"\+\d", "") + suffixes;
+                } 
+                else 
+                {
+                    name = item.GetCustomEnchantmentPrefixes() + uniqueName + suffixes;
+                }
+            }
+            return name.Replace("  ", " ").Trim();
+        }
+
         private int CalculateDisplayedEnchantmentPoints(ItemEntity item)
         {
             if (item == null) return 0;
             int points = 0;
             foreach (var e in item.Enchantments)
             {
-                // Prendre la valeur d'override si présente dans le JSON, sinon fallback au blueprint
                 string guid = e.Blueprint.AssetGuid.ToString();
                 var overrideData = EnchantmentScanner.GetByGuid(guid);
                 int baseCost = overrideData?.PointCost ?? e.Blueprint.EnchantmentCost;
@@ -524,16 +586,12 @@ namespace CraftingSystem
         private string ValidateSelectionBeforeStart(ItemEntity item, List<EnchantmentData> selectedList, long totalCost)
         {
             if (item == null || selectedList == null || selectedList.Count == 0) return "Aucun enchantement sélectionné.";
- 
-            // Vérifier fonds
             if (Game.Instance.Player.Money < totalCost) return "Vous n'avez pas assez d'or pour lancer tous les projets sélectionnés.";
  
-            // Vérifications de points / altérations
             int currentPoints = CalculateDisplayedEnchantmentPoints(item);
             int currentEnhancement = 0;
             foreach (var e in item.Enchantments)
             {
-                // Détecter l'altération existante en tenant compte des overrides
                 string guid = e.Blueprint.AssetGuid.ToString();
                 var overrideData = EnchantmentScanner.GetByGuid(guid);
                 int p = overrideData?.PointCost ?? e.Blueprint.EnchantmentCost;
@@ -552,20 +610,17 @@ namespace CraftingSystem
             bool hasEnhancementOriginally = currentEnhancement > 0;
             bool anySelectedEnh = selectedList.Any(d => d.Categories.Contains("Enhancement") || d.PointCost > 0);
  
-            // Si la règle RequirePlusOneFirst est active pour armes => s'assurer qu'on a masterwork ou au moins une altération (soit existante soit sélectionnée)
-            bool isWeapon = item.Blueprint is Kingmaker.Blueprints.Items.Weapons.BlueprintItemWeapon;
+            bool isWeapon = item.Blueprint is BlueprintItemWeapon;
             if (RequirePlusOneFirst && isWeapon)
             {
                 if (!hasEnhancementOriginally && !anySelectedEnh && !hasMasterwork)
                     return "Une arme doit être masterwork ou posséder (ou recevoir) une altération (+1) avant d'être enchantée spécial.";
             }
  
-            // Total points (somme des PointCost affichés)
             int addedPoints = selectedList.Sum(d => d.PointCost);
             if (EnforcePointsLimit && currentPoints + addedPoints > MaxTotalBonus)
                 return $"Limite de puissance totale dépassée (max +{MaxTotalBonus}).";
  
-            // Max enhancement cap
             int selectedMaxEnh = 0;
             foreach (var d in selectedList)
             {
@@ -578,67 +633,8 @@ namespace CraftingSystem
             return null;
         }
  
-        private void TryAddEnchantment(ItemEntity item, EnchantmentData data, int cost, int days)
-        {
-            // Gardé pour compatibilité (ajout immédiat d'un enchantement)
-            if (item == null || data == null) return;
- 
-            if (Game.Instance.Player.Money < cost)
-            {
-                feedbackMessage = "Vous n'avez pas assez d'or pour cet enchantement !";
-                return;
-            }
- 
-            if (EnforcePointsLimit)
-            {
-                int currentPoints = CalculateDisplayedEnchantmentPoints(item);
-                int currentEnhancement = 0;
-                foreach(var e in item.Enchantments) {
-                    string guid = e.Blueprint.AssetGuid.ToString();
-                    var overrideData = EnchantmentScanner.GetByGuid(guid);
-                    int p = overrideData?.PointCost ?? e.Blueprint.EnchantmentCost;
-                    if (p <= 0) continue;
- 
-                    if (overrideData != null && overrideData.Categories.Contains("Enhancement")) currentEnhancement = Math.Max(currentEnhancement, p);
-                    if (e.Blueprint.name.Contains("Plus") || e.Blueprint is BlueprintWeaponEnchantment we && we.EnchantmentCost > 0 && e.Blueprint.name.StartsWith("Enhancement"))
-                        currentEnhancement = Math.Max(currentEnhancement, p);
-                }
- 
-                if (data.Categories.Contains("Enhancement") && (currentEnhancement + data.PointCost > MaxEnhancementBonus))
-                {
-                    feedbackMessage = $"Limite d'altération (+{MaxEnhancementBonus}) dépassée !";
-                    return;
-                }
- 
-                if (currentPoints + data.PointCost > MaxTotalBonus)
-                {
-                    feedbackMessage = $"Limite de puissance totale (+{MaxTotalBonus}) dépassée !";
-                    return;
-                }
- 
-                if (RequirePlusOneFirst && currentEnhancement == 0 && !data.Categories.Contains("Enhancement"))
-                {
-                    feedbackMessage = "Une arme doit avoir au moins +1 d'altération avant d'être enchantée spécial.";
-                    return;
-                }
-            }
- 
-            CraftingActions.StartCraftingProject(item, data, cost, days);
-            
-            if (days > 0)
-            {
-                selectedItem = null; 
-                feedbackMessage = $"Projet lancé ! Wilcer Garms a pris l'objet en forge pour {days} jours.";
-            }
-            else
-            {
-                feedbackMessage = $"Succès immédiat ! {data.Name} a été appliqué à {item.Name} ({cost} po déduits).";
-            }
-        }
- 
         void DrawSettingsGUI(float scale)
         {
-            // Capture valeurs précédentes pour détection de modification
             float prevCostMult = CostMultiplier;
             bool prevInstant = InstantCrafting;
             bool prevEnforce = EnforcePointsLimit;
@@ -662,26 +658,16 @@ namespace CraftingSystem
  
             if (InstantCrafting && !previousInstantCrafting)
             {
-                Main.ModEntry.Logger.Log("[UI-DEBUG] Toggle 'Craft Instantané' activé.");
                 try
                 {
                     var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
-                    if (workshop == null)
+                    if (workshop != null)
                     {
-                        Main.ModEntry.Logger.Error("[UI-DEBUG] ERREUR : Le workshop est null !");
-                    }
-                    else
-                    {
-                        Main.ModEntry.Logger.Log($"[UI-DEBUG] Lancement CheckAndFinishProjects. Projets en cours : {workshop.ActiveProjects.Count}");
                         workshop.CheckAndFinishProjects();
-                        Main.ModEntry.Logger.Log("[UI-DEBUG] CheckAndFinishProjects terminé avec succès.");
                         feedbackMessage = "Toutes les forges en cours ont été terminées instantanément !";
                     }
                 }
-                catch (Exception ex)
-                {
-                    Main.ModEntry.Logger.Error($"[UI-DEBUG] CRASH lors du clic sur Instantané : {ex.Message}\n{ex.StackTrace}");
-                }
+                catch (Exception ex) { Main.ModEntry.Logger.Error($"[UI-DEBUG] CRASH : {ex.Message}"); }
             }
             
             GUILayout.Space(10);
@@ -724,7 +710,6 @@ namespace CraftingSystem
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
  
-            // Si l'utilisateur a modifié un réglage, on sauvegarde
             if (prevCostMult != CostMultiplier || prevInstant != InstantCrafting || prevEnforce != EnforcePointsLimit
                 || prevMaxEnh != MaxEnhancementBonus || prevMaxTotal != MaxTotalBonus || prevRequirePlus != RequirePlusOneFirst
                 || prevSourceFilter != CurrentSourceFilter)
@@ -751,26 +736,6 @@ namespace CraftingSystem
                 Main.ModEntry.Logger.Log($"[ATELIER] Renommé : {(string.IsNullOrEmpty(name) ? "Original" : name)}");
             }
             catch (Exception ex) { Main.ModEntry.Logger.Error($"Erreur renommage : {ex}"); }
-        }
- 
-        private string RestoreIntelligentName(ItemEntity item)
-        {
-            if (item == null) return "";
-            
-            string baseDisplayName = item.Blueprint.m_DisplayNameText.ToString();
-            
-            string[] magicPrefixes = { "Shocking", "Flaming", "Frost", "Corrosive", "Keen", "Holy", "Unholy", "Spiked", "Foudre", "Feu", "Glace", "électrique" };
- 
-            string cleanName = baseDisplayName;
-            foreach (var p in magicPrefixes) {
-                cleanName = cleanName.Replace(p, "").Replace(p.ToLower(), "");
-            }
- 
-            cleanName = System.Text.RegularExpressions.Regex.Replace(cleanName, @"\+\d+", "");
-            cleanName = cleanName.Replace("  ", " ").Trim();
- 
-            int bonus = item.Enchantments.Sum(e => e.Blueprint.EnchantmentCost);
-            return cleanName + (bonus > 0 ? $" +{bonus}" : "");
         }
     }
 }

@@ -26,7 +26,6 @@ namespace CraftingSystem
             // Formule PF1e : (Bonus^2) * Facteur
             long bonusPrice = (long)totalBonus * totalBonus * factor;
 
-            // On ajoute les coûts fixes (ex: matériaux spéciaux comme l'Adamantine, non gérés ici pour l'instant)
             return bonusPrice;
         }
 
@@ -37,7 +36,6 @@ namespace CraftingSystem
         {
             if (item == null || newEnchant == null) return 0;
 
-            // Si l'enchantement a un coût fixe en PO (ex: Slick, Shadow), on utilise l'override du JSON
             if (newEnchant.GoldOverride >= 0) return (long)(newEnchant.GoldOverride * costMultiplier);
 
             int currentBonus = item.Enchantments.Sum(e => e.Blueprint.EnchantmentCost);
@@ -49,7 +47,6 @@ namespace CraftingSystem
             long currentMarketPrice = (long)currentBonus * currentBonus * factor;
             long newMarketPrice = (long)newTotalBonus * newTotalBonus * factor;
 
-            // Prix d'amélioration = (Nouveau Prix - Ancien Prix) / 2 (Règle artisanat 50%)
             long baseUpgradeCost = (newMarketPrice - currentMarketPrice) / 2;
 
             return (long)(baseUpgradeCost * costMultiplier);
@@ -60,15 +57,28 @@ namespace CraftingSystem
         /// </summary>
         public static int GetCraftingDays(long gpCost, bool instant = false)
         {
-            // Si le cheat de craft instantané est actif (ou si le coût est 0), ça prend 0 jour.
             if (instant || gpCost <= 0) return 0;
 
-            // On divise le prix par 1000. 
-            // Math.Ceiling permet d'arrondir à l'entier supérieur (ex: 1250 po -> 2 jours).
             int days = (int)Math.Ceiling(gpCost / 1000.0);
-
-            // On s'assure qu'un objet coûteux prend au minimum 1 jour de travail
             return Math.Max(1, days);
+        }
+
+        /// <summary>
+        /// Formate les ticks restants en une chaîne lisible (Jours et Heures)
+        /// </summary>
+        public static string FormatRemainingTime(long remainingTicks)
+        {
+            if (remainingTicks <= 0) return "Terminé";
+
+            TimeSpan ts = TimeSpan.FromTicks(remainingTicks);
+            int days = ts.Days;
+            int hours = ts.Hours;
+
+            if (days > 0 && hours > 0) return $"{days} jour(s) et {hours} heure(s)";
+            if (days > 0) return $"{days} jour(s)";
+            if (hours > 0) return $"{hours} heure(s)";
+            
+            return "Moins d'une heure";
         }
     }
 }
