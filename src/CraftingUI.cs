@@ -29,8 +29,11 @@ namespace CraftingSystem
         private const float REFERENCE_WIDTH = 2560f;
         private const float REFERENCE_HEIGHT = 1440f;
         
-        // Sélection multiple
+        // Sélection multiple & Filtres
         private HashSet<string> queuedEnchantGuids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private bool showCategoryFilter = false;
+        private HashSet<string> activeCategories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private HashSet<string> activeTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         void Awake() 
         { 
@@ -126,6 +129,9 @@ namespace CraftingSystem
                     selectedItem = null;
                     newNameDraft = "";
                     queuedEnchantGuids.Clear();
+                    activeCategories.Clear();
+                    activeTypes.Clear();
+                    showCategoryFilter = false;
                 }
             }
 
@@ -178,6 +184,14 @@ namespace CraftingSystem
                             selectedItem = it;
                             newNameDraft = it.Name;
                             queuedEnchantGuids.Clear();
+                            activeCategories.Clear();
+                            showCategoryFilter = false;
+                            
+                            // -- PRÉ-SÉLECTION DU TYPE --
+                            activeTypes.Clear();
+                            if (it.Blueprint is BlueprintItemWeapon) activeTypes.Add("Weapon");
+                            else if (it.Blueprint is BlueprintItemArmor) activeTypes.Add("Armor");
+                            else activeTypes.Add("Other");
                         }
                     }
                     GUILayout.EndHorizontal();
@@ -207,7 +221,7 @@ namespace CraftingSystem
 
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true, GUILayout.ExpandHeight(true));
             
-            // --- SECTION RENOMMAGE (ENCHANTEMENT GRATUIT) ---
+            // --- SECTION RENOMMAGE ---
             GUILayout.Label("Action Spéciale : Renommer l'objet (Gratuit)");
             GUILayout.BeginHorizontal();
             
@@ -276,10 +290,87 @@ namespace CraftingSystem
             // --- RECHERCHE + LISTE ---
             GUILayout.Label("Enchantements disponibles :", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
 
+            // -- UI FILTRE DES TYPES --
+            GUILayout.BeginHorizontal();
+            bool isWep = GUILayout.Toggle(activeTypes.Contains("Weapon"), " Armes (Weapon)", GUILayout.Width(150 * scale));
+            bool isArm = GUILayout.Toggle(activeTypes.Contains("Armor"), " Armures (Armor)", GUILayout.Width(150 * scale));
+            bool isOth = GUILayout.Toggle(activeTypes.Contains("Other"), " Autres (Other)", GUILayout.Width(150 * scale));
+            
+            if (isWep) activeTypes.Add("Weapon"); else activeTypes.Remove("Weapon");
+            if (isArm) activeTypes.Add("Armor"); else activeTypes.Remove("Armor");
+            if (isOth) activeTypes.Add("Other"); else activeTypes.Remove("Other");
+            GUILayout.EndHorizontal();
+            
+            GUILayout.Space(10);
+
+            // On récupère TOUTE la liste directement, pour laisser l'UI gérer les types
+            List<EnchantmentData> rawAvailable;
+            lock (EnchantmentScanner.MasterList)
+            {
+                rawAvailable = EnchantmentScanner.MasterList.ToList();
+            }
+
+            // On filtre d'abord par Type
+            var typeFilteredAvailable = new List<EnchantmentData>();
+            foreach (var data in rawAvailable)
+            {
+                if (activeTypes.Contains(data.Type) || queuedEnchantGuids.Contains(data.Guid))
+                {
+                    typeFilteredAvailable.Add(data);
+                }
+            }
+
+            // -- EXTRACTION DES CATÉGORIES (basée uniquement sur les types actifs) --
+            HashSet<string> uniqueCategories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var data in typeFilteredAvailable)
+            {
+                var cleanCats = data.Categories != null ? data.Categories.Where(c => !string.Equals(c, "Discovered", StringComparison.OrdinalIgnoreCase)).ToList() : new List<string>();
+                if (cleanCats.Count == 0) uniqueCategories.Add("Untyped");
+                else foreach (var cat in cleanCats) uniqueCategories.Add(cat);
+            }
+            List<string> allCategoriesList = uniqueCategories.ToList();
+            allCategoriesList.Sort();
+
+            // -- UI RECHERCHE & FILTRES CATÉGORIES --
             GUILayout.BeginHorizontal();
             GUILayout.Label("Recherche : ", GUILayout.Width(100 * scale));
             enchantmentSearch = GUILayout.TextField(enchantmentSearch, GUILayout.ExpandWidth(true));
+            
+            string filterBtnText = activeCategories.Count > 0 ? $"Filtres ({activeCategories.Count}) ▼" : "Filtres (Tous) ▼";
+            if (GUILayout.Button(filterBtnText, GUILayout.Width(130 * scale))) showCategoryFilter = !showCategoryFilter;
             GUILayout.EndHorizontal();
+
+            if (showCategoryFilter)
+            {
+                GUILayout.BeginVertical(GUI.skin.box);
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button("Tout cocher", GUILayout.Width(120 * scale))) foreach (var c in allCategoriesList) activeCategories.Add(c);
+                if (GUILayout.Button("Tout décocher", GUILayout.Width(120 * scale))) activeCategories.Clear();
+                GUILayout.Label(activeCategories.Count == 0 ? " <i>(Aucun filtre actif = Tout afficher)</i>" : "", new GUIStyle(GUI.skin.label) { richText = true });
+                GUILayout.EndHorizontal();
+                GUILayout.Space(5);
+
+                int cols = 3;
+                int currentCol = 0;
+                GUILayout.BeginHorizontal();
+                foreach (var cat in allCategoriesList)
+                {
+                    bool isActive = activeCategories.Contains(cat);
+                    bool toggled = GUILayout.Toggle(isActive, cat, GUILayout.Width(240 * scale));
+                    if (toggled && !isActive) activeCategories.Add(cat);
+                    if (!toggled && isActive) activeCategories.Remove(cat);
+
+                    currentCol++;
+                    if (currentCol >= cols)
+                    {
+                        GUILayout.EndHorizontal();
+                        GUILayout.BeginHorizontal();
+                        currentCol = 0;
+                    }
+                }
+                GUILayout.EndHorizontal();
+                GUILayout.EndVertical();
+            }
 
             GUILayout.Space(5);
 
@@ -298,33 +389,45 @@ namespace CraftingSystem
             }
             else
             {
-                // On récupère TOUT DE SUITE la liste des enchantements cochés
                 var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
-                
-                // On interroge le Calculator : cet objet a-t-il le droit de voir les spéciaux ?
                 bool isReadyForSpecial = CraftingCalculator.IsItemReadyForSpecialEnchants(selectedItem, currentSelectedList);
                 bool isWeaponOrArmor = selectedItem.Blueprint is BlueprintItemWeapon || selectedItem.Blueprint is BlueprintItemArmor;
-
-                var available = EnchantmentScanner.GetFor(selectedItem);
                 
-                foreach (var data in available)
+                // On utilise la liste pré-filtrée par type !
+                foreach (var data in typeFilteredAvailable)
                 {
-                    // === NOUVEAU FILTRE DYNAMIQUE ===
-                    // Si c'est une arme/armure normale, et qu'on n'a pas encore coché "+1", on masque !
-                    if (isWeaponOrArmor && !isReadyForSpecial)
-                    {
-                        if (!CraftingCalculator.IsEnchantmentAllowedOnNormalItem(data))
-                            continue; // On passe au suivant (le bouton n'est pas dessiné)
-                    }
-                    // ==================================
+                    bool isQueued = queuedEnchantGuids.Contains(data.Guid);
 
-                    // On charge le Blueprint pour lire la traduction
+                    // --- FILTRE DES CATÉGORIES (LOGIQUE 'ET' STRICTE) ---
+                    if (!isQueued && activeCategories.Count > 0)
+                    {
+                        var cleanCats = data.Categories != null ? data.Categories.Where(c => !string.Equals(c, "Discovered", StringComparison.OrdinalIgnoreCase)).ToList() : new List<string>();
+                        if (cleanCats.Count == 0) cleanCats.Add("Untyped");
+
+                        bool matchAll = true; 
+                        foreach (var activeCat in activeCategories)
+                        {
+                            if (!cleanCats.Contains(activeCat, StringComparer.OrdinalIgnoreCase))
+                            {
+                                matchAll = false;
+                                break;
+                            }
+                        }
+                        if (!matchAll) continue; 
+                    }
+
+                    // --- FILTRE D'OBJET NORMAL ---
+                    if (isWeaponOrArmor && !isReadyForSpecial && !isQueued)
+                    {
+                        if (!CraftingCalculator.IsEnchantmentAllowedOnNormalItem(data)) continue; 
+                    }
+
+                    // --- FILTRE RECHERCHE ---
                     var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
                     string displayName = GetDisplayName(bp, data);
-
-                    // On fait la recherche sur le nom traduit, c'est plus intuitif pour le joueur !
                     if (!string.IsNullOrEmpty(enchantmentSearch) && !displayName.ToLower().Contains(enchantmentSearch.ToLower())) continue;
                     
+                    // --- FILTRE SOURCE ---
                     if (CraftingSettings.CurrentSourceFilter == SourceFilter.TTRPG && data.Source != "TTRPG") continue;
                     if (CraftingSettings.CurrentSourceFilter == SourceFilter.Owlcat && data.Source != "TTRPG" && data.Source != "Owlcat") continue;
                     if (CraftingSettings.CurrentSourceFilter == SourceFilter.Mods && data.Source != "Mod") continue;
@@ -336,13 +439,12 @@ namespace CraftingSystem
                     if (data.DaysOverride >= 0) days = (int)data.DaysOverride;
 
                     GUILayout.BeginHorizontal(GUI.skin.box);
-                    bool isSelected = queuedEnchantGuids.Contains(data.Guid);
-                    bool newSelected = GUILayout.Toggle(isSelected, $"{displayName}", GUILayout.Width(320 * scale));
+                    bool newSelected = GUILayout.Toggle(isQueued, $"{displayName}", GUILayout.Width(320 * scale));
                     GUILayout.FlexibleSpace();
                     GUILayout.Label($"{costToPay} po / {days} j   (+{data.PointCost})", GUILayout.Width(220 * scale));
                     
-                    if (newSelected && !isSelected) queuedEnchantGuids.Add(data.Guid);
-                    if (!newSelected && isSelected) queuedEnchantGuids.Remove(data.Guid);
+                    if (newSelected && !isQueued) queuedEnchantGuids.Add(data.Guid);
+                    if (!newSelected && isQueued) queuedEnchantGuids.Remove(data.Guid);
 
                     GUILayout.EndHorizontal();
                 }
@@ -524,30 +626,16 @@ namespace CraftingSystem
             GUI.Box(new Rect(rect.x, rect.y + rect.height + 5, rect.width, 2 * scale), "");
         }
 
-        /// <summary>
-        /// Tente de récupérer le nom officiel traduit par le jeu.
-        /// Si le jeu n'a pas de traduction pour cet effet, on se rabat sur le JSON, 
-        /// puis sur un nom interne "nettoyé".
-        /// </summary>
         private string GetDisplayName(BlueprintItemEnchantment bp, EnchantmentData data)
         {
-            // 1. On tente de lire le nom officiel traduit (FR/EN)
             if (bp != null && bp.m_EnchantName != null)
             {
                 string localized = bp.m_EnchantName.ToString();
-                if (!string.IsNullOrWhiteSpace(localized) && localized != bp.name)
-                {
-                    return localized;
-                }
+                if (!string.IsNullOrWhiteSpace(localized) && localized != bp.name) return localized;
             }
 
-            // 2. Si le jeu n'a pas de texte, on lit ton fichier JSON
-            if (data != null && !string.IsNullOrWhiteSpace(data.Name))
-            {
-                return data.Name;
-            }
+            if (data != null && !string.IsNullOrWhiteSpace(data.Name)) return data.Name;
 
-            // 3. En dernier recours, on nettoie le nom interne moche de Unity
             if (bp != null)
             {
                 return bp.name.Replace("WeaponEnchantment", "")
