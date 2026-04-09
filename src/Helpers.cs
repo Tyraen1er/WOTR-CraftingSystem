@@ -226,16 +226,4 @@ namespace CraftingSystem
             return bp;
         }
     }
-
-    [HarmonyPatch(typeof(LocalizationManager), "OnLocaleChanged")]
-    public static class LocalizationManager_OnLocaleChanged_Patch
-    {
-        public static void Postfix()
-        {
-            if (LocalizationManager.CurrentPack != null) {
-                Helpers.ApplyLocalization(LocalizationManager.CurrentLocale.ToString());
-                Helpers.InjectStringsIntoPack(LocalizationManager.CurrentPack);
-            }
-        }
-    }
 }

@@ -6,11 +6,29 @@ using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Designers;
 using Kingmaker.Items;
-// --- LIGNE AJOUTÉE POUR CORRIGER L'ERREUR CS0246 ---
-using Kingmaker.Designers.Mechanics.Facts; 
+using Kingmaker.Designers.Mechanics.Facts;using Kingmaker.EntitySystem;
+using Newtonsoft.Json;
+using System.Reflection;
+using HarmonyLib;
+using Kingmaker.Blueprints;
+using Kingmaker.Blueprints.JsonSystem;
+using Kingmaker.DialogSystem.Blueprints;
+using Kingmaker.Localization;
+using UnityModManagerNet;
+using Kingmaker;
+using Kingmaker.PubSubSystem;
+using Kingmaker.UI.Models.Log;
+using Kingmaker.Blueprints.Root;
+
 
 namespace CraftingSystem
 {
+    public class ItemPartCustomName : EntityPart
+    {
+        [JsonProperty]
+        public string CustomName;
+    }
+
     // =====================================================================
     // DICTIONNAIRE DES PRÉFIXES/SUFFIXES
     // Remplace la modification des Blueprints qui causait l'erreur CS0200
@@ -138,6 +156,90 @@ namespace CraftingSystem
                 text += $" +{totalEnhancement}";
             }
             return text;
+        }
+    }
+
+    // --- SUPPORT DU RENOMMAGE PERSISTANT ---
+    [HarmonyPatch(typeof(ItemEntity), "get_Name")]
+    public static class ItemEntity_Name_Patch
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ItemEntity __instance, ref string __result)
+        {
+            try {
+                var part = __instance.Get<ItemPartCustomName>();
+                if (part != null && !string.IsNullOrEmpty(part.CustomName))
+                {
+                    __result = part.CustomName;
+                }
+            } catch { }
+        }
+    }
+
+    // --- SÉCURITÉ : PRÉSERVER LE NOM LORS D'UN SPLIT ---
+    [HarmonyPatch(typeof(ItemEntity), nameof(ItemEntity.Split))]
+    public static class ItemEntity_Split_Patch
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ItemEntity __instance, ItemEntity __result)
+        {
+            if (__instance == null || __result == null || __instance == __result) return;
+            var originalPart = __instance.Get<ItemPartCustomName>();
+            if (originalPart != null)
+            {
+                var newPart = __result.Ensure<ItemPartCustomName>();
+                newPart.CustomName = originalPart.CustomName;
+            }
+        }
+    }
+
+    // =====================================================================
+    // GESTIONNAIRE DES ACTIONS DE RENOMMAGE (Nouveau conteneur)
+    // =====================================================================
+    public static class ItemRenamer
+    {
+        // --- GÉNÉRATEUR MANUEL DE NOM AUTO ---
+        public static string GenerateAutoName(ItemEntity item)
+        {
+            if (item == null) return "";
+            string uniqueName = item.Blueprint.m_DisplayNameText;
+            string defaultName = "";
+
+            if (item.Blueprint is BlueprintItemWeapon bpW) defaultName = bpW.Type.DefaultName;
+            else if (item.Blueprint is BlueprintItemArmor bpA) defaultName = bpA.Type.DefaultName;
+
+            string name = "";
+            if (string.IsNullOrEmpty(uniqueName)) 
+            {
+                name = item.GetEnchantmentPrefixes() + defaultName + item.GetEnchantmentSuffixes();
+            } 
+            else 
+            {
+                var suffixes = item.GetCustomEnchantmentSuffixes();
+                if (System.Text.RegularExpressions.Regex.Match(suffixes, @"\+\d").Success) 
+                {
+                    name = item.GetCustomEnchantmentPrefixes() + System.Text.RegularExpressions.Regex.Replace(uniqueName, @"\+\d", "") + suffixes;
+                } 
+                else 
+                {
+                    name = item.GetCustomEnchantmentPrefixes() + uniqueName + suffixes;
+                }
+            }
+            return name.Replace("  ", " ").Trim();
+        }
+
+        public static void RenameItem(ItemEntity item, string name)
+        {
+            if (item == null) return;
+            try
+            {
+                if (string.IsNullOrEmpty(name)) item.Remove<ItemPartCustomName>();
+                else item.Ensure<ItemPartCustomName>().CustomName = name;
+                
+                item.Identify();
+                Main.ModEntry.Logger.Log($"[ATELIER] Renommé : {(string.IsNullOrEmpty(name) ? "Original" : name)}");
+            }
+            catch (Exception ex) { Main.ModEntry.Logger.Error($"Erreur renommage : {ex}"); }
         }
     }
 }
