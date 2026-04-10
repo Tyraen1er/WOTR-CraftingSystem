@@ -111,10 +111,10 @@ namespace CraftingSystem
             // --- HEADER AVEC DÉFILEMENT POUR TEXTE LONG ---
             GUILayout.BeginHorizontal();
             
-            string title = "Atelier";
-            if (ShowSettings) title = "Configuration";
-            else if (selectedItem != null) title = "Détails : " + selectedItem.Name;
-            else title = "Sélection d'objet";
+            string title = Helpers.GetString("ui_title_workshop", "Atelier");
+            if (ShowSettings) title = Helpers.GetString("ui_title_config", "Configuration");
+            else if (selectedItem != null) title = Helpers.GetString("ui_title_details", "Détails : ") + selectedItem.Name;
+            else title = Helpers.GetString("ui_title_select", "Sélection d'objet");
             
             titleScrollPosition = GUILayout.BeginScrollView(titleScrollPosition, GUIStyle.none, GUIStyle.none, GUILayout.ExpandWidth(true), GUILayout.Height(45 * scale));
             GUILayout.Label(title, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(16 * scale), wordWrap = false });
@@ -124,7 +124,7 @@ namespace CraftingSystem
             
             if (selectedItem != null && !ShowSettings)
             {
-                if (GUILayout.Button("<< RETOUR", GUILayout.Width(130 * scale), GUILayout.Height(30 * scale))) 
+                if (GUILayout.Button(Helpers.GetString("ui_btn_back", "<< RETOUR"), GUILayout.Width(130 * scale), GUILayout.Height(30 * scale))) 
                 {
                     selectedItem = null;
                     newNameDraft = "";
@@ -139,7 +139,7 @@ namespace CraftingSystem
             float optionWidth = Mathf.Max(CraftingSettings.BUTTON_OPTION_WIDTH_BASE * scale, windowWidth * 0.14f);
             float closeWidth  = Mathf.Max(CraftingSettings.BUTTON_CLOSE_WIDTH_BASE  * scale, windowWidth * 0.06f);
 
-            if (GUILayout.Button(ShowSettings ? "Atelier" : "Options", GUILayout.Width(optionWidth), GUILayout.Height(30 * scale)))
+            if (GUILayout.Button(ShowSettings ? Helpers.GetString("ui_btn_workshop", "Atelier") : Helpers.GetString("ui_btn_options", "Options"), GUILayout.Width(optionWidth), GUILayout.Height(30 * scale)))
             {
                 ShowSettings = !ShowSettings;
             }
@@ -160,7 +160,7 @@ namespace CraftingSystem
             var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
             var items = workshop?.StashedItems ?? new List<ItemEntity>();
 
-            if (!items.Any()) GUILayout.Label("\n   (Aucun objet n'est stocké dans l'atelier)");
+            if (!items.Any()) GUILayout.Label(Helpers.GetString("ui_no_item_stashed", "\n   (Aucun objet n'est stocké dans l'atelier)"));
             else 
             {
                 GUIStyle entryStyle = new GUIStyle(GUI.skin.button) { 
@@ -177,7 +177,7 @@ namespace CraftingSystem
                         var it = items[i + j];
                         var project = workshop?.ActiveProjects.FirstOrDefault(p => p.Item == it);
                         string label = it.Name;
-                        if (project != null) label += " (En forge...)";
+                        if (project != null) label += Helpers.GetString("ui_in_forge", " (En forge...)");
 
                         if (GUILayout.Button(label, entryStyle, GUILayout.Width(350 * scale), GUILayout.Height(50 * scale))) 
                         {
@@ -211,10 +211,11 @@ namespace CraftingSystem
             {
                 long remainingTicks = activeProject.FinishTimeTicks - Game.Instance.Player.GameTime.Ticks;
                 double remainingDays = Math.Max(0, remainingTicks / (double)TimeSpan.TicksPerDay);
-                GUILayout.Label($"<b>WILCER EST EN TRAIN DE TRAVAILLER SUR CET OBJET</b>", new GUIStyle(GUI.skin.label) { richText = true, alignment = TextAnchor.MiddleCenter });
-                GUILayout.Label($"Temps restant estimé : {remainingDays:F1} jours", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label(Helpers.GetString("ui_wilcer_working", "<b>WILCER EST EN TRAIN DE TRAVAILLER SUR CET OBJET</b>"), new GUIStyle(GUI.skin.label) { richText = true, alignment = TextAnchor.MiddleCenter });
+                string remText = string.Format(Helpers.GetString("ui_time_remaining", "Temps restant estimé : {0:F1} jours"), remainingDays);
+                GUILayout.Label(remText, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
                 GUILayout.Space(20);
-                if (GUILayout.Button("Fermer l'interface", GUILayout.Height(40 * scale))) IsOpen = false;
+                if (GUILayout.Button(Helpers.GetString("ui_btn_close_ui", "Fermer l'interface"), GUILayout.Height(40 * scale))) IsOpen = false;
                 GUILayout.EndVertical();
                 return;
             }
@@ -222,7 +223,7 @@ namespace CraftingSystem
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true, GUILayout.ExpandHeight(true));
             
             // --- SECTION RENOMMAGE ---
-            GUILayout.Label("Action Spéciale : Renommer l'objet (Gratuit)");
+            GUILayout.Label(Helpers.GetString("ui_special_action_rename", "Action Spéciale : Renommer l'objet (Gratuit)"));
             GUILayout.BeginHorizontal();
             
             float windowWidth = 800f * scale;
@@ -237,18 +238,18 @@ namespace CraftingSystem
             
             GUILayout.Space(10 * scale);
             
-            if (GUILayout.Button("Renommer", GUILayout.Width(100 * scale), GUILayout.Height(30 * scale)))
+            if (GUILayout.Button(Helpers.GetString("ui_btn_rename", "Renommer"), GUILayout.Width(100 * scale), GUILayout.Height(30 * scale)))
             {
                 ItemRenamer.RenameItem(selectedItem, newNameDraft);
-                feedbackMessage = "L'objet a été renommé !";
+                feedbackMessage = Helpers.GetString("ui_feedback_renamed", "L'objet a été renommé !");
             }
 
-            if (selectedItem != null && GUILayout.Button("Auto", GUILayout.Width(80 * scale), GUILayout.Height(30 * scale)))
+            if (selectedItem != null && GUILayout.Button(Helpers.GetString("ui_btn_auto", "Auto"), GUILayout.Width(80 * scale), GUILayout.Height(30 * scale)))
             {
                 string autoName = ItemRenamer.GenerateAutoName(selectedItem);
                 ItemRenamer.RenameItem(selectedItem, autoName);
                 newNameDraft = autoName;
-                feedbackMessage = "Nom automatique généré.";
+                feedbackMessage = Helpers.GetString("ui_feedback_autoname_gen", "Nom automatique généré.");
             }
             GUILayout.EndHorizontal();
             
@@ -257,11 +258,11 @@ namespace CraftingSystem
             GUILayout.Space(10);
             
             // --- SECTION : ENCHANTEMENTS DÉJÀ PRÉSENTS ---
-            GUILayout.Label("Enchantements appliqués :", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+            GUILayout.Label(Helpers.GetString("ui_applied_enchants", "Enchantements appliqués :"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
             var currentEnchants = selectedItem.Enchantments.ToList();
             if (!currentEnchants.Any()) 
             {
-                GUILayout.Label("<i>(Aucun enchantement magique)</i>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(12 * scale) });
+                GUILayout.Label(Helpers.GetString("ui_no_magic_enchants", "<i>(Aucun enchantement magique)</i>"), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(12 * scale) });
             }
             else 
             {
@@ -274,7 +275,7 @@ namespace CraftingSystem
                     GUILayout.BeginHorizontal(GUI.skin.box);
                     string displayName = GetDisplayName(ench.Blueprint, overrideData);
                     GUILayout.Label($"{displayName} (+{pointValue})", GUILayout.ExpandWidth(true));
-                    if (GUILayout.Button("Retirer", GUILayout.Width(80 * scale)))
+                    if (GUILayout.Button(Helpers.GetString("ui_btn_remove", "Retirer"), GUILayout.Width(80 * scale)))
                     {
                         selectedItem.RemoveEnchantment(ench);
                         selectedItem.Identify(); 
@@ -288,13 +289,13 @@ namespace CraftingSystem
             GUILayout.Space(10);
             
             // --- RECHERCHE + LISTE ---
-            GUILayout.Label("Enchantements disponibles :", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+            GUILayout.Label(Helpers.GetString("ui_available_enchants", "Enchantements disponibles :"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
 
             // -- UI FILTRE DES TYPES --
             GUILayout.BeginHorizontal();
-            bool isWep = GUILayout.Toggle(activeTypes.Contains("Weapon"), " Armes (Weapon)", GUILayout.Width(150 * scale));
-            bool isArm = GUILayout.Toggle(activeTypes.Contains("Armor"), " Armures (Armor)", GUILayout.Width(150 * scale));
-            bool isOth = GUILayout.Toggle(activeTypes.Contains("Other"), " Autres (Other)", GUILayout.Width(150 * scale));
+            bool isWep = GUILayout.Toggle(activeTypes.Contains("Weapon"), Helpers.GetString("ui_filter_weapons", " Armes (Weapon)"), GUILayout.Width(150 * scale));
+            bool isArm = GUILayout.Toggle(activeTypes.Contains("Armor"), Helpers.GetString("ui_filter_armors", " Armures (Armor)"), GUILayout.Width(150 * scale));
+            bool isOth = GUILayout.Toggle(activeTypes.Contains("Other"), Helpers.GetString("ui_filter_others", " Autres (Other)"), GUILayout.Width(150 * scale));
             
             if (isWep) activeTypes.Add("Weapon"); else activeTypes.Remove("Weapon");
             if (isArm) activeTypes.Add("Armor"); else activeTypes.Remove("Armor");
@@ -333,10 +334,10 @@ namespace CraftingSystem
 
             // -- UI RECHERCHE & FILTRES CATÉGORIES --
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Recherche : ", GUILayout.Width(100 * scale));
+            GUILayout.Label(Helpers.GetString("ui_search_label", "Recherche : "), GUILayout.Width(100 * scale));
             enchantmentSearch = GUILayout.TextField(enchantmentSearch, GUILayout.ExpandWidth(true));
             
-            string filterBtnText = activeCategories.Count > 0 ? $"Filtres ({activeCategories.Count}) ▼" : "Filtres (Tous) ▼";
+            string filterBtnText = activeCategories.Count > 0 ? string.Format(Helpers.GetString("ui_filter_active_btn", "Filtres ({0}) ▼"), activeCategories.Count) : Helpers.GetString("ui_filter_all_btn", "Filtres (Tous) ▼");
             if (GUILayout.Button(filterBtnText, GUILayout.Width(130 * scale))) showCategoryFilter = !showCategoryFilter;
             GUILayout.EndHorizontal();
 
@@ -344,9 +345,9 @@ namespace CraftingSystem
             {
                 GUILayout.BeginVertical(GUI.skin.box);
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button("Tout cocher", GUILayout.Width(120 * scale))) foreach (var c in allCategoriesList) activeCategories.Add(c);
-                if (GUILayout.Button("Tout décocher", GUILayout.Width(120 * scale))) activeCategories.Clear();
-                GUILayout.Label(activeCategories.Count == 0 ? " <i>(Aucun filtre actif = Tout afficher)</i>" : "", new GUIStyle(GUI.skin.label) { richText = true });
+                if (GUILayout.Button(Helpers.GetString("ui_filter_check_all", "Tout cocher"), GUILayout.Width(120 * scale))) foreach (var c in allCategoriesList) activeCategories.Add(c);
+                if (GUILayout.Button(Helpers.GetString("ui_filter_uncheck_all", "Tout décocher"), GUILayout.Width(120 * scale))) activeCategories.Clear();
+                GUILayout.Label(activeCategories.Count == 0 ? Helpers.GetString("ui_filter_none_active", " <i>(Aucun filtre actif = Tout afficher)</i>") : "", new GUIStyle(GUI.skin.label) { richText = true });
                 GUILayout.EndHorizontal();
                 GUILayout.Space(5);
 
@@ -385,7 +386,7 @@ namespace CraftingSystem
 
             if (EnchantmentScanner.IsSyncing)
             {
-                GUILayout.Label("Scan en cours — aucun enchantement disponible pour l'instant.", new GUIStyle(GUI.skin.label) { fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label(Helpers.GetString("ui_scan_in_progress", "Scan en cours — aucun enchantement disponible pour l'instant."), new GUIStyle(GUI.skin.label) { fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
             }
             else
             {
@@ -430,7 +431,7 @@ namespace CraftingSystem
                     // --- FILTRE SOURCE ---
                     if (CraftingSettings.CurrentSourceFilter == SourceFilter.TTRPG && data.Source != "TTRPG") continue;
                     if (CraftingSettings.CurrentSourceFilter == SourceFilter.Owlcat && data.Source != "TTRPG" && data.Source != "Owlcat") continue;
-                    if (CraftingSettings.CurrentSourceFilter == SourceFilter.Mods && data.Source != "Mod") continue;
+                    if (CraftingSettings.CurrentSourceFilter == SourceFilter.Mods && (data.Source == "TTRPG" || data.Source == "Owlcat")) continue;
                     
                     long costToPay = CraftingCalculator.GetUpgradeCost(selectedItem, data, CraftingSettings.CostMultiplier);
                     int days = CraftingCalculator.GetCraftingDays(costToPay, CraftingSettings.InstantCrafting);
@@ -474,15 +475,15 @@ namespace CraftingSystem
             int selectedPoints = selectedList.Sum(d => d.PointCost);
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label($"Niveau actuel : {currentLevelPoints}/{maxLevel}", GUILayout.ExpandWidth(false));
+            GUILayout.Label(string.Format(Helpers.GetString("ui_current_level", "Niveau actuel : {0}/{1}"), currentLevelPoints, maxLevel), GUILayout.ExpandWidth(false));
             GUILayout.FlexibleSpace();
-            GUILayout.Label($"Sélection : +{selectedPoints} — Total : {totalCost} po / ~{totalDays} j", GUILayout.ExpandWidth(false));
+            GUILayout.Label(string.Format(Helpers.GetString("ui_selection_total", "Sélection : +{0} — Total : {1} po / ~{2} j"), selectedPoints, totalCost, totalDays), GUILayout.ExpandWidth(false));
             GUILayout.EndHorizontal();
 
             GUILayout.Space(6);
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Valider la sélection", GUILayout.Width(200 * scale), GUILayout.Height(32 * scale)))
+            if (GUILayout.Button(Helpers.GetString("ui_btn_validate_selection", "Valider la sélection"), GUILayout.Width(200 * scale), GUILayout.Height(32 * scale)))
             {
                 string validationError = CraftingCalculator.ValidateSelectionBeforeStart(selectedItem, selectedList, totalCost);
                 if (!string.IsNullOrEmpty(validationError))
@@ -505,7 +506,8 @@ namespace CraftingSystem
 
                         try 
                         {
-                            string logText = $"<color=#E2C675>[Atelier]</color> <b>{selectedItem.Name}</b> a été envoyé en forge pour <b>{totalCost} po</b>.";
+                            string localizedLogBase = Helpers.GetString("log_project_started", "<color=#E2C675>[Atelier]</color> <b>{0}</b> a été envoyé en forge pour <b>{1} po</b>.");
+                            string logText = string.Format(localizedLogBase, selectedItem.Name, totalCost);
                             Kingmaker.PubSubSystem.EventBus.RaiseEvent<Kingmaker.PubSubSystem.ILogMessageUIHandler>(
                                 h => h.HandleLogMessage(logText)
                             );
@@ -517,16 +519,18 @@ namespace CraftingSystem
 
                         queuedEnchantGuids.Clear();
                         selectedItem = null;
-                        feedbackMessage = $"Projets lancés : {selectedList.Count} enchantement(s).";
+                        
+                        string fbBase = Helpers.GetString("ui_feedback_projects_started", "Projets lancés : {0} enchantement(s).");
+                        feedbackMessage = string.Format(fbBase, selectedList.Count);
                     }
                     else
                     {
-                        feedbackMessage = "Erreur inattendue : fonds insuffisants au moment du paiement.";
+                        feedbackMessage = Helpers.GetString("ui_feedback_no_funds", "Erreur inattendue : fonds insuffisants au moment du paiement.");
                     }
                 }
             }
 
-            if (GUILayout.Button("Annuler la sélection", GUILayout.Width(180 * scale), GUILayout.Height(32 * scale)))
+            if (GUILayout.Button(Helpers.GetString("ui_btn_cancel_selection", "Annuler la sélection"), GUILayout.Width(180 * scale), GUILayout.Height(32 * scale)))
             {
                 queuedEnchantGuids.Clear();
             }
@@ -546,17 +550,17 @@ namespace CraftingSystem
             SourceFilter prevSourceFilter = CraftingSettings.CurrentSourceFilter;
 
             GUILayout.BeginVertical(GUI.skin.box);
-            GUILayout.Label("Réglages de l'Atelier", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+            GUILayout.Label(Helpers.GetString("ui_settings_title", "Réglages de l'Atelier"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
             
             GUILayout.Space(10);
             
             GUILayout.BeginHorizontal();
-            GUILayout.Label(" Multiplicateur de coût : " + CraftingSettings.CostMultiplier.ToString("F1"), GUILayout.Width(200 * scale));
+            GUILayout.Label(Helpers.GetString("ui_settings_cost_mult", " Multiplicateur de coût : ") + CraftingSettings.CostMultiplier.ToString("F1"), GUILayout.Width(200 * scale));
             CraftingSettings.CostMultiplier = GUILayout.HorizontalSlider(CraftingSettings.CostMultiplier, 0f, 5f, GUILayout.Width(150 * scale));
             GUILayout.EndHorizontal();
 
             bool previousInstantCrafting = CraftingSettings.InstantCrafting;
-            CraftingSettings.InstantCrafting = GUILayout.Toggle(CraftingSettings.InstantCrafting, "Craft Instantané");
+            CraftingSettings.InstantCrafting = GUILayout.Toggle(CraftingSettings.InstantCrafting, Helpers.GetString("ui_settings_instant_craft", "Craft Instantané"));
 
             if (CraftingSettings.InstantCrafting && !previousInstantCrafting)
             {
@@ -566,7 +570,7 @@ namespace CraftingSystem
                     if (workshop != null)
                     {
                         workshop.CheckAndFinishProjects();
-                        feedbackMessage = "Toutes les forges en cours ont été terminées instantanément !";
+                        feedbackMessage = Helpers.GetString("ui_feedback_all_forges_done", "Toutes les forges en cours ont été terminées instantanément !");
                     }
                 }
                 catch (Exception ex) { Main.ModEntry.Logger.Error($"[UI-DEBUG] CRASH : {ex.Message}"); }
@@ -574,37 +578,37 @@ namespace CraftingSystem
             
             GUILayout.Space(10);
             
-            CraftingSettings.EnforcePointsLimit = GUILayout.Toggle(CraftingSettings.EnforcePointsLimit, " Appliquer les limites de bonus (Pathfinder)");
+            CraftingSettings.EnforcePointsLimit = GUILayout.Toggle(CraftingSettings.EnforcePointsLimit, Helpers.GetString("ui_settings_enforce_limit", " Appliquer les limites de bonus (Pathfinder)"));
             
             if (CraftingSettings.EnforcePointsLimit)
             {
                 GUILayout.BeginHorizontal();
-                GUILayout.Label($" Max Altération : +{CraftingSettings.MaxEnhancementBonus}", GUILayout.Width(150 * scale));
+                GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_enhancement", " Max Altération : +{0}"), CraftingSettings.MaxEnhancementBonus), GUILayout.Width(150 * scale));
                 CraftingSettings.MaxEnhancementBonus = (int)GUILayout.HorizontalSlider(CraftingSettings.MaxEnhancementBonus, 1, 20, GUILayout.Width(150 * scale));
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label($" Max Total : +{CraftingSettings.MaxTotalBonus}", GUILayout.Width(150 * scale));
+                GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_total", " Max Total : +{0}"), CraftingSettings.MaxTotalBonus), GUILayout.Width(150 * scale));
                 CraftingSettings.MaxTotalBonus = (int)GUILayout.HorizontalSlider(CraftingSettings.MaxTotalBonus, 1, 50, GUILayout.Width(150 * scale));
                 GUILayout.EndHorizontal();
 
-                CraftingSettings.RequirePlusOneFirst = GUILayout.Toggle(CraftingSettings.RequirePlusOneFirst, " Prérequis : +1 Altération minimum");
+                CraftingSettings.RequirePlusOneFirst = GUILayout.Toggle(CraftingSettings.RequirePlusOneFirst, Helpers.GetString("ui_settings_require_plus_one", " Prérequis : +1 Altération minimum"));
             }
 
             GUILayout.Space(10);
-            GUILayout.Label("Affichage des sources :");
+            GUILayout.Label(Helpers.GetString("ui_settings_source_display", "Affichage des sources :"));
             GUILayout.BeginHorizontal();
             if (GUILayout.Toggle(CraftingSettings.CurrentSourceFilter == SourceFilter.TTRPG, "TTRPG")) CraftingSettings.CurrentSourceFilter = SourceFilter.TTRPG;
-            if (GUILayout.Toggle(CraftingSettings.CurrentSourceFilter == SourceFilter.Owlcat, "Owlcat")) CraftingSettings.CurrentSourceFilter = SourceFilter.Owlcat;
+            if (GUILayout.Toggle(CraftingSettings.CurrentSourceFilter == SourceFilter.Owlcat, "Owlcat + TTRPG")) CraftingSettings.CurrentSourceFilter = SourceFilter.Owlcat;
             if (GUILayout.Toggle(CraftingSettings.CurrentSourceFilter == SourceFilter.Mods, "Mods")) CraftingSettings.CurrentSourceFilter = SourceFilter.Mods;
-            if (GUILayout.Toggle(CraftingSettings.CurrentSourceFilter == SourceFilter.All, "Tout")) CraftingSettings.CurrentSourceFilter = SourceFilter.All;
+            if (GUILayout.Toggle(CraftingSettings.CurrentSourceFilter == SourceFilter.All, Helpers.GetString("ui_settings_source_all", "Tout"))) CraftingSettings.CurrentSourceFilter = SourceFilter.All;
             GUILayout.EndHorizontal();
 
             GUILayout.Space(20);
             
-            GUILayout.Label("Outils de diagnostic :");
+            GUILayout.Label(Helpers.GetString("ui_settings_diagnostic", "Outils de diagnostic :"));
             GUILayout.Label(EnchantmentScanner.LastSyncMessage);
-            if (GUILayout.Button("Forcer la synchronisation (Scan intégral)", GUILayout.Height(30 * scale)))
+            if (GUILayout.Button(Helpers.GetString("ui_settings_force_sync", "Forcer la synchronisation (Scan intégral)"), GUILayout.Height(30 * scale)))
             {
                 EnchantmentScanner.ForceSync();
             }
@@ -644,7 +648,7 @@ namespace CraftingSystem
                               .Replace("Plus", "+");
             }
 
-            return "Enchantement inconnu";
+            return Helpers.GetString("ui_unknown_enchant_name", "Enchantement inconnu");
         }
     }
 }

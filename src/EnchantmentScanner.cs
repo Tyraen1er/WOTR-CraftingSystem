@@ -187,7 +187,7 @@ namespace CraftingSystem
 
                     // --- RÉUSSITE TOTALE ---
                     _hasSyncedThisSession = true;
-                    LastSyncMessage = $"Sync réussie ({MasterList.Count} enchantements).";
+                    LastSyncMessage = string.Format(Helpers.GetString("ui_sync_success", "Sync réussie ({0} enchantements)."), MasterList.Count);
                     Main.ModEntry.Logger.Log($"[SYNC] Synchronisation terminée avec succès. {MasterList.Count} enchantements répertoriés.");
                 }
                 catch (Exception ex)

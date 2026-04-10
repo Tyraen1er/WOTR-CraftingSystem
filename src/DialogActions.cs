@@ -139,11 +139,7 @@ namespace CraftingSystem
                 var aM = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_modify"), "CraftingSystem_AnsModify", "fa3e1f7d4e3347bdaeb88a1b6c8baab9");
                 var aC = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_cancel"), "CraftingSystem_AnsCancel", "fa3e1f7d4e3347bdaeba8a1b6c8baab1");
                 
-                // [LEGACY_COMPATIBILITY]
-                Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_weapon"), "CraftingSystem_Legacy_Weapon", "fa3e1f7d4e3347bdaeb88a1b6c8baab8");
-                Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_armor"),  "CraftingSystem_Legacy_Armor",  "fa3e1f7d4e3347bdaeb88a1b6c8baab8");
-                Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_item"),   "CraftingSystem_Legacy_Item",   "fa3e1f7d4e3347bdaeb88a1b6c8baab8");
-                Helpers.CreateAnswer("bdfc738cca072e29cf4bbcaf21d14546", "CraftingSystem_Ghost_Answer", "fa3e1f7d4e3347bdaeb88a1b6c8baab6");
+
                 
                 var actD = (OpenItemSelectorAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(OpenItemSelectorAction));
                 var actM = (OpenStoredItemSelectorAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(OpenStoredItemSelectorAction));

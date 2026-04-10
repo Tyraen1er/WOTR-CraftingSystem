@@ -20,6 +20,15 @@ namespace CraftingSystem
         // Static GUIDs for our injected strings so they can be reliably referenced
         public static readonly string CraftingIntroGuid = "fa3e1f7d4e3347bdaeb88a1b6c8baab6";
 
+        public static string GetString(string key, string fallback = null)
+        {
+            if (CustomStrings.ContainsKey(key))
+            {
+                return CustomStrings[key];
+            }
+            return fallback ?? key; // Return fallback or key if not found
+        }
+
         public static void LoadLocalization(string modPath)
         {
             try {

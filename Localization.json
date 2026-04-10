@@ -27,6 +27,210 @@
         "fa3e1f7d4e3347bdaeba8a1b6c8baab3": {
             "enGB": "« As you wish. Anything else? »",
             "frFR": "« Entendu. Je reste à votre disposition si vous changez d'avis. Autre chose ? »"
+        },
+        "ui_title_workshop": {
+            "enGB": "Workshop",
+            "frFR": "Atelier"
+        },
+        "ui_title_config": {
+            "enGB": "Configuration",
+            "frFR": "Configuration"
+        },
+        "ui_title_details": {
+            "enGB": "Details: ",
+            "frFR": "Détails : "
+        },
+        "ui_title_select": {
+            "enGB": "Item Selection",
+            "frFR": "Sélection d'objet"
+        },
+        "ui_feedback_renamed": {
+            "enGB": "The item has been renamed!",
+            "frFR": "L'objet a été renommé !"
+        },
+        "ui_feedback_autoname_gen": {
+            "enGB": "Automatic name generated.",
+            "frFR": "Nom automatique généré."
+        },
+        "log_project_started": {
+            "enGB": "<color=#E2C675>[Workshop]</color> <b>{0}</b> has been sent to the forge for <b>{1} gp</b>.",
+            "frFR": "<color=#E2C675>[Atelier]</color> <b>{0}</b> a été envoyé en forge pour <b>{1} po</b>."
+        },
+        "ui_feedback_projects_started": {
+            "enGB": "Projects started: {0} enchantment(s).",
+            "frFR": "Projets lancés : {0} enchantement(s)."
+        },
+        "ui_feedback_no_funds": {
+            "enGB": "Unexpected error: insufficient funds at the time of payment.",
+            "frFR": "Erreur inattendue : fonds insuffisants au moment du paiement."
+        },
+        "ui_btn_back": {
+            "enGB": "<< BACK",
+            "frFR": "<< RETOUR"
+        },
+        "ui_btn_options": {
+            "enGB": "Options",
+            "frFR": "Options"
+        },
+        "ui_no_item_stashed": {
+            "enGB": "\n   (No item is stored in the workshop)",
+            "frFR": "\n   (Aucun objet n'est stocké dans l'atelier)"
+        },
+        "ui_in_forge": {
+            "enGB": " (In forge...)",
+            "frFR": " (En forge...)"
+        },
+        "ui_wilcer_working": {
+            "enGB": "<b>WILCER IS CURRENTLY WORKING ON THIS ITEM</b>",
+            "frFR": "<b>WILCER EST EN TRAIN DE TRAVAILLER SUR CET OBJET</b>"
+        },
+        "ui_time_remaining": {
+            "enGB": "Estimated remaining time: {0:F1} days",
+            "frFR": "Temps restant estimé : {0:F1} jours"
+        },
+        "ui_btn_close_ui": {
+            "enGB": "Close Interface",
+            "frFR": "Fermer l'interface"
+        },
+        "ui_special_action_rename": {
+            "enGB": "Special Action: Rename item (Free)",
+            "frFR": "Action Spéciale : Renommer l'objet (Gratuit)"
+        },
+        "ui_btn_rename": {
+            "enGB": "Rename",
+            "frFR": "Renommer"
+        },
+        "ui_btn_auto": {
+            "enGB": "Auto",
+            "frFR": "Auto"
+        },
+        "ui_applied_enchants": {
+            "enGB": "Applied Enchantments:",
+            "frFR": "Enchantements appliqués :"
+        },
+        "ui_no_magic_enchants": {
+            "enGB": "<i>(No magic enchantment)</i>",
+            "frFR": "<i>(Aucun enchantement magique)</i>"
+        },
+        "ui_btn_remove": {
+            "enGB": "Remove",
+            "frFR": "Retirer"
+        },
+        "ui_available_enchants": {
+            "enGB": "Available Enchantments:",
+            "frFR": "Enchantements disponibles :"
+        },
+        "ui_filter_weapons": {
+            "enGB": " Weapons",
+            "frFR": " Armes (Weapon)"
+        },
+        "ui_filter_armors": {
+            "enGB": " Armors",
+            "frFR": " Armures (Armor)"
+        },
+        "ui_filter_others": {
+            "enGB": " Others",
+            "frFR": " Autres (Other)"
+        },
+        "ui_search_label": {
+            "enGB": "Search: ",
+            "frFR": "Recherche : "
+        },
+        "ui_filter_active_btn": {
+            "enGB": "Filters ({0}) \u25bc",
+            "frFR": "Filtres ({0}) \u25bc"
+        },
+        "ui_filter_all_btn": {
+            "enGB": "Filters (All) \u25bc",
+            "frFR": "Filtres (Tous) \u25bc"
+        },
+        "ui_filter_check_all": {
+            "enGB": "Check All",
+            "frFR": "Tout cocher"
+        },
+        "ui_filter_uncheck_all": {
+            "enGB": "Uncheck All",
+            "frFR": "Tout décocher"
+        },
+        "ui_filter_none_active": {
+            "enGB": " <i>(No filter active = Show all)</i>",
+            "frFR": " <i>(Aucun filtre actif = Tout afficher)</i>"
+        },
+        "ui_scan_in_progress": {
+            "enGB": "Scan in progress \u2014 no enchantment available for now.",
+            "frFR": "Scan en cours \u2014 aucun enchantement disponible pour l'instant."
+        },
+        "ui_current_level": {
+            "enGB": "Current level: {0}/{1}",
+            "frFR": "Niveau actuel : {0}/{1}"
+        },
+        "ui_selection_total": {
+            "enGB": "Selection: +{0} \u2014 Total: {1} gp / ~{2} d",
+            "frFR": "S\u00e9lection : +{0} \u2014 Total : {1} po / ~{2} j"
+        },
+        "ui_btn_validate_selection": {
+            "enGB": "Confirm Selection",
+            "frFR": "Valider la sélection"
+        },
+        "ui_btn_cancel_selection": {
+            "enGB": "Cancel Selection",
+            "frFR": "Annuler la sélection"
+        },
+        "ui_settings_title": {
+            "enGB": "Workshop Settings",
+            "frFR": "Réglages de l'Atelier"
+        },
+        "ui_settings_cost_mult": {
+            "enGB": " Cost Multiplier: ",
+            "frFR": " Multiplicateur de coût : "
+        },
+        "ui_settings_instant_craft": {
+            "enGB": "Instant Crafting",
+            "frFR": "Craft Instantané"
+        },
+        "ui_feedback_all_forges_done": {
+            "enGB": "All active forging projects have been completed instantly!",
+            "frFR": "Toutes les forges en cours ont été terminées instantanément !"
+        },
+        "ui_settings_enforce_limit": {
+            "enGB": " Enforce Bonus Limits (Pathfinder)",
+            "frFR": " Appliquer les limites de bonus (Pathfinder)"
+        },
+        "ui_settings_max_enhancement": {
+            "enGB": " Max Enhancement: +{0}",
+            "frFR": " Max Altération : +{0}"
+        },
+        "ui_settings_max_total": {
+            "enGB": " Max Total: +{0}",
+            "frFR": " Max Total : +{0}"
+        },
+        "ui_settings_require_plus_one": {
+            "enGB": " Prerequisite: At least +1 Enhancement",
+            "frFR": " Prérequis : +1 Altération minimum"
+        },
+        "ui_settings_source_display": {
+            "enGB": "Source display:",
+            "frFR": "Affichage des sources :"
+        },
+        "ui_settings_source_all": {
+            "enGB": "All",
+            "frFR": "Tout"
+        },
+        "ui_settings_diagnostic": {
+            "enGB": "Diagnostic Tools:",
+            "frFR": "Outils de diagnostic :"
+        },
+        "ui_settings_force_sync": {
+            "enGB": "Force Synchronization (Full Scan)",
+            "frFR": "Forcer la synchronisation (Scan intégral)"
+        },
+        "ui_unknown_enchant_name": {
+            "enGB": "Unknown Enchantment",
+            "frFR": "Enchantement inconnu"
+        },
+        "ui_sync_success": {
+            "enGB": "Sync successful ({0} enchantments).",
+            "frFR": "Sync réussie ({0} enchantements)."
         }
     }
 }
