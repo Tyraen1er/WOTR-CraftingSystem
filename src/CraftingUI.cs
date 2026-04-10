@@ -439,12 +439,35 @@ namespace CraftingSystem
                     if (data.GoldOverride >= 0) costToPay = (long)(data.GoldOverride * CraftingSettings.CostMultiplier);
                     if (data.DaysOverride >= 0) days = (int)data.DaysOverride;
 
+                    string internalName = bp != null ? bp.name : (data.Name ?? "");
+
                     GUILayout.BeginHorizontal(GUI.skin.box);
-                    bool newSelected = GUILayout.Toggle(isQueued, $"{displayName}", GUILayout.Width(320 * scale));
-                    GUILayout.FlexibleSpace();
-                    GUILayout.Label($"{costToPay} po / {days} j   (+{data.PointCost})", GUILayout.Width(220 * scale));
+                    GUIStyle toggleStyle = new GUIStyle(GUI.skin.toggle) { richText = true };
+                    bool newSelected = GUILayout.Toggle(isQueued, $"{displayName} <color=#888888>({internalName})</color>", toggleStyle, GUILayout.ExpandWidth(true));
+                    GUILayout.Label($"{costToPay} po / {days} j   (+{data.PointCost})", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleRight }, GUILayout.Width(180 * scale));
                     
-                    if (newSelected && !isQueued) queuedEnchantGuids.Add(data.Guid);
+                    if (newSelected && !isQueued) 
+                    {
+                        string baseName = System.Text.RegularExpressions.Regex.Replace(internalName, @"\d+$", "");
+                        
+                        if (baseName.ToLower().Contains("enhancement"))
+                        {
+                            queuedEnchantGuids.RemoveWhere(guid => 
+                            {
+                                var otherData = EnchantmentScanner.GetByGuid(guid);
+                                if (otherData != null)
+                                {
+                                    var otherBp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(guid));
+                                    string otherInternal = otherBp != null ? otherBp.name : (otherData.Name ?? "");
+                                    string otherBase = System.Text.RegularExpressions.Regex.Replace(otherInternal, @"\d+$", "");
+                                    return otherBase == baseName;
+                                }
+                                return false;
+                            });
+                        }
+
+                        queuedEnchantGuids.Add(data.Guid);
+                    }
                     if (!newSelected && isQueued) queuedEnchantGuids.Remove(data.Guid);
 
                     GUILayout.EndHorizontal();
@@ -556,7 +579,7 @@ namespace CraftingSystem
             
             GUILayout.BeginHorizontal();
             GUILayout.Label(Helpers.GetString("ui_settings_cost_mult", " Multiplicateur de coût : ") + CraftingSettings.CostMultiplier.ToString("F1"), GUILayout.Width(200 * scale));
-            CraftingSettings.CostMultiplier = GUILayout.HorizontalSlider(CraftingSettings.CostMultiplier, 0f, 5f, GUILayout.Width(150 * scale));
+            CraftingSettings.CostMultiplier = (float)Math.Round(GUILayout.HorizontalSlider(CraftingSettings.CostMultiplier, 0f, 5f, GUILayout.Width(150 * scale)), 1);
             GUILayout.EndHorizontal();
 
             bool previousInstantCrafting = CraftingSettings.InstantCrafting;
