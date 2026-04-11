@@ -75,6 +75,10 @@
       <HintPath>$(WrathPath)\Owlcat.Runtime.Visual.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Owlcat.SharedTypes">
+      <HintPath>$(WrathPath)\Owlcat.SharedTypes.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>$(WrathPath)\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>

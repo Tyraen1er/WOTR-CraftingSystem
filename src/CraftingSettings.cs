@@ -7,7 +7,7 @@ using System.Text;
 namespace CraftingSystem
 {
     // L'Enumération des filtres (déplacée depuis CraftingUI)
-    public enum SourceFilter { All, TTRPG, Owlcat, Mods }
+    public enum SourceFilter { TTRPG = 0, Owlcat = 1, OwlcatPlus = 2, Mods = 3, All = 4 }
 
     public static class CraftingSettings
     {

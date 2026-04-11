@@ -149,6 +149,7 @@ namespace CraftingSystem
                 
                 var cCan = Helpers.CreateCue(Helpers.MergeGuid(list.AssetGuid, "cue_cancel"), "CraftingSystem_CueCancel", "fa3e1f7d4e3347bdaeba8a1b6c8baab3", speaker);
                 var cSel = Helpers.CreateCue(Helpers.MergeGuid(list.AssetGuid, "cue_selection"), "CraftingSystem_CueSelection", "fa3e1f7d4e3347bdaeba8a1b6c8baab2", speaker);
+                var cSelStored = Helpers.CreateCue(Helpers.MergeGuid(list.AssetGuid, "cue_selection_stored"), "CraftingSystem_CueSelection_Stored", "dialog_cue_stored_item", speaker);
                 
                 rA.NextCue.Cues.Add(iC.ToReference<BlueprintCueBaseReference>());
                 iC.Answers.Add(sL.ToReference<BlueprintAnswerBaseReference>());
@@ -157,7 +158,7 @@ namespace CraftingSystem
                 sL.Answers.Add(aC.ToReference<BlueprintAnswerBaseReference>());
                 
                 aG.NextCue.Cues.Add(cSel.ToReference<BlueprintCueBaseReference>());
-                aM.NextCue.Cues.Add(cSel.ToReference<BlueprintCueBaseReference>());
+                aM.NextCue.Cues.Add(cSelStored.ToReference<BlueprintCueBaseReference>());
                 aC.NextCue.Cues.Add(cCan.ToReference<BlueprintCueBaseReference>());
                 
                 if (parentDialog != null && parentDialog.FirstCue != null && parentDialog.FirstCue.Cues.Count > 0) {

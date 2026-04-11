@@ -431,7 +431,8 @@ namespace CraftingSystem
                     // --- FILTRE SOURCE ---
                     if (CraftingSettings.CurrentSourceFilter == SourceFilter.TTRPG && data.Source != "TTRPG") continue;
                     if (CraftingSettings.CurrentSourceFilter == SourceFilter.Owlcat && data.Source != "TTRPG" && data.Source != "Owlcat") continue;
-                    if (CraftingSettings.CurrentSourceFilter == SourceFilter.Mods && (data.Source == "TTRPG" || data.Source == "Owlcat")) continue;
+                    if (CraftingSettings.CurrentSourceFilter == SourceFilter.OwlcatPlus && data.Source != "TTRPG" && data.Source != "Owlcat" && data.Source != "Owlcat+") continue;
+                    if (CraftingSettings.CurrentSourceFilter == SourceFilter.Mods && (data.Source == "TTRPG" || data.Source == "Owlcat" || data.Source == "Owlcat+")) continue;
                     
                     long costToPay = CraftingCalculator.GetUpgradeCost(selectedItem, data, CraftingSettings.CostMultiplier);
                     int days = CraftingCalculator.GetCraftingDays(costToPay, CraftingSettings.InstantCrafting);
@@ -621,10 +622,21 @@ namespace CraftingSystem
             GUILayout.Space(10);
             GUILayout.Label(Helpers.GetString("ui_settings_source_display", "Affichage des sources :"));
             GUILayout.BeginHorizontal();
-            if (GUILayout.Toggle(CraftingSettings.CurrentSourceFilter == SourceFilter.TTRPG, "TTRPG")) CraftingSettings.CurrentSourceFilter = SourceFilter.TTRPG;
-            if (GUILayout.Toggle(CraftingSettings.CurrentSourceFilter == SourceFilter.Owlcat, "Owlcat + TTRPG")) CraftingSettings.CurrentSourceFilter = SourceFilter.Owlcat;
-            if (GUILayout.Toggle(CraftingSettings.CurrentSourceFilter == SourceFilter.Mods, "Mods")) CraftingSettings.CurrentSourceFilter = SourceFilter.Mods;
-            if (GUILayout.Toggle(CraftingSettings.CurrentSourceFilter == SourceFilter.All, Helpers.GetString("ui_settings_source_all", "Tout"))) CraftingSettings.CurrentSourceFilter = SourceFilter.All;
+            int sliderVal = (int)CraftingSettings.CurrentSourceFilter;
+            sliderVal = Mathf.RoundToInt(GUILayout.HorizontalSlider(sliderVal, 0, 4, GUILayout.Width(300 * scale)));
+            CraftingSettings.CurrentSourceFilter = (SourceFilter)sliderVal;
+            GUILayout.Space(20 * scale);
+            
+            string sourceLabel = "";
+            switch (CraftingSettings.CurrentSourceFilter)
+            {
+                case SourceFilter.TTRPG: sourceLabel = Helpers.GetString("ui_settings_source_ttrpg", "TTRPG (Uniquement TTRPG)"); break;
+                case SourceFilter.Owlcat: sourceLabel = Helpers.GetString("ui_settings_source_owlcat", "Owlcat (TTRPG + Owlcat)"); break;
+                case SourceFilter.OwlcatPlus: sourceLabel = Helpers.GetString("ui_settings_source_owlcatplus", "Owlcat+ (TTRPG + Owlcat + Owlcat+)"); break;
+                case SourceFilter.Mods: sourceLabel = Helpers.GetString("ui_settings_source_mods", "Mod (Tout le reste)"); break;
+                case SourceFilter.All: sourceLabel = Helpers.GetString("ui_settings_source_all_desc", "Tout afficher"); break;
+            }
+            GUILayout.Label(sourceLabel, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic });
             GUILayout.EndHorizontal();
 
             GUILayout.Space(20);

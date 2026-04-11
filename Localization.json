@@ -24,6 +24,10 @@
             "enGB": "« I'm listening. Show me the equipment in question, I'll see that it's sent to the best specialists in Mendev. »",
             "frFR": "« Je vous écoute. Montrez-moi l'équipement en question, je m'occuperai de le transmettre aux meilleurs spécialistes du Mendev. »"
         },
+        "dialog_cue_stored_item": {
+            "enGB": "« Very well, let's take a look at your stash. What enchants do you want on those items? »",
+            "frFR": "« Très bien, inspectons votre réserve. Quels enchantements souhaitez-vous appliquer à ces objets ? »"
+        },
         "fa3e1f7d4e3347bdaeba8a1b6c8baab3": {
             "enGB": "« As you wish. Anything else? »",
             "frFR": "« Entendu. Je reste à votre disposition si vous changez d'avis. Autre chose ? »"
@@ -122,15 +126,15 @@
         },
         "ui_filter_weapons": {
             "enGB": " Weapons",
-            "frFR": " Armes (Weapon)"
+            "frFR": " Armes"
         },
         "ui_filter_armors": {
             "enGB": " Armors",
-            "frFR": " Armures (Armor)"
+            "frFR": " Armures"
         },
         "ui_filter_others": {
             "enGB": " Others",
-            "frFR": " Autres (Other)"
+            "frFR": " Autres"
         },
         "ui_search_label": {
             "enGB": "Search: ",
@@ -231,6 +235,26 @@
         "ui_sync_success": {
             "enGB": "Sync successful ({0} enchantments).",
             "frFR": "Sync réussie ({0} enchantements)."
+        },
+        "ui_settings_source_ttrpg": {
+            "enGB": "TTRPG (TTRPG enchantments only)",
+            "frFR": "TTRPG (Uniquement les enchantements du TTRPG)"
+        },
+        "ui_settings_source_owlcat": {
+            "enGB": "Owlcat (All generic in-game enchantments)",
+            "frFR": "Owlcat (Tous les enchantements génériques du jeu)"
+        },
+        "ui_settings_source_owlcatplus": {
+            "enGB": "Owlcat+ (All game enchantments, including unique items)",
+            "frFR": "Owlcat+ (Tous les enchantements du jeu, y compris les items uniques)"
+        },
+        "ui_settings_source_mods": {
+            "enGB": "Mod (All non-base game enchantments)",
+            "frFR": "Mod (Tous les enchantements ne provenant pas du jeu)"
+        },
+        "ui_settings_source_all_desc": {
+            "enGB": "Show all",
+            "frFR": "Tout afficher"
         }
     }
 }

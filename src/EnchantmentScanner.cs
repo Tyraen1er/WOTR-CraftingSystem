@@ -9,8 +9,13 @@ using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 using Newtonsoft.Json;
+using Kingmaker.Blueprints.JsonSystem;
+using Kingmaker.Blueprints.JsonSystem.BinaryFormat;
+using Kingmaker.Blueprints.JsonSystem.Converters;
 
 namespace CraftingSystem
 {
@@ -66,7 +71,6 @@ namespace CraftingSystem
                 return -1;
             }
         }
-
         [JsonIgnore]
         public BlueprintItemEnchantment Blueprint => ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(Guid)) as BlueprintItemEnchantment;
     }
@@ -103,6 +107,8 @@ namespace CraftingSystem
         public static void ForceSync()
         {
             Main.ModEntry.Logger.Log("[SYNC] Forçage de la synchronisation manuelle...");
+            string cachePath = Path.Combine(Main.ModEntry.Path, "EnchantmentGuidsCache.json");
+            if (File.Exists(cachePath)) File.Delete(cachePath);
             _hasSyncedThisSession = false;
             StartSync();
         }
@@ -135,48 +141,105 @@ namespace CraftingSystem
                         foreach (var ov in overrideList) overrides[ov.Guid] = ov;
                     }
 
-                    // 2. Scan (MÉTHODE NATIVE COMPATIBLE)
+                    // 2. Scan Multithreadé avec lecture binaire brute de ToyBox (Ultra-Rapide & Read-Only)
                     var syncedList = new List<EnchantmentData>();
-                    var allGuids = bpCache.m_LoadedBlueprints.Keys.ToList();
-                    TotalCount = allGuids.Count;
+                    
+                    var allKeys = bpCache.m_LoadedBlueprints.OrderBy(e => e.Value.Offset).Select(e => e.Key).ToList();
+                    TotalCount = allKeys.Count;
                     ProcessedCount = 0;
                     
-                    Main.ModEntry.Logger.Log($"[SYNC] Scan de {TotalCount} Blueprints en cours...");
+                    Main.ModEntry.Logger.Log($"[SYNC] Préparation du scan multithread binaire ({TotalCount} blueprints)...");
+                    
+                    var memStream = new MemoryStream();
+                    lock (bpCache.m_Lock) {
+                        bpCache.m_PackFile.Position = 0;
+                        bpCache.m_PackFile.CopyTo(memStream);
+                    }
+                    var bytes = memStream.GetBuffer();
+                    
+                    var chunks = allKeys.Select((k, i) => new { Index = i, Value = k })
+                                        .GroupBy(x => x.Index / 1000)
+                                        .Select(x => x.Select(v => v.Value).ToList())
+                                        .ToList();
+                    
+                    var chunkQueue = new ConcurrentQueue<List<BlueprintGuid>>(chunks);
+                    var foundEnchants = new ConcurrentBag<BlueprintItemEnchantment>();
+                    
+                    int numThreads = 4;
+                    var tasks = new List<Task>();
+                    
+                    for (int i = 0; i < numThreads; i++) {
+                        tasks.Add(Task.Run(() => {
+                            Stream stream = new MemoryStream(bytes);
+                            stream.Position = 0;
+                            var serializer = new ReflectionBasedSerializer(new PrimitiveSerializer(new BinaryReader(stream), UnityObjectConverter.AssetList));
+                            
+                            while (chunkQueue.TryDequeue(out var chunkGuids)) {
+                                foreach(var guid in chunkGuids) {
+                                    int currentCount = Interlocked.Increment(ref ProcessedCount);
+                                    if (currentCount % 1000 == 0) {
+                                        LastSyncMessage = $"Scanner binaire multithread : {currentCount} / {TotalCount} traités...";
+                                    }
+                                    
+                                    try {
+                                        var mLoaded = bpCache.m_LoadedBlueprints;
+                                        if (mLoaded.TryGetValue(guid, out var entry)) {
+                                            if (entry.Offset == 0U) continue;
+                                            
+                                            // Si déjà officiellement chargé par le jeu on vérifie vite.
+                                            if (entry.Blueprint != null) {
+                                                if (entry.Blueprint is BlueprintItemEnchantment bpEnchChecked) {
+                                                    foundEnchants.Add(bpEnchChecked);
+                                                }
+                                                continue;
+                                            }
+                                            
+                                            // Lecture binaire brute du blueprint (sans l'injecter de force pour éviter la corruption du jeu)
+                                            stream.Seek(entry.Offset, SeekOrigin.Begin);
+                                            SimpleBlueprint simpleBlueprint = null;
+                                            serializer.Blueprint(ref simpleBlueprint);
+                                            
+                                            if (simpleBlueprint is BlueprintItemEnchantment ench) {
+                                                ench.AssetGuid = guid;
+                                                foundEnchants.Add(ench);
+                                            }
+                                        }
+                                    } catch { } // on ignore les erreurs isolées de parsing (ToyBox fait pareil)
+                                }
+                            }
+                        }));
+                    }
+                    
+                    // Attend que tous les workers aient fini la lecture brute
+                    Task.WaitAll(tasks.ToArray());
+                    Main.ModEntry.Logger.Log($"[SYNC] Scan binaire terminé : {foundEnchants.Count} enchantements extraits parmis {TotalCount} blueprints !");
+                    
+                    LastSyncMessage = "Intégration et filtrage des surcharges (JSON)...";
 
-                    foreach (var guid in allGuids)
+                    foreach (var bp in foundEnchants)
                     {
-                        ProcessedCount++;
-                        if (ProcessedCount % 1000 == 0) // Mise à jour de l'UI tous les 1000 éléments
+                        string guidStr = bp.AssetGuid.ToString();
+
+                        if (overrides.TryGetValue(guidStr, out var ovData))
                         {
-                            LastSyncMessage = $"Synchronisation : {ProcessedCount} / {TotalCount} chargés...";
+                            syncedList.Add(ovData);
                         }
-
-                        var bpRaw = ResourcesLibrary.TryGetBlueprint(guid);
-                        if (bpRaw is BlueprintItemEnchantment bp)
+                        else
                         {
-                            string guidStr = guid.ToString();
-                            if (overrides.TryGetValue(guidStr, out var ovData))
-                            {
-                                syncedList.Add(ovData);
-                            }
-                            else
-                            {
-                                string type = "Other";
-                                if (bp is BlueprintWeaponEnchantment) type = "Weapon";
-                                else if (bp is BlueprintArmorEnchantment) type = "Armor";
+                            string type = "Other";
+                            if (bp is BlueprintWeaponEnchantment) type = "Weapon";
+                            else if (bp is BlueprintArmorEnchantment) type = "Armor";
 
-                                syncedList.Add(new EnchantmentData
-                                {
-                                    Name = bp.name,
-                                    Guid = guidStr,
-                                    Type = type,
-                                    Source = "Mod",
-                                    // On génère automatiquement le PointString (+1, +2 etc) pour le nouveau format JSON
-                                    PointString = bp.EnchantmentCost > 0 ? $"+{bp.EnchantmentCost}" : "+1",
-                                    Description = System.Text.RegularExpressions.Regex.Replace(bp.Description?.ToString() ?? "", "<.*?>", string.Empty),
-                                    Categories = new List<string> { "Discovered" }
-                                });
-                            }
+                            syncedList.Add(new EnchantmentData
+                            {
+                                Name = bp.name,
+                                Guid = guidStr,
+                                Type = type,
+                                Source = "Mod",
+                                PointString = bp.EnchantmentCost > 0 ? $"+{bp.EnchantmentCost}" : "+1",
+                                Description = System.Text.RegularExpressions.Regex.Replace(bp.Description?.ToString() ?? "", "<.*?>", string.Empty),
+                                Categories = new List<string> { "Discovered" }
+                            });
                         }
                     }
 
