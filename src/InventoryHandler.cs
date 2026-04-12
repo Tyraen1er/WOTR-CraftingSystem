@@ -76,7 +76,7 @@ namespace CraftingSystem
                         UnityEngine.Object.DontDestroyOnLoad(go);
                         go.AddComponent<CraftingUI>();
                     }
-                    CraftingUI.Instance.IsOpen = true;
+                    if (CraftingUI.Instance != null) CraftingUI.Instance.IsOpen = true;
                 }
             });
         }
@@ -189,6 +189,27 @@ namespace CraftingSystem
             // 1. On vérifie si la collection est celle de la forge
             if (__instance == DeferredInventoryOpener.CraftingBox)
             {
+                /*
+                Main.ModEntry.Logger.Log($"\n[DIAGNOSTIC] --- Analyse de l'objet retiré : {item.Name} ---");
+                foreach (var e in item.Enchantments)
+                {
+                    Main.ModEntry.Logger.Log($"[DIAGNOSTIC] Enchantment: {e.Blueprint.name} ({e.Blueprint.AssetGuid})");
+                    foreach (var c in e.Blueprint.Components)
+                    {
+                        if (c == null) continue;
+                        var type = c.GetType();
+                        Main.ModEntry.Logger.Log($"[DIAGNOSTIC]   - Component: {type.FullName}");
+                        foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic))
+                        {
+                            try {
+                                Main.ModEntry.Logger.Log($"[DIAGNOSTIC]     . Field: {field.Name} = {field.GetValue(c)}");
+                            } catch { }
+                        }
+                    }
+                }
+                Main.ModEntry.Logger.Log($"[DIAGNOSTIC] --- Fin de l'analyse ---\n");
+                */
+
                 // Accès sécurisé au joueur
                 var player = Kingmaker.Game.Instance.Player.MainCharacter.Value;
                 if (player == null) return true;
@@ -198,15 +219,11 @@ namespace CraftingSystem
                 // 2. Si l'objet est en cours de forge, on bloque !
                 if (workshop != null && workshop.ActiveProjects.Any(p => p.Item == item))
                 {
-                    // ALERTE VISUELLE (Celle-ci fonctionne toujours, elle est très stable)
                     Kingmaker.PubSubSystem.EventBus.RaiseEvent<Kingmaker.PubSubSystem.IWarningNotificationUIHandler>(
                         h => h.HandleWarning("FORGE : Cet équipement est en cours de modification !")
                     );
 
-                    // LOG SYSTÈME (Pour tes tests)
                     Main.ModEntry.Logger.Log($"[SÉCURITÉ] Retrait bloqué pour {item.Name} car un projet est actif.");
-
-                    // On annule le retrait (l'objet reste dans la boîte)
                     return false; 
                 }
             }

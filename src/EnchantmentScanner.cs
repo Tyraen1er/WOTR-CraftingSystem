@@ -30,7 +30,7 @@ namespace CraftingSystem
         public string Source = "Mod"; // "TTRPG", "Owlcat", "Mod"
         public bool IsHomebrew = false;
         
-        [JsonProperty("Point")]
+        [JsonProperty("PointCost")]
         public string PointString; // Récupère "+1" ou "4000" depuis le JSON
         
         public int DaysOverride = -1; 
@@ -282,9 +282,16 @@ namespace CraftingSystem
 
         public static EnchantmentData GetByGuid(string guid)
         {
+            if (string.IsNullOrEmpty(guid)) return null;
             lock (MasterList)
             {
-                return MasterList.FirstOrDefault(e => e.Guid == guid);
+                // On passe en OrdinalIgnoreCase pour être sur de ne pas rater un GUID à cause de la casse
+                var result = MasterList.FirstOrDefault(e => string.Equals(e.Guid, guid, StringComparison.OrdinalIgnoreCase));
+                if (result == null && guid.Length > 10)
+                {
+                    Main.ModEntry.Logger.Warning($"[DEBUG] GetByGuid FAILED to find: {guid}. MasterList count: {MasterList.Count}");
+                }
+                return result;
             }
         }
     }

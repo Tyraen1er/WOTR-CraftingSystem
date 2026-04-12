@@ -1,26 +1,66 @@
-Effect	Base Price	Example
-Ability bonus (enhancement)	Bonus squared × 1,000 gp	Belt of incredible dexterity +2
-Armor bonus (enhancement)	Bonus squared × 1,000 gp	+1 chainmail
-Bonus spell	Spell level squared × 1,000 gp	Pearl of power
-AC bonus (deflection)	bonus squared × 2,000 gp	Ring of protection +3
-AC bonus (other)1	bonus squared × 2,500 gp	Ioun stone (dusty rose prism)
-Natural armor bonus (enhancement)	bonus squared × 2,000 gp	Amulet of natural armor +1
-Save bonus (resistance)	bonus squared × 1,000 gp	Cloak of resistance +5
-Save bonus (other)1	bonus squared × 2,000 gp	Stone of good luck
-Skill bonus (competence)	bonus squared × 100 gp	Cloak of elvenkind
-Spell resistance	10,000 gp per point over SR 12; SR 13 minimum	Mantle of spell resistance
-Weapon bonus (enhancement)	bonus squared × 2,000 gp	+1 longsword
-Spell Effect	Base Price	Example
-Single use, spell completion	Spell level × caster level × 25 gp	Scroll of haste
-Single use, use-activated	Spell level × caster level × 50 gp	Potion of cure light wounds
-50 charges, spell trigger	Spell level × caster level × 750 gp	Wand of fireball
-Command word	Spell level × caster level × 1,800 gp	Cape of the mountebank
-Use-activated or continuous	Spell level × caster level × 2,000 gp2	Lantern of revealing
-Special	Base Price Adjustment	Example
-Charges per day	Divide by (5 divided by charges per day)	Boots of teleportation
-No space limitation3	Multiply entire cost by 2	Ioun stone
-Multiple different abilities	Multiply lower item cost by 1.5	Helm of brilliance
-Charged (50 charges)	1/2 unlimited use base price	Ring of the ram
-Component	Extra Cost	Example
-Armor, shield, or weapon	Add cost of masterwork item	+1 composite longbow
-Spell has material component cost	Add directly into price of item per charge4	Wand of stoneskin
+[
+  {
+    "Slot (Emplacement)": "Armor",
+    "Affinités courantes (Types de bonus)": "Bonus d'armure, capacités spéciales d'armure."
+  },
+  {
+    "Slot (Emplacement)": "Weapon / Held",
+    "Affinités courantes (Types de bonus)": "Bonus au toucher et aux dégâts, capacités d'armes, focalisation magique (sceptres, baguettes)."
+  },
+  {
+    "Slot (Emplacement)": "Shield",
+    "Affinités courantes (Types de bonus)": "Bonus de bouclier, capacités spéciales de bouclier."
+  },
+  {
+    "Slot (Emplacement)": "Belts",
+    "Affinités courantes (Types de bonus)": "Amélioration physique (Force, Dextérité, Constitution)."
+  },
+  {
+    "Slot (Emplacement)": "Body",
+    "Affinités courantes (Types de bonus)": "Protection physique globale, renforcement des capacités de classe, magie."
+  },
+  {
+    "Slot (Emplacement)": "Chest",
+    "Affinités courantes (Types de bonus)": "Utilitaires mineurs, magie, protection physique."
+  },
+  {
+    "Slot (Emplacement)": "Eyes",
+    "Affinités courantes (Types de bonus)": "Vision, perception, détection."
+  },
+  {
+    "Slot (Emplacement)": "Feet",
+    "Affinités courantes (Types de bonus)": "Déplacement (vitesse, acrobaties, vol), furtivité."
+  },
+  {
+    "Slot (Emplacement)": "Hands",
+    "Affinités courantes (Types de bonus)": "Combat, dextérité fine, compétences manuelles (sabotage, escamotage)."
+  },
+  {
+    "Slot (Emplacement)": "Head",
+    "Affinités courantes (Types de bonus)": "Sens, interaction, illusions (déguisement), capacités mentales utilitaires."
+  },
+  {
+    "Slot (Emplacement)": "Headband",
+    "Affinités courantes (Types de bonus)": "Amélioration mentale (Intelligence, Sagesse, Charisme), magie."
+  },
+  {
+    "Slot (Emplacement)": "Neck",
+    "Affinités courantes (Types de bonus)": "Protection, armure naturelle, renforcement des attaques naturelles."
+  },
+  {
+    "Slot (Emplacement)": "Ring (2)",
+    "Affinités courantes (Types de bonus)": "Protection (déflection), effets magiques divers, soutien."
+  },
+  {
+    "Slot (Emplacement)": "Shoulders",
+    "Affinités courantes (Types de bonus)": "Protection, magie (inclut le vol et les bonus de résistance aux jets de sauvegarde)."
+  },
+  {
+    "Slot (Emplacement)": "Wrist",
+    "Affinités courantes (Types de bonus)": "Combat, magie (inclut les bonus d'armure à la CA)."
+  },
+  {
+    "Slot (Emplacement)": "Slotless",
+    "Affinités courantes (Types de bonus)": "Aucune affinité (Coût de base x2). Inclut les Pierres Ioun et objets merveilleux divers."
+  }
+]

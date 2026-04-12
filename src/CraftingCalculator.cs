@@ -7,6 +7,7 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
+using Kingmaker.Designers.Mechanics.Facts;
 
 namespace CraftingSystem
 {
@@ -26,45 +27,100 @@ namespace CraftingSystem
         public static bool IsPureEnhancement(BlueprintItemEnchantment bp)
         {
             if (bp == null) return false;
-            return bp.ComponentsArray.Any(c => 
-                c.GetType().Name == "WeaponEnhancementBonus" || 
-                c.GetType().Name == "ArmorEnhancementBonus"
-            );
+            
+            // Approche robuste : On scanne les noms des composants pour éviter les problèmes de versions/types
+            foreach (var c in bp.Components)
+            {
+                if (c == null) continue;
+                string typeName = c.GetType().Name;
+                
+                // Egalité stricte pour exclure les Bane (WeaponConditionalEnhancementBonus)
+                if (typeName == "WeaponEnhancementBonus" || typeName == "ArmorEnhancementBonus")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static int GetEnhancementValue(BlueprintItemEnchantment bp)
+        {
+            if (bp == null) return 0;
+            
+            foreach (var c in bp.Components)
+            {
+                if (c == null) continue;
+                var type = c.GetType();
+                
+                // On cherche dynamiquement les champs EnhancementBonus (Armes) ou EnhancementValue (Armures)
+                // Cela fonctionne même si la classe est une variante (ex: WeaponConditionalEnhancementBonus)
+                var field = type.GetField("EnhancementBonus") ?? type.GetField("EnhancementValue");
+                if (field != null)
+                {
+                    try {
+                        return (int)field.GetValue(c);
+                    } catch { }
+                }
+            }
+            return 0;
         }
 
         public static bool IsPureEnhancement(EnchantmentData data)
         {
             if (data == null || string.IsNullOrEmpty(data.Guid)) return false;
             var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
+            
+            if (bp == null) {
+                // Main.ModEntry.Logger.Warning($"[DEBUG] IsPureEnhancement: Blueprint INTROUVABLE pour le GUID {data.Guid}");
+                return false;
+            }
+
             return IsPureEnhancement(bp);
         }
 
         // ====================================================================
 
-        public static long GetMarketPrice(ItemEntity item)
+        public static long GetEnchantmentCost(ItemEntity item, EnchantmentData newEnchant = null, float costMultiplier = 1.0f)
         {
             if (item == null) return 0;
-            int totalBonus = item.Enchantments.Sum(e => e.Blueprint.EnchantmentCost);
-            bool isWeapon = item.Blueprint is BlueprintItemWeapon;
-            int factor = isWeapon ? WEAPON_BASE_FACTOR : ARMOR_BASE_FACTOR;
-            return (long)totalBonus * totalBonus * factor;
-        }
 
-        public static long GetUpgradeCost(ItemEntity item, EnchantmentData newEnchant, float costMultiplier = 1.0f)
-        {
-            if (item == null || newEnchant == null) return 0;
-            if (newEnchant.GoldOverride >= 0) return (long)(newEnchant.GoldOverride * costMultiplier);
+            // 1. Cas particulier : Le nouvel enchantement a un coût fixe imposé (ex: Ombre, Résistance)
+            if (newEnchant != null && newEnchant.GoldOverride >= 0)
+            {
+                return (long)(newEnchant.GoldOverride * costMultiplier);
+            }
 
-            int currentBonus = item.Enchantments.Sum(e => e.Blueprint.EnchantmentCost);
-            int newTotalBonus = currentBonus + newEnchant.PointCost;
+            // 2. Détermination du facteur de base selon le type d'objet
+            int factor;
+            switch (item.Blueprint)
+            {
+                case BlueprintItemWeapon:
+                    factor = WEAPON_BASE_FACTOR;
+                    break;
+                case BlueprintItemArmor:
+                    factor = ARMOR_BASE_FACTOR;
+                    break;
+                default:
+                    factor = 1000; // Objets merveilleux
+                    break;
+            }
 
-            bool isWeapon = item.Blueprint is BlueprintItemWeapon;
-            int factor = isWeapon ? WEAPON_BASE_FACTOR : ARMOR_BASE_FACTOR;
-
+            // 3. Calcul du prix de marché actuel de l'objet (Unifié : JSON > Blueprint)
+            int currentBonus = CalculateDisplayedEnchantmentPoints(item);
             long currentMarketPrice = (long)currentBonus * currentBonus * factor;
+
+            // 4. Si aucun nouvel enchantement n'est fourni, on retourne simplement le prix de marché
+            if (newEnchant == null)
+            {
+                return currentMarketPrice;
+            }
+
+            // 5. Si on ajoute un enchantement, on calcule le nouveau prix total
+            int newTotalBonus = currentBonus + newEnchant.PointCost;
             long newMarketPrice = (long)newTotalBonus * newTotalBonus * factor;
 
-            return (long)((newMarketPrice - currentMarketPrice) / 2 * costMultiplier);
+            // 6. Règle de craft Pathfinder : (Nouveau Prix - Ancien Prix) / 2
+            return (long)(((newMarketPrice - currentMarketPrice) / 2) * costMultiplier);
         }
 
         public static int GetCraftingDays(long gpCost, bool instant = false)
@@ -93,13 +149,14 @@ namespace CraftingSystem
             
             foreach (var e in item.Enchantments)
             {
+                // Sécurité : On ignore les bonus temporaires (sorts, capacités) pour les prérequis de craft permanent
+                if (e.IsTemporary) continue;
+
                 if (IsPureEnhancement(e.Blueprint))
                 {
-                    string guid = e.Blueprint.AssetGuid.ToString();
-                    var overrideData = EnchantmentScanner.GetByGuid(guid);
-                    // On utilise la valeur du JSON en priorité
-                    int p = overrideData?.PointCost ?? e.Blueprint.EnchantmentCost;
-                    currentEnhancement = Math.Max(currentEnhancement, p);
+                    // On récupère la valeur réelle du composant (+1, +2...)
+                    int val = GetEnhancementValue(e.Blueprint);
+                    currentEnhancement = Math.Max(currentEnhancement, val);
                 }
             }
 
@@ -117,7 +174,7 @@ namespace CraftingSystem
                     {
                         if (!IsEnchantmentAllowedOnNormalItem(selected))
                         {
-                            return "Un équipement doit posséder (ou recevoir simultanément) une 'Altération pure' avant de recevoir des enchantements spéciaux.";
+                            return "Un équipement doit posséder (ou recevoir simultanément) une 'Altération' avant de recevoir des enchantements spéciaux.";
                         }
                     }
                 }
@@ -139,19 +196,27 @@ namespace CraftingSystem
             return null;
         }
 
+        /// <summary>
+        /// Calcule le bonus total actuel de l'objet (ex: +3) en respectant ta règle :
+        /// Priorité absolue au JSON si l'enchantement y est présent.
+        /// </summary>
         public static int CalculateDisplayedEnchantmentPoints(ItemEntity item)
         {
             if (item == null) return 0;
             int points = 0;
             foreach (var e in item.Enchantments)
             {
+                // On ignore les bonus temporaires pour le calcul du niveau réel
+                if (e.IsTemporary) continue;
+
                 string guid = e.Blueprint.AssetGuid.ToString();
                 var overrideData = EnchantmentScanner.GetByGuid(guid);
                 
-                // Exécution stricte de tes consignes : On ne prend plus que la valeur réelle (JSON ou Jeu),
-                // sans aucun multiplicateur arbitraire basé sur le nom.
-                int baseCost = overrideData?.PointCost ?? e.Blueprint.EnchantmentCost;
-                if (baseCost > 0) points += baseCost;
+                // Si l'enchantement est dans le JSON, on prend sa valeur PointCost (qui est 0 pour les prix fixes)
+                // Sinon on prend la valeur native du jeu.
+                int bonusValue = (overrideData != null) ? overrideData.PointCost : e.Blueprint.EnchantmentCost;
+                
+                if (bonusValue > 0) points += bonusValue;
             }
             return points;
         }
@@ -164,8 +229,10 @@ namespace CraftingSystem
         {
             if (item == null) return false;
 
-            bool hasEnhancementOriginally = item.Enchantments.Any(e => IsPureEnhancement(e.Blueprint));
+            bool hasEnhancementOriginally = item.Enchantments.Any(e => !e.IsTemporary && IsPureEnhancement(e.Blueprint));
             bool queueHasEnhancement = queuedEnchants != null && queuedEnchants.Any(d => IsPureEnhancement(d) && d.PointCost > 0);
+
+            // Main.ModEntry.Logger.Log($"[DEBUG] IsItemReadyForSpecialEnchants: {item.Name} -> hasOriginal={hasEnhancementOriginally}, hasInQueue={queueHasEnhancement}");
 
             // Débloque tous les enchantements spéciaux instantanément si un +1 est coché
             return hasEnhancementOriginally || queueHasEnhancement;
@@ -178,15 +245,19 @@ namespace CraftingSystem
             var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
             if (bp == null) return false;
 
-            // 1. Est-ce un coût fixe en or défini dans ton JSON ?
-            if (data.GoldOverride >= 0) return true;
-
             // 2. Est-ce que le jeu considère que ça coûte 0 point ? (ex: Adamantium, Mithral)
-            if (bp.EnchantmentCost == 0) return true;
+            if (bp.EnchantmentCost == 0 || GetEnhancementValue(bp) > 0) return true;
 
-            // 3. Si on arrive ici, on vérifie si c'est une altération +1 pure
-            // On prend la valeur du JSON s'il y en a une (supérieure à 0), sinon on lit le Blueprint
-            int pointCost = data.PointCost > 0 ? data.PointCost : bp.EnchantmentCost;
+            // On respecte la règle : Priorité au JSON si présent
+            int pointCost = data.PointCost; 
+            
+            // Si l'enchantement n'est pas dans le JSON (donc découvert par scan), pointCost sera 0 par défaut.
+            // Dans ce cas précis, on utilise la valeur du Blueprint.
+            var isInJson = EnchantmentScanner.MasterList.Any(d => string.Equals(d.Guid, data.Guid, StringComparison.OrdinalIgnoreCase));
+            if (!isInJson)
+            {
+                pointCost = bp.EnchantmentCost;
+            }
 
             return pointCost == 1 && IsPureEnhancement(bp);
         }

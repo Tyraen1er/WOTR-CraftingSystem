@@ -434,7 +434,7 @@ namespace CraftingSystem
                     if (CraftingSettings.CurrentSourceFilter == SourceFilter.OwlcatPlus && data.Source != "TTRPG" && data.Source != "Owlcat" && data.Source != "Owlcat+") continue;
                     if (CraftingSettings.CurrentSourceFilter == SourceFilter.Mods && (data.Source == "TTRPG" || data.Source == "Owlcat" || data.Source == "Owlcat+")) continue;
                     
-                    long costToPay = CraftingCalculator.GetUpgradeCost(selectedItem, data, CraftingSettings.CostMultiplier);
+                    long costToPay = CraftingCalculator.GetEnchantmentCost(selectedItem, data, CraftingSettings.CostMultiplier);
                     int days = CraftingCalculator.GetCraftingDays(costToPay, CraftingSettings.InstantCrafting);
                     
                     if (data.GoldOverride >= 0) costToPay = (long)(data.GoldOverride * CraftingSettings.CostMultiplier);
@@ -483,12 +483,28 @@ namespace CraftingSystem
             // =========================================================================
             GUILayout.Space(8);
 
-            var selectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
+            var selectedList = new List<EnchantmentData>();
+            foreach (var g in queuedEnchantGuids)
+            {
+                var d = EnchantmentScanner.GetByGuid(g);
+                if (d != null)
+                {
+                    selectedList.Add(d);
+                    // On ne logge qu'une fois par seconde pour éviter de flooder (60 fps)
+                    /* if (UnityEngine.Time.frameCount % 60 == 0) 
+                        Main.ModEntry.Logger.Log($"[PANIER-DEBUG] Guid={g} -> {d.Name}, Points={d.PointCost} (String:'{d.PointString}'), IsPure={CraftingCalculator.IsPureEnhancement(d)}");
+                }
+                else if (UnityEngine.Time.frameCount % 60 == 0)
+                {
+                    Main.ModEntry.Logger.Warning($"[PANIER-DEBUG] Guid={g} -> NON TROUVÉ DANS LA MASTERLIST");
+                } */
+            }
+
             long totalCost = 0;
             int totalDays = 0;
             foreach (var d in selectedList)
             {
-                long c = CraftingCalculator.GetUpgradeCost(selectedItem, d, CraftingSettings.CostMultiplier);
+                long c = CraftingCalculator.GetEnchantmentCost(selectedItem, d, CraftingSettings.CostMultiplier);
                 if (d.GoldOverride >= 0) c = (long)(d.GoldOverride * CraftingSettings.CostMultiplier);
                 totalCost += c;
                 totalDays += CraftingCalculator.GetCraftingDays(c, CraftingSettings.InstantCrafting);
@@ -522,7 +538,7 @@ namespace CraftingSystem
                         
                         foreach (var d in selectedList)
                         {
-                            long c = CraftingCalculator.GetUpgradeCost(selectedItem, d, CraftingSettings.CostMultiplier);
+                            long c = CraftingCalculator.GetEnchantmentCost(selectedItem, d, CraftingSettings.CostMultiplier);
                             if (d.GoldOverride >= 0) c = (long)(d.GoldOverride * CraftingSettings.CostMultiplier);
                             int days = CraftingCalculator.GetCraftingDays(c, CraftingSettings.InstantCrafting);
                             CraftingActions.StartCraftingProject(selectedItem, d, (int)c, days);

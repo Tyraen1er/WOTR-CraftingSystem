@@ -114,6 +114,7 @@ namespace CraftingSystem
 
             foreach (var project in ActiveProjects)
             {
+                /*
                 try 
                 {
                     if (currentTime >= project.FinishTimeTicks || CraftingSettings.InstantCrafting)
@@ -137,13 +138,14 @@ namespace CraftingSystem
                 {
                     Main.ModEntry.Logger.Error($"[ATELIER-DEBUG] CRASH dans la boucle d'un projet : {e.Message}\n{e.StackTrace}");
                 }
+                */
             }
 
             foreach (var p in completedProjects) 
             {
                 ActiveProjects.Remove(p);
             }
-            Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Fin CheckAndFinishProjects. Projets restants : {ActiveProjects.Count}");
+            // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Fin CheckAndFinishProjects. Projets restants : {ActiveProjects.Count}");
         }
 
         public static void ApplyEnchantmentSafely(ItemEntity item, BlueprintItemEnchantment bp)
