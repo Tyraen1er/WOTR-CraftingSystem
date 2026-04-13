@@ -240,7 +240,7 @@ namespace CraftingSystem
                                 Type = type,
                                 Source = "Mod",
                                 PointString = bp.EnchantmentCost > 0 ? $"+{bp.EnchantmentCost}" : "+1",
-                                Description = System.Text.RegularExpressions.Regex.Replace(bp.Description?.ToString() ?? "", "<.*?>", string.Empty),
+                                Description = !string.IsNullOrEmpty(bp.Comment) ? bp.Comment : System.Text.RegularExpressions.Regex.Replace(bp.Description?.ToString() ?? "", "<.*?>", string.Empty),
                                 Categories = new List<string> { "Discovered" }
                             });
                         }

@@ -209,8 +209,8 @@
             "frFR": " Max Total : +{0}"
         },
         "ui_settings_require_plus_one": {
-            "enGB": " Prerequisite: At least +1 Enhancement",
-            "frFR": " Prérequis : +1 Altération minimum"
+            "enGB": " TTRPG Prerequisite: At least +1 Enhancement to apply any enchants",
+            "frFR": " Prérequis du JDR : +1 Altération minimum pour pouvoir enchanter"
         },
         "ui_settings_source_display": {
             "enGB": "Source display:",
@@ -277,8 +277,8 @@
             "frFR": "j"
         },
         "err_require_plus_one": {
-            "enGB": "Equipment must have (or simultaneously receive) an 'Enhancement' (+1) before receiving special enchantments.",
-            "frFR": "Un équipement doit posséder (ou recevoir simultanément) une 'Altération' (+1) avant de recevoir des enchantements spéciaux."
+            "enGB": "TTRPG rules: Equipment must have at least an 'Enhancement' (+1) before receiving special enchantments.",
+            "frFR": "Règles JDR : Un équipement doit posséder au moins une 'Altération' (+1) avant de recevoir des enchantements spéciaux."
         },
         "err_limit_total": {
             "enGB": "Total power limit exceeded (max +{0}).",

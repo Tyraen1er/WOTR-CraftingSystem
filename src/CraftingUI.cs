@@ -24,6 +24,8 @@ namespace CraftingSystem
         private string enchantmentSearch = "";
         private ItemEntity selectedItem = null;
         private bool lastOpenState = false;
+        private string activeDescriptionPopup = "";
+        private string activeDescriptionTitle = "";
         
         // Auto-scale reference
         private const float REFERENCE_WIDTH = 2560f;
@@ -94,7 +96,18 @@ namespace CraftingSystem
             
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
             GUI.Window(999, windowRect, DrawWindowContent, "");
-            GUI.FocusWindow(999);
+            
+            // --- FENÊTRE DE DESCRIPTION (POPUP) ---
+            if (!string.IsNullOrEmpty(activeDescriptionPopup))
+            {
+                float pW = 500f * scale;
+                float pH = 350f * scale;
+                Rect popupRect = new Rect((Screen.width - pW) / 2f, (Screen.height - pH) / 2f, pW, pH);
+                GUI.Window(998, popupRect, DrawDescriptionPopup, "");
+                GUI.BringWindowToFront(998);
+            }
+
+            GUI.FocusWindow(string.IsNullOrEmpty(activeDescriptionPopup) ? 999 : 998);
         }
 
         void DrawWindowContent(int windowID)
@@ -275,6 +288,23 @@ namespace CraftingSystem
                     GUILayout.BeginHorizontal(GUI.skin.box);
                     string displayName = GetDisplayName(ench.Blueprint, overrideData);
                     GUILayout.Label($"{displayName} (+{pointValue})", GUILayout.ExpandWidth(true));
+
+                    // POUR LES OBJETS DÉJÀ APPLIQUÉS
+                    string desc = overrideData?.Description ?? (!string.IsNullOrEmpty(ench.Blueprint.Comment) ? ench.Blueprint.Comment : "");
+                    if (!string.IsNullOrEmpty(desc))
+                    {
+                        GUIContent infoContent = new GUIContent("<color=#3498db>[?]</color>");
+                        GUIStyle infoStyle = new GUIStyle(GUI.skin.label) { richText = true, fontStyle = FontStyle.Bold };
+                        if (GUILayout.Button(infoContent, infoStyle, GUILayout.Width(25 * scale))) 
+                        {
+                            activeDescriptionTitle = displayName;
+                            activeDescriptionPopup = desc;
+                        }
+                    }
+                    else
+                    {
+                        GUILayout.Space(25 * scale);
+                    }
                     if (GUILayout.Button(Helpers.GetString("ui_btn_remove", "Remove"), GUILayout.Width(80 * scale)))
                     {
                         selectedItem.RemoveEnchantment(ench);
@@ -418,7 +448,7 @@ namespace CraftingSystem
                     }
 
                     // --- FILTRE D'OBJET NORMAL (SI PAS DE +1) ---
-                    if (isWeaponOrArmor && !isReadyForSpecial && !isQueued)
+                    if (CraftingSettings.RequirePlusOneFirst && isWeaponOrArmor && !isReadyForSpecial && !isQueued)
                     {
                         bool isAllowed = CraftingCalculator.IsEnchantmentAllowedOnNormalItem(data);
                         
@@ -452,7 +482,25 @@ namespace CraftingSystem
 
                     GUILayout.BeginHorizontal(GUI.skin.box);
                     GUIStyle toggleStyle = new GUIStyle(GUI.skin.toggle) { richText = true };
+                    
+                    // -- NOM + ICÔNE INFO [?] --
                     bool newSelected = GUILayout.Toggle(isQueued, $"{displayName} <color=#888888>({internalName})</color>", toggleStyle, GUILayout.ExpandWidth(true));
+                    
+                    if (!string.IsNullOrEmpty(data.Description))
+                    {
+                        GUIContent infoContent = new GUIContent("<color=#3498db>[?]</color>");
+                        GUIStyle infoStyle = new GUIStyle(GUI.skin.label) { richText = true, fontStyle = FontStyle.Bold };
+                        if (GUILayout.Button(infoContent, infoStyle, GUILayout.Width(25 * scale))) 
+                        {
+                            activeDescriptionTitle = displayName;
+                            activeDescriptionPopup = data.Description;
+                        }
+                    }
+                    else
+                    {
+                        GUILayout.Space(25 * scale);
+                    }
+
                     string currency = Helpers.GetString("ui_currency_gp", "gp");
                     string daysLabel = Helpers.GetString("ui_time_days_short", "d");
                     GUILayout.Label($"{costToPay} {currency} / {days} {daysLabel}   (+{data.PointCost})", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleRight }, GUILayout.Width(180 * scale));
@@ -691,23 +739,57 @@ namespace CraftingSystem
 
         private string GetDisplayName(BlueprintItemEnchantment bp, EnchantmentData data)
         {
+            string finalName = "";
+
             if (bp != null && bp.m_EnchantName != null)
             {
                 string localized = bp.m_EnchantName.ToString();
-                if (!string.IsNullOrWhiteSpace(localized) && localized != bp.name) return localized;
+                if (!string.IsNullOrWhiteSpace(localized) && localized != bp.name) finalName = localized;
             }
 
-            if (data != null && !string.IsNullOrWhiteSpace(data.Name)) return data.Name;
+            if (string.IsNullOrEmpty(finalName) && data != null && !string.IsNullOrWhiteSpace(data.Name)) 
+                finalName = data.Name;
 
-            if (bp != null)
+            if (string.IsNullOrEmpty(finalName) && bp != null)
             {
-                return bp.name.Replace("WeaponEnchantment", "")
+                finalName = bp.name.Replace("WeaponEnchantment", "")
                               .Replace("ArmorEnchantment", "")
                               .Replace("Enchantment", "")
                               .Replace("Plus", "+");
             }
 
-            return Helpers.GetString("ui_unknown_enchant_name", "Unknown Enchantment");
+            if (string.IsNullOrEmpty(finalName)) 
+                finalName = Helpers.GetString("ui_unknown_enchant_name", "Unknown Enchantment");
+
+            // Troncation à 50 caractères
+            if (finalName.Length > 50) 
+                finalName = finalName.Substring(0, 47) + "...";
+
+            return finalName;
+        }
+
+        private void DrawDescriptionPopup(int windowID)
+        {
+            float scale = CraftingSettings.ScalePercent / 100f;
+            GUILayout.BeginVertical();
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(activeDescriptionTitle, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(16 * scale) });
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("X", GUILayout.Width(30 * scale))) activeDescriptionPopup = "";
+            GUILayout.EndHorizontal();
+            
+            GUILayout.Space(10);
+            
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUI.skin.box);
+            GUILayout.Label(activeDescriptionPopup, new GUIStyle(GUI.skin.label) { wordWrap = true, richText = true, fontSize = (int)(14 * scale) });
+            GUILayout.EndScrollView();
+            
+            GUILayout.Space(10);
+            if (GUILayout.Button(Helpers.GetString("ui_btn_ok", "OK"), GUILayout.Height(40 * scale))) activeDescriptionPopup = "";
+            
+            GUILayout.EndVertical();
+            GUI.DragWindow();
         }
     }
 }
