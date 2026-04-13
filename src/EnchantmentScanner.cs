@@ -118,7 +118,7 @@ namespace CraftingSystem
             if (_hasSyncedThisSession || IsSyncing) return;
             
             IsSyncing = true;
-            LastSyncMessage = "Synchronisation en cours...";
+            LastSyncMessage = Helpers.GetString("ui_sync_in_progress", "Synchronization in progress...");
             Main.ModEntry.Logger.Log("[SYNC] Lancement de la tâche de synchronisation en arrière-plan...");
             
             Task.Run(() => {
@@ -126,7 +126,7 @@ namespace CraftingSystem
                 {
                     var bpCache = ResourcesLibrary.BlueprintsCache;
                     if (bpCache == null) {
-                        LastSyncMessage = "Échec : Index du jeu inaccessible.";
+                        LastSyncMessage = Helpers.GetString("ui_sync_error_index", "Failed: Game index inaccessible.");
                         Main.ModEntry.Logger.Error("[SYNC] Impossible d'accéder au BlueprintsCache du jeu.");
                         return;
                     }
@@ -178,7 +178,7 @@ namespace CraftingSystem
                                 foreach(var guid in chunkGuids) {
                                     int currentCount = Interlocked.Increment(ref ProcessedCount);
                                     if (currentCount % 1000 == 0) {
-                                        LastSyncMessage = $"Scanner binaire multithread : {currentCount} / {TotalCount} traités...";
+                                        LastSyncMessage = string.Format(Helpers.GetString("ui_sync_scanner_progress", "Multithreaded binary scanner: {0} / {1} processed..."), currentCount, TotalCount);
                                     }
                                     
                                     try {
@@ -214,7 +214,7 @@ namespace CraftingSystem
                     Task.WaitAll(tasks.ToArray());
                     Main.ModEntry.Logger.Log($"[SYNC] Scan binaire terminé : {foundEnchants.Count} enchantements extraits parmis {TotalCount} blueprints !");
                     
-                    LastSyncMessage = "Intégration et filtrage des surcharges (JSON)...";
+                    LastSyncMessage = Helpers.GetString("ui_sync_integration", "Integration and filtering of overrides (JSON)...");
 
                     foreach (var bp in foundEnchants)
                     {
@@ -253,7 +253,7 @@ namespace CraftingSystem
 
                     // --- RÉUSSITE TOTALE ---
                     _hasSyncedThisSession = true;
-                    LastSyncMessage = string.Format(Helpers.GetString("ui_sync_success", "Sync réussie ({0} enchantements)."), MasterList.Count);
+                    LastSyncMessage = string.Format(Helpers.GetString("ui_sync_success", "Sync successful ({0} enchantments)."), MasterList.Count);
                     Main.ModEntry.Logger.Log($"[SYNC] Synchronisation terminée avec succès. {MasterList.Count} enchantements répertoriés.");
                 }
                 catch (Exception ex)

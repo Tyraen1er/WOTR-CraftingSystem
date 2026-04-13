@@ -255,6 +255,54 @@
         "ui_settings_source_all_desc": {
             "enGB": "Show all",
             "frFR": "Tout afficher"
+        },
+        "ui_btn_ok": {
+            "enGB": "OK",
+            "frFR": "OK"
+        },
+        "ui_btn_workshop_short": {
+            "enGB": "Workshop",
+            "frFR": "Atelier"
+        },
+        "ui_cat_untyped": {
+            "enGB": "Untyped",
+            "frFR": "Sans catégorie"
+        },
+        "ui_currency_gp": {
+            "enGB": "gp",
+            "frFR": "po"
+        },
+        "ui_time_days_short": {
+            "enGB": "d",
+            "frFR": "j"
+        },
+        "err_require_plus_one": {
+            "enGB": "Equipment must have (or simultaneously receive) an 'Enhancement' (+1) before receiving special enchantments.",
+            "frFR": "Un équipement doit posséder (ou recevoir simultanément) une 'Altération' (+1) avant de recevoir des enchantements spéciaux."
+        },
+        "err_limit_total": {
+            "enGB": "Total power limit exceeded (max +{0}).",
+            "frFR": "Limite de puissance totale dépassée (max +{0})."
+        },
+        "err_limit_enhancement": {
+            "enGB": "Pure enhancement limit exceeded (max +{0}).",
+            "frFR": "Limite d'altération pure dépassée (max +{0})."
+        },
+        "ui_sync_in_progress": {
+            "enGB": "Synchronization in progress...",
+            "frFR": "Synchronisation en cours..."
+        },
+        "ui_sync_error_index": {
+            "enGB": "Failed: Game index inaccessible.",
+            "frFR": "Échec : Index du jeu inaccessible."
+        },
+        "ui_sync_integration": {
+            "enGB": "Integration and filtering of overrides (JSON)...",
+            "frFR": "Intégration et filtrage des surcharges (JSON)..."
+        },
+        "ui_sync_scanner_progress": {
+            "enGB": "Multithreaded binary scanner: {0} / {1} processed...",
+            "frFR": "Scanner binaire multithread : {0} / {1} traités..."
         }
     }
 }

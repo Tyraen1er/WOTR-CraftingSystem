@@ -176,7 +176,7 @@ namespace CraftingSystem
                     {
                         if (!IsEnchantmentAllowedOnNormalItem(selected))
                         {
-                            return "Un équipement doit posséder (ou recevoir simultanément) une 'Altération' avant de recevoir des enchantements spéciaux.";
+                            return Helpers.GetString("err_require_plus_one", "Un équipement doit posséder (ou recevoir simultanément) une 'Altération' (+1) avant de recevoir des enchantements spéciaux.");
                         }
                     }
                 }
@@ -184,7 +184,7 @@ namespace CraftingSystem
 
             int addedPoints = selectedList.Sum(d => d.PointCost);
             if (CraftingSettings.EnforcePointsLimit && currentPoints + addedPoints > CraftingSettings.MaxTotalBonus)
-                return $"Limite de puissance totale dépassée (max +{CraftingSettings.MaxTotalBonus}).";
+                return string.Format(Helpers.GetString("err_limit_total", "Limite de puissance totale dépassée (max +{0})."), CraftingSettings.MaxTotalBonus);
 
             int selectedMaxEnh = 0;
             foreach (var d in selectedList)
@@ -193,7 +193,7 @@ namespace CraftingSystem
                     selectedMaxEnh = Math.Max(selectedMaxEnh, d.PointCost);
             }
             if (CraftingSettings.EnforcePointsLimit && Math.Max(currentEnhancement, selectedMaxEnh) > CraftingSettings.MaxEnhancementBonus)
-                return $"Limite d'altération pure dépassée (max +{CraftingSettings.MaxEnhancementBonus}).";
+                return string.Format(Helpers.GetString("err_limit_enhancement", "Limite d'altération pure dépassée (max +{0})."), CraftingSettings.MaxEnhancementBonus);
 
             return null;
         }
