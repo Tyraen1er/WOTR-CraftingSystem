@@ -70,10 +70,12 @@ namespace CraftingSystem
             if (data == null || string.IsNullOrEmpty(data.Guid)) return false;
             var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
             
+            /*
             if (bp == null) {
-                // Main.ModEntry.Logger.Warning($"[DEBUG] IsPureEnhancement: Blueprint INTROUVABLE pour le GUID {data.Guid}");
+                Main.ModEntry.Logger.Warning($"[DEBUG] IsPureEnhancement: Blueprint INTROUVABLE pour le GUID {data.Guid}");
                 return false;
             }
+            */
 
             return IsPureEnhancement(bp);
         }
@@ -245,21 +247,14 @@ namespace CraftingSystem
             var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
             if (bp == null) return false;
 
-            // 2. Est-ce que le jeu considère que ça coûte 0 point ? (ex: Adamantium, Mithral)
-            if (bp.EnchantmentCost == 0 || GetEnhancementValue(bp) > 0) return true;
+            // 1. Matériaux (via catégories du JSON)
+            bool isMaterial = data.Categories != null && data.Categories.Contains("Material", StringComparer.OrdinalIgnoreCase);
+            if (isMaterial) return true;
 
-            // On respecte la règle : Priorité au JSON si présent
-            int pointCost = data.PointCost; 
-            
-            // Si l'enchantement n'est pas dans le JSON (donc découvert par scan), pointCost sera 0 par défaut.
-            // Dans ce cas précis, on utilise la valeur du Blueprint.
-            var isInJson = EnchantmentScanner.MasterList.Any(d => string.Equals(d.Guid, data.Guid, StringComparison.OrdinalIgnoreCase));
-            if (!isInJson)
-            {
-                pointCost = bp.EnchantmentCost;
-            }
+            // 2. Altérations pures (+1, +2, +3...)
+            if (IsPureEnhancement(bp)) return true;
 
-            return pointCost == 1 && IsPureEnhancement(bp);
+            return false;
         }
     }
 }

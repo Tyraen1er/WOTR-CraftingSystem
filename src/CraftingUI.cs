@@ -417,10 +417,18 @@ namespace CraftingSystem
                         if (!matchAll) continue; 
                     }
 
-                    // --- FILTRE D'OBJET NORMAL ---
+                    // --- FILTRE D'OBJET NORMAL (SI PAS DE +1) ---
                     if (isWeaponOrArmor && !isReadyForSpecial && !isQueued)
                     {
-                        if (!CraftingCalculator.IsEnchantmentAllowedOnNormalItem(data)) continue; 
+                        bool isAllowed = CraftingCalculator.IsEnchantmentAllowedOnNormalItem(data);
+                        
+                        // LOG DE TRAÇAGE POUR LE +1 REQUIRED
+                        if (CraftingSettings.RequirePlusOneFirst && UnityEngine.Time.frameCount % 300 == 0) // Toutes les 5s env
+                        {
+                            Main.ModEntry.Logger.Log($"[FILTRE-REPORT] {data.Name} -> Caché car isReadyForSpecial={isReadyForSpecial} et IsAllowedOnNormal={isAllowed}");
+                        }
+
+                        if (!isAllowed) continue; 
                     }
 
                     // --- FILTRE RECHERCHE ---
@@ -490,15 +498,13 @@ namespace CraftingSystem
                 if (d != null)
                 {
                     selectedList.Add(d);
-                    // On ne logge qu'une fois par seconde pour éviter de flooder (60 fps)
-                    /* if (UnityEngine.Time.frameCount % 60 == 0) 
-                        Main.ModEntry.Logger.Log($"[PANIER-DEBUG] Guid={g} -> {d.Name}, Points={d.PointCost} (String:'{d.PointString}'), IsPure={CraftingCalculator.IsPureEnhancement(d)}");
                 }
                 else if (UnityEngine.Time.frameCount % 60 == 0)
                 {
                     Main.ModEntry.Logger.Warning($"[PANIER-DEBUG] Guid={g} -> NON TROUVÉ DANS LA MASTERLIST");
-                } */
+                }
             }
+
 
             long totalCost = 0;
             int totalDays = 0;

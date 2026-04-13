@@ -114,31 +114,28 @@ namespace CraftingSystem
 
             foreach (var project in ActiveProjects)
             {
-                /*
                 try 
                 {
                     if (currentTime >= project.FinishTimeTicks || CraftingSettings.InstantCrafting)
                     {
-                        string itemName = project.Item != null ? project.Item.Name : "Objet Null";
-                        Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Tentative de finition pour : {itemName} avec l'enchantement {project.EnchantmentGuid}");
-
+                        // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Tentative de finition pour : {itemName} avec l'enchantement {project.EnchantmentGuid}");
+                        
                         var bp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(project.EnchantmentGuid)) as BlueprintItemEnchantment;
                         if (bp == null) 
                         {
                             Main.ModEntry.Logger.Error($"[ATELIER-DEBUG] ERREUR: Blueprint introuvable pour le GUID {project.EnchantmentGuid} !");
-                            continue; // On passe au projet suivant pour éviter de tout crasher
+                            continue;
                         }
 
                         ApplyEnchantmentSafely(project.Item, bp);
                         completedProjects.Add(project);
-                        Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Application réussie sur {itemName}");
+                        // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Application réussie sur {itemName}");
                     }
                 } 
                 catch (Exception e) 
                 {
                     Main.ModEntry.Logger.Error($"[ATELIER-DEBUG] CRASH dans la boucle d'un projet : {e.Message}\n{e.StackTrace}");
                 }
-                */
             }
 
             foreach (var p in completedProjects) 

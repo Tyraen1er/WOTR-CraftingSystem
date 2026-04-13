@@ -189,6 +189,7 @@ namespace CraftingSystem
             // 1. On vérifie si la collection est celle de la forge
             if (__instance == DeferredInventoryOpener.CraftingBox)
             {
+                // DIAGNOSTIC PROFOND DEMANDÉ PAR L'UTILISATEUR
                 /*
                 Main.ModEntry.Logger.Log($"\n[DIAGNOSTIC] --- Analyse de l'objet retiré : {item.Name} ---");
                 foreach (var e in item.Enchantments)

@@ -218,6 +218,9 @@ namespace CraftingSystem
 
                     foreach (var bp in foundEnchants)
                     {
+                        bool isPure = CraftingCalculator.IsPureEnhancement(bp);
+                        if (isPure) Main.ModEntry.Logger.Log($"[SYNC-PURE] {bp.name} ({bp.AssetGuid}) est détecté comme PURE.");
+
                         string guidStr = bp.AssetGuid.ToString();
 
                         if (overrides.TryGetValue(guidStr, out var ovData))
