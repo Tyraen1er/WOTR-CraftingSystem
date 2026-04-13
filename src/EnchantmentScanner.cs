@@ -218,9 +218,6 @@ namespace CraftingSystem
 
                     foreach (var bp in foundEnchants)
                     {
-                        bool isPure = CraftingCalculator.IsPureEnhancement(bp);
-                        if (isPure) Main.ModEntry.Logger.Log($"[SYNC-PURE] {bp.name} ({bp.AssetGuid}) est détecté comme PURE.");
-
                         string guidStr = bp.AssetGuid.ToString();
 
                         if (overrides.TryGetValue(guidStr, out var ovData))
@@ -240,7 +237,7 @@ namespace CraftingSystem
                                 Type = type,
                                 Source = "Mod",
                                 PointString = bp.EnchantmentCost > 0 ? $"+{bp.EnchantmentCost}" : "+1",
-                                Description = !string.IsNullOrEmpty(bp.Comment) ? bp.Comment : System.Text.RegularExpressions.Regex.Replace(bp.Description?.ToString() ?? "", "<.*?>", string.Empty),
+                                Description = "", // Sera résolu dynamiquement par l'UI
                                 Categories = new List<string> { "Discovered" }
                             });
                         }

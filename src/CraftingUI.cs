@@ -289,16 +289,21 @@ namespace CraftingSystem
                     string displayName = GetDisplayName(ench.Blueprint, overrideData);
                     GUILayout.Label($"{displayName} (+{pointValue})", GUILayout.ExpandWidth(true));
 
-                    // POUR LES OBJETS DÉJÀ APPLIQUÉS
-                    string desc = overrideData?.Description ?? (!string.IsNullOrEmpty(ench.Blueprint.Comment) ? ench.Blueprint.Comment : "");
-                    if (!string.IsNullOrEmpty(desc))
+                    // POUR LES OBJETS DÉJÀ APPLIQUÉS (RÉSOLU DYNAMIQUEMENT)
+                    string appliedDesc = GetLocalizedDescription(ench.Blueprint, overrideData);
+                    if (!string.IsNullOrEmpty(appliedDesc))
                     {
-                        GUIContent infoContent = new GUIContent("<color=#3498db>[?]</color>");
-                        GUIStyle infoStyle = new GUIStyle(GUI.skin.label) { richText = true, fontStyle = FontStyle.Bold };
-                        if (GUILayout.Button(infoContent, infoStyle, GUILayout.Width(25 * scale))) 
+                        GUIContent infoContent = new GUIContent("<color=#3498db>?</color>");
+                        GUIStyle infoStyle = new GUIStyle(GUI.skin.button) { 
+                            richText = true, 
+                            fontStyle = FontStyle.Bold, 
+                            fontSize = (int)(9 * scale),
+                            padding = new RectOffset(0, 0, 0, 0)
+                        };
+                        if (GUILayout.Button(infoContent, infoStyle, GUILayout.Width(15 * scale), GUILayout.Height(15 * scale))) 
                         {
                             activeDescriptionTitle = displayName;
-                            activeDescriptionPopup = desc;
+                            activeDescriptionPopup = appliedDesc;
                         }
                     }
                     else
@@ -486,14 +491,20 @@ namespace CraftingSystem
                     // -- NOM + ICÔNE INFO [?] --
                     bool newSelected = GUILayout.Toggle(isQueued, $"{displayName} <color=#888888>({internalName})</color>", toggleStyle, GUILayout.ExpandWidth(true));
                     
-                    if (!string.IsNullOrEmpty(data.Description))
+                    string descForData = GetLocalizedDescription(bp, data);
+                    if (!string.IsNullOrEmpty(descForData))
                     {
-                        GUIContent infoContent = new GUIContent("<color=#3498db>[?]</color>");
-                        GUIStyle infoStyle = new GUIStyle(GUI.skin.label) { richText = true, fontStyle = FontStyle.Bold };
-                        if (GUILayout.Button(infoContent, infoStyle, GUILayout.Width(25 * scale))) 
+                        GUIContent infoContent = new GUIContent("<color=#3498db>?</color>");
+                        GUIStyle infoStyle = new GUIStyle(GUI.skin.button) { 
+                            richText = true, 
+                            fontStyle = FontStyle.Bold, 
+                            fontSize = (int)(9 * scale),
+                            padding = new RectOffset(0, 0, 0, 0)
+                        };
+                        if (GUILayout.Button(infoContent, infoStyle, GUILayout.Width(15 * scale), GUILayout.Height(15 * scale))) 
                         {
                             activeDescriptionTitle = displayName;
-                            activeDescriptionPopup = data.Description;
+                            activeDescriptionPopup = descForData;
                         }
                     }
                     else
@@ -735,6 +746,28 @@ namespace CraftingSystem
         {
             Rect rect = GUILayoutUtility.GetLastRect();
             GUI.Box(new Rect(rect.x, rect.y + rect.height + 5, rect.width, 2 * scale), "");
+        }
+
+        private string GetLocalizedDescription(BlueprintItemEnchantment bp, EnchantmentData data)
+        {
+            // 1. Priorité JSON
+            if (data != null && !string.IsNullOrEmpty(data.Description)) return data.Description;
+
+            // 2. Localisation du Jeu (Dynamique selon la langue active)
+            if (bp != null)
+            {
+                string localized = bp.m_Description?.ToString();
+                if (!string.IsNullOrEmpty(localized) && localized != bp.name) 
+                {
+                    // Nettoyage rapide du HTML d'Owlcat
+                    return System.Text.RegularExpressions.Regex.Replace(localized, "<.*?>", string.Empty);
+                }
+
+                // 3. Fallback sur le Commentaire ( souvent en anglais )
+                if (!string.IsNullOrEmpty(bp.Comment)) return bp.Comment;
+            }
+
+            return null;
         }
 
         private string GetDisplayName(BlueprintItemEnchantment bp, EnchantmentData data)

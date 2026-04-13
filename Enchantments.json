@@ -1,7 +1,7 @@
 [
   {
     "Name": "PoisonResistance4Enchant",
-    "Description": "A +4 bonus on all saving throws against poison.",
+    "Description": "",
     "Categories": ["Defensive"],
     "Type": "Weapon",
     "GUID": "c38a3a3dab5880f48b4fa6699841d58e",
@@ -10,7 +10,7 @@
   },
   {
     "Name": "BaneEverything",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "1a93ab9c46e48f3488178733be29342a",
@@ -19,7 +19,7 @@
   },
   {
     "Name": "BaneLiving",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "e1d6f5e3cd3855b43a0cb42f6c747e1c",
@@ -28,7 +28,7 @@
   },
   {
     "Name": "GreaterBaneEverything",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "HitChance", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "bb434647a70ca7e4f9c8050c55a7d235",
@@ -37,7 +37,7 @@
   },
   {
     "Name": "HumanbaneMorningstar2Enchant",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "c4918d4b7c3e2bb40a4e73d8ea45bd88",
@@ -46,7 +46,7 @@
   },
   {
     "Name": "BaneLongshankEnchant",
-    "Description": "A bane weapon excels against certain foes. This weapon is designated against Giants, Humans, Elves, Orcs and other humanoids goblins call longshanks. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "92a1f5db1a03c5b468828c25dd375806",
@@ -55,7 +55,7 @@
   },
   {
     "Name": "ChaoticAligned",
-    "Description": "A chaotic-aligned weapon can bypass the DR of certain creatures.",
+    "Description": "",
     "Categories": ["Alignment", "DR"],
     "Type": "Weapon",
     "GUID": "5781c3a3255f5be4a9f94c6faf0ac0c3",
@@ -64,7 +64,7 @@
   },
   {
     "Name": "SilverWeaponEnchantment",
-    "Description": "A complex process involving metallurgy and alchemy can bond silver to a weapon made of steel so that it bypasses the damage reduction of creatures such as lycanthropes. On a successful attack with a silver slashing or piercing weapon, the wielder takes a –1 penalty on the damage roll.",
+    "Description": "",
     "Categories": ["Material", "PenaltiesAndCursed"],
     "Type": "Weapon",
     "GUID": "9012b1095c9645e0a6152f673fc07d0a",
@@ -73,7 +73,7 @@
   },
   {
     "Name": "GoodAligned",
-    "Description": "A good-aligned weapon can bypass the DR of certain creatures.",
+    "Description": "",
     "Categories": ["Alignment"],
     "Type": "Weapon",
     "GUID": "326da486cd9077242a0e25df7eb7cd78",
@@ -82,7 +82,7 @@
   },
   {
     "Name": "LordProtectorEnchant",
-    "Description": "A loyal weapon refuses to damage the allies of its wielder. Weapon's attack bonus is reduced by -5 against friendly targets.",
+    "Description": "",
     "Categories": ["HitChance", "PenaltiesAndCursed"],
     "Type": "Weapon",
     "GUID": "feef0ce49bf8cfa4590201a7fcf6ec66",
@@ -91,7 +91,7 @@
   },
   {
     "Name": "ThunderingBurst",
-    "Description": "A thundering burst weapon functions as a thundering weapon that explodes with sonic upon striking a successful critical hit. The sonic does not harm the wielder. In addition to the extra sonic damage from the thundering ability, a thundering burst weapon deals an extra 1d10 points of sonic damage on a successful critical hit. If the weapon's critical multiplier is ×3, add an extra 2d10 points of sonic damage instead, and if the multiplier is ×4, add an extra 3d10 points.",
+    "Description": "",
     "Categories": ["Critical", "AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "83bd616525288b34a8f34976b2759ea1",
@@ -100,7 +100,7 @@
   },
   {
     "Name": "ElderToothEnchantmentLethal",
-    "Description": "Ability doubles the threat range of a weapon. This benefit stacks with any other effects that expand the threat range of a weapon.",
+    "Description": "",
     "Categories": ["Critical"],
     "Type": "Weapon",
     "GUID": "b28d69b00bbd4e1438a3ca951ab8c860",
@@ -109,7 +109,7 @@
   },
   {
     "Name": "AdamantineArmorHeavyEnchant",
-    "Description": "Adamantine is extremely strong and favored by weapon and armor smiths alike for its ability to cut through solid barriers with ease and endure heavy blows. Armor made from adamantine grants its wearer damage reduction of 1/— if it's light armor, 2/— if it's medium armor, and 3/— if it's heavy armor. Adamantine is so costly that weapons and armor made from it are always of masterwork quality; the masterwork cost is included in the prices given. Thus, adamantine weapons and ammunition have a +1 enhancement bonus on attack rolls, and the armor check penalty of adamantine armor is lessened by 1 compared to ordinary armor of its type. Items without metal parts cannot be made from adamantine. An arrow could be made of adamantine, but a quarterstaff could not.",
+    "Description": "",
     "Categories": ["Material", "DR", "Defensive", "HitChance"],
     "Type": "Armor",
     "GUID": "933456ff83c454146a8bf434e39b1f93",
@@ -118,7 +118,7 @@
   },
   {
     "Name": "AdamantineArmorLightEnchant",
-    "Description": "Adamantine is extremely strong and favored by weapon and armor smiths alike for its ability to cut through solid barriers with ease and endure heavy blows. Armor made from adamantine grants its wearer damage reduction of 1/— if it's light armor, 2/— if it's medium armor, and 3/— if it's heavy armor. Adamantine is so costly that weapons and armor made from it are always of masterwork quality; the masterwork cost is included in the prices given. Thus, adamantine weapons and ammunition have a +1 enhancement bonus on attack rolls, and the armor check penalty of adamantine armor is lessened by 1 compared to ordinary armor of its type. Items without metal parts cannot be made from adamantine. An arrow could be made of adamantine, but a quarterstaff could not.",
+    "Description": "",
     "Categories": ["Material", "DR", "HitChance"],
     "Type": "Armor",
     "GUID": "5faa3aaee432ac444b101de2b7b0faf7",
@@ -127,7 +127,7 @@
   },
   {
     "Name": "AdamantineArmorMediumEnchant",
-    "Description": "Adamantine is extremely strong and favored by weapon and armor smiths alike for its ability to cut through solid barriers with ease and endure heavy blows. Armor made from adamantine grants its wearer damage reduction of 1/— if it's light armor, 2/— if it's medium armor, and 3/— if it's heavy armor. Adamantine is so costly that weapons and armor made from it are always of masterwork quality; the masterwork cost is included in the prices given. Thus, adamantine weapons and ammunition have a +1 enhancement bonus on attack rolls, and the armor check penalty of adamantine armor is lessened by 1 compared to ordinary armor of its type. Items without metal parts cannot be made from adamantine. An arrow could be made of adamantine, but a quarterstaff could not.",
+    "Description": "",
     "Categories": ["DR", "Material"],
     "Type": "Armor",
     "GUID": "aa25531ab5bb58941945662aa47b73e7",
@@ -136,7 +136,7 @@
   },
   {
     "Name": "ThroneKeeperEnchantment",
-    "Description": "Adamantine is extremely strong and favored by weapon and armor smiths alike for its ability to cut through solid barriers with ease and endure heavy blows. Armor made from adamantine grants its wearer damage reduction of 1/— if it's light armor, 2/— if it's medium armor, and 3/— if it's heavy armor. Adamantine is so costly that weapons and armor made from it are always of masterwork quality; the masterwork cost is included in the prices given. Thus, adamantine weapons and ammunition have a +1 enhancement bonus on attack rolls, and the armor check penalty of adamantine armor is lessened by 1 compared to ordinary armor of its type. Items without metal parts cannot be made from adamantine. An arrow could be made of adamantine, but a quarterstaff could not.",
+    "Description": "",
     "Categories": ["Material", "DR", "HitChance"],
     "Type": "Armor",
     "GUID": "e82cbaab66e2415dbb5869bbfc1664e7",
@@ -145,7 +145,7 @@
   },
   {
     "Name": "BaneHumanoidGiant2d6",
-    "Description": "Against a designated foe it deals an extra 2d6 points of damage.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "1e25d1f515c867d40b9c0642e0b40ec2",
@@ -154,7 +154,7 @@
   },
   {
     "Name": "Sacrificial",
-    "Description": "Against a helpless foe, the weapon's enhancement bonus is +2 better than its actual bonus.",
+    "Description": "",
     "Categories": ["HitChance"],
     "Type": "Weapon",
     "GUID": "b7f029a31452b26408bc75d715227993",
@@ -163,7 +163,7 @@
   },
   {
     "Name": "EnhancementBonusWilloWisp",
-    "Description": "Against Will-o'-Wisps, the weapon's enhancement bonus is +4 better than its actual bonus.",
+    "Description": "",
     "Categories": ["Bane", "HitChance"],
     "Type": "Weapon",
     "GUID": "012f72c2749c2e94eb3c389f3f077aac",
@@ -172,7 +172,7 @@
   },
   {
     "Name": "CritAutoconfirmAgainstEvil",
-    "Description": "All critical hit rolls against evil foes are automatically successful.",
+    "Description": "",
     "Categories": ["Critical", "Alignment"],
     "Type": "Weapon",
     "GUID": "8c381459747746341be72f7fa0112e10",
@@ -181,7 +181,7 @@
   },
   {
     "Name": "Ultrasound",
-    "Description": "An ultrasound weapon creates a hardly hearable noise whenever it strikes a target, dealing an extra 2d6 points of sonic damage.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "582849db96824254ebcc68f0b7484e51",
@@ -190,7 +190,7 @@
   },
   {
     "Name": "DLC3_ShadowBalorFX",
-    "Description": "An unholy weapon is imbued with unholy power. This power makes the weapon evil-aligned and thus bypasses the corresponding damage reduction. It deals an extra 2d6 points of damage against all creatures of good alignment.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Alignment"],
     "Type": "Weapon",
     "GUID": "9abd18bca8394dc18b17318481e06933",
@@ -199,7 +199,7 @@
   },
   {
     "Name": "CallLightningCritical",
-    "Description": "Any creature struck by a critical hit, either from a natural attack or from this scimitar, becomes a target of lightning, as per the Call Lightning Storm spell (5d6 damage, 24 DC Reflex half). All natural attacks from both the wielder of this scimitar and the wielder's animal companion have concussive and shocking modifiers applied to them. If the wielder is wild shaped into a bear or if their animal companion is a bear, the sonic and electrical damage from their attacks is increased to 1d10.",
+    "Description": "",
     "Categories": ["Critical", "AdditionalDamage", "Elemental", "DC"],
     "Type": "Weapon",
     "GUID": "ea4da1b2cf1db1147b9e9974135d43ad",
@@ -208,7 +208,7 @@
   },
   {
     "Name": "ArcaneArmorShadowGreaterEnchant",
-    "Description": "As shadow, except it grants a +15 competence bonus on Stealth skill checks.",
+    "Description": "",
     "Categories": ["Skill"],
     "Type": "Armor",
     "GUID": "dd8f2032f05d72740961fc95201a5b15",
@@ -217,7 +217,7 @@
   },
   {
     "Name": "BooksOfDreamsIIStageEnchantment",
-    "Description": "As your travels continue and the story unravels itself, the book reveals more of its secrets. Now all your summoned creatures gain the effects of longstrider, greater and good hope spells.",
+    "Description": "",
     "Categories": ["Spellcasting", "StatusAndCC"],
     "Type": "Other",
     "GUID": "86c43107e126418288ef681bc82fc567",
@@ -226,7 +226,7 @@
   },
   {
     "Name": "Enhancement6",
-    "Description": "Attacks with this weapon get a +6 enhancement bonus on both attack and damage rolls.",
+    "Description": "",
     "Categories": ["HitChance", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "0326d02d2e24d254a9ef626cc7a3850f",
@@ -235,7 +235,7 @@
   },
   {
     "Name": "AgainstHelplessPlus2",
-    "Description": "Attacks with this weapon get an additional +2 enhancement bonus against stunned, paralyzed, nauseated and frightened targets.",
+    "Description": "",
     "Categories": ["StatusAndCC", "Bane"],
     "Type": "Weapon",
     "GUID": "2fa378b52d997da4e814af3c48d88d35",
@@ -244,7 +244,7 @@
   },
   {
     "Name": "ArmorEnhancementRusty",
-    "Description": "Broken armor gives half as much AC as it usually would. Its armor check penalty is doubled.",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed", "AC"],
     "Type": "Armor",
     "GUID": "d18d9f4e2caf4a79ba597036b5e21aca",
@@ -253,7 +253,7 @@
   },
   {
     "Name": "BreastplateEnhancementRusty",
-    "Description": "Broken armor gives half as much AC as it usually would. Its armor check penalty is doubled.",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed", "AC"],
     "Type": "Armor",
     "GUID": "bf5a1d482e8e4bc9a59050e2962952ff",
@@ -262,7 +262,7 @@
   },
   {
     "Name": "HalfplateEnhancementRusty",
-    "Description": "Broken armor gives half as much AC as it usually would. Its armor check penalty is doubled.",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed", "AC"],
     "Type": "Armor",
     "GUID": "e47a19217a584dc18c95afe3cd789f92",
@@ -271,7 +271,7 @@
   },
   {
     "Name": "HeavyShieldEnhancementRusty",
-    "Description": "Broken armor gives half as much AC as it usually would. Its armor check penalty is doubled.",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed", "AC"],
     "Type": "Armor",
     "GUID": "5fbb3964ceb9492da80806de8205a491",
@@ -280,7 +280,7 @@
   },
   {
     "Name": "HideStandardEnhancementRusty",
-    "Description": "Broken armor gives half as much AC as it usually would. Its armor check penalty is doubled.",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed", "AC"],
     "Type": "Armor",
     "GUID": "78fee91390a74317bcde8ce932db8513",
@@ -289,7 +289,7 @@
   },
   {
     "Name": "LeatherStandardEnhancementRusty",
-    "Description": "Broken armor gives half as much AC as it usually would. Its armor check penalty is doubled.",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed", "AC"],
     "Type": "Armor",
     "GUID": "ee8c8ec986eb42f6aad896370b30bdd4",
@@ -298,7 +298,7 @@
   },
   {
     "Name": "LightShieldEnhancementRusty",
-    "Description": "Broken armor gives half as much AC as it usually would. Its armor check penalty is doubled.",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed", "AC"],
     "Type": "Armor",
     "GUID": "ee0909bbf49d4736b21aa06d8e31161d",
@@ -307,7 +307,7 @@
   },
   {
     "Name": "JagannathKhandaPoisonEnchant",
-    "Description": "Creatures hit by the Khanda must succeed at a DC 17 Fortitude saving throw or be affected by poison for 6 rounds. Poison deals 1d2 Wisdom damage and dazes a target for 1 round.",
+    "Description": "",
     "Categories": ["StatusAndCC"],
     "Type": "Weapon",
     "GUID": "ff83ca13c3d633446a2b031ee3ffc557",
@@ -316,7 +316,7 @@
   },
   {
     "Name": "EdictEnchantment",
-    "Description": "Creatures hit by this dagger suffer a -3 penalty to Will saving throws for 1 minute.",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed", "StatusAndCC"],
     "Type": "Weapon",
     "GUID": "f24560ec5d6d8ee4a928bb6c10688aed",
@@ -325,7 +325,7 @@
   },
   {
     "Name": "LuckyLongbowEnchant",
-    "Description": "Critical multiplier of this weapon is ×4 instead of ×3.",
+    "Description": "",
     "Categories": ["Critical"],
     "Type": "Weapon",
     "GUID": "ad87461f079fe534b8b16ed777652702",
@@ -334,7 +334,7 @@
   },
   {
     "Name": "CriticalMultiplierIncrease",
-    "Description": "Critical multiplier of this weapon is increased by 1.",
+    "Description": "",
     "Categories": ["Critical"],
     "Type": "Weapon",
     "GUID": "5b1550c536bd09740bf43a6ddd1ad919",
@@ -343,7 +343,7 @@
   },
   {
     "Name": "Deteriorative",
-    "Description": "Deteriorative weapons a bane to all living things and deal 3d6 points of negative energy damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "bbe55d6e76b973d41bf5abeed643861d",
@@ -352,7 +352,7 @@
   },
   {
     "Name": "AncestralDwarwenShieldEnchantment",
-    "Description": "DR 2/-",
+    "Description": "",
     "Categories": ["Defensive", "DR"],
     "Type": "Other",
     "GUID": "0c96b611460bb254cbe9fdbfe7dbbdad",
@@ -361,7 +361,7 @@
   },
   {
     "Name": "ExtremeFrost4d6",
-    "Description": "Epic frost weapon is sheathed in a terrible, icy cold that deals an extra 4d6 points of cold damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "d206f3166f7492a43ad7817ec741cc7b",
@@ -370,7 +370,7 @@
   },
   {
     "Name": "Firebrand",
-    "Description": "Flaming weapon is sheathed in fire that deals an extra 1d6 points of fire damage on a successful hit. The fire does not harm the wielder. The effect remains until another command is given.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "7b314775d394a2846a9b64651e84a9c6",
@@ -379,7 +379,7 @@
   },
   {
     "Name": "Brass2d8",
-    "Description": "Flaming weapon is sheathed in fire that deals an extra 2d8 points of fire damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "a6064c14629de6d48bec8e8e0460f661",
@@ -388,7 +388,7 @@
   },
   {
     "Name": "Ice2d6",
-    "Description": "Freezing weapon is sheathed in a terrible, icy cold that deals an extra 2d6 points of cold damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "00049f6046b20394091b29702c6e9617",
@@ -397,7 +397,7 @@
   },
   {
     "Name": "RobeOfEarthEnchant",
-    "Description": "Grants +2 DC bonus to acid spells.",
+    "Description": "",
     "Categories": ["DC", "Elemental"],
     "Type": "Armor",
     "GUID": "87b96ae9ecf792741b409e85bebe30a7",
@@ -406,7 +406,7 @@
   },
   {
     "Name": "RobeOfWaterEnchant",
-    "Description": "Grants +2 DC bonus to cold spells.",
+    "Description": "",
     "Categories": ["Spellcasting", "Elemental", "DC"],
     "Type": "Armor",
     "GUID": "54d0633c038e96b4a9d5422e0801dfb5",
@@ -415,7 +415,7 @@
   },
   {
     "Name": "RobeOfAirEnchant",
-    "Description": "Grants +2 DC bonus to electrical spells.",
+    "Description": "",
     "Categories": ["Spellcasting", "Elemental", "DC"],
     "Type": "Armor",
     "GUID": "8e7f512654a46d949a1eee77249bd75d",
@@ -424,7 +424,7 @@
   },
   {
     "Name": "ShieldEnhancementBonus2",
-    "Description": "Grants +2 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.",
+    "Description": "",
     "Categories": ["Defensive", "AC"],
     "Type": "Armor",
     "GUID": "7b9f2f78a83577d49927c78be0f7fbc1",
@@ -433,7 +433,7 @@
   },
   {
     "Name": "ShieldEnhancementBonus4",
-    "Description": "Grants +4 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.",
+    "Description": "",
     "Categories": ["AC", "Defensive"],
     "Type": "Armor",
     "GUID": "a5d27d73859bd19469a6dde3b49750ff",
@@ -442,7 +442,7 @@
   },
   {
     "Name": "ShieldEnhancementBonus5",
-    "Description": "Grants +5 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.",
+    "Description": "",
     "Categories": ["AC", "Defensive"],
     "Type": "Armor",
     "GUID": "84d191a748edef84ba30c13b8ab83bd9",
@@ -451,7 +451,7 @@
   },
   {
     "Name": "ShieldEnhancementBonus6",
-    "Description": "Grants +6 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.",
+    "Description": "",
     "Categories": ["AC", "Defensive"],
     "Type": "Armor",
     "GUID": "70c26c66adb96d74baec38fc8d20c139",
@@ -460,7 +460,7 @@
   },
   {
     "Name": "FirebornWarhammerEnchantmentFire",
-    "Description": "Greater Flaming weapon is sheathed in fire that deals an extra 2d6 points of fire damage on a successful hit and 1d10 on critical hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental", "Critical"],
     "Type": "Weapon",
     "GUID": "5f2fdab15f558084494b83b48064a844",
@@ -469,7 +469,7 @@
   },
   {
     "Name": "Frost2d8",
-    "Description": "Greater frost weapon is sheathed in a terrible, icy cold that deals an extra 2d8 points of cold damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "83e7559124cb78a4c9d61360d3a4c3c2",
@@ -478,7 +478,7 @@
   },
   {
     "Name": "DarkBiddingSlingstaffNecrotic2d8",
-    "Description": "Greater necrotic weapons are a bane to all living things and deal 2d8 points of negative energy damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "c2229230ff9292048b07a8429d6536c6",
@@ -487,7 +487,7 @@
   },
   {
     "Name": "Shock2d6",
-    "Description": "Improved shock weapon is sheathed in crackling electricity that deals an extra 2d6 points of electricity damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "b1de8528121b80844bd7cf09d9e1cf00",
@@ -496,7 +496,7 @@
   },
   {
     "Name": "Brass",
-    "Description": "Incinerating weapon is sheathed in fire that deals an extra 2d6 points of fire damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "5e0e5de297c229f42b00c5b1738b50fa",
@@ -505,7 +505,7 @@
   },
   {
     "Name": "ImprovedCriticalMultiplerEnchantment",
-    "Description": "Increases weapon's critical multiplier by one.",
+    "Description": "",
     "Categories": ["Critical"],
     "Type": "Weapon",
     "GUID": "57b51dd8f352e99409dee709669e164f",
@@ -514,7 +514,7 @@
   },
   {
     "Name": "BooksOfDreamsIIIStageEnchantment",
-    "Description": "Luck always favors adventurers as well as this book. Whenever any of your summoned creatures die from an attack with a weapon, you and your allies restore 20 HP and 1 round of azata performance.",
+    "Description": "",
     "Categories": ["Defensive"],
     "Type": "Other",
     "GUID": "5ef6b452273044cb9b4bf63fd07d8639",
@@ -523,7 +523,7 @@
   },
   {
     "Name": "AdamantineWeaponEnchantment",
-    "Description": "Mined from rocks that fell from the heavens, this ultrahard metal adds to the quality of a weapon or suit of armor. Adamantine is so costly that weapons made from it are always of masterwork quality.",
+    "Description": "",
     "Categories": ["Material"],
     "Type": "Weapon",
     "GUID": "ab39e7d59dd12f4429ffef5dca88dc7b",
@@ -532,7 +532,7 @@
   },
   {
     "Name": "MithralWeaponEnchantment",
-    "Description": "Mithral is a rare, silvery metal that is lighter than steel but just as hard. An item made from mithral weighs half as much as the same item made from other metals. In the case of weapons, this lighter weight does not change a weapon's size category or the ease with which it can be wielded (whether it is light, one-handed, or two-handed). Mithral weapons count as silver for the purpose of overcoming damage reduction. Weapons fashioned from mithral are always masterwork items as well.",
+    "Description": "",
     "Categories": ["Material"],
     "Type": "Weapon",
     "GUID": "0ae8fc9f2e255584faf4d14835224875",
@@ -541,7 +541,7 @@
   },
   {
     "Name": "MithralArmorEnchant",
-    "Description": "Mithral is a very rare silvery, glistening metal that is lighter than steel but just as hard. When worked like steel, it becomes a wonderful material from which to create armor, and is occasionally used for other items as well. Most mithral armors are one category lighter than normal for purposes of movement and other limitations. Heavy armors are treated as medium, and medium armors are treated as light, but light armors are still treated as light. This decrease does not apply to proficiency in wearing the armor. Spell failure chances for armors and shields made from mithral are decreased by 10%, maximum Dexterity bonuses are increased by 2, and armor check penalties are decreased by 3 (to a minimum of 0). An item made from mithral weighs half as much as the same item made from other metals.",
+    "Description": "",
     "Categories": ["Material", "Defensive"],
     "Type": "Armor",
     "GUID": "7b95a819181574a4799d93939aa99aff",
@@ -550,7 +550,7 @@
   },
   {
     "Name": "Necrotic",
-    "Description": "Necrotic weapons are a bane to all living things. They deal additional 1d6 points of negative energy damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "bad4134798e182c4487819dce9b43003",
@@ -559,7 +559,7 @@
   },
   {
     "Name": "WoundBearerNegative1d6",
-    "Description": "Necrotic weapons are a bane to all living things. They deal additional 1d6 points of negative energy damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "7f727c7023be4854babc44d3ee756d31",
@@ -568,7 +568,7 @@
   },
   {
     "Name": "TouchEnchant2",
-    "Description": "Owner of this item gets +2 enhancement bonus to attack with touch spells.",
+    "Description": "",
     "Categories": ["HitChance", "Spellcasting"],
     "Type": "Weapon",
     "GUID": "2431f5f8d2ffe854784429b989d1e8a3",
@@ -577,7 +577,7 @@
   },
   {
     "Name": "DruchiteWeaponEnchantment",
-    "Description": "The black-and-violet ore known as druchite is so dark that creatures can have extreme difficulty perceiving it. Druchite-veined melee weapons grant their wielder a 10% chance that the enemy will not see the attack coming, as if the attacker were invisible.",
+    "Description": "",
     "Categories": ["Material", "HitChance"],
     "Type": "Weapon",
     "GUID": "e6a7a2b6f26b488783c612add1e9a8bd",
@@ -586,7 +586,7 @@
   },
   {
     "Name": "AsziteArmorEnchantment",
-    "Description": "The navy-blue ore known as aszite absorbs any light around it. The wearer of aszite-veined armor gains a +5 circumstance bonus on Stealth checks. If the wearer is wielding a druchite weapon, the usual chance that the enemy will not notice an attack made with the weapon increases to 20%.",
+    "Description": "",
     "Categories": ["Skill", "Material"],
     "Type": "Armor",
     "GUID": "b6dff2f7ec3e4a4bbc5090d27752b465",
@@ -595,7 +595,7 @@
   },
   {
     "Name": "JokeOfNatureArrowsQuiverEnchantment",
-    "Description": "The owner of this quiver can use it to shoot 20 units of ammunition. This ammunition deals additional 1d6+5 piercing damage and on a confirmed critical hit transforms the enemy into a pony for 1 round.",
+    "Description": "",
     "Categories": ["StatusAndCC", "AdditionalDamage", "Critical"],
     "Type": "Weapon",
     "GUID": "3eee945a1954548438ac5ccf11cc46e6",
@@ -604,7 +604,7 @@
   },
   {
     "Name": "SacredVengenanceArrowsQuiverEnchantment",
-    "Description": "The owner of this quiver can use it to shoot 30 units of ammunition. This ammunition hits the first enemy as well as two additional enemies, each of which must be within 15 feet of the primary target. It deals additional 1d6 points of holy damage.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "69a429b10f05f2e4287daa4ae035071c",
@@ -613,7 +613,7 @@
   },
   {
     "Name": "ForcefulPushArrowsQuiverEnchantment",
-    "Description": "The owner of this quiver can use it to shoot 30 units of enchanted ammunition. This ammunition deals additional 1d8 bludgeoning damage. Each time the projectile hits an enemy, the enemy must pass a Fortitude saving throw (DC 15 + wielder's Str modifier) or it will be pushed back on 5 feet and become prone.",
+    "Description": "",
     "Categories": ["StatusAndCC", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "875713a1ec809e540a17af03ac9b45ba",
@@ -622,7 +622,7 @@
   },
   {
     "Name": "OolioddrooTongueEnchantment",
-    "Description": "The victim takes 2 points of Wisdom drain. A creature can resist this attack with a successful DC 23 Will save. On a failed save, the oolioddroo targets the victim with one of the following effects. The save DC is Charisma-based.",
+    "Description": "",
     "Categories": ["StatusAndCC", "PenaltiesAndCursed", "DC"],
     "Type": "Weapon",
     "GUID": "539012411469f7b4ab717ec2172eb173",
@@ -631,7 +631,7 @@
   },
   {
     "Name": "DLC3_BracersOfBraveryEnchantment",
-    "Description": "The wearer of these bracers gains a +2 morale bonus on all Will saving throws. They also grant the ability to cast the heroism, greater spell as a 15th level wizard once per day.",
+    "Description": "",
     "Categories": ["Spellcasting", "Defensive"],
     "Type": "Armor",
     "GUID": "338dbdb19b584050a99e82d705fd8a66",
@@ -640,7 +640,7 @@
   },
   {
     "Name": "JagannathKhandaBeguiling",
-    "Description": "The wielder of this weapon gets a +4 bonus to Persuasion skill checks.",
+    "Description": "",
     "Categories": ["Skill"],
     "Type": "Weapon",
     "GUID": "ae8fa09aa9a11114594915a4120f4ab5",
@@ -649,7 +649,7 @@
   },
   {
     "Name": "JagannathKhandaMindAffectingEnchant",
-    "Description": "The wielder of this weapon gets a +8 bonus on saving throws against mind-affecting effects.",
+    "Description": "",
     "Categories": ["Defensive"],
     "Type": "Weapon",
     "GUID": "b521c08e57d60344885eb46c915c7b8d",
@@ -658,7 +658,7 @@
   },
   {
     "Name": "JagannathKhandaDamageReductionEnchant",
-    "Description": "The wielder of this weapon gets DR 5/piercing.",
+    "Description": "",
     "Categories": ["Defensive", "DR"],
     "Type": "Weapon",
     "GUID": "01cfd260209e1904082829ec12ea5aa9",
@@ -667,7 +667,7 @@
   },
   {
     "Name": "SarkorisDirgeEnchantment",
-    "Description": "This +2 keen heavy mace of Sarkorian make deals an additional 2d8 holy damage to undead and grants its wielder a +2 bonus to Strength.",
+    "Description": "",
     "Categories": ["Critical", "Alignment", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "e02dedda1d5248b3aa9016f918722c2e",
@@ -676,7 +676,7 @@
   },
   {
     "Name": "HundredPocktesEnchant",
-    "Description": "This armor grants its wearer a +5 competence bonus to Trickery skill checks.",
+    "Description": "",
     "Categories": ["Skill"],
     "Type": "Armor",
     "GUID": "710c2a979241a5a4d846b3d6232190fb",
@@ -685,7 +685,7 @@
   },
   {
     "Name": "PatchworkHide",
-    "Description": "This armor grants its wearer an inherent +3 damage bonus against animals, dragons and magical beasts.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage"],
     "Type": "Other",
     "GUID": "f7d08bc5e5182ab4bb500681196cc3d6",
@@ -694,7 +694,7 @@
   },
   {
     "Name": "GentlePersuasionEnchant",
-    "Description": "This armor is cursed to steer the wearer toward evil, choking the life out of them every time they or one of their associates does a good action, reducing their Constitution by 2 each time, to a minimum of 1. Only committing an evil act can provide relief, removing the Constitution penalty and giving 10 temporary hit points instead. Unequipping this armor is only possible after casting remove curse on the wearer and passing a DC 33 caster level check.",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed", "Alignment"],
     "Type": "Armor",
     "GUID": "d884882b038db4741a12b006e9de3e8b",
@@ -703,7 +703,7 @@
   },
   {
     "Name": "ArmorEnhancementBonus6",
-    "Description": "This armor provides a +6 enhancement bonus to Armor Class. The armor check penalty of magic armor is decreased by 1 compared to ordinary armor of its type.",
+    "Description": "",
     "Categories": ["AC"],
     "Type": "Armor",
     "GUID": "de15272d1f4eb7244aa3af47dbb754ef",
@@ -712,7 +712,7 @@
   },
   {
     "Name": "ArcaneArmorBalancedEnchant",
-    "Description": "This armor pushes back against anything that threatens to knock its wearer to the ground. The wearer gains a +4 bonus to CMD against grapple, trip and overrun combat maneuvers.",
+    "Description": "",
     "Categories": ["Defensive"],
     "Type": "Armor",
     "GUID": "53fba8eec3abd214b98a57b12d7ad0a7",
@@ -721,7 +721,7 @@
   },
   {
     "Name": "BleedConst1d4",
-    "Description": "This creature takes 1d4 Constitution damage each turn. Bleeding can be stopped through the application of any effect that cures hit point damage (even if the bleed is ability damage).",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed"],
     "Type": "Weapon",
     "GUID": "aa2e3d24a86e49bcb09ed00a7938cdee",
@@ -730,7 +730,7 @@
   },
   {
     "Name": "MagicWeapon",
-    "Description": "This enchantment makes the weapon magic and thus bypasses the corresponding damage reduction.",
+    "Description": "",
     "Categories": ["DR"],
     "Type": "Weapon",
     "GUID": "631cb72d11015374987c161a2451a1cf",
@@ -739,7 +739,7 @@
   },
   {
     "Name": "StrengthThrown",
-    "Description": "This feature allows you to add your Strength bonus to damage with a bow.",
+    "Description": "",
     "Categories": ["AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "c4d213911e9616949937e1520c80aaf3",
@@ -748,7 +748,7 @@
   },
   {
     "Name": "ColdIronWeaponEnchantment",
-    "Description": "This iron, mined deep underground and known for its effectiveness against demons and fey creatures, is forged at a lower temperature to preserve its delicate properties.",
+    "Description": "",
     "Categories": ["Bane", "Material"],
     "Type": "Weapon",
     "GUID": "e5990dc76d2a613409916071c898eee8",
@@ -757,7 +757,7 @@
   },
   {
     "Name": "RawHolyPowerEnchantment",
-    "Description": "This ring grants its wearer a +2 enhancement bonus to Strength ability score. The wearer gains a +2 enhancement bonus on attack rolls against undead. Once per day, the wearer of this ring can use it to cast the prayer spell with a duration of 5 rounds.",
+    "Description": "",
     "Categories": ["Spellcasting", "HitChance", "Bane"],
     "Type": "Other",
     "GUID": "4aec56647e1e40f0bb697c722bc422e1",
@@ -766,7 +766,7 @@
   },
   {
     "Name": "RodOfFiredVengenceEnchantment",
-    "Description": "This rod is hot to touch. It vibrates slightly with the power burning inside. It transforms all wielder's spell damage into fire damage, increasing caster level by 1 and +3 bonus to Evocation school spells' DC. It also grants its wielder the ability to make up to five spells they cast per day maximized as though using the Maximize Spell feat. Greater rods can be used with spells of 9th level or lower.",
+    "Description": "",
     "Categories": ["Spellcasting", "Elemental", "DC", "freeSpell"],
     "Type": "Weapon",
     "GUID": "df965765941407543b1a0732e7e21723",
@@ -775,7 +775,7 @@
   },
   {
     "Name": "FieryBody",
-    "Description": "This spell transforms your body into living flame. You and your equipment are immune to fire damage. In fact, every time you would normally take damage from fire, you are instead healed of damage at a rate of 1 point per 3 points of damage the fire attack would have normally inflicted. You are immune toblindness, critical hits, ability score damage, disease, electricity, poison, and stunning. You have acid resistance 30. You take 150% as much damage from cold as normal. You have a +6 enhancement bonus to your Dexterity score. Your unarmed attack deals an additional 3d6 points of fire damage, and you are considered armed when making unarmed attacks. Fire spells you cast have their save DCs increased by +1.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Critical", "DC", "Defensive", "Elemental", "PenaltiesAndCursed", "Spellcasting", "StatusAndCC"],
     "Type": "Weapon",
     "GUID": "1daab3baedcd2db4e9f596ae91bff1c5",
@@ -784,7 +784,7 @@
   },
   {
     "Name": "FireGemstone",
-    "Description": "This staff contains six charges that are replenished each day. By spending three charges it wielder may cast fireball, and by spending two charges, they may cast scorching ray.",
+    "Description": "",
     "Categories": ["Spellcasting", "Elemental"],
     "Type": "Weapon",
     "GUID": "eecfce4c53be9fa4d900fd2fd29cf29a",
@@ -793,7 +793,7 @@
   },
   {
     "Name": "ArcaneArmorInvulnerabilityEnchant",
-    "Description": "This suit of armor grants the wearer DR 5/magic.",
+    "Description": "",
     "Categories": ["Defensive", "DR"],
     "Type": "Armor",
     "GUID": "4ffa3c3d5f6cdfb4eaf15f11d8e55bd1",
@@ -802,7 +802,7 @@
   },
   {
     "Name": "CarroksThornRogueEnch",
-    "Description": "This thorn can be wielded as a +2 destructive dagger. Whenever the wielder rolls a natural 20 on an attack roll made with this dagger, if the wielder is a rogue or a slayer of 7th level or higher or an assassin of any level, they inflict a negative level on the target.",
+    "Description": "",
     "Categories": ["Critical", "StatusAndCC"],
     "Type": "Weapon",
     "GUID": "0bc0f40c28224e35a216b91178aa6acd",
@@ -811,7 +811,7 @@
   },
   {
     "Name": "ElderToothEnchantment",
-    "Description": "This weapon deals an additional 1d6 negative damage on hit. In addition to the extra damage, a necrotic burst weapon deals an extra 1d10 points of negative energy damage on a successful critical hit. If the weapon's critical multiplier is ×3, add an extra 2d10 points of negative energy damage instead, and if the multiplier is ×4, add an extra 3d10 points of negative energy damage.",
+    "Description": "",
     "Categories": ["Critical", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "83612e733df422742818a69bf94f57fc",
@@ -820,7 +820,7 @@
   },
   {
     "Name": "ElderCorrosive2d6",
-    "Description": "This weapon functions like caustic, except it bypasses any resistance or immunity to acid the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "55eece8fead0448aac01c44f37ea065a",
@@ -829,7 +829,7 @@
   },
   {
     "Name": "ElderCorrosiveBurst",
-    "Description": "This weapon functions like corrosive burst, except it bypasses any resistance or immunity to acid the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental", "Critical"],
     "Type": "Weapon",
     "GUID": "ea30c02bc5814d8fb600e66dc9d3d520",
@@ -838,7 +838,7 @@
   },
   {
     "Name": "ElderCorrosive",
-    "Description": "This weapon functions like corrosive, except it bypasses any resistance or immunity to acid the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "c7fa5c82d5bb4baf8458dd30981908d1",
@@ -847,7 +847,7 @@
   },
   {
     "Name": "ElderFlamingBurst",
-    "Description": "This weapon functions like flaming burst, except it bypasses any resistance or immunity to fire the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental", "Critical"],
     "Type": "Weapon",
     "GUID": "9ab28e024ad2448f8c76c9f60b398e6a",
@@ -856,7 +856,7 @@
   },
   {
     "Name": "ElderFlaming",
-    "Description": "This weapon functions like flaming, except it bypasses any resistance or immunity to fire the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "1735064e8f614d8ca0a065b5e051dbc1",
@@ -865,7 +865,7 @@
   },
   {
     "Name": "ElderIce2d6",
-    "Description": "This weapon functions like freezing, except it bypasses any resistance or immunity to cold the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "c4c701aee76742188477a6f24505c222",
@@ -874,7 +874,7 @@
   },
   {
     "Name": "ElderFrost",
-    "Description": "This weapon functions like frost, except it bypasses any resistance or immunity to cold the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "c9c2580b9b6c43e992acae157615deb5",
@@ -883,7 +883,7 @@
   },
   {
     "Name": "ElderShock2d6",
-    "Description": "This weapon functions like greater shock, except it bypasses any resistance or immunity to electricity the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "5573c979b9dc403684166fe6e1c31c15",
@@ -892,7 +892,7 @@
   },
   {
     "Name": "ElderIcyBurst",
-    "Description": "This weapon functions like icy burst, except it bypasses any resistance or immunity to cold the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental", "Critical"],
     "Type": "Weapon",
     "GUID": "3011dd343b1b41c4b49734b65ca26c5d",
@@ -901,7 +901,7 @@
   },
   {
     "Name": "ElderBrass",
-    "Description": "This weapon functions like incinerating, except it bypasses any resistance or immunity to fire the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "0a8f3559cfcc4d38961bd9658d026cc8",
@@ -910,7 +910,7 @@
   },
   {
     "Name": "ElderShock",
-    "Description": "This weapon functions like shock, except it bypasses any resistance or immunity to electricity the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "27e28279803f4ef58fdd3ab76e68c376",
@@ -919,7 +919,7 @@
   },
   {
     "Name": "ElderShockingBurst",
-    "Description": "This weapon functions like shocking burst, except it bypasses any resistance or immunity to electricity the target might have.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental", "Critical"],
     "Type": "Weapon",
     "GUID": "a30a16ee048e4d1fb186c5cf4a0984b0",
@@ -928,7 +928,7 @@
   },
   {
     "Name": "UnstoppableEnchantment",
-    "Description": "This weapon ignores all damage reduction and immunities.",
+    "Description": "",
     "Categories": ["DR"],
     "Type": "Weapon",
     "GUID": "fe5efcd0969ce794a866386faba8ac48",
@@ -937,7 +937,7 @@
   },
   {
     "Name": "DevourerOfMetalEnchant",
-    "Description": "Weapon deals an extra 2d6 points of acid damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "d0c3002b7efc3b647993df15b3bcb65d",
@@ -946,7 +946,7 @@
   },
   {
     "Name": "ProtectionFromEvil",
-    "Description": "Weapon emits a Magic circle against evil effect. All creatures within the area gain the effects of a Protection from evil spell.",
+    "Description": "",
     "Categories": ["Defensive", "Alignment", "Spellcasting"],
     "Type": "Weapon",
     "GUID": "b5c80d332c8b8ab4e982adf5a276f9fb",
@@ -955,7 +955,7 @@
   },
   {
     "Name": "OversizedPenaltyNegateEnchant",
-    "Description": "Weapon is exceptionally large and deals more damage, but attacks with it suffer a penalty of -2 to attack rolls.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "PenaltiesAndCursed", "HitChance"],
     "Type": "Weapon",
     "GUID": "e857717a398cb5a40b059e3122743ad3",
@@ -964,7 +964,7 @@
   },
   {
     "Name": "Oversized",
-    "Description": "Weapon is exceptionally large and deals more damage, but attacks with it suffer a penalty of –2 to attack rolls.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "PenaltiesAndCursed", "HitChance"],
     "Type": "Weapon",
     "GUID": "d8e1ebc1062d8cc42abff78783856b0d",
@@ -973,7 +973,7 @@
   },
   {
     "Name": "WarswordEnchantmentTarget",
-    "Description": "When a vicious weapon strikes an opponent, it creates a flash of disruptive energy that resonates between the opponent and the wielder. This energy deals an extra 2d6 points of damage to the opponent and 1d6 points of damage to the wielder.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "PenaltiesAndCursed"],
     "Type": "Weapon",
     "GUID": "0f5c798466b1c2841b2cdc712ce86c27",
@@ -982,7 +982,7 @@
   },
   {
     "Name": "TowerShieldAttackPenalty",
-    "Description": "When employing a tower shield in combat, you take a –2 penalty on attack rolls because of the shield's encumbrance.",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed", "HitChance"],
     "Type": "Armor",
     "GUID": "f6b1f4378dd64044db145a1c2afa589f",
@@ -991,7 +991,7 @@
   },
   {
     "Name": "QuickbladeEnchant",
-    "Description": "When making a full attack, the wielder of a speed weapon may make two extra attack with it. The attacks use the wielder's full base attack bonus, plus any modifiers appropriate to the situation. (This benefit is not cumulative with similar effects, such as a haste spell.)",
+    "Description": "",
     "Categories": ["HitChance"],
     "Type": "Weapon",
     "GUID": "1e428c24d94987c4cb20e38bfbf4e164",
@@ -1000,7 +1000,7 @@
   },
   {
     "Name": "Mageblade",
-    "Description": "When you have a touch spell charged, the weapon's enhancement bonus is +2 better than its actual bonus.",
+    "Description": "",
     "Categories": ["Spellcasting", "HitChance"],
     "Type": "Weapon",
     "GUID": "eb130f652be2dc14b9a5f63608672021",
@@ -1009,7 +1009,7 @@
   },
   {
     "Name": "RobeOfFireEnchant",
-    "Description": "Whenever the wearer casts a spell with fire descriptor, its saving throw DC is increased by 2.",
+    "Description": "",
     "Categories": ["Spellcasting", "Elemental", "DC"],
     "Type": "Armor",
     "GUID": "dcf93e8d4b970ee408b410f2b01ad13f",
@@ -1018,7 +1018,7 @@
   },
   {
     "Name": "CrushingBurdenEnchantment",
-    "Description": "Whenever the wielder of this +5 vicious gnome hooked hammer lands 3 consecutive hits on the same enemy, the enemy must pass a Fortitude saving throw (DC 28) or become fatigued. Whenever the wielder lands 3 consecutive hits on a fatigued enemy, that enemy must pass a Fortitude saving throw (DC 31) or become exhausted.",
+    "Description": "",
     "Categories": ["StatusAndCC"],
     "Type": "Weapon",
     "GUID": "64112519b83044b6a6422fbc7afb4f22",
@@ -1027,7 +1027,7 @@
   },
   {
     "Name": "DLC5_GraveWoundsSithhudEnchantment",
-    "Description": "Whenever the wielder of this weapon confirms a critical hit with it against an enemy who is bleeding, they deal an additional 6d10 unholy damage.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Critical"],
     "Type": "Weapon",
     "GUID": "22d2d95953b1436884515614500ab521",
@@ -1036,7 +1036,7 @@
   },
   {
     "Name": "DLC5_SwordOfSithhudGraveWoundsEnchantment",
-    "Description": "Whenever the wielder of this weapon confirms a critical hit with it against an enemy who is bleeding, they deal an additional 6d10 unholy damage.",
+    "Description": "",
     "Categories": ["Critical", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "0f4baabf184640a498541386b288241d",
@@ -1045,7 +1045,7 @@
   },
   {
     "Name": "DeadlyGraceEnchant",
-    "Description": "Whenever the wielder of this weapon successfully lands a hit, the target must succeed at a Fortitude saving throw (DC 15) or be injected with acid that deals 2d4 damage every round for 3 rounds.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "f674d7c3fd9f70b429c321ad84e4c116",
@@ -1054,7 +1054,7 @@
   },
   {
     "Name": "AnimatedWeaponPoisonEnchant",
-    "Description": "Whenever this weapon lands a hit, the target must succeed at a Fortitude save (DC 37) or become poisoned, suffering the effects similar to those of an iron golem's poison.",
+    "Description": "",
     "Categories": ["StatusAndCC", "DC"],
     "Type": "Weapon",
     "GUID": "f70c01b2c3fa4550929d869242f1f281",
@@ -1063,7 +1063,7 @@
   },
   {
     "Name": "ChannelOnCrit",
-    "Description": "Whenever you score a critical hit with this weapon, you emit a wave of negative energy that deals 4d6 damage to everyone around you. Creatures that take damage from negative energy receive a Will save DC 15 to halve the damage.",
+    "Description": "",
     "Categories": ["Critical", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "eed9b44b0b57bd540927b7ccf443557c",
@@ -1072,7 +1072,7 @@
   },
   {
     "Name": "BlindOnCrit15",
-    "Description": "Whenever you score a critical hit with this weapon, your opponent becomes permanently blinded. A successful Fortitude save DC 15 reduces the duration for 1 round.",
+    "Description": "",
     "Categories": ["StatusAndCC", "Critical", "DC"],
     "Type": "Weapon",
     "GUID": "025b828fb61feb34080ce0d87c9cc06b",
@@ -1081,7 +1081,7 @@
   },
   {
     "Name": "StunOnCrit17",
-    "Description": "Whenever you score a critical hit with this weapon, your opponent becomes stunned for 1d4 rounds. A successful DC 17 Fortitude save reduces this to staggered for 1 round. These effects do not stack. Additional hits instead add to the duration.",
+    "Description": "",
     "Categories": ["StatusAndCC", "Critical"],
     "Type": "Weapon",
     "GUID": "c4d17560bd7d0344d82f08b7b40457f2",
@@ -1090,7 +1090,7 @@
   },
   {
     "Name": "SlowOnHit14",
-    "Description": "Whenever you score a hit with this weapon, your opponent becomes slowed for 1d4 rounds. A successful DC 14 Will save negates this. These effects don't stack. Additional hits instead add to the duration.",
+    "Description": "",
     "Categories": ["StatusAndCC", "DC"],
     "Type": "Weapon",
     "GUID": "3222498b474b4994ab02ebcaaf581280",
@@ -1099,7 +1099,7 @@
   },
   {
     "Name": "StunOnHit13",
-    "Description": "Whenever you score a hit with this weapon, your opponent becomes stunned for 1 round. A successful DC 14 Fortitude save negates this. These effects do not stack. Additional hits instead add to the duration.",
+    "Description": "",
     "Categories": ["StatusAndCC", "DC"],
     "Type": "Weapon",
     "GUID": "87634d03357ff2c40bdfff4a4cbcc474",
@@ -1108,7 +1108,7 @@
   },
   {
     "Name": "BooksOfDreamsIStageEnchantment",
-    "Description": "While this book is active, each time you use an ability that lets you summon multiple creatures, their number is increased by one.",
+    "Description": "",
     "Categories": ["Spellcasting"],
     "Type": "Other",
     "GUID": "56ec6da4e4304318a20656b726b23501",
@@ -1117,7 +1117,7 @@
   },
   {
     "Name": "SeriouslyEliteExpertise",
-    "Description": "Wielder of this weapon performs ranged attacks as if they had Point-Blank Shot and Precise Shot feats.",
+    "Description": "",
     "Categories": ["HitChance"],
     "Type": "Weapon",
     "GUID": "344aa98b08434ab41a630c31894d9d7e",
@@ -14761,7 +14761,7 @@
   },
   {
     "Name": "BaneAberration",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Bane", "HitChance"],
     "Type": "Weapon",
     "GUID": "ee71cc8848219c24b8418a628cc3e2fa",
@@ -14770,7 +14770,7 @@
   },
   {
     "Name": "BaneAnimal",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "78cf9fabe95d3934688ea898c154d904",
@@ -14779,7 +14779,7 @@
   },
   {
     "Name": "BaneConstruct",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Bane", "HitChance"],
     "Type": "Weapon",
     "GUID": "73d30862f33cc754bb5a5f3240162ae6",
@@ -14788,7 +14788,7 @@
   },
   {
     "Name": "BaneDragon",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "e5cb46a0a658b0a41854447bea32d2ee",
@@ -14797,7 +14797,7 @@
   },
   {
     "Name": "BaneFey",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "b6948040cdb601242884744a543050d4",
@@ -14806,7 +14806,7 @@
   },
   {
     "Name": "BaneHumanoidGiant",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "dcecb5f2ffacfd44ead0ed4f8846445d",
@@ -14815,7 +14815,7 @@
   },
   {
     "Name": "BaneHumanoidReptilian",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "c4b9cce255d1d6641a6105a255934e2e",
@@ -14824,7 +14824,7 @@
   },
   {
     "Name": "BaneLycanthrope",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "188efcfcd9938d44e9561c87794d17a8",
@@ -14833,7 +14833,7 @@
   },
   {
     "Name": "BaneMagicalBeast",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "97d477424832c5144a9413c64d818659",
@@ -14842,7 +14842,7 @@
   },
   {
     "Name": "BaneMonstrousHumanoid",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "c5f84a79ad154c84e8d2e9fe0dd49350",
@@ -14851,7 +14851,7 @@
   },
   {
     "Name": "BaneOrcGoblin",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "0391d8eae25f39a48bcc6c2fc8bf4e12",
@@ -14860,7 +14860,7 @@
   },
   {
     "Name": "BaneOutsiderChaotic",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Alignment", "Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "234177d5807909f44b8c91ed3c9bf7ac",
@@ -14869,7 +14869,7 @@
   },
   {
     "Name": "BaneOutsiderEvil",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "20ba9055c6ae1e44ca270c03feacc53b",
@@ -14878,7 +14878,7 @@
   },
   {
     "Name": "BaneOutsiderGood",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Bane", "Alignment"],
     "Type": "Weapon",
     "GUID": "a876de94b916b7249a77d090cb9be4f3",
@@ -14887,7 +14887,7 @@
   },
   {
     "Name": "BaneOutsiderLawful",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "3a6f564c8ea2d1941a45b19fa16e59f5",
@@ -14896,7 +14896,7 @@
   },
   {
     "Name": "BaneOutsiderNeutral",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "4e30e79c500e5af4b86a205cc20436f2",
@@ -14905,7 +14905,7 @@
   },
   {
     "Name": "BanePlant",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "0b761b6ed6375114d8d01525d44be5a9",
@@ -14914,7 +14914,7 @@
   },
   {
     "Name": "BaneUndead",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "eebb4d3f20b8caa43af1fed8f2773328",
@@ -14923,7 +14923,7 @@
   },
   {
     "Name": "BaneVermin",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "c3428441c00354c4fabe27629c6c64dd",
@@ -14932,7 +14932,7 @@
   },
   {
     "Name": "DragonEssenceBaneDragon",
-    "Description": "A bane weapon excels against certain foes. Against a designated foe, the weapon's enhancement bonus is +2 better than its actual bonus. It also deals an extra 2d6 points of damage against such foes.",
+    "Description": "",
     "Categories": ["Bane", "AdditionalDamage", "HitChance"],
     "Type": "Weapon",
     "GUID": "dd4285c1c3a8d834f888cac9cb0f980a",
@@ -14941,7 +14941,7 @@
   },
   {
     "Name": "BrilliantEnergy",
-    "Description": "A brilliant energy weapon ignores nonliving matter. Armor and shield bonuses to AC (including any enhancement bonuses to that armor) do not count against it because the weapon passes through armor. (Dexterity, deflection, dodge, natural armor, and other such bonuses still apply.) A brilliant energy weapon cannot harm undead, constructs, or objects.",
+    "Description": "",
     "Categories": ["HitChance"],
     "Type": "Weapon",
     "GUID": "66e9e299c9002ea4bb65b6f300e43770",
@@ -14950,7 +14950,7 @@
   },
   {
     "Name": "CorrosiveBurst",
-    "Description": "A corrosive burst weapon functions as a corrosive weapon that also explodes with acid upon striking a successful critical hit. The acid does not harm the wielder. In addition to the extra 1d6 acid damage from the corrosive ability, a corrosive burst weapon deals an extra 1d10 points of acid damage on a successful critical hit. If the weapon's critical multiplier is ×3, add an extra 2d10 points of acid damage instead, and if the multiplier is ×4, add an extra 3d10 points of acid damage.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Critical", "Elemental"],
     "Type": "Weapon",
     "GUID": "0cf34703e67e37b40905845ca14b1380",
@@ -14959,7 +14959,7 @@
   },
   {
     "Name": "DisruptingWeapon",
-    "Description": "A disruption weapon is the bane of all undead. Any undead creature struck in combat must succeed on a DC 14 Will save or be destroyed. A disruption weapon must be a bludgeoning melee weapon.",
+    "Description": "",
     "Categories": ["Bane", "DC"],
     "Type": "Weapon",
     "GUID": "7a41c4df836a0e34daa6e82c2bad8a85",
@@ -14968,7 +14968,7 @@
   },
   {
     "Name": "Disruption",
-    "Description": "A disruption weapon is the bane of all undead. Any undead creature struck in combat must succeed on a DC 14 Will save or be destroyed. A disruption weapon must be a bludgeoning melee weapon.",
+    "Description": "",
     "Categories": ["Bane", "DC"],
     "Type": "Weapon",
     "GUID": "0f20d79b7049c0f4ca54ca3d1ea44baa",
@@ -14977,7 +14977,7 @@
   },
   {
     "Name": "FlamingBurst",
-    "Description": "A flaming burst weapon functions as a flaming weapon that also explodes with flame upon striking a successful critical hit. The fire does not harm the wielder. In addition to the extra 1d6 fire damage from the flaming ability, a flaming burst weapon deals an extra 1d10 points of fire damage on a successful critical hit. If the weapon's critical multiplier is ×3, add an extra 2d10 points of fire damage instead, and if the multiplier is ×4, add an extra 3d10 points of fire damage.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental", "Critical"],
     "Type": "Weapon",
     "GUID": "3f032a3cd54e57649a0cdad0434bf221",
@@ -14986,7 +14986,7 @@
   },
   {
     "Name": "WeaponBondFlamingBurstEnchant",
-    "Description": "A flaming burst weapon functions as a flaming weapon that also explodes with flame upon striking a successful critical hit. The fire does not harm the wielder. In addition to the extra 1d6 fire damage from the flaming ability, a flaming burst weapon deals an extra 1d10 points of fire damage on a successful critical hit. If the weapon's critical multiplier is ×3, add an extra 2d10 points of fire damage instead, and if the multiplier is ×4, add an extra 3d10 points of fire damage.",
+    "Description": "",
     "Categories": ["Critical", "AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "b166fefa25b04b40a840fc5461e4feb5",
@@ -14995,7 +14995,7 @@
   },
   {
     "Name": "Furious",
-    "Description": "A furious weapon serves as a focus for its wielder's anger. When the wielder is raging or under the effect of a rage spell, the weapon's enhancement bonus is +2 better than normal.",
+    "Description": "",
     "Categories": ["HitChance", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "b606a3f5daa76cc40add055613970d2a",
@@ -15004,7 +15004,7 @@
   },
   {
     "Name": "GhostTouch",
-    "Description": "A ghost touch weapon deals damage normally against incorporeal creatures, regardless of its bonus. An incorporeal creature's 50% reduction in damage from corporeal sources does not apply to attacks made against it with ghost touch weapons.",
+    "Description": "",
     "Categories": ["AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "47857e1a5a3ec1a46adf6491b1423b4f",
@@ -15013,7 +15013,7 @@
   },
   {
     "Name": "Heartseeker",
-    "Description": "A heartseeker weapon ignores the miss chance for concealment against most living targets, though the attack must still target the proper space. This special ability does not apply against aberrations, oozes, plants, outsiders with the elemental subtype, or any creature specifically noted to lack a heart.",
+    "Description": "",
     "Categories": ["HitChance"],
     "Type": "Weapon",
     "GUID": "e252b26686ab66241afdf33f2adaead6",
@@ -15022,7 +15022,7 @@
   },
   {
     "Name": "Holy",
-    "Description": "A holy weapon is imbued with holy power. This power makes the weapon good-aligned and thus bypasses the corresponding damage reduction. It deals an extra 2d6 points of damage against all creatures of evil alignment.",
+    "Description": "",
     "Categories": ["Alignment", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "28a9964d81fedae44bae3ca45710c140",
@@ -15031,7 +15031,7 @@
   },
   {
     "Name": "LawfulAligned",
-    "Description": "A lawful-aligned weapon can bypass the DR of certain creatures.",
+    "Description": "",
     "Categories": ["Alignment", "DR"],
     "Type": "Weapon",
     "GUID": "76c7f6e9f0618a64fa21905687e36133",
@@ -15040,7 +15040,7 @@
   },
   {
     "Name": "Masterwork",
-    "Description": "A masterwork weapon is a finely crafted version of a normal weapon. Wielding it provides a +1 enhancement bonus on attack rolls.",
+    "Description": "",
     "Categories": ["HitChance"],
     "Type": "Weapon",
     "GUID": "6b38844e2bffbac48b63036b66e735be",
@@ -15049,7 +15049,7 @@
   },
   {
     "Name": "ShockingBurst",
-    "Description": "A shocking burst weapon functions as a shock weapon that explodes with electricity upon striking a successful critical hit. The electricity does not harm the wielder. In addition to the extra electricity damage from the shock ability, a shocking burst weapon deals an extra 1d10 points of electricity damage on a successful critical hit. If the weapon's critical multiplier is ×3, add an extra 2d10 points of electricity damage instead, and if the multiplier is ×4, add an extra 3d10 points.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Critical", "Elemental"],
     "Type": "Weapon",
     "GUID": "914d7ee77fb09d846924ca08bccee0ff",
@@ -15058,7 +15058,7 @@
   },
   {
     "Name": "Thundering",
-    "Description": "A thundering weapon creates a cacophonous roar like thunder whenever it strikes a target, dealing an extra 1d6 points of sonic damage.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "690e762f7704e1f4aa1ac69ef0ce6a96",
@@ -15067,7 +15067,7 @@
   },
   {
     "Name": "Keen",
-    "Description": "Ability doubles the threat range of a weapon. This benefit doesn't stack with any other effects that expand the threat range of a weapon.",
+    "Description": "",
     "Categories": ["Critical"],
     "Type": "Weapon",
     "GUID": "102a9c8c9b7a75e4fb5844e79deaf4c0",
@@ -15076,7 +15076,7 @@
   },
   {
     "Name": "Agile",
-    "Description": "Agile weapons are unusually well balanced and responsive. A wielder with the Weapon Finesse feat can choose to apply her Dexterity modifier to damage rolls with an agile weapon in place of her Strength modifier (whichever is higher). This modifier to damage is not increased for two-handed weapons, but is still reduced for off-hand weapons.",
+    "Description": "",
     "Categories": ["AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "a36ad92c51789b44fa8a1c5c116a1328",
@@ -15085,7 +15085,7 @@
   },
   {
     "Name": "Anarchic",
-    "Description": "An anarchic weapon is infused with the power of chaos. It makes the weapon chaotically aligned and thus bypasses the corresponding damage reduction. It deals an extra 2d6 points of damage against all creatures of lawful alignment.",
+    "Description": "",
     "Categories": ["Alignment", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "57315bc1e1f62a741be0efde688087e9",
@@ -15094,7 +15094,7 @@
   },
   {
     "Name": "Axiomatic",
-    "Description": "An axiomatic weapon is infused with lawful power. It makes the weapon law-aligned and thus bypasses the corresponding damage reduction. It deals an extra 2d6 points of damage against chaotic creatures.",
+    "Description": "",
     "Categories": ["Alignment", "AdditionalDamage", "DR"],
     "Type": "Weapon",
     "GUID": "0ca43051edefcad4b9b2240aa36dc8d4",
@@ -15103,7 +15103,7 @@
   },
   {
     "Name": "EvilAligned",
-    "Description": "An evil-aligned weapon can bypass the DR of certain creatures.",
+    "Description": "",
     "Categories": ["Alignment"],
     "Type": "Weapon",
     "GUID": "785f58ae4af37d041a6924634b0f238f",
@@ -15112,7 +15112,7 @@
   },
   {
     "Name": "IcyBurst",
-    "Description": "An icy burst weapon functions as a frost weapon that also explodes with frost upon striking a successful critical hit. The frost does not harm the wielder. In addition to the extra damage from the frost ability, an icy burst weapon deals an extra 1d10 points of cold damage on a successful critical hit. If the weapon's critical multiplier is ×3, add an extra 2d10 points of cold damage instead, and if the multiplier is ×4, add an extra 3d10 points.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental", "Critical"],
     "Type": "Weapon",
     "GUID": "564a6924b246d254c920a7c44bf2a58b",
@@ -15121,7 +15121,7 @@
   },
   {
     "Name": "IgnitingEnchantment",
-    "Description": "An igniting weapon functions as a flaming weapon that also causes the target to catch fire upon striking it with a successful critical hit. The target have to pass Fortitude saving throw (DC 20) or suffer 1d6 fire damage each round and can make a save each round on its turn to put out the fire.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental", "Critical", "StatusAndCC"],
     "Type": "Weapon",
     "GUID": "cd344d5e4cdd8254e97943b2dd358ce5",
@@ -15130,7 +15130,7 @@
   },
   {
     "Name": "Unholy",
-    "Description": "An unholy weapon is imbued with unholy power. This power makes the weapon evil-aligned and thus bypasses the corresponding damage reduction. It deals an extra 2d6 points of damage against all creatures of good alignment.",
+    "Description": "",
     "Categories": ["Alignment", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "d05753b8df780fc4bb55b318f06af453",
@@ -15139,7 +15139,7 @@
   },
   {
     "Name": "Enhancement1",
-    "Description": "Attacks with this weapon get +1 enhancement bonus on both attack and damage rolls.",
+    "Description": "",
     "Categories": ["HitChance"],
     "Type": "Weapon",
     "GUID": "d42fc23b92c640846ac137dc26e000d4",
@@ -15148,7 +15148,7 @@
   },
   {
     "Name": "Corrosive2d6",
-    "Description": "Caustic weapon deals an extra 2d6 points of acid damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "2becfef47bec13940b9ee71f1b14d2dd",
@@ -15157,7 +15157,7 @@
   },
   {
     "Name": "Corrosive",
-    "Description": "Corrosive weapon deals an extra 1d6 points of acid damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "633b38ff1d11de64a91d490c683ab1c8",
@@ -15166,7 +15166,7 @@
   },
   {
     "Name": "Flaming",
-    "Description": "Flaming weapon is sheathed in fire that deals an extra 1d6 points of fire damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "30f90becaaac51f41bf56641966c4121",
@@ -15175,7 +15175,7 @@
   },
   {
     "Name": "Frost",
-    "Description": "Frost weapon is sheathed in a terrible, icy cold that deals an extra 1d6 points of cold damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "421e54078b7719d40915ce0672511d0b",
@@ -15184,7 +15184,7 @@
   },
   {
     "Name": "ShieldEnhancementBonus1",
-    "Description": "Grants +1 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.",
+    "Description": "",
     "Categories": ["AC", "Defensive"],
     "Type": "Armor",
     "GUID": "e90c252e08035294eba39bafce76c119",
@@ -15193,7 +15193,7 @@
   },
   {
     "Name": "ShieldEnhancementBonus3",
-    "Description": "Grants +3 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.",
+    "Description": "",
     "Categories": ["AC"],
     "Type": "Armor",
     "GUID": "ac2e3a582b5faa74aab66e0a31c935a9",
@@ -15202,7 +15202,7 @@
   },
   {
     "Name": "Radiant",
-    "Description": "Radiant weapon is imbued with life essence itself and deals an extra 1d6 points of positive energy damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "5ac5c88157f7dde48a2a5b24caf40131",
@@ -15211,7 +15211,7 @@
   },
   {
     "Name": "Shock",
-    "Description": "Shock weapon is sheathed in crackling electricity that deals an extra 1d6 points of electricity damage on a successful hit.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "Elemental"],
     "Type": "Weapon",
     "GUID": "7bda5277d36ad114f9f9fd21d0dab658",
@@ -15220,7 +15220,7 @@
   },
   {
     "Name": "ArcaneArmorShadowEnchant",
-    "Description": "This armor blurs the wearer whenever they try to hide, while also dampening the sound around them, granting a +5 competence bonus on Stealth skill checks. The armor's armor check penalty still applies normally.",
+    "Description": "",
     "Categories": ["Skill"],
     "Type": "Armor",
     "GUID": "4e916cbeced676f4e83e02ac65dc562c",
@@ -15229,7 +15229,7 @@
   },
   {
     "Name": "GreaterShadow",
-    "Description": "This armor grants its wearer a +10 competence bonus to Stealth skill checks.",
+    "Description": "",
     "Categories": ["Skill"],
     "Type": "Armor",
     "GUID": "6b090a291c473984baa5b5bb07a1e300",
@@ -15238,7 +15238,7 @@
   },
   {
     "Name": "ShadowArmor",
-    "Description": "This armor grants its wearer a +5 competence bonus to Stealth skill checks.",
+    "Description": "",
     "Categories": ["Skill"],
     "Type": "Armor",
     "GUID": "d64d7aa52626bc24da3906dce17dbc7d",
@@ -15247,7 +15247,7 @@
   },
   {
     "Name": "ArmorEnhancementBonus1",
-    "Description": "This armor provides a +1 enhancement bonus to Armor Class. The armor check penalty of magic armor is lessened by 1 compared to ordinary armor of its type.",
+    "Description": "",
     "Categories": ["AC", "Defensive"],
     "Type": "Armor",
     "GUID": "a9ea95c5e02f9b7468447bc1010fe152",
@@ -15256,7 +15256,7 @@
   },
   {
     "Name": "StrengthComposite",
-    "Description": "This feature allows you to add your Strength bonus to damage with a bow.",
+    "Description": "",
     "Categories": ["AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "c3209eb058d471548928a200d70765e0",
@@ -15265,7 +15265,7 @@
   },
   {
     "Name": "SingingSteelEnchant",
-    "Description": "This lustrous golden metal emits beautiful bell-like tones when struck. An alloy of gold and mithral, singing steel was originally created by the elves. Most armor made of singing steel is treated as one category lighter (heavy armors are treated as medium, and medium armors are treated as light, but light armors are still treated as light). The armor or shield's arcane spell failure chance is reduced by 5%, its maximum Dexterity bonus is increased by 1, and its armor check penalty is reduced by 1 (to a minimum of 0). The wielder or wearer can strike the singing steel as part of beginning a bardic performance. If the wielder can normally start a bardic performance as a standard action, he can do so as a move action instead. If the wielder can normally start a bardic performance as a move action, he can do so as a swift action instead. If the wielder can normally start a bardic performance as a swift action, he can do so as a free action instead.",
+    "Description": "",
     "Categories": ["Material", "Spellcasting", "Defensive"],
     "Type": "Armor",
     "GUID": "451601816a45311419b77b83f253b75b",
@@ -15274,7 +15274,7 @@
   },
   {
     "Name": "Vorpal",
-    "Description": "This potent and feared ability allows the weapon to sever the heads of those it strikes. Upon a roll of natural 20 (followed by a successful roll to confirm the critical hit), the weapon severs the opponent's head (if it has one) from its body. Some creatures, such as many aberrations and all oozes, have no heads. Others, such as golems and undead creatures other than vampires, are not affected by the loss of their heads. Most other creatures, however, die when their heads are cut off.",
+    "Description": "",
     "Categories": ["Critical"],
     "Type": "Weapon",
     "GUID": "2f60bfcba52e48a479e4a69868e24ebc",
@@ -15283,7 +15283,7 @@
   },
   {
     "Name": "ArrowDeflectionEnchantment",
-    "Description": "This shield protects the wielder as if they had the Deflect Arrows feat.",
+    "Description": "",
     "Categories": ["Defensive"],
     "Type": "Armor",
     "GUID": "faf86f0f02b30884c860b675a0df8e2e",
@@ -15292,7 +15292,7 @@
   },
   {
     "Name": "Furyborn",
-    "Description": "This special ability can only be placed on melee weapons. A furyborn weapon draws power from the anger and frustration the wielder feels when battling foes that refuse to die. Each time the wielder damages an opponent with the weapon, its enhancement bonus increases by +1 when making attacks against that opponent. Enhancement bonus can't be increased this way beyond the maximum value of +5. This extra enhancement bonus goes away if the opponent dies, the wielder uses the weapon to attack a different creature, or 1 hour passes.",
+    "Description": "",
     "Categories": ["HitChance", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "091e2f6b2fad84a45ae76b8aac3c55c3",
@@ -15301,7 +15301,7 @@
   },
   {
     "Name": "NullifyingEnchantment",
-    "Description": "This special ability can only be placed on melee weapons. A nullifying weapon suppresses a creature's spell resistance for a short amount of time. Anytime the weapon strikes a creature with spell resistance, the target's spell resistance is reduced by 1 for 1 minute. On a confirmed critical hit, its spell resistance is instead reduced by 2. Multiple hits from a nullifying weapon stack.",
+    "Description": "",
     "Categories": ["PenaltiesAndCursed", "Critical", "Spellcasting"],
     "Type": "Weapon",
     "GUID": "efbe3a35fc7349845ac9f96b4c63312e",
@@ -15310,7 +15310,7 @@
   },
   {
     "Name": "Fortification25Enchant",
-    "Description": "This suit of armor or shield produces a magical force that protects vital areas of the wearer more effectively. When an enemy confirms a critical hit or lands a sneak attack against the wearer, there is a chance that the critical hit or sneak attack is negated and damage is instead rolled normally. The chance is 25% for light fortification, 50% for moderate fortification, and 75% for heavy fortification.",
+    "Description": "",
     "Categories": ["Defensive", "Critical"],
     "Type": "Armor",
     "GUID": "1e69e9029c627914eb06608dad707b36",
@@ -15319,7 +15319,7 @@
   },
   {
     "Name": "Fortification50Enchant",
-    "Description": "This suit of armor or shield produces a magical force that protects vital areas of the wearer more effectively. When an enemy confirms a critical hit or lands a sneak attack against the wearer, there is a chance that the critical hit or sneak attack is negated and damage is instead rolled normally. The chance is 25% for light fortification, 50% for moderate fortification, and 75% for heavy fortification.",
+    "Description": "",
     "Categories": ["Defensive", "Critical"],
     "Type": "Armor",
     "GUID": "62ec0b22425fb424c82fd52d7f4c02a5",
@@ -15328,7 +15328,7 @@
   },
   {
     "Name": "Fortification75Enchant",
-    "Description": "This suit of armor or shield produces a magical force that protects vital areas of the wearer more effectively. When an enemy confirms a critical hit or lands a sneak attack against the wearer, there is a chance that the critical hit or sneak attack is negated and damage is instead rolled normally. The chance is 25% for light fortification, 50% for moderate fortification, and 75% for heavy fortification.",
+    "Description": "",
     "Categories": ["Defensive", "Critical"],
     "Type": "Armor",
     "GUID": "9b1538c732e06544bbd955fee570a2be",
@@ -15337,7 +15337,7 @@
   },
   {
     "Name": "ViciousEnchantment",
-    "Description": "When a vicious weapon strikes an opponent, it creates a flash of disruptive energy that resonates between the opponent and the wielder. This energy deals an extra 2d6 points of damage to the opponent and 1d6 points of damage to the wielder.",
+    "Description": "",
     "Categories": ["AdditionalDamage", "PenaltiesAndCursed"],
     "Type": "Weapon",
     "GUID": "a1455a289da208144981e4b1ef92cc56",
@@ -15346,7 +15346,7 @@
   },
   {
     "Name": "Speed",
-    "Description": "When making a full attack, the wielder of a speed weapon may make one extra attack with it. The attack uses the wielder's full base attack bonus, plus any modifiers appropriate to the situation. (This benefit is not cumulative with similar effects, such as a haste spell.)",
+    "Description": "",
     "Categories": ["HitChance"],
     "Type": "Weapon",
     "GUID": "f1c0c50108025d546b2554674ea1c006",
@@ -15355,7 +15355,7 @@
   },
   {
     "Name": "CruelEnchantment",
-    "Description": "When the wielder strikes a creature that is frightened or shaken with a cruel weapon, that creature becomes sickened for 1 round. When the wielder uses the weapon to knock unconscious or kill a creature, he gains 5 temporary hit points that last for 10 minutes.",
+    "Description": "",
     "Categories": ["StatusAndCC", "Defensive"],
     "Type": "Weapon",
     "GUID": "629c383ffb407224398bb71d1bd95d14",
@@ -15364,7 +15364,7 @@
   },
   {
     "Name": "Bleed",
-    "Description": "Whenever a bleed weapon lands a hit, it makes the target bleed for 1d6 HP per round. Bleed will continue until the target receives magic healing or leaves combat.",
+    "Description": "",
     "Categories": ["StatusAndCC", "AdditionalDamage"],
     "Type": "Weapon",
     "GUID": "ac0108944bfaa7e48aa74f407e3944e3",
