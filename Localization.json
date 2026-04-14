@@ -212,6 +212,10 @@
             "enGB": " TTRPG Prerequisite: At least +1 Enhancement to apply any enchants",
             "frFR": " Prérequis du JDR : +1 Altération minimum pour pouvoir enchanter"
         },
+        "ui_settings_slot_penalty": {
+            "enGB": " Apply Slot Penalty (x1.5 cost if inappropriate slot)",
+            "frFR": " Appliquer pénalité d'emplacement (Coût x1.5 si inapproprié)"
+        },
         "ui_settings_source_display": {
             "enGB": "Source display:",
             "frFR": "Affichage des sources :"

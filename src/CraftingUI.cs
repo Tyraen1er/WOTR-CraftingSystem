@@ -32,7 +32,7 @@ namespace CraftingSystem
         private const float REFERENCE_HEIGHT = 1440f;
         
         // Sélection multiple & Filtres
-        private HashSet<string> queuedEnchantGuids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private List<string> queuedEnchantGuids = new List<string>();
         private bool showCategoryFilter = false;
         private HashSet<string> activeCategories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private HashSet<string> activeTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -477,7 +477,19 @@ namespace CraftingSystem
                     if (CraftingSettings.CurrentSourceFilter == SourceFilter.OwlcatPlus && data.Source != "TTRPG" && data.Source != "Owlcat" && data.Source != "Owlcat+") continue;
                     if (CraftingSettings.CurrentSourceFilter == SourceFilter.Mods && (data.Source == "TTRPG" || data.Source == "Owlcat" || data.Source == "Owlcat+")) continue;
                     
-                    long costToPay = CraftingCalculator.GetEnchantmentCost(selectedItem, data, CraftingSettings.CostMultiplier);
+                    long costToPay;
+                    if (isQueued)
+                    {
+                        // Pour les déjà sélectionnés : prix basé sur l'ordre historique
+                        int idx = currentSelectedList.FindIndex(e => e.Guid == data.Guid);
+                        var preceding = currentSelectedList.Take(idx);
+                        costToPay = CraftingCalculator.GetMarginalCost(selectedItem, preceding, data, CraftingSettings.CostMultiplier);
+                    }
+                    else
+                    {
+                        // Pour les nouveaux : prix par rapport à TOUT le panier
+                        costToPay = CraftingCalculator.GetMarginalCost(selectedItem, currentSelectedList, data, CraftingSettings.CostMultiplier);
+                    }
                     int days = CraftingCalculator.GetCraftingDays(costToPay, CraftingSettings.InstantCrafting);
                     
                     if (data.GoldOverride >= 0) costToPay = (long)(data.GoldOverride * CraftingSettings.CostMultiplier);
@@ -522,7 +534,7 @@ namespace CraftingSystem
                         
                         if (baseName.ToLower().Contains("enhancement"))
                         {
-                            queuedEnchantGuids.RemoveWhere(guid => 
+                            queuedEnchantGuids.RemoveAll(guid => 
                             {
                                 var otherData = EnchantmentScanner.GetByGuid(guid);
                                 if (otherData != null)
@@ -567,15 +579,12 @@ namespace CraftingSystem
             }
 
 
-            long totalCost = 0;
-            int totalDays = 0;
-            foreach (var d in selectedList)
+            long totalCost = CraftingCalculator.GetMarginalCost(selectedItem, selectedList.Where(e => e.GoldOverride < 0), null, CraftingSettings.CostMultiplier);
+            foreach (var d in selectedList.Where(e => e.GoldOverride >= 0))
             {
-                long c = CraftingCalculator.GetEnchantmentCost(selectedItem, d, CraftingSettings.CostMultiplier);
-                if (d.GoldOverride >= 0) c = (long)(d.GoldOverride * CraftingSettings.CostMultiplier);
-                totalCost += c;
-                totalDays += CraftingCalculator.GetCraftingDays(c, CraftingSettings.InstantCrafting);
+                totalCost += (long)(d.GoldOverride * CraftingSettings.CostMultiplier);
             }
+            int totalDays = CraftingCalculator.GetCraftingDays(totalCost, CraftingSettings.InstantCrafting);
 
             int currentLevelPoints = CraftingCalculator.CalculateDisplayedEnchantmentPoints(selectedItem);
             int maxLevel = CraftingSettings.MaxTotalBonus;
@@ -654,6 +663,7 @@ namespace CraftingSystem
             int prevMaxEnh = CraftingSettings.MaxEnhancementBonus;
             int prevMaxTotal = CraftingSettings.MaxTotalBonus;
             bool prevRequirePlus = CraftingSettings.RequirePlusOneFirst;
+            bool prevSlotPenalty = CraftingSettings.ApplySlotPenalty;
             SourceFilter prevSourceFilter = CraftingSettings.CurrentSourceFilter;
 
             GUILayout.BeginVertical(GUI.skin.box);
@@ -700,6 +710,7 @@ namespace CraftingSystem
                 GUILayout.EndHorizontal();
 
                 CraftingSettings.RequirePlusOneFirst = GUILayout.Toggle(CraftingSettings.RequirePlusOneFirst, Helpers.GetString("ui_settings_require_plus_one", " Prerequisite: At least +1 Enhancement"));
+                CraftingSettings.ApplySlotPenalty = GUILayout.Toggle(CraftingSettings.ApplySlotPenalty, Helpers.GetString("ui_settings_slot_penalty", " Apply Slot Penalty (x1.5)"));
             }
 
             GUILayout.Space(10);
@@ -736,6 +747,7 @@ namespace CraftingSystem
 
             if (prevCostMult != CraftingSettings.CostMultiplier || prevInstant != CraftingSettings.InstantCrafting || prevEnforce != CraftingSettings.EnforcePointsLimit
                 || prevMaxEnh != CraftingSettings.MaxEnhancementBonus || prevMaxTotal != CraftingSettings.MaxTotalBonus || prevRequirePlus != CraftingSettings.RequirePlusOneFirst
+                || prevSlotPenalty != CraftingSettings.ApplySlotPenalty
                 || prevSourceFilter != CraftingSettings.CurrentSourceFilter)
             {
                 CraftingSettings.SaveSettings();

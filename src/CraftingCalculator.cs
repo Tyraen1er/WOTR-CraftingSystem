@@ -84,45 +84,47 @@ namespace CraftingSystem
 
         public static long GetEnchantmentCost(ItemEntity item, EnchantmentData newEnchant = null, float costMultiplier = 1.0f)
         {
+            return GetMarginalCost(item, new List<EnchantmentData>(), newEnchant, costMultiplier);
+        }
+
+        public static long GetMarginalCost(ItemEntity item, IEnumerable<EnchantmentData> queuedEnchants, EnchantmentData nextEnchant = null, float costMultiplier = 1.0f)
+        {
             if (item == null) return 0;
 
-            // 1. Cas particulier : Le nouvel enchantement a un coût fixe imposé (ex: Ombre, Résistance)
-            if (newEnchant != null && newEnchant.GoldOverride >= 0)
+            // 1. Cas particulier : Coût fixe
+            if (nextEnchant != null && nextEnchant.GoldOverride >= 0)
             {
-                return (long)(newEnchant.GoldOverride * costMultiplier);
+                return (long)(nextEnchant.GoldOverride * costMultiplier);
             }
 
-            // 2. Détermination du facteur de base selon le type d'objet
+            // 2. Facteur de base
             int factor;
             switch (item.Blueprint)
             {
-                case BlueprintItemWeapon:
-                    factor = WEAPON_BASE_FACTOR;
-                    break;
-                case BlueprintItemArmor:
-                    factor = ARMOR_BASE_FACTOR;
-                    break;
-                default:
-                    factor = 1000; // Objets merveilleux
-                    break;
+                case BlueprintItemWeapon: factor = WEAPON_BASE_FACTOR; break;
+                case BlueprintItemArmor: factor = ARMOR_BASE_FACTOR; break;
+                default: factor = 1000; break;
             }
 
-            // 3. Calcul du prix de marché actuel de l'objet (Unifié : JSON > Blueprint)
-            int currentBonus = CalculateDisplayedEnchantmentPoints(item);
-            long currentMarketPrice = (long)currentBonus * currentBonus * factor;
+            // 3. Calcul du bonus (Objet + Panier)
+            int initialBonus = CalculateDisplayedEnchantmentPoints(item);
+            int basketBonus = queuedEnchants != null ? queuedEnchants.Sum(e => e.PointCost) : 0;
+            int totalBefore = initialBonus + basketBonus;
 
-            // 4. Si aucun nouvel enchantement n'est fourni, on retourne simplement le prix de marché
-            if (newEnchant == null)
+            // 4. Prix total du panier (si nextEnchant == null)
+            if (nextEnchant == null)
             {
-                return currentMarketPrice;
+                long priceBefore = (long)initialBonus * initialBonus * factor;
+                long priceAfter = (long)totalBefore * totalBefore * factor;
+                return (long)((priceAfter - priceBefore) * costMultiplier);
             }
 
-            // 5. Si on ajoute un enchantement, on calcule le nouveau prix total
-            int newTotalBonus = currentBonus + newEnchant.PointCost;
-            long newMarketPrice = (long)newTotalBonus * newTotalBonus * factor;
+            // 5. Calcul marginal (Nouveau Prix - Prix Panier)
+            int totalAfter = totalBefore + nextEnchant.PointCost;
+            long priceWithBasket = (long)totalBefore * totalBefore * factor;
+            long priceWithNext = (long)totalAfter * totalAfter * factor;
 
-            // 6. Règle de craft Pathfinder : (Nouveau Prix - Ancien Prix) / 2
-            return (long)(((newMarketPrice - currentMarketPrice) / 2) * costMultiplier);
+            return (long)((priceWithNext - priceWithBasket) * costMultiplier);
         }
 
         public static int GetCraftingDays(long gpCost, bool instant = false)

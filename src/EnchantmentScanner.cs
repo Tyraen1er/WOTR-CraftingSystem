@@ -26,7 +26,7 @@ namespace CraftingSystem
         [JsonProperty("GUID")]
         public string Guid;
         
-        public string Type; // "Weapon" or "Armor"
+        public string Type; // "Weapon" or "Armor" or "Other"
         public string Source = "Mod"; // "TTRPG", "Owlcat", "Mod"
         public bool IsHomebrew = false;
         
