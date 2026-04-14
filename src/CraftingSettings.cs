@@ -21,6 +21,7 @@ namespace CraftingSystem
         public static int MaxEnhancementBonus = 5;
         public static bool RequirePlusOneFirst = true;
         public static bool ApplySlotPenalty = false;
+        public static bool EnableEpicCosts = false;
         public static int ScalePercent = 100;
         public static SourceFilter CurrentSourceFilter = SourceFilter.All;
 

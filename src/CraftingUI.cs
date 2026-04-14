@@ -579,11 +579,7 @@ namespace CraftingSystem
             }
 
 
-            long totalCost = CraftingCalculator.GetMarginalCost(selectedItem, selectedList.Where(e => e.GoldOverride < 0), null, CraftingSettings.CostMultiplier);
-            foreach (var d in selectedList.Where(e => e.GoldOverride >= 0))
-            {
-                totalCost += (long)(d.GoldOverride * CraftingSettings.CostMultiplier);
-            }
+            long totalCost = CraftingCalculator.GetMarginalCost(selectedItem, selectedList, null, CraftingSettings.CostMultiplier);
             int totalDays = CraftingCalculator.GetCraftingDays(totalCost, CraftingSettings.InstantCrafting);
 
             int currentLevelPoints = CraftingCalculator.CalculateDisplayedEnchantmentPoints(selectedItem);
@@ -664,6 +660,7 @@ namespace CraftingSystem
             int prevMaxTotal = CraftingSettings.MaxTotalBonus;
             bool prevRequirePlus = CraftingSettings.RequirePlusOneFirst;
             bool prevSlotPenalty = CraftingSettings.ApplySlotPenalty;
+            bool prevEnableEpic = CraftingSettings.EnableEpicCosts;
             SourceFilter prevSourceFilter = CraftingSettings.CurrentSourceFilter;
 
             GUILayout.BeginVertical(GUI.skin.box);
@@ -711,6 +708,7 @@ namespace CraftingSystem
 
                 CraftingSettings.RequirePlusOneFirst = GUILayout.Toggle(CraftingSettings.RequirePlusOneFirst, Helpers.GetString("ui_settings_require_plus_one", " Prerequisite: At least +1 Enhancement"));
                 CraftingSettings.ApplySlotPenalty = GUILayout.Toggle(CraftingSettings.ApplySlotPenalty, Helpers.GetString("ui_settings_slot_penalty", " Apply Slot Penalty (x1.5)"));
+                CraftingSettings.EnableEpicCosts = GUILayout.Toggle(CraftingSettings.EnableEpicCosts, Helpers.GetString("ui_settings_epic_multiplier", " Enable Epic Multiplier (x10)"));
             }
 
             GUILayout.Space(10);
@@ -747,7 +745,7 @@ namespace CraftingSystem
 
             if (prevCostMult != CraftingSettings.CostMultiplier || prevInstant != CraftingSettings.InstantCrafting || prevEnforce != CraftingSettings.EnforcePointsLimit
                 || prevMaxEnh != CraftingSettings.MaxEnhancementBonus || prevMaxTotal != CraftingSettings.MaxTotalBonus || prevRequirePlus != CraftingSettings.RequirePlusOneFirst
-                || prevSlotPenalty != CraftingSettings.ApplySlotPenalty
+                || prevSlotPenalty != CraftingSettings.ApplySlotPenalty || prevEnableEpic != CraftingSettings.EnableEpicCosts
                 || prevSourceFilter != CraftingSettings.CurrentSourceFilter)
             {
                 CraftingSettings.SaveSettings();
@@ -762,22 +760,21 @@ namespace CraftingSystem
 
         private string GetLocalizedDescription(BlueprintItemEnchantment bp, EnchantmentData data)
         {
-            // 1. Priorité JSON
-            if (data != null && !string.IsNullOrEmpty(data.Description)) return data.Description;
-
-            // 2. Localisation du Jeu (Dynamique selon la langue active)
+            // 1. Priorité au Jeu (Description localisée officielle)
             if (bp != null)
             {
                 string localized = bp.m_Description?.ToString();
                 if (!string.IsNullOrEmpty(localized) && localized != bp.name) 
                 {
-                    // Nettoyage rapide du HTML d'Owlcat
                     return System.Text.RegularExpressions.Regex.Replace(localized, "<.*?>", string.Empty);
                 }
-
-                // 3. Fallback sur le Commentaire ( souvent en anglais )
-                if (!string.IsNullOrEmpty(bp.Comment)) return bp.Comment;
             }
+
+            // 2. Surcharge JSON (Seulement si le jeu est vide)
+            if (data != null && !string.IsNullOrEmpty(data.Description)) return data.Description;
+
+            // 3. Fallback sur le Commentaire développeur
+            if (bp != null && !string.IsNullOrEmpty(bp.Comment)) return bp.Comment;
 
             return null;
         }

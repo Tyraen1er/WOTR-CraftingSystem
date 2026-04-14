@@ -216,6 +216,10 @@
             "enGB": " Apply Slot Penalty (x1.5 cost if inappropriate slot)",
             "frFR": " Appliquer pénalité d'emplacement (Coût x1.5 si inapproprié)"
         },
+        "ui_settings_epic_multiplier": {
+            "enGB": " Enable Epic Multiplier (x10 cost for Epic enchants)",
+            "frFR": " Activer multiplicateur Épique (Coût x10 pour enchants épiques)"
+        },
         "ui_settings_source_display": {
             "enGB": "Source display:",
             "frFR": "Affichage des sources :"

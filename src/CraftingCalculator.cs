@@ -91,40 +91,65 @@ namespace CraftingSystem
         {
             if (item == null) return 0;
 
-            // 1. Cas particulier : Coût fixe
-            if (nextEnchant != null && nextEnchant.GoldOverride >= 0)
+            // 1. Si on demande le prix TOTAL d'un panier (Calcul récursif marginal pour la précision)
+            if (nextEnchant == null)
             {
-                return (long)(nextEnchant.GoldOverride * costMultiplier);
+                long basketTotal = 0;
+                var currentQueue = new List<EnchantmentData>();
+                if (queuedEnchants != null)
+                {
+                    foreach (var enchant in queuedEnchants)
+                    {
+                        basketTotal += GetMarginalCost(item, currentQueue, enchant, costMultiplier);
+                        currentQueue.Add(enchant);
+                    }
+                }
+                return basketTotal;
             }
 
-            // 2. Facteur de base
+            // 2. Cas particulier : Coût fixe
+            if (nextEnchant.GoldOverride >= 0)
+            {
+                long fixedCost = (long)(nextEnchant.GoldOverride * costMultiplier);
+                if (CraftingSettings.EnableEpicCosts && nextEnchant.IsEpic) fixedCost *= 10;
+                return fixedCost;
+            }
+
+            // 3. Facteur de base (Objet ou Surcharge JSON)
             int factor;
-            switch (item.Blueprint)
+            if (nextEnchant.PriceFactor > 0)
             {
-                case BlueprintItemWeapon: factor = WEAPON_BASE_FACTOR; break;
-                case BlueprintItemArmor: factor = ARMOR_BASE_FACTOR; break;
-                default: factor = 1000; break;
+                factor = nextEnchant.PriceFactor;
+            }
+            else
+            {
+                switch (item.Blueprint)
+                {
+                    case BlueprintItemWeapon: factor = WEAPON_BASE_FACTOR; break;
+                    case BlueprintItemArmor: factor = ARMOR_BASE_FACTOR; break;
+                    default: factor = 1000; break;
+                }
             }
 
-            // 3. Calcul du bonus (Objet + Panier)
+            // 4. Calcul du bonus (Objet + Panier)
             int initialBonus = CalculateDisplayedEnchantmentPoints(item);
             int basketBonus = queuedEnchants != null ? queuedEnchants.Sum(e => e.PointCost) : 0;
             int totalBefore = initialBonus + basketBonus;
-
-            // 4. Prix total du panier (si nextEnchant == null)
-            if (nextEnchant == null)
-            {
-                long priceBefore = (long)initialBonus * initialBonus * factor;
-                long priceAfter = (long)totalBefore * totalBefore * factor;
-                return (long)((priceAfter - priceBefore) * costMultiplier);
-            }
 
             // 5. Calcul marginal (Nouveau Prix - Prix Panier)
             int totalAfter = totalBefore + nextEnchant.PointCost;
             long priceWithBasket = (long)totalBefore * totalBefore * factor;
             long priceWithNext = (long)totalAfter * totalAfter * factor;
 
-            return (long)((priceWithNext - priceWithBasket) * costMultiplier);
+            long marginalCost = (long)((priceWithNext - priceWithBasket) * costMultiplier);
+
+            // 6. Multiplicateur Épique
+            if (CraftingSettings.EnableEpicCosts && nextEnchant.IsEpic)
+            {
+                marginalCost *= 10;
+            }
+
+            return marginalCost;
         }
 
         public static int GetCraftingDays(long gpCost, bool instant = false)

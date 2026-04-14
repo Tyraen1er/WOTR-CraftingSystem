@@ -36,6 +36,12 @@ namespace CraftingSystem
         public int DaysOverride = -1; 
         public List<string> Categories = new List<string>();
         public string Description;
+        
+        [JsonProperty("IsEpic")]
+        public bool IsEpic = false;
+
+        [JsonProperty("PriceFactor")]
+        public int PriceFactor = -1;
 
         [JsonIgnore]
         public int PointCost
