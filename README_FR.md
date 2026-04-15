@@ -31,6 +31,7 @@ Le mod calcule les coûts dynamiquement selon le type d'objet et les propriété
 - Installez le mod via **Unity Mod Manager**.
 - Parlez à **Wilcer Garms** (Campement ou Drezen) pour accéder à l'atelier.
 - Utilisez l'interface pour parcourir votre inventaire et mettre des enchantements en file d'attente.
+- **Attention :** Ce mod ne peut pas être désinstallé d'une sauvegarde sans risque une fois qu'il a été utilisé.
 
 ## Contributions
 **Le développement du mod est ouvert à la communauté :**

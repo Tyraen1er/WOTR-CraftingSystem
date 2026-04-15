@@ -29,8 +29,9 @@ The mod calculates costs dynamically based on the item type and existing propert
 
 ### Installation and Usage
 - Install the mod via **Unity Mod Manager**.
-- Speak to **Wilcer Garms** (Campsite or Drezen) to access the workshop.
+- Speak to **Wilcer Garms** (Camp or Drezen) to access the workshop.
 - Use the interface to browse your inventory and queue enchantments.
+- **Warning:** This mod cannot be safely uninstalled from a save file once it has been used.
 
 ## Contributions
 **Mod development is open to the community:**
