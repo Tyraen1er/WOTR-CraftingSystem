@@ -82,4 +82,4 @@ if __name__ == "__main__":
     
     result = convert_csv_to_json(input_csv)
     if result:
-        print(f"Le processus s'est terminé avec succès. Fichier généré : {result}")
+        print(f"The Python process succeded. File generated: {result}")
