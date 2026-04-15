@@ -8,5 +8,5 @@
   "AssemblyName": "CraftingSystem.dll",
   "EntryMethod": "CraftingSystem.Main.Load",
   "HomePage": "https://github.com/Tyraen1er/WOTR-CraftingSystem",
-  "Repository": ""
+  "Repository": "https://raw.githubusercontent.com/Tyraen1er/WOTR-CraftingSystem/main/Repository.json"
 }
