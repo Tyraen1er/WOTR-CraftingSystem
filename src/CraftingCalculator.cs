@@ -9,6 +9,10 @@ using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Designers.Mechanics.Facts;
 
+//
+// CraftingCalculator.cs
+//
+
 namespace CraftingSystem
 {
     public static class CraftingCalculator

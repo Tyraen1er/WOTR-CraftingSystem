@@ -330,8 +330,10 @@ namespace CraftingSystem
             GUILayout.BeginHorizontal();
             bool isWep = GUILayout.Toggle(activeTypes.Contains("Weapon"), Helpers.GetString("ui_filter_weapons", " Weapons"), GUILayout.Width(150 * scale));
             bool isArm = GUILayout.Toggle(activeTypes.Contains("Armor"), Helpers.GetString("ui_filter_armors", " Armors"), GUILayout.Width(150 * scale));
-            bool isOth = GUILayout.Toggle(activeTypes.Contains("Other"), Helpers.GetString("ui_filter_others", " Others"), GUILayout.Width(150 * scale));
-            
+            // TODO check if it's correct
+            //bool isOth = GUILayout.Toggle(activeTypes.Contains("Other"), Helpers.GetString("ui_filter_others", " Others"), GUILayout.Width(150 * scale));
+            bool isOth = isWep || isArm;
+
             if (isWep) activeTypes.Add("Weapon"); else activeTypes.Remove("Weapon");
             if (isArm) activeTypes.Add("Armor"); else activeTypes.Remove("Armor");
             if (isOth) activeTypes.Add("Other"); else activeTypes.Remove("Other");
@@ -429,8 +431,13 @@ namespace CraftingSystem
                 bool isReadyForSpecial = CraftingCalculator.IsItemReadyForSpecialEnchants(selectedItem, currentSelectedList);
                 bool isWeaponOrArmor = selectedItem.Blueprint is BlueprintItemWeapon || selectedItem.Blueprint is BlueprintItemArmor;
                 
-                // On utilise la liste pré-filtrée par type !
-                foreach (var data in typeFilteredAvailable)
+                // On utilise la liste pré-filtrée par type ET on trie pour mettre les cochés en haut !
+                var displayedEnchants = typeFilteredAvailable
+                    .OrderByDescending(e => queuedEnchantGuids.Contains(e.Guid)) 
+                    .ThenBy(e => e.Name)
+                    .ToList();
+
+                foreach (var data in displayedEnchants)
                 {
                     bool isQueued = queuedEnchantGuids.Contains(data.Guid);
 
@@ -458,10 +465,10 @@ namespace CraftingSystem
                         bool isAllowed = CraftingCalculator.IsEnchantmentAllowedOnNormalItem(data);
                         
                         // LOG DE TRAÇAGE POUR LE +1 REQUIRED
-                        if (CraftingSettings.RequirePlusOneFirst && UnityEngine.Time.frameCount % 300 == 0) // Toutes les 5s env
+                        /*if (CraftingSettings.RequirePlusOneFirst && UnityEngine.Time.frameCount % 300 == 0) // Toutes les 5s env
                         {
                             Main.ModEntry.Logger.Log($"[FILTRE-REPORT] {data.Name} -> Caché car isReadyForSpecial={isReadyForSpecial} et IsAllowedOnNormal={isAllowed}");
-                        }
+                        }*/
 
                         if (!isAllowed) continue; 
                     }
@@ -493,7 +500,6 @@ namespace CraftingSystem
                     int days = CraftingCalculator.GetCraftingDays(costToPay, CraftingSettings.InstantCrafting);
                     
                     if (data.GoldOverride >= 0) costToPay = (long)(data.GoldOverride * CraftingSettings.CostMultiplier);
-                    if (data.DaysOverride >= 0) days = (int)data.DaysOverride;
 
                     string internalName = bp != null ? bp.name : (data.Name ?? "");
 

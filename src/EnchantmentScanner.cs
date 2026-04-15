@@ -17,31 +17,37 @@ using Kingmaker.Blueprints.JsonSystem;
 using Kingmaker.Blueprints.JsonSystem.BinaryFormat;
 using Kingmaker.Blueprints.JsonSystem.Converters;
 
+//
+// EnchantmentScanner.cs
+//
+
 namespace CraftingSystem
 {
     public class EnchantmentData
     {
         public string Name;
+        public string Type; // "Weapon" or "Armor" or "Other"
+        public string Source = "Mod"; // "TTRPG", "Owlcat", "Ownlcat+", "Mod"
+        public bool IsHomebrew = false;
         
         [JsonProperty("GUID")]
         public string Guid;
+
+        [JsonProperty("PointCost", NullValueHandling = NullValueHandling.Ignore)]
+        public string PointString; // Accepte "+1", "+2", ou même juste "1", "2"
         
-        public string Type; // "Weapon" or "Armor" or "Other"
-        public string Source = "Mod"; // "TTRPG", "Owlcat", "Mod"
-        public bool IsHomebrew = false;
-        
-        [JsonProperty("PointCost")]
-        public string PointString; // Récupère "+1" ou "4000" depuis le JSON
-        
-        public int DaysOverride = -1; 
         public List<string> Categories = new List<string>();
         public string Description;
         
-        [JsonProperty("IsEpic")]
+        [JsonProperty("IsEpic", NullValueHandling = NullValueHandling.Ignore)]
         public bool IsEpic = false;
 
-        [JsonProperty("PriceFactor")]
+        [JsonProperty("PriceFactor", NullValueHandling = NullValueHandling.Ignore)]
         public int PriceFactor = -1;
+
+        // NOUVEAU : On récupère directement la colonne PriceOverride du JSON
+        [JsonProperty("PriceOverride", NullValueHandling = NullValueHandling.Ignore)]
+        public int GoldOverride = -1;
 
         [JsonIgnore]
         public int PointCost
@@ -50,33 +56,18 @@ namespace CraftingSystem
             {
                 if (string.IsNullOrEmpty(PointString)) return 0;
                 
-                // Si la chaîne commence par un "+", c'est un bonus d'altération (ex: "+1")
-                if (PointString.StartsWith("+"))
+                // On nettoie la chaîne (on enlève les "+" et les espaces)
+                // Comme ça, que tu écrives "+2" ou "2" dans ton CSV, ça marchera.
+                string cleanString = PointString.Replace("+", "").Trim();
+                
+                if (int.TryParse(cleanString, out int val))
                 {
-                    if (int.TryParse(PointString.Replace("+", "").Trim(), out int val))
-                        return val;
+                    return val;
                 }
-                return 0; // Si c'est un prix en pièces d'or, le PointCost est 0
+                return 0;
             }
         }
 
-        [JsonIgnore]
-        public int GoldOverride
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(PointString)) return -1;
-
-                // Si ça ne commence pas par "+", on assume que c'est un prix fixe
-                if (!PointString.StartsWith("+"))
-                {
-                    string numericPart = new string(PointString.Where(char.IsDigit).ToArray());
-                    if (int.TryParse(numericPart, out int val) && val > 0)
-                        return val;
-                }
-                return -1;
-            }
-        }
         [JsonIgnore]
         public BlueprintItemEnchantment Blueprint => ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(Guid)) as BlueprintItemEnchantment;
     }
