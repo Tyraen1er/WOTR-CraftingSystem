@@ -2,11 +2,11 @@
   "Id": "CraftingSystem",
   "DisplayName": "Crafting System",
   "Author": "Tyraen1er",
-  "Version": "0.1.1",
+  "Version": "1.0",
   "ManagerVersion": "0.24.0",
   "Requirements": [],
   "AssemblyName": "CraftingSystem.dll",
   "EntryMethod": "CraftingSystem.Main.Load",
-  "HomePage": "",
+  "HomePage": "https://github.com/Tyraen1er/WOTR-CraftingSystem",
   "Repository": ""
 }
