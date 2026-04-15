@@ -63,6 +63,11 @@ namespace CraftingSystem
                 
                 // --- CHARGEMENT SIMPLE JSON AU DÉMARRAGE ---
                 EnchantmentScanner.Load();
+
+                // --- DUMP DES ENCHANTEMENTS ---
+                // À commenter ou supprimer une fois que tu as récupéré ton fichier Enchantments_Dump.json
+                // EnchantmentDumper.DumpAll();
+                
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Error in BlueprintsCache.Init: {ex}");
             }

@@ -1,45 +1,50 @@
 # Wilcer Workshop - Crafting System (WotR Mod)
+This mod provides an immersive crafting and enchantment system for Pathfinder: Wrath of the Righteous, centered around the character Wilcer Garms. It bridges the gap between the video game and the Pathfinder 1st Edition tabletop rules.
 
-This mod provides an immersive crafting and enchantment system for Pathfinder: Wrath of the Righteous, centered around the NPC Wilcer Garms.
+## Key Features
 
-## Current Features
+### Hybrid Enchantment System
+- **Full Game Scan:** The mod automatically detects all existing enchantments (including DLCs and other mods) from the blueprint index.
+- **External Enchantment Support:** If a specific enchantment is not detected or comes from an external source, it can be manually added to the JSON file using its GUID. Unused GUIDs do not affect mod performance.
+- **Intelligent Upgrade System:** The mod identifies enchantment families (e.g., Enhancement, Acid Resistance). When upgrading, it only charges the price difference between the old and the new rank.
+- **JSON Overrides:** Precise configuration of properties (point costs, fixed prices, crafting duration, allowed slots, epic status) via the `Enchantments.json` file.
 
-### 🛠️ Hybrid Enchantment System
-- **Comprehensive Game Scan**: The mod automatically detects all enchantments present in your installation (including those from other mods) directly from the game's blueprint index.
-- **JSON Overrides**: You can configure specific properties (point cost, gold overrides, crafting days, categories, etc.) via the `Enchantments.json` file. Data in the JSON seamlessly overrides the automatically detected blueprint data.
-- **Granular Source Filtering**: Filter available enchantments by source in the UI:
-  - **TTRPG**: Only enchantments marked strictly as TTRPG in the JSON.
-  - **Owlcat + TTRPG**: All standard and tabletop enchantments defined in the JSON.
-  - **Mods**: Everything else (all other JSON entries not labeled TTRPG or Owlcat, plus any dynamically extracted enchantments from the game).
-- **Full UI Localization**: Fully supports dynamic translations (English and French provided) for the entire GUI, combat logs, and dialogue via `Localization.json`.
+### Balancing and Rules (Pathfinder 1e)
+The mod calculates costs dynamically based on the item type and existing properties:
 
-### ⚖️ Balance and Ruleset (Pathfinder 1e)
-- **Official Formulas**:
-  - Weapons: `(Bonus^2) * 2000 gp` (Market price).
-  - Armors/Shields: `(Bonus^2) * 1000 gp` (Market price).
-  - **Crafting Cost**: Adding enchantments costs 50% of the market price by default. (A Cost Multiplier slider is available).
-- **Enhancement Rules**: 
-  - **Auto-Replacement**: Obsolete enhancement bonuses are safely removed when upgraded (e.g., adding +2 removes a pre-existing +1).
-  - **Prerequisites**: Optionally require a minimum +1 base enhancement before adding special abilities.
-- **Configurable Limits**: Set the maximum total bonus (default +10) and maximum enhancement bonus (default +5) securely in the mod's options menu.
+**Official Formulas:**
+- **Weapons:** (Bonus^2) * 2,000 gp.
+- **Armor/Shields:** (Bonus^2) * 1,000 gp.
+- **Wondrous Items:** Custom factors via JSON (defaults to Bonus^2 * 1,000 gp).
 
-### 💠 Item Management
-- **Item Renaming**: Rename your items for free. Features a one-click "Auto" generator to name the item based on its exact magical properties.
-- **Remove Enchantments**: Cleanly remove applied enchantments via the "Applied Enchantments" section. 
-  - *Note*: Removal is currently **FREE** (development phase).
-- **Delayed & Instant Crafting**: Crafting takes a dynamic amount of in-game time based on the cost. You can bypass this by toggling "Instant Crafting" in the settings to finish projects immediately.
+**Pathfinder 1e Penalties:**
+- **Slot Penalty (+50%):** Applied if an enchantment is placed on an item type not intended for that effect (e.g., a ring effect on a belt).
+- **Multiple Capacities (+50%):** In accordance with TTRPG rules, adding different capacities to a wondrous item increases the cost of the new capacity by 50%.
+- **Epic Costs (x10):** Enchantments marked as "Epic" trigger a x10 multiplier, respecting high-level game balance.
 
-## Installation & Usage
-1. Install using Unity Mod Manager.
-2. Talk to Wilcer Garms (in the Crusader Camp or Drezen) and ask him to handle your equipment.
-3. Access the workshop UI to browse inventory or queue multiple enchantments at once.
+### Item Management
+- **Item Renaming:** Change the name of your equipment. Includes an automatic generator based on the actual magical properties of the item.
+- **Enchantment Removal:** Clean your items via the "Applied Enchantments" section.
+- **Time-based or Instant Crafting:** Crafting time depends on the gold cost. An option in the settings allows for instant crafting.
 
----
-*Developed for immersion and strict adherence to TTRPG rules.*
+### Installation and Usage
+- Install the mod via **Unity Mod Manager**.
+- Speak to **Wilcer Garms** (Campsite or Drezen) to access the workshop.
+- Use the interface to browse your inventory and queue enchantments.
 
-## Developer Setup (Compilation)
-To compile this project on a new device or environment:
-1. **UserConfig.props**: If missing, create or edit `UserConfig.props` in the root directory.
-2. **Paths**: Set `<WrathPath>` to point to your local `Wrath_Data\Managed` folder.
-3. **Framework**: This project targets **.NET Framework 4.8**. Ensure you have the appropriate SDK installed.
-4. **Auto-Install**: The build process automatically copies the DLL and JSON files to your game's `Mods` folder using the `<ModInstallPath>` defined in your config.
+## Contributions
+**Mod development is open to the community:**
+- **Developers:** Pull Requests are welcome for any code improvements or bug fixes.
+- **Non-developers:** Updating data (balancing, new enchantments, translations) directly in the CSV or JSON files is greatly appreciated.
+
+## Development Configuration
+1. **UserConfig.props:** Define the path to your `Wrath_Data\Managed` folder.
+2. **Framework:** Targets .NET Framework 4.8.
+3. **Data Conversion:** The build process triggers a Python script that automatically converts the `Enchantments.csv` file into `Enchantments.json`.
+4. **Auto-Install:** The build process automatically copies the DLL and JSON files into the game's Mods folder.
+
+### JSON Configuration and Structure
+Settings can be modified within the mod menu:
+- **Cost Multiplier:** Adjusts the global cost (Default is 0.5 for creation cost).
+- **Apply Slot Penalty:** Enables or disables the 50% surcharge.
+- **Enable Epic Costs:** Enables or disables the x10 multiplier.

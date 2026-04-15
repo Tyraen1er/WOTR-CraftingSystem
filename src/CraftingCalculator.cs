@@ -8,6 +8,7 @@ using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Designers.Mechanics.Facts;
+using System.Text.RegularExpressions;
 
 //
 // CraftingCalculator.cs
@@ -84,18 +85,45 @@ namespace CraftingSystem
             return IsPureEnhancement(bp);
         }
 
-        // ====================================================================
+        /// <summary>
+        /// Extrait la "famille" de l'enchantement en supprimant tous les chiffres de son nom interne.
+        /// Exemples : "ArmorBonus5" -> "ArmorBonus", "AcidResistance10Enchant" -> "AcidResistanceEnchant"
+        /// </summary>
+        public static string GetEnchantmentFamily(string blueprintName)
+        {
+            if (string.IsNullOrEmpty(blueprintName)) return string.Empty;
+            return Regex.Replace(blueprintName, @"\d+", "");
+        }
 
         public static long GetEnchantmentCost(ItemEntity item, EnchantmentData newEnchant = null, float costMultiplier = 1.0f)
         {
             return GetMarginalCost(item, new List<EnchantmentData>(), newEnchant, costMultiplier);
         }
 
+        /// <summary>
+        /// Calcule le coût marginal en pièces d'or pour ajouter un enchantement spécifique à un objet, 
+        /// ou le coût total d'une file d'attente d'enchantements.
+        /// </summary>
+        /// <remarks>
+        /// Cette méthode implémente les règles de calcul suivantes :
+        /// <list type="bullet">
+        /// <item><description><b>Calcul Marginal :</b> Facture uniquement la différence de prix entre l'état actuel (item + panier) et l'état final.</description></item>
+        /// <item><description><b>Système d'Upgrade :</b> Détecte via <see cref="GetEnchantmentFamily"/> si un enchantement de même type est déjà présent pour ne facturer que la différence (ex: passer d'une Résistance 10 à 30).</description></item>
+        /// <item><description><b>Pénalité de Slot (+50%) :</b> Appliquée si l'enchantement est posé sur un <c>ItemType</c> non listé dans ses slots autorisés.</description></item>
+        /// <item><description><b>Capacités Multiples (+50%) :</b> Appliquée sur les Objets Merveilleux possédant déjà au moins un enchantement permanent ou en attente.</description></item>
+        /// <item><description><b>Coûts Épiques (x10) :</b> Appliqués en fin de calcul si l'enchantement est marqué comme <c>IsEpic</c>.</description></item>
+        /// </list>
+        /// </remarks>
+        /// <param name="item">L'entité de l'objet à enchanter.</param>
+        /// <param name="queuedEnchants">Liste des enchantements déjà présents dans le panier de modification.</param>
+        /// <param name="nextEnchant">L'enchantement à chiffrer. Si <c>null</c>, la méthode calcule récursivement le total de <paramref name="queuedEnchants"/>.</param>
+        /// <param name="costMultiplier">Multiplicateur global de prix (issu des réglages du mod).</param>
+        /// <returns>Le montant en pièces d'or à payer pour l'opération.</returns>
         public static long GetMarginalCost(ItemEntity item, IEnumerable<EnchantmentData> queuedEnchants, EnchantmentData nextEnchant = null, float costMultiplier = 1.0f)
         {
             if (item == null) return 0;
 
-            // 1. Si on demande le prix TOTAL d'un panier (Calcul récursif marginal pour la précision)
+            // 1. Calcul récursif pour le prix TOTAL d'un panier
             if (nextEnchant == null)
             {
                 long basketTotal = 0;
@@ -111,11 +139,71 @@ namespace CraftingSystem
                 return basketTotal;
             }
 
-            // 2. Cas particulier : Coût fixe
+            // --- CALCUL DES MULTIPLICATEURS DE PÉNALITÉ ---
+            float slotMultiplier = (CraftingSettings.ApplySlotPenalty && IsWrongSlot(item, nextEnchant)) ? 1.5f : 1.0f;
+            float wondrousMultiplier = (IsWondrousItem(item) && HasMultipleAbilities(item, queuedEnchants)) ? 1.5f : 1.0f;
+            float totalPenaltyMultiplier = slotMultiplier * wondrousMultiplier;
+
+            // --- LOGIQUE DE REMPLACEMENT (UPGRADE FAMILLE) ---
+            int existingPointCost = 0;
+            long existingGoldOverride = 0;
+
+            var nextBp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(nextEnchant.Guid));
+            string nextFamily = nextBp != null ? GetEnchantmentFamily(nextBp.name) : string.Empty;
+
+            if (!string.IsNullOrEmpty(nextFamily))
+            {
+                // A. Chercher dans la file d'attente (panier)
+                var replacedInQueue = queuedEnchants?.FirstOrDefault(e => 
+                {
+                    var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(e.Guid));
+                    return bp != null && GetEnchantmentFamily(bp.name) == nextFamily;
+                });
+
+                if (replacedInQueue != null)
+                {
+                    existingPointCost = replacedInQueue.PointCost;
+                    existingGoldOverride = replacedInQueue.GoldOverride;
+                }
+                else
+                {
+                    // B. Chercher directement sur l'objet
+                    var replacedOnItem = item.Enchantments.FirstOrDefault(e => 
+                        !e.IsTemporary && GetEnchantmentFamily(e.Blueprint.name) == nextFamily);
+
+                    if (replacedOnItem != null)
+                    {
+                        string replacedGuid = replacedOnItem.Blueprint.AssetGuid.ToString();
+                        
+                        // /!\ IMPORTANT : Remplace la ligne ci-dessous par ton appel réel au gestionnaire JSON
+                        // Exemple : var oldData = EnchantmentScanner.GetByGuid(replacedGuid);
+                        // if (oldData != null) { 
+                        //     existingPointCost = oldData.PointCost; 
+                        //     existingGoldOverride = oldData.GoldOverride; 
+                        // }
+                    }
+                }
+            }
+
+            // 2. Cas particulier : Coût fixe (GoldOverride)
             if (nextEnchant.GoldOverride >= 0)
             {
-                long fixedCost = (long)(nextEnchant.GoldOverride * costMultiplier);
+                long baseCostToPay = nextEnchant.GoldOverride;
+                
+                // On déduit le prix de l'enchantement remplacé (s'il y en a un)
+                if (existingGoldOverride > 0)
+                {
+                    baseCostToPay = Math.Max(0, baseCostToPay - existingGoldOverride);
+                }
+
+                long fixedCost = (long)(baseCostToPay * costMultiplier);
+                
+                // Application des pénalités
+                fixedCost = (long)(fixedCost * totalPenaltyMultiplier);
+
+                // Multiplicateur Épique
                 if (CraftingSettings.EnableEpicCosts && nextEnchant.IsEpic) fixedCost *= 10;
+                
                 return fixedCost;
             }
 
@@ -135,17 +223,26 @@ namespace CraftingSystem
                 }
             }
 
-            // 4. Calcul du bonus (Objet + Panier)
+            // 4. Calcul du bonus
             int initialBonus = CalculateDisplayedEnchantmentPoints(item);
             int basketBonus = queuedEnchants != null ? queuedEnchants.Sum(e => e.PointCost) : 0;
             int totalBefore = initialBonus + basketBonus;
 
-            // 5. Calcul marginal (Nouveau Prix - Prix Panier)
-            int totalAfter = totalBefore + nextEnchant.PointCost;
+            // 5. Calcul marginal (Nouveau Prix - Prix Panier) avec déduction
+            int pointsToAdd = nextEnchant.PointCost;
+            if (existingPointCost > 0)
+            {
+                pointsToAdd = Math.Max(0, pointsToAdd - existingPointCost);
+            }
+
+            int totalAfter = totalBefore + pointsToAdd;
             long priceWithBasket = (long)totalBefore * totalBefore * factor;
             long priceWithNext = (long)totalAfter * totalAfter * factor;
 
             long marginalCost = (long)((priceWithNext - priceWithBasket) * costMultiplier);
+
+            // Application des pénalités sur le coût marginal
+            marginalCost = (long)(marginalCost * totalPenaltyMultiplier);
 
             // 6. Multiplicateur Épique
             if (CraftingSettings.EnableEpicCosts && nextEnchant.IsEpic)
@@ -154,6 +251,52 @@ namespace CraftingSystem
             }
 
             return marginalCost;
+        }
+
+        /// <summary>
+        /// Vérifie si la catégorie de l'item ("Weapon", "Armor" ou "Other") 
+        /// est absente de la liste des emplacements autorisés (EnchantmentData.Slots).
+        /// Retourne 'true' si c'est le mauvais emplacement (déclenche la pénalité de +50%).
+        /// </summary>
+        public static bool IsWrongSlot(ItemEntity item, EnchantmentData enchant)
+        {
+            // S'il n'y a aucune restriction définie dans le JSON, il n'y a pas de malus
+            if (enchant == null || enchant.Slots == null || enchant.Slots.Count == 0)
+                return false;
+
+            if (item == null || item.Blueprint == null)
+                return false;
+
+            // Récupère l'enum ItemType (Kingmaker.Blueprints.Items.ItemType)
+            // et le convertit en texte ("Weapon", "Shield", "Ring", etc.)
+            string currentItemType = item.Blueprint.ItemType.ToString();
+
+            // Vérifie si la liste de l'enchantement contient ce type exact (insensible à la casse)
+            bool isAllowed = enchant.Slots.Contains(currentItemType, StringComparer.OrdinalIgnoreCase);
+
+            // Si ce type n'est pas autorisé, alors c'est le mauvais emplacement
+            return !isAllowed;
+        }
+
+        public static bool IsWondrousItem(ItemEntity item)
+        {
+            if (item == null || item.Blueprint == null) return false;
+            string itemType = item.Blueprint.ItemType.ToString();
+            
+            // Tout ce qui n'est pas une arme, une armure ou un bouclier est considéré comme objet merveilleux
+            return itemType != "Weapon" && itemType != "Armor" && itemType != "Shield";
+        }
+
+        // Nouvelle méthode pour vérifier si l'objet possède déjà des capacités
+        public static bool HasMultipleAbilities(ItemEntity item, IEnumerable<EnchantmentData> queuedEnchants)
+        {
+            // Vérifier s'il y a déjà des enchantements non-temporaires sur l'objet de base
+            bool hasBaseEnchants = item.Enchantments.Any(e => !e.IsTemporary);
+            
+            // Ou s'il y a déjà d'autres enchantements en attente dans le panier
+            bool hasQueuedEnchants = queuedEnchants != null && queuedEnchants.Any();
+
+            return hasBaseEnchants || hasQueuedEnchants;
         }
 
         public static int GetCraftingDays(long gpCost, bool instant = false)

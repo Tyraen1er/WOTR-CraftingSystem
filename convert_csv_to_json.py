@@ -60,6 +60,18 @@ def convert_csv_to_json(csv_filepath):
                 else:
                     # Si la colonne manque totalement dans le CSV, on l'ajoute par sécurité
                     row['Categories'] = []
+
+                # 3.bis Traitement pour le champ Slot (conversion en tableau)
+                slot_key = next((k for k in row.keys() if k and k.lower() == 'slots'), None)
+                if slot_key:
+                    slot_str = str(row[slot_key]).strip()
+                    if slot_str:
+                        row[slot_key] = [s.strip() for s in slot_str.split(',') if s.strip()]
+                    else:
+                        row[slot_key] = []
+                else:
+                    # Valeur par défaut si la colonne est absente du CSV
+                    row['Slots'] = []
                 
                 data.append(row)
 

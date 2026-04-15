@@ -28,10 +28,12 @@ namespace CraftingSystem
         public string Name;
         public string Type; // "Weapon" or "Armor" or "Other"
         public string Source = "Mod"; // "TTRPG", "Owlcat", "Ownlcat+", "Mod"
-        public bool IsHomebrew = false;
         
         [JsonProperty("GUID")]
         public string Guid;
+
+        [JsonProperty("Slots", NullValueHandling = NullValueHandling.Ignore)]
+        public List<string> Slots = new List<string>();
 
         [JsonProperty("PointCost", NullValueHandling = NullValueHandling.Ignore)]
         public string PointString; // Accepte "+1", "+2", ou même juste "1", "2"
