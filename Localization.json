@@ -2,315 +2,393 @@
     "strings": {
         "fa3e1f7d4e3347bdaeb88a1b6c8baab6": {
             "enGB": "« I have work to entrust to your craftsmen. »",
-            "frFR": "« J'ai du travail à confier à vos artisans. »"
+            "frFR": "« J'ai du travail à confier à vos artisans. »",
+			"ruRU": "«У меня есть работа, которую я хочу доверить вашим мастерам.»"
         },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab7": {
             "enGB": "« Of course, the Quartermaster's office is here for that. What is it about exactly? »",
-            "frFR": "« Bien sûr, l'Intendance est là pour ça. De quoi s'agit-il précisément ? »"
+            "frFR": "« Bien sûr, l'Intendance est là pour ça. De quoi s'agit-il précisément ? »",
+			"ruRU": "«Конечно, для этого здесь находится квартирмейстерская. А для чего именно?»"
         },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab8": {
             "enGB": "« Here is some equipment they should take care of. »",
-            "frFR": "« Voici un équipement dont ils doivent s'occuper. »"
+            "frFR": "« Voici un équipement dont ils doivent s'occuper. »",
+			"ruRU": "«Отлично, давайте осмотрим ваш арсенал. Какие чары вы хотите наложить на эти предметы?»"
         },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab9": {
             "enGB": "« I would like to modify some equipment I already entrusted to you. »",
-            "frFR": "« J'aimerais modifier un équipement que je vous ai confié. »"
+            "frFR": "« J'aimerais modifier un équipement que je vous ai confié. »",
+			"ruRU": "«Я бы хотел улучшить вещи, которое уже передал вам.»"
         },
         "fa3e1f7d4e3347bdaeba8a1b6c8baab1": {
             "enGB": "« Forget about it. »",
-            "frFR": "« Oubliez ça. »"
+            "frFR": "« Oubliez ça. »",
+			"ruRU": "«Забудьте об этом. »"
         },
         "fa3e1f7d4e3347bdaeba8a1b6c8baab2": {
             "enGB": "« I'm listening. Show me the equipment in question, I'll see that it's sent to the best specialists in Mendev. »",
-            "frFR": "« Je vous écoute. Montrez-moi l'équipement en question, je m'occuperai de le transmettre aux meilleurs spécialistes du Mendev. »"
+            "frFR": "« Je vous écoute. Montrez-moi l'équipement en question, je m'occuperai de le transmettre aux meilleurs spécialistes du Mendev. »",
+			"ruRU": "«Я слушаю. Покажите мне это вещи, я прослежу, чтобы его отправили к лучшим специалистам в Мендев.»"
         },
         "dialog_cue_stored_item": {
             "enGB": "« Very well, let's take a look at your stash. What enchants do you want on those items? »",
-            "frFR": "« Très bien, inspectons votre réserve. Quels enchantements souhaitez-vous appliquer à ces objets ? »"
+            "frFR": "« Très bien, inspectons votre réserve. Quels enchantements souhaitez-vous appliquer à ces objets ? »",
+			"ruRU": "«Что ж, давайте взглянем на ваши запасы. Какие чары вы хотите наложить на эти предметы?.»"
         },
         "fa3e1f7d4e3347bdaeba8a1b6c8baab3": {
             "enGB": "« As you wish. Anything else? »",
-            "frFR": "« Entendu. Je reste à votre disposition si vous changez d'avis. Autre chose ? »"
+            "frFR": "« Entendu. Je reste à votre disposition si vous changez d'avis. Autre chose ? »",
+			"ruRU": "«Как пожелаете. Что-нибудь еще? »"
         },
         "ui_title_workshop": {
             "enGB": "Workshop",
-            "frFR": "Atelier"
+            "frFR": "Atelier",
+			"ruRU": "Мастерская"
         },
         "ui_title_config": {
             "enGB": "Configuration",
-            "frFR": "Configuration"
+            "frFR": "Configuration",
+			"ruRU": "Конфигурация"
         },
         "ui_title_details": {
             "enGB": "Details: ",
-            "frFR": "Détails : "
+            "frFR": "Détails : ",
+			"ruRU": "Подробно: "
         },
         "ui_title_select": {
             "enGB": "Item Selection",
-            "frFR": "Sélection d'objet"
+            "frFR": "Sélection d'objet",
+			"ruRU": "Выбор объекта"
         },
         "ui_feedback_renamed": {
             "enGB": "The item has been renamed!",
-            "frFR": "L'objet a été renommé !"
+            "frFR": "L'objet a été renommé !",
+			"ruRU": "Предмет был переименован!"
         },
         "ui_feedback_autoname_gen": {
             "enGB": "Automatic name generated.",
-            "frFR": "Nom automatique généré."
+            "frFR": "Nom automatique généré.",
+			"ruRU": "Автогенерация имени."
         },
         "log_project_started": {
             "enGB": "<color=#E2C675>[Workshop]</color> <b>{0}</b> has been sent to the forge for <b>{1} gp</b>.",
-            "frFR": "<color=#E2C675>[Atelier]</color> <b>{0}</b> a été envoyé en forge pour <b>{1} po</b>."
+            "frFR": "<color=#E2C675>[Atelier]</color> <b>{0}</b> a été envoyé en forge pour <b>{1} po</b>.",
+			"ruRU": "<color=#E2C675>[Workshop]</color> <b>{0}</b> был отправлен в кузницу для <b>{1} gp</b>."
         },
         "ui_feedback_projects_started": {
             "enGB": "Projects started: {0} enchantment(s).",
-            "frFR": "Projets lancés : {0} enchantement(s)."
+            "frFR": "Projets lancés : {0} enchantement(s).",
+			"ruRU": "Запущено проектов: {0} зачарования(s)."
         },
         "ui_feedback_no_funds": {
             "enGB": "Unexpected error: insufficient funds at the time of payment.",
-            "frFR": "Erreur inattendue : fonds insuffisants au moment du paiement."
+            "frFR": "Erreur inattendue : fonds insuffisants au moment du paiement.",
+			"ruRU": "Непредвиденная ошибка: на момент оплаты недостаточно средств."
         },
         "ui_btn_back": {
             "enGB": "<< BACK",
-            "frFR": "<< RETOUR"
+            "frFR": "<< RETOUR",
+			"ruRU": "<< НАЗАД"
         },
         "ui_btn_options": {
             "enGB": "Options",
-            "frFR": "Options"
+            "frFR": "Options",
+			"ruRU": "Опции"
         },
         "ui_no_item_stashed": {
             "enGB": "\n   (No item is stored in the workshop)",
-            "frFR": "\n   (Aucun objet n'est stocké dans l'atelier)"
+            "frFR": "\n   (Aucun objet n'est stocké dans l'atelier)",
+			"ruRU": "\n   (В мастерской нет предметов)"
         },
         "ui_in_forge": {
             "enGB": " (In forge...)",
-            "frFR": " (En forge...)"
+            "frFR": " (En forge...)",
+			"ruRU": " (В кузне...)"
         },
         "ui_wilcer_working": {
             "enGB": "<b>WILCER IS CURRENTLY WORKING ON THIS ITEM</b>",
-            "frFR": "<b>WILCER EST EN TRAIN DE TRAVAILLER SUR CET OBJET</b>"
+            "frFR": "<b>WILCER EST EN TRAIN DE TRAVAILLER SUR CET OBJET</b>",
+			"ruRU": "<b>СЕЙЧАС ВИЛЬСЕР РАБОТАЕТ НАД ЭТИМ ТОВАРОМ</b>"
         },
         "ui_time_remaining": {
             "enGB": "Estimated remaining time: {0:F1} days",
-            "frFR": "Temps restant estimé : {0:F1} jours"
+            "frFR": "Temps restant estimé : {0:F1} jours",
+			"ruRU": "Примерное оставшееся время: {0:F1} суток"
         },
         "ui_btn_close_ui": {
             "enGB": "Close Interface",
-            "frFR": "Fermer l'interface"
+            "frFR": "Fermer l'interface",
+			"ruRU": "Закрыть интерфейс"
         },
         "ui_special_action_rename": {
             "enGB": "Special Action: Rename item (Free)",
-            "frFR": "Action Spéciale : Renommer l'objet (Gratuit)"
+            "frFR": "Action Spéciale : Renommer l'objet (Gratuit)",
+			"ruRU": "Спец. действие: Переименовать предмет (Бесплатно)"
         },
         "ui_btn_rename": {
             "enGB": "Rename",
-            "frFR": "Renommer"
+            "frFR": "Renommer",
+			"ruRU": "Переименовать"
         },
         "ui_btn_auto": {
             "enGB": "Auto",
-            "frFR": "Auto"
+            "frFR": "Auto",
+			"ruRU": "Авто"
         },
         "ui_applied_enchants": {
             "enGB": "Applied Enchantments:",
-            "frFR": "Enchantements appliqués :"
+            "frFR": "Enchantements appliqués :",
+			"ruRU": "Применённые зачарования:"
         },
         "ui_no_magic_enchants": {
             "enGB": "<i>(No magic enchantment)</i>",
-            "frFR": "<i>(Aucun enchantement magique)</i>"
+            "frFR": "<i>(Aucun enchantement magique)</i>",
+			"ruRU": "<i>(Отсутствуют чары на предмете)</i>"
         },
         "ui_btn_remove": {
             "enGB": "Remove",
-            "frFR": "Retirer"
+            "frFR": "Retirer",
+			"ruRU": "Снять"
         },
         "ui_available_enchants": {
             "enGB": "Available Enchantments:",
-            "frFR": "Enchantements disponibles :"
+            "frFR": "Enchantements disponibles :",
+			"ruRU": "Доступные зачарования:"
         },
         "ui_filter_weapons": {
             "enGB": " Weapons",
-            "frFR": " Armes"
+            "frFR": " Armes",
+			"ruRU": "Оружие"
         },
         "ui_filter_armors": {
             "enGB": " Armors",
-            "frFR": " Armures"
+            "frFR": " Armures",
+			"ruRU": "Броня"
         },
         "ui_filter_others": {
             "enGB": " Others",
-            "frFR": " Autres"
+            "frFR": " Autres",
+			"ruRU": "Прочее"
         },
         "ui_search_label": {
             "enGB": "Search: ",
-            "frFR": "Recherche : "
+            "frFR": "Recherche : ",
+			"ruRU": "Поиск: "
         },
         "ui_filter_active_btn": {
             "enGB": "Filters ({0}) \u25bc",
-            "frFR": "Filtres ({0}) \u25bc"
+            "frFR": "Filtres ({0}) \u25bc",
+			"ruRU": "Фильтр ({0}) \u25bc"
         },
         "ui_filter_all_btn": {
             "enGB": "Filters (All) \u25bc",
-            "frFR": "Filtres (Tous) \u25bc"
+            "frFR": "Filtres (Tous) \u25bc",
+			"ruRU": "Фильтр (Все) \u25bc"
         },
         "ui_filter_check_all": {
             "enGB": "Check All",
-            "frFR": "Tout cocher"
+            "frFR": "Tout cocher",
+			"ruRU": "Выбрать все"
         },
         "ui_filter_uncheck_all": {
             "enGB": "Uncheck All",
-            "frFR": "Tout décocher"
+            "frFR": "Tout décocher",
+			"ruRU": "Сброс"
         },
         "ui_filter_none_active": {
             "enGB": " <i>(No filter active = Show all)</i>",
-            "frFR": " <i>(Aucun filtre actif = Tout afficher)</i>"
+            "frFR": " <i>(Aucun filtre actif = Tout afficher)</i>",
+			"ruRU": " <i>(Фильтр не выбран = Показать всё)</i>"
         },
         "ui_scan_in_progress": {
             "enGB": "Scan in progress \u2014 no enchantment available for now.",
-            "frFR": "Scan en cours \u2014 aucun enchantement disponible pour l'instant."
+            "frFR": "Scan en cours \u2014 aucun enchantement disponible pour l'instant.",
+			"ruRU": "Сканирование продолжается \u2014 на данный момент зачарование недоступно."
         },
         "ui_current_level": {
             "enGB": "Current level: {0}/{1}",
-            "frFR": "Niveau actuel : {0}/{1}"
+            "frFR": "Niveau actuel : {0}/{1}",
+			"ruRU": "Текущий уровень: {0}/{1}"
         },
         "ui_selection_total": {
             "enGB": "Selection: +{0} \u2014 Total: {1} gp / ~{2} d",
-            "frFR": "S\u00e9lection : +{0} \u2014 Total : {1} po / ~{2} j"
+            "frFR": "S\u00e9lection : +{0} \u2014 Total : {1} po / ~{2} j",
+			"ruRU": "Выбор: +{0} \u2014 Total: {1} gp / ~{2} d"
         },
         "ui_btn_validate_selection": {
             "enGB": "Confirm Selection",
-            "frFR": "Valider la sélection"
+            "frFR": "Valider la sélection",
+			"ruRU": "Подтвердите выбор"
         },
         "ui_btn_cancel_selection": {
             "enGB": "Cancel Selection",
-            "frFR": "Annuler la sélection"
+            "frFR": "Annuler la sélection",
+			"ruRU": "Отмена выбора"
         },
         "ui_settings_title": {
             "enGB": "Workshop Settings",
-            "frFR": "Réglages de l'Atelier"
+            "frFR": "Réglages de l'Atelier",
+			"ruRU": "Настройки Мастерской"
         },
         "ui_settings_cost_mult": {
             "enGB": " Cost Multiplier: ",
-            "frFR": " Multiplicateur de coût : "
+            "frFR": " Multiplicateur de coût : ",
+			"ruRU": " Коэффициент затрат: "
         },
         "ui_settings_instant_craft": {
             "enGB": "Instant Crafting",
-            "frFR": "Craft Instantané"
+            "frFR": "Craft Instantané",
+			"ruRU": "Мгновенное создание"
         },
         "ui_feedback_all_forges_done": {
             "enGB": "All active forging projects have been completed instantly!",
-            "frFR": "Toutes les forges en cours ont été terminées instantanément !"
+            "frFR": "Toutes les forges en cours ont été terminées instantanément !",
+			"ruRU": "Все текущие проекты по ковке были завершены в кратчайшие сроки!"
         },
         "ui_settings_enforce_limit": {
             "enGB": " Enforce Bonus Limits (Pathfinder)",
-            "frFR": " Appliquer les limites de bonus (Pathfinder)"
+            "frFR": " Appliquer les limites de bonus (Pathfinder)",
+			"ruRU": " Внедрение ограничений на бонусы (Pathfinder)"
         },
         "ui_settings_max_enhancement": {
             "enGB": " Max Enhancement: +{0}",
-            "frFR": " Max Altération : +{0}"
+            "frFR": " Max Altération : +{0}",
+			"ruRU": " Max Enhancement: +{0}"
         },
         "ui_settings_max_total": {
             "enGB": " Max Total: +{0}",
-            "frFR": " Max Total : +{0}"
+            "frFR": " Max Total : +{0}",
+			"ruRU": " Max Total: +{0}"
         },
         "ui_settings_require_plus_one": {
             "enGB": " TTRPG Prerequisite: At least +1 Enhancement to apply any enchants",
-            "frFR": " Prérequis du JDR : +1 Altération minimum pour pouvoir enchanter"
+            "frFR": " Prérequis du JDR : +1 Altération minimum pour pouvoir enchanter",
+			"ruRU": " Предварительное условие для настольной игры: как минимум +1 улучшение для применения любых зачарований"
         },
         "ui_settings_slot_penalty": {
             "enGB": " Apply Slot Penalty (x1.5 cost if inappropriate slot)",
-            "frFR": " Appliquer pénalité d'emplacement (Coût x1.5 si inapproprié)"
+            "frFR": " Appliquer pénalité d'emplacement (Coût x1.5 si inapproprié)",
+			"ruRU": " Применить штраф за слот (стоимость x1,5, если слот неподходящий)"
         },
         "ui_settings_epic_multiplier": {
             "enGB": " Enable Epic Multiplier (x10 cost for Epic enchants)",
-            "frFR": " Activer multiplicateur Épique (Coût x10 pour enchants épiques)"
+            "frFR": " Activer multiplicateur Épique (Coût x10 pour enchants épiques)",
+			"ruRU": " Включить эпический множитель (стоимость x10 для эпических зачарований)"
         },
         "ui_settings_source_display": {
             "enGB": "Source display:",
-            "frFR": "Affichage des sources :"
+            "frFR": "Affichage des sources :",
+			"ruRU": "Отображение источника:"
         },
         "ui_settings_source_all": {
             "enGB": "All",
-            "frFR": "Tout"
+            "frFR": "Tout",
+			"ruRU": "Все"
         },
         "ui_settings_diagnostic": {
             "enGB": "Diagnostic Tools:",
-            "frFR": "Outils de diagnostic :"
+            "frFR": "Outils de diagnostic :",
+			"ruRU": "Инструменты диагностики:"
         },
         "ui_settings_force_sync": {
             "enGB": "Force Synchronization (Full Scan)",
-            "frFR": "Forcer la synchronisation (Scan intégral)"
+            "frFR": "Forcer la synchronisation (Scan intégral)",
+			"ruRU": "Принудительная синхронизация (Полное сканирование)"
         },
         "ui_unknown_enchant_name": {
             "enGB": "Unknown Enchantment",
-            "frFR": "Enchantement inconnu"
+            "frFR": "Enchantement inconnu",
+			"ruRU": "Неизвестное зачарование"
         },
         "ui_sync_success": {
             "enGB": "Sync successful ({0} enchantments).",
-            "frFR": "Sync réussie ({0} enchantements)."
+            "frFR": "Sync réussie ({0} enchantements).",
+			"ruRU": "Синхронизация успешна ({0} зачарований)."
         },
         "ui_settings_source_ttrpg": {
             "enGB": "TTRPG (TTRPG enchantments only)",
-            "frFR": "TTRPG (Uniquement les enchantements du TTRPG)"
+            "frFR": "TTRPG (Uniquement les enchantements du TTRPG)",
+			"ruRU": "TTRPG (TTRPG только зачарования настольной игры)"
         },
         "ui_settings_source_owlcat": {
             "enGB": "Owlcat (All generic in-game enchantments)",
-            "frFR": "Owlcat (Tous les enchantements génériques du jeu)"
+            "frFR": "Owlcat (Tous les enchantements génériques du jeu)",
+			"ruRU": "Owlcat (Все стандартные внутриигровые зачарования)"
         },
         "ui_settings_source_owlcatplus": {
             "enGB": "Owlcat+ (All game enchantments, including unique items)",
-            "frFR": "Owlcat+ (Tous les enchantements du jeu, y compris les items uniques)"
+            "frFR": "Owlcat+ (Tous les enchantements du jeu, y compris les items uniques)",
+			"ruRU": "Owlcat+ (Все игровые зачарования, включая уникальные предметы)"
         },
         "ui_settings_source_mods": {
             "enGB": "Mod (All non-base game enchantments)",
-            "frFR": "Mod (Tous les enchantements ne provenant pas du jeu)"
+            "frFR": "Mod (Tous les enchantements ne provenant pas du jeu)",
+			"ruRU": "Mod (Все зачарования, не входящие в базовую игру)"
         },
         "ui_settings_source_all_desc": {
             "enGB": "Show all",
-            "frFR": "Tout afficher"
+            "frFR": "Tout afficher",
+			"ruRU": "Show all"
         },
         "ui_btn_ok": {
             "enGB": "OK",
-            "frFR": "OK"
+            "frFR": "OK",
+			"ruRU": "ОК"
         },
         "ui_btn_workshop_short": {
             "enGB": "Workshop",
-            "frFR": "Atelier"
+            "frFR": "Atelier",
+			"ruRU": "Мастерская"
         },
         "ui_cat_untyped": {
             "enGB": "Untyped",
-            "frFR": "Sans catégorie"
+            "frFR": "Sans catégorie",
+			"ruRU": "Нетипичный"
         },
         "ui_currency_gp": {
             "enGB": "gp",
-            "frFR": "po"
+            "frFR": "po",
+			"ruRU": "gp"
         },
         "ui_time_days_short": {
             "enGB": "d",
-            "frFR": "j"
+            "frFR": "j",
+			"ruRU": "d"
         },
         "err_require_plus_one": {
             "enGB": "TTRPG rules: Equipment must have at least an 'Enhancement' (+1) before receiving special enchantments.",
-            "frFR": "Règles JDR : Un équipement doit posséder au moins une 'Altération' (+1) avant de recevoir des enchantements spéciaux."
+            "frFR": "Règles JDR : Un équipement doit posséder au moins une 'Altération' (+1) avant de recevoir des enchantements spéciaux.",
+			"ruRU": "Правила настольной ролевой игры: Снаряжение должно иметь как минимум «Улучшение» (+1), прежде чем получать особые зачарования."
         },
         "err_limit_total": {
             "enGB": "Total power limit exceeded (max +{0}).",
-            "frFR": "Limite de puissance totale dépassée (max +{0})."
+            "frFR": "Limite de puissance totale dépassée (max +{0}).",
+			"ruRU": "Превышен лимит общей мощности (max +{0})."
         },
         "err_limit_enhancement": {
             "enGB": "Pure enhancement limit exceeded (max +{0}).",
-            "frFR": "Limite d'altération pure dépassée (max +{0})."
+            "frFR": "Limite d'altération pure dépassée (max +{0}).",
+			"ruRU": "Превышен предел чистого усиления (max +{0})."
         },
         "ui_sync_in_progress": {
             "enGB": "Synchronization in progress...",
-            "frFR": "Synchronisation en cours..."
+            "frFR": "Synchronisation en cours...",
+			"ruRU": "Идёт синхронизация..."
         },
         "ui_sync_error_index": {
             "enGB": "Failed: Game index inaccessible.",
-            "frFR": "Échec : Index du jeu inaccessible."
+            "frFR": "Échec : Index du jeu inaccessible.",
+			"ruRU": "Ошибка: Индекс игры недоступен."
         },
         "ui_sync_integration": {
             "enGB": "Integration and filtering of overrides (JSON)...",
-            "frFR": "Intégration et filtrage des surcharges (JSON)..."
+            "frFR": "Intégration et filtrage des surcharges (JSON)...",
+			"ruRU": "Интеграция и фильтрация переопределений (JSON)..."
         },
         "ui_sync_scanner_progress": {
             "enGB": "Multithreaded binary scanner: {0} / {1} processed...",
-            "frFR": "Scanner binaire multithread : {0} / {1} traités..."
+            "frFR": "Scanner binaire multithread : {0} / {1} traités...",
+			"ruRU": "Многопоточный бинарный сканер: {0} / {1} обработано ..."
         }
     }
 }
