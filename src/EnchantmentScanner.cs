@@ -26,7 +26,11 @@ namespace CraftingSystem
     public class EnchantmentData
     {
         public string Name;
+
+        // Le JSON actuel utilise "internType" — nous l'acceptons uniquement (plus de compat legacy).
+        [JsonProperty("internType", NullValueHandling = NullValueHandling.Ignore)]
         public string Type; // "Weapon" or "Armor" or "Other"
+
         public string Source = "Mod"; // "TTRPG", "Owlcat", "Ownlcat+", "Mod"
         
         [JsonProperty("GUID")]
@@ -47,7 +51,7 @@ namespace CraftingSystem
         [JsonProperty("PriceFactor", NullValueHandling = NullValueHandling.Ignore)]
         public int PriceFactor = -1;
 
-        // NOUVEAU : On récupère directement la colonne PriceOverride du JSON
+        // Colonne PriceOverride dans le JSON
         [JsonProperty("PriceOverride", NullValueHandling = NullValueHandling.Ignore)]
         public int GoldOverride = -1;
 
@@ -91,9 +95,24 @@ namespace CraftingSystem
                 if (File.Exists(path))
                 {
                     string json = File.ReadAllText(path);
-                    MasterList = JsonConvert.DeserializeObject<List<EnchantmentData>>(json) ?? new List<EnchantmentData>();
+                    var list = JsonConvert.DeserializeObject<List<EnchantmentData>>(json) ?? new List<EnchantmentData>();
+
+                    // Validation stricte : on exige GUID et internType (Type) présents — sinon on rejette l'entrée.
+                    int before = list.Count;
+                    list = list.Where(e => !string.IsNullOrEmpty(e.Guid) && !string.IsNullOrEmpty(e.Type)).ToList();
+                    int after = list.Count;
+                    if (after != before)
+                    {
+                        Main.ModEntry.Logger.Warning($"[SYNC] {before - after} entrée(s) Enchantments.json rejetée(s) : GUID ou internType manquant.");
+                    }
+
+                    MasterList = list;
                     LastSyncMessage = $"JSON chargé ({MasterList.Count} entrées).";
                     Main.ModEntry.Logger.Log($"[SYNC] JSON d'enchantements chargé : {MasterList.Count} entrées.");
+                }
+                else
+                {
+                    Main.ModEntry.Logger.Log("[SYNC] Aucun Enchantments.json trouvé — le scanner continuera sans overrides.");
                 }
             }
             catch (Exception ex)
@@ -131,13 +150,26 @@ namespace CraftingSystem
                     }
 
                     // 1. Overrides (Chargement du fichier JSON pour lier vos modifications)
-                    var overrides = new Dictionary<string, EnchantmentData>();
+                    var overrides = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
                     string path = Path.Combine(Main.ModEntry.Path, "Enchantments.json");
                     if (File.Exists(path))
                     {
-                        var json = File.ReadAllText(path);
-                        var overrideList = JsonConvert.DeserializeObject<List<EnchantmentData>>(json) ?? new List<EnchantmentData>();
-                        foreach (var ov in overrideList) overrides[ov.Guid] = ov;
+                        try
+                        {
+                            var overrideList = JsonConvert.DeserializeObject<List<EnchantmentData>>(File.ReadAllText(path)) ?? new List<EnchantmentData>();
+                            // Validation stricte : n'ajouter que les overrides valides (GUID + Type)
+                            foreach (var ov in overrideList)
+                            {
+                                if (string.IsNullOrEmpty(ov.Guid) || string.IsNullOrEmpty(ov.Type))
+                                {
+                                    Main.ModEntry.Logger.Warning($"[SYNC] Override JSON ignoré (GUID ou internType manquant).");
+                                    continue;
+                                }
+                                overrides[ov.Guid] = ov;
+                            }
+                            Main.ModEntry.Logger.Log($"[SYNC] Overrides chargés : {overrides.Count}");
+                        }
+                        catch (Exception ex) { Main.ModEntry.Logger.Error($"[SYNC] Impossible de parser Enchantments.json : {ex}"); }
                     }
 
                     // 2. Scan Multithreadé avec lecture binaire brute de ToyBox (Ultra-Rapide & Read-Only)
@@ -284,7 +316,6 @@ namespace CraftingSystem
             if (string.IsNullOrEmpty(guid)) return null;
             lock (MasterList)
             {
-                // On passe en OrdinalIgnoreCase pour être sur de ne pas rater un GUID à cause de la casse
                 var result = MasterList.FirstOrDefault(e => string.Equals(e.Guid, guid, StringComparison.OrdinalIgnoreCase));
                 if (result == null && guid.Length > 10)
                 {
