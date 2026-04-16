@@ -163,6 +163,50 @@ namespace CraftingSystem
         }
     }
 
+    [HarmonyPatch(typeof(Kingmaker.Controllers.Rest.CameraController), "Tick")]
+    public static class RestCameraController_Block_Patch
+    {
+        public static bool Prefix()
+        {
+            if (CraftingUI.Instance != null && CraftingUI.Instance.IsOpen) return false;
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Kingmaker.UI._ConsoleUI.InputLayers.InGameLayer.InGameInputLayer), "UpdateMovement")]
+    public static class GamepadMovement_Block_Patch
+    {
+        public static bool Prefix()
+        {
+            if (CraftingUI.Instance != null && CraftingUI.Instance.IsOpen) return false;
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Kingmaker.UI._ConsoleUI.InputLayers.InGameLayer.InGameInputLayer), "OnInteract")]
+    public static class GamepadInteraction_Block_Patch
+    {
+        public static bool Prefix()
+        {
+            if (CraftingUI.Instance != null && CraftingUI.Instance.IsOpen) return false;
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Kingmaker.UI._ConsoleUI.InputLayers.InGameLayer.InGameInputLayer), "OnMoveRightStick")]
+    public static class GamepadRightStick_Scroll_Patch
+    {
+        public static bool Prefix(UnityEngine.Vector2 vec)
+        {
+            if (CraftingUI.Instance != null && CraftingUI.Instance.IsOpen)
+            {
+                CraftingUI.Instance.RightStickScrollAmount = vec.y;
+                return false;
+            }
+            return true;
+        }
+    }
+
     // --- EMPÊCHER LE STACKING VIA CanBeMerged ---
     [HarmonyPatch(typeof(ItemEntity), nameof(ItemEntity.CanBeMerged), new Type[] { typeof(ItemEntity) })]
     public static class ItemEntity_NoMerge_Patch
