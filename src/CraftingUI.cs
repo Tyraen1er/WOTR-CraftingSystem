@@ -22,16 +22,8 @@ namespace CraftingSystem
             {
                 if (_isOpen == value) return;
                 _isOpen = value;
-                try 
-                {
-                    // Nous allons utiliser des Harmony Patchs externes pour la manette et la caméra
-                    // car IFullScreenUIHandler et FixCamera ont changé dans WOTR par rapport à Kingmaker.
-                    // (Les patchs se feront dans InventoryHandler.cs)
-                } 
-                catch (Exception e) 
-                { 
-                    Main.ModEntry.Logger.Error("Error toggling UI Input Blocker: " + e.Message); 
-                }
+                // Nous utilisons des Harmony Patchs externes pour la manette et la caméra
+                // (Les patchs se font dans InventoryHandler.cs)
             }
         }
         public bool ShowSettings = false;
@@ -71,7 +63,7 @@ namespace CraftingSystem
             if (submit) inputSubmitDown = true;
             if (cancel) inputCancelDown = true;
 
-            float h = 0f; float v = 0f; float rightV = 0f;
+            float h = 0f; float v = 0f;
             try { 
                 h = UnityEngine.Input.GetAxisRaw("Horizontal"); 
                 v = UnityEngine.Input.GetAxisRaw("Vertical"); 

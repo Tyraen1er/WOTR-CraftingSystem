@@ -104,34 +104,7 @@ namespace CraftingSystem
 
         public void HandleItemsRemoved(ItemsCollection collection, ItemEntity item, int count) { }
 
-        private void ForceItemBackToForge(ItemEntity item)
-        {
-            // On augmente un peu le délai à 100ms pour être sûr que le jeu a fini son propre transfert
-            UniRx.Observable.Timer(TimeSpan.FromMilliseconds(100)).Subscribe(new System.Action<long>(_ => 
-            {
-                try 
-                {
-                    if (item.Collection != CraftingBox)
-                    {
-                        Main.ModEntry.Logger.Log($"[SÉCURITÉ-DEBUG] Récupération de l'objet depuis : {item.Collection?.GetType().Name ?? "Inconnu"}");
-                        
-                        // On le retire d'où il est
-                        item.Collection?.Remove(item);
-                        
-                        // On le remet dans la forge
-                        if (!CraftingBox.Contains(item))
-                        {
-                            CraftingBox.Add(item);
-                            Main.ModEntry.Logger.Log($"[SÉCURITÉ-DEBUG] {item.Name} remis de force dans la forge.");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Main.ModEntry.Logger.Error($"[SÉCURITÉ-DEBUG] Erreur lors du retour forcé : {ex.Message}");
-                }
-            }));
-        }
+
 
         private void SpitItemBack(ItemEntity item)
         {
@@ -233,27 +206,7 @@ namespace CraftingSystem
             // 1. On vérifie si la collection est celle de la forge
             if (__instance == DeferredInventoryOpener.CraftingBox)
             {
-                // DIAGNOSTIC PROFOND DEMANDÉ PAR L'UTILISATEUR
-                /*
-                Main.ModEntry.Logger.Log($"\n[DIAGNOSTIC] --- Analyse de l'objet retiré : {item.Name} ---");
-                foreach (var e in item.Enchantments)
-                {
-                    Main.ModEntry.Logger.Log($"[DIAGNOSTIC] Enchantment: {e.Blueprint.name} ({e.Blueprint.AssetGuid})");
-                    foreach (var c in e.Blueprint.Components)
-                    {
-                        if (c == null) continue;
-                        var type = c.GetType();
-                        Main.ModEntry.Logger.Log($"[DIAGNOSTIC]   - Component: {type.FullName}");
-                        foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic))
-                        {
-                            try {
-                                Main.ModEntry.Logger.Log($"[DIAGNOSTIC]     . Field: {field.Name} = {field.GetValue(c)}");
-                            } catch { }
-                        }
-                    }
-                }
-                Main.ModEntry.Logger.Log($"[DIAGNOSTIC] --- Fin de l'analyse ---\n");
-                */
+
 
                 // Accès sécurisé au joueur
                 var player = Kingmaker.Game.Instance.Player.MainCharacter.Value;
