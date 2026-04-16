@@ -330,9 +330,8 @@ namespace CraftingSystem
             GUILayout.BeginHorizontal();
             bool isWep = GUILayout.Toggle(activeTypes.Contains("Weapon"), Helpers.GetString("ui_filter_weapons", " Weapons"), GUILayout.Width(150 * scale));
             bool isArm = GUILayout.Toggle(activeTypes.Contains("Armor"), Helpers.GetString("ui_filter_armors", " Armors"), GUILayout.Width(150 * scale));
-            // TODO check if it's correct
-            //bool isOth = GUILayout.Toggle(activeTypes.Contains("Other"), Helpers.GetString("ui_filter_others", " Others"), GUILayout.Width(150 * scale));
-            bool isOth = isWep || isArm;
+            bool isOth = GUILayout.Toggle(activeTypes.Contains("Other"), Helpers.GetString("ui_filter_others", " Others"), GUILayout.Width(150 * scale));
+
 
             if (isWep) activeTypes.Add("Weapon"); else activeTypes.Remove("Weapon");
             if (isArm) activeTypes.Add("Armor"); else activeTypes.Remove("Armor");
