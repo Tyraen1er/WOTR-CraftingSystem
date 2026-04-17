@@ -169,6 +169,15 @@ namespace CraftingSystem
                 selectedItem = null;
                 ShowSettings = false;
                 lastOpenState = true;
+
+                // --- DUMP DEMANDÉ PAR L'UTILISATEUR ---
+                Main.ModEntry.Logger.Log("[DUMPER] L'interface s'ouvre, lancement du dump structurel...");
+                BlueprintDumper.DumpByGuid("b183bd491793d194c9e4c96cd11769b1", 2);
+                
+                // Mass Dumper
+                System.Threading.Tasks.Task.Run(() => {
+                    EnchantmentDumper.DumpAllUniqueComponents();
+                });
             }
 
             UpdateAutoScale();
