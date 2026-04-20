@@ -28,6 +28,8 @@ namespace CraftingSystem
         [JsonProperty("COMP_TYPE")]
         public string ComponentType;
         public string enGB;
+        public string frFR;
+        public string ruRU;
     }
 
     public class EnchantmentData

@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.UnitLogic.Mechanics;
+using Kingmaker.Localization;
 
 namespace CraftingSystem
 {
@@ -39,7 +40,7 @@ namespace CraftingSystem
 
                 if (template != null)
                 {
-                    string templateText = template.enGB; // En attendant la localisation complète
+                    string templateText = GetLocalizedTemplate(template);
                     string resolved = ResolveTemplate(templateText, comp);
                     if (!string.IsNullOrEmpty(resolved))
                     {
@@ -53,8 +54,22 @@ namespace CraftingSystem
             return string.Join("\n", lines);
         }
 
+        private static string GetLocalizedTemplate(DescriptionTemplate template)
+        {
+            string currentLocale = LocalizationManager.CurrentLocale.ToString();
+            
+            if (currentLocale == "frFR" && !string.IsNullOrEmpty(template.frFR))
+                return template.frFR;
+            if (currentLocale == "ruRU" && !string.IsNullOrEmpty(template.ruRU))
+                return template.ruRU;
+                
+            return template.enGB; // Fallback to English
+        }
+
         private static string ResolveTemplate(string template, object comp)
         {
+            if (string.IsNullOrEmpty(template)) return "";
+            
             return VariableRegex.Replace(template, match =>
             {
                 string tag = match.Groups[1].Value;
@@ -86,12 +101,14 @@ namespace CraftingSystem
                     object val = fieldInfo.GetValue(comp);
                     if (val is bool b && b)
                     {
-                        activeFlags.Add(fieldName);
+                        // On cherche une traduction pour le nom du champ
+                        string localizedName = Helpers.GetString("field_" + fieldName, fieldName);
+                        activeFlags.Add(localizedName);
                     }
                     else if (val != null && !(val is bool) && !IsDefaultValue(val))
                     {
-                        // Si c'est une valeur non-booléenne et non par défaut, on l'affiche aussi comme "active"
-                        activeFlags.Add($"{fieldName}: {FormatValue(val)}");
+                        string localizedName = Helpers.GetString("field_" + fieldName, fieldName);
+                        activeFlags.Add($"{localizedName}: {FormatValue(val)}");
                     }
                 }
             }
@@ -116,6 +133,10 @@ namespace CraftingSystem
 
         private static string FormatValue(object val)
         {
+            if (val == null) return "None";
+
+            var type = val.GetType();
+
             if (val is BlueprintReferenceBase bpRef)
             {
                 var referred = bpRef.GetBlueprint();
@@ -125,16 +146,143 @@ namespace CraftingSystem
             {
                 return cv.Value.ToString();
             }
+            
+            // Gestion des listes d'actions (Kingmaker.ElementsSystem.ActionList)
+            if (type.Name.Contains("ActionList") || type.Name.Contains("ElementsList"))
+            {
+                return SummarizeElementsList(val);
+            }
+
             if (val is IEnumerable<object> list)
             {
                 return string.Join(", ", list.Select(FormatValue));
             }
-            if (val.GetType().IsEnum)
+            if (type.IsEnum)
             {
                 return val.ToString();
             }
 
+            // Gestion spécifique des structures complexes
+            if (type.Name == "ContextActionConditional") return SummarizeConditional(val);
+            if (type.Name == "ConditionsChecker") return SummarizeConditions(val);
+
+            // Pour éviter les noms de types techniques comme Kingmaker.ActionList
+            if (type.FullName.StartsWith("Kingmaker") && !type.IsPrimitive && type != typeof(string))
+            {
+                // On essaye de mapper le type si possible (Action, Condition, ou Champ)
+                string typeKey = "action_" + type.Name;
+                if (type.Name.StartsWith("ContextCondition")) typeKey = "cond_" + type.Name;
+
+                string localizedType = Helpers.GetString(typeKey, "");
+                if (!string.IsNullOrEmpty(localizedType)) return localizedType;
+                
+                // Fallback technique simplifié
+                string fallback = type.Name.Replace("ContextAction", "").Replace("Action", "").Replace("ContextCondition", "").Replace("Condition", "");
+                return string.IsNullOrEmpty(fallback) ? type.Name : fallback;
+            }
+
             return val.ToString();
+        }
+
+        private static string SummarizeElementsList(object listObj)
+        {
+            if (listObj == null) return "";
+            try
+            {
+                var type = listObj.GetType();
+                var fieldsField = type.GetField("Actions", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic) 
+                                ?? type.GetField("Elements", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+                
+                if (fieldsField == null) return "";
+
+                var array = fieldsField.GetValue(listObj) as Array;
+                if (array == null || array.Length == 0) return "";
+
+                var summaries = new List<string>();
+                foreach (var item in array)
+                {
+                    if (item == null) continue;
+                    
+                    string summary = FormatValue(item);
+                    if (!string.IsNullOrEmpty(summary) && !summaries.Contains(summary))
+                    {
+                        summaries.Add(summary);
+                    }
+                }
+
+                if (summaries.Count == 0) return Helpers.GetString("ui_special_effects", "special effects");
+                return string.Join(", ", summaries);
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        private static string SummarizeConditional(object condAction)
+        {
+            try
+            {
+                var type = condAction.GetType();
+                var conditionsField = type.GetField("ConditionsChecker", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+                var ifTrueField = type.GetField("IfTrue", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+                var ifFalseField = type.GetField("IfFalse", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+
+                string conditionText = "";
+                if (conditionsField != null)
+                {
+                    conditionText = SummarizeConditions(conditionsField.GetValue(condAction));
+                }
+
+                string trueText = "";
+                if (ifTrueField != null)
+                {
+                    trueText = SummarizeElementsList(ifTrueField.GetValue(condAction));
+                }
+
+                string falseText = "";
+                if (ifFalseField != null)
+                {
+                    falseText = SummarizeElementsList(ifFalseField.GetValue(condAction));
+                }
+
+                StringBuilder sb = new StringBuilder();
+                string uiIf = Helpers.GetString("ui_if", "if");
+                string uiThen = Helpers.GetString("ui_then", "then");
+                string uiElse = Helpers.GetString("ui_else", "else");
+
+                sb.Append($"{uiIf} [{conditionText}]");
+                if (!string.IsNullOrEmpty(trueText)) sb.Append($" {uiThen} ({trueText})");
+                if (!string.IsNullOrEmpty(falseText)) sb.Append($" {uiElse} ({falseText})");
+
+                return sb.ToString();
+            }
+            catch { return "Conditional"; }
+        }
+
+        private static string SummarizeConditions(object checker)
+        {
+            if (checker == null) return "";
+            try
+            {
+                var type = checker.GetType();
+                var conditionsField = type.GetField("Conditions", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+                if (conditionsField == null) return "";
+
+                var array = conditionsField.GetValue(checker) as Array;
+                if (array == null || array.Length == 0) return "";
+
+                var summaries = new List<string>();
+                foreach (var cond in array)
+                {
+                    if (cond == null) continue;
+                    summaries.Add(FormatValue(cond));
+                }
+
+                string uiAnd = Helpers.GetString("ui_and", "and");
+                return string.Join($" {uiAnd} ", summaries);
+            }
+            catch { return ""; }
         }
 
         private static FieldInfo GetFieldRecursive(Type type, string fieldName)

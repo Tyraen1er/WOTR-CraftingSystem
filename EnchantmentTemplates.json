@@ -1,1006 +1,1508 @@
 [
   {
     "COMP_TYPE": "AddDamageResistanceEnergy",
-    "enGB": "Resistance to <Type> of <Value>"
+    "enGB": "Resistance to <Type> of <Value>",
+    "frFR": "Résistance à : <Type> de <Value>",
+    "ruRU": "Устойчивость к <Type>: <Value>"
   },
   {
     "COMP_TYPE": "AddStatBonus",
-    "enGB": "+<Value> <Descriptor> bonus to <Stat>"
+    "enGB": "+<Value> <Descriptor> bonus to <Stat>",
+    "frFR": "Bonus de <Descriptor> de +<Value> à la stat <Stat>",
+    "ruRU": "+<Value> (<Descriptor>) бонус к характеристике <Stat>"
   },
   {
     "COMP_TYPE": "AddDamageResistancePhysical",
-    "enGB": "DR <Value>/<FlagCondition: BypassedByMaterial, BypassedByForm, BypassedByMagic, BypassedByAlignment, BypassedByReality, BypassedByWeaponType, BypassedByMeleeWeapon, BypassedByEpic>"
+    "enGB": "DR <Value>/<FlagCondition: BypassedByMaterial, BypassedByForm, BypassedByMagic, BypassedByAlignment, BypassedByReality, BypassedByWeaponType, BypassedByMeleeWeapon, BypassedByEpic>",
+    "frFR": "RD <Value>/<FlagCondition: BypassedByMaterial, BypassedByForm, BypassedByMagic, BypassedByAlignment, BypassedByReality, BypassedByWeaponType, BypassedByMeleeWeapon, BypassedByEpic>",
+    "ruRU": "ПЗ <Value>/<FlagCondition: BypassedByMaterial, BypassedByForm, BypassedByMagic, BypassedByAlignment, BypassedByReality, BypassedByWeaponType, BypassedByMeleeWeapon, BypassedByEpic>"
   },
   {
     "COMP_TYPE": "AddSpellResistance",
-    "enGB": "Spell Resistance <Value>"
+    "enGB": "Spell Resistance <Value>",
+    "frFR": "Résistance aux sorts <Value>",
+    "ruRU": "Устойчивость к магии <Value>"
   },
   {
     "COMP_TYPE": "AddCasterLevel",
-    "enGB": "+<Bonus> <Descriptor> bonus to caster level"
+    "enGB": "+<Bonus> <Descriptor> bonus to caster level",
+    "frFR": "Bonus de <Descriptor> de +<Bonus> au niveau de lanceur de sorts",
+    "ruRU": "+<Bonus> (<Descriptor>) бонус к уровню заклинателя"
   },
   {
     "COMP_TYPE": "AddConcealment",
-    "enGB": "<Concealment> concealment (<Descriptor>) <FlagCondition: CheckDistance, CheckWeaponRangeType>"
+    "enGB": "<Concealment> concealment (<Descriptor>) <FlagCondition: CheckDistance, CheckWeaponRangeType>",
+    "frFR": "Camouflage : <Concealment> (<Descriptor>) <FlagCondition: CheckDistance, CheckWeaponRangeType>",
+    "ruRU": "Маскировка <Concealment> (<Descriptor>) <FlagCondition: CheckDistance, CheckWeaponRangeType>"
   },
   {
     "COMP_TYPE": "IncreaseAllSpellsDC",
-    "enGB": "add <BonusDC> to all spell"
+    "enGB": "add <BonusDC> to all spell",
+    "frFR": "ajoute <BonusDC> au DD de tous les sorts",
+    "ruRU": "добавляет <BonusDC> к сложности всех заклинаний"
   },
   {
     "COMP_TYPE": "AddFeatureOnAlignment",
-    "enGB": "Grants <m_Facts[]> if alignment is <Alignment>"
+    "enGB": "Grants <m_Facts[]> if alignment is <Alignment>",
+    "frFR": "Confère <m_Facts[]> si l'alignement est <Alignment>",
+    "ruRU": "Дарует <m_Facts[]>, если мировоззрение — <Alignment>"
   },
   {
     "COMP_TYPE": "AddImmunityToEnergyDrain",
-    "enGB": "Immunity to Energy Drain"
+    "enGB": "Immunity to Energy Drain",
+    "frFR": "Immunité à l'absorption d'énergie",
+    "ruRU": "Иммунитет к вытягиванию энергии"
   },
   {
     "COMP_TYPE": "AddItemCasterLevelBonus",
-    "enGB": "+<Bonus> level for <ItemType>"
+    "enGB": "+<Bonus> level for <ItemType>",
+    "frFR": "+<Bonus> niveau de lanceur pour <ItemType>",
+    "ruRU": "+<Bonus> к уровню заклинателя для <ItemType>"
   },
   {
     "COMP_TYPE": "AdditionalDiceOnDamage",
-    "enGB": "Adds <DiceValue> <DamageTypeDescription> on damage <FlagCondition: CheckWeaponType, CheckAbilityType, CheckSpellDescriptor, CheckEnergyDamageType>"
+    "enGB": "Adds <DiceValue> <DamageTypeDescription> on damage <FlagCondition: CheckWeaponType, CheckAbilityType, CheckSpellDescriptor, CheckEnergyDamageType>",
+    "frFR": "Ajoute <DiceValue> <DamageTypeDescription> aux dégâts <FlagCondition: CheckWeaponType, CheckAbilityType, CheckSpellDescriptor, CheckEnergyDamageType>",
+    "ruRU": "Добавляет <DiceValue> <DamageTypeDescription> к урону <FlagCondition: CheckWeaponType, CheckAbilityType, CheckSpellDescriptor, CheckEnergyDamageType>"
   },
   {
     "COMP_TYPE": "AdditionalDiceOnAttack",
-    "enGB": "Adds <Value> <DamageType> on attack <FlagCondition: OnlyOnFullAttack, OnlyOnFirstAttack, OnHit, CriticalHit, OnlySneakAttack, OnCharge, OnAttackOfOpportunity>"
+    "enGB": "Adds <Value> <DamageType> on attack <FlagCondition: OnlyOnFullAttack, OnlyOnFirstAttack, OnHit, CriticalHit, OnlySneakAttack, OnCharge, OnAttackOfOpportunity>",
+    "frFR": "Ajoute <Value> <DamageType> à l'attaque <FlagCondition: OnlyOnFullAttack, OnlyOnFirstAttack, OnHit, CriticalHit, OnlySneakAttack, OnCharge, OnAttackOfOpportunity>",
+    "ruRU": "Добавляет <Value> <DamageType> при атаке <FlagCondition: OnlyOnFullAttack, OnlyOnFirstAttack, OnHit, CriticalHit, OnlySneakAttack, OnCharge, OnAttackOfOpportunity>"
   },
   {
     "COMP_TYPE": "AdditionalSneakDamageOnHit",
-    "enGB": "Adds <PhysicalDamageDice> sneak damage <FlagCondition: OnlyNoDexToAC>"
+    "enGB": "Adds <PhysicalDamageDice> sneak damage <FlagCondition: OnlyNoDexToAC>",
+    "frFR": "Ajoute <PhysicalDamageDice> dégâts de précision <FlagCondition: OnlyNoDexToAC>",
+    "ruRU": "Добавляет <PhysicalDamageDice> урона от скрытой атаки <FlagCondition: OnlyNoDexToAC>"
   },
   {
     "COMP_TYPE": "AddMetamagicFeat",
-    "enGB": "Apply metamagic <Metamagic>"
+    "enGB": "Apply metamagic <Metamagic>",
+    "frFR": "Applique la métamagie <Metamagic>",
+    "ruRU": "Применяет метамагию <Metamagic>"
   },
   {
     "COMP_TYPE": "AddOutgoingDamageBonus",
-    "enGB": "Increase outgoing <DamageType> by <OriginalDamageFactor> <FlagCondition: Condition>"
+    "enGB": "Increase outgoing <DamageType> by <OriginalDamageFactor> <FlagCondition: Condition>",
+    "frFR": "Augmente les dégâts de <DamageType> sortants de <OriginalDamageFactor> <FlagCondition: Condition>",
+    "ruRU": "Увеличивает исходящий урон (<DamageType>) в <OriginalDamageFactor> раз <FlagCondition: Condition>"
   },
   {
     "COMP_TYPE": "AddSpellKnownTemporary",
-    "enGB": "Grants the spell <m_Spell> (Level <Level>) <FlagCondition: OnlySpontaneous>"
+    "enGB": "Grants the spell <m_Spell> (Level <Level>) <FlagCondition: OnlySpontaneous>",
+    "frFR": "Confère le sort <m_Spell> (Niveau <Level>) <FlagCondition: OnlySpontaneous>",
+    "ruRU": "Дарует заклинание <m_Spell> (<Level> ур.) <FlagCondition: OnlySpontaneous>"
   },
   {
     "COMP_TYPE": "AdvanceArmorStats",
-    "enGB": "Modifies armor: Max Dex <MaxDexBonusShift>, Check Penalty <ArmorCheckPenaltyShift>, Spell Failure <ArcaneSpellFailureShift>"
+    "enGB": "Modifies armor: Max Dex <MaxDexBonusShift>, Check Penalty <ArmorCheckPenaltyShift>, Spell Failure <ArcaneSpellFailureShift>",
+    "frFR": "Modifie l'armure : Max Dex <MaxDexBonusShift>, Malus de test <ArmorCheckPenaltyShift>, Échec de sort <ArcaneSpellFailureShift>",
+    "ruRU": "Изменяет параметры брони: Макс. Ловк. <MaxDexBonusShift>, Штраф за доспехи <ArmorCheckPenaltyShift>, Провал заклинаний <ArcaneSpellFailureShift>"
   },
   {
     "COMP_TYPE": "AllAttacksEnhancement",
-    "enGB": "+<Bonus> <Descriptor> enhancement bonus to all attacks"
+    "enGB": "+<Bonus> <Descriptor> enhancement bonus to all attacks",
+    "frFR": "Bonus d'altération de <Descriptor> de +<Bonus> à toutes les attaques",
+    "ruRU": "+<Bonus> (<Descriptor>) бонус усиления ко всем атакам"
   },
   {
     "COMP_TYPE": "AttackBonusConditional",
-    "enGB": "+<Bonus> <Descriptor> attack bonus <FlagCondition: Conditions>"
+    "enGB": "+<Bonus> <Descriptor> attack bonus <FlagCondition: Conditions>",
+    "frFR": "Bonus de <Descriptor> de +<Bonus> à l'attaque <FlagCondition: Conditions>",
+    "ruRU": "+<Bonus> (<Descriptor>) бонус к атаке <FlagCondition: Conditions>"
   },
   {
     "COMP_TYPE": "AttackOfOpportunityAttackBonus",
-    "enGB": "+<Bonus> <Descriptor> attack bonus on attacks of opportunity <FlagCondition: NotAttackOfOpportunity>"
+    "enGB": "+<Bonus> <Descriptor> attack bonus on attacks of opportunity <FlagCondition: NotAttackOfOpportunity>",
+    "frFR": "Bonus de <Descriptor> de +<Bonus> à l'attaque lors d'une attaque d'opportunité <FlagCondition: NotAttackOfOpportunity>",
+    "ruRU": "+<Bonus> (<Descriptor>) бонус к атаке при внеочередных атаках <FlagCondition: NotAttackOfOpportunity>"
   },
   {
     "COMP_TYPE": "AttackOfOpportunityDamageBonus",
-    "enGB": "Adds <DamageBonus> to damage on attacks of opportunity <FlagCondition: CheckWeaponRangeType>"
+    "enGB": "Adds <DamageBonus> to damage on attacks of opportunity <FlagCondition: CheckWeaponRangeType>",
+    "frFR": "Ajoute <DamageBonus> aux dégâts lors d'une attaque d'opportunité <FlagCondition: CheckWeaponRangeType>",
+    "ruRU": "Добавляет <DamageBonus> к урону при внеочередных атаках <FlagCondition: CheckWeaponRangeType>"
   },
   {
     "COMP_TYPE": "AttackStatReplacement",
-    "enGB": "Replaces attack stat with <ReplacementStat> <FlagCondition: CheckWeaponTypes>"
+    "enGB": "Replaces attack stat with <ReplacementStat> <FlagCondition: CheckWeaponTypes>",
+    "frFR": "Remplace la statistique d'attaque par <ReplacementStat> <FlagCondition: CheckWeaponTypes>",
+    "ruRU": "Заменяет характеристику атаки на <ReplacementStat> <FlagCondition: CheckWeaponTypes>"
   },
   {
     "COMP_TYPE": "AttackTypeAttackBonus",
-    "enGB": "+<AttackBonus> <Descriptor> attack bonus with <Type> weapons <FlagCondition: AllTypesExcept, CheckFact>"
+    "enGB": "+<AttackBonus> <Descriptor> attack bonus with <Type> weapons <FlagCondition: AllTypesExcept, CheckFact>",
+    "frFR": "Bonus de <Descriptor> de +<AttackBonus> à l'attaque avec les armes de type <Type> <FlagCondition: AllTypesExcept, CheckFact>",
+    "ruRU": "+<AttackBonus> (<Descriptor>) бонус к атаке оружием типа <Type> <FlagCondition: AllTypesExcept, CheckFact>"
   },
   {
     "COMP_TYPE": "AutoMetamagic",
-    "enGB": "Automatically apply <Metamagic> metamagic to <m_AllowedAbilities> <FlagCondition: School, Descriptor, MaxSpellLevel>"
+    "enGB": "Automatically apply <Metamagic> metamagic to <m_AllowedAbilities> <FlagCondition: School, Descriptor, MaxSpellLevel>",
+    "frFR": "Applique automatiquement la métamagie <Metamagic> à <m_AllowedAbilities> <FlagCondition: School, Descriptor, MaxSpellLevel>",
+    "ruRU": "Автоматически применяет метамагию <Metamagic> к <m_AllowedAbilities> <FlagCondition: School, Descriptor, MaxSpellLevel>"
   },
   {
     "COMP_TYPE": "BuffAllSavesBonus",
-    "enGB": "+<Value> <Descriptor> bonus to all saving throws"
+    "enGB": "+<Value> <Descriptor> bonus to all saving throws",
+    "frFR": "Bonus de <Descriptor> de +<Value> à tous les jets de sauvegarde",
+    "ruRU": "+<Value> (<Descriptor>) бонус ко всем спасброскам"
   },
   {
     "COMP_TYPE": "BuffAllSkillsBonus",
-    "enGB": "+<Value> <Descriptor> bonus to all skills <FlagCondition: Multiplier>"
+    "enGB": "+<Value> <Descriptor> bonus to all skills <FlagCondition: Multiplier>",
+    "frFR": "Bonus de <Descriptor> de +<Value> à toutes les compétences <FlagCondition: Multiplier>",
+    "ruRU": "+<Value> (<Descriptor>) бонус ко всем навыкам <FlagCondition: Multiplier>"
   },
   {
     "COMP_TYPE": "BuffContextStatBonus",
-    "enGB": "+<Value> <Descriptor> bonus to <Stat> <FlagCondition: HasMinimal>"
+    "enGB": "+<Value> <Descriptor> bonus to <Stat> <FlagCondition: HasMinimal>",
+    "frFR": "Bonus de <Descriptor> de +<Value> à <Stat> <FlagCondition: HasMinimal>",
+    "ruRU": "+<Value> (<Descriptor>) бонус к характеристике <Stat> <FlagCondition: HasMinimal>"
   },
   {
     "COMP_TYPE": "BuffDescriptorImmunity",
-    "enGB": "Immunity to effects with the descriptor: <Descriptor> <FlagCondition: CheckFact>"
+    "enGB": "Immunity to effects with the descriptor: <Descriptor> <FlagCondition: CheckFact>",
+    "frFR": "Immunité aux effets avec le descripteur : <Descriptor> <FlagCondition: CheckFact>",
+    "ruRU": "Иммунитет к эффектам с дескриптором: <Descriptor> <FlagCondition: CheckFact>"
   },
   {
     "COMP_TYPE": "BuffEnchantWornItem",
-    "enGB": "Enchant item in <Slot> with <m_EnchantmentBlueprint> <FlagCondition: AllWeapons>"
+    "enGB": "Enchant item in <Slot> with <m_EnchantmentBlueprint> <FlagCondition: AllWeapons>",
+    "frFR": "Enchante l'objet dans <Slot> avec <m_EnchantmentBlueprint> <FlagCondition: AllWeapons>",
+    "ruRU": "Наделяет предмет в слоте <Slot> чарами <m_EnchantmentBlueprint> <FlagCondition: AllWeapons>"
   },
   {
     "COMP_TYPE": "BuffMovementSpeed",
-    "enGB": "<Value> <Descriptor> bonus to movement speed <FlagCondition: CappedOnMultiplier, CappedMinimum>"
+    "enGB": "<Value> <Descriptor> bonus to movement speed <FlagCondition: CappedOnMultiplier, CappedMinimum>",
+    "frFR": "Bonus de <Descriptor> de <Value> à la vitesse de déplacement <FlagCondition: CappedOnMultiplier, CappedMinimum>",
+    "ruRU": "<Value> (<Descriptor>) бонус к скорости перемещения <FlagCondition: CappedOnMultiplier, CappedMinimum>"
   },
   {
     "COMP_TYPE": "ConcentrationBonus",
-    "enGB": "+<Value> bonus to concentration checks <FlagCondition: CheckFact>"
+    "enGB": "+<Value> bonus to concentration checks <FlagCondition: CheckFact>",
+    "frFR": "Bonus de +<Value> aux tests de concentration <FlagCondition: CheckFact>",
+    "ruRU": "+<Value> бонус к проверкам концентрации <FlagCondition: CheckFact>"
   },
   {
     "COMP_TYPE": "DamageBonusConditional",
-    "enGB": "+<Bonus> <Descriptor> damage bonus <FlagCondition: Conditions, OnlyWeaponDamage>"
+    "enGB": "+<Bonus> <Descriptor> damage bonus <FlagCondition: Conditions, OnlyWeaponDamage>",
+    "frFR": "Bonus de <Descriptor> de +<Bonus> aux dégâts <FlagCondition: Conditions, OnlyWeaponDamage>",
+    "ruRU": "+<Bonus> (<Descriptor>) бонус к урону <FlagCondition: Conditions, OnlyWeaponDamage>"
   },
   {
     "COMP_TYPE": "DamageOverTime",
-    "enGB": "Deals <Damage> <EnergyType> damage each round <FlagCondition: InstantStartTick>"
+    "enGB": "Deals <Damage> <EnergyType> damage each round <FlagCondition: InstantStartTick>",
+    "frFR": "Inflige <Damage> dégâts de <EnergyType> chaque round <FlagCondition: InstantStartTick>",
+    "ruRU": "Наносит <Damage> урона (<EnergyType>) каждый раунд <FlagCondition: InstantStartTick>"
   },
   {
     "COMP_TYPE": "DiceDamageBonusOnSpell",
-    "enGB": "+<Value> damage per die of <m_Spells> <FlagCondition: UseContextBonus>"
+    "enGB": "+<Value> damage per die of <m_Spells> <FlagCondition: UseContextBonus>",
+    "frFR": "+<Value> dégâts par dé de <m_Spells> <FlagCondition: UseContextBonus>",
+    "ruRU": "+<Value> урона за каждую кость заклинания <m_Spells> <FlagCondition: UseContextBonus>"
   },
   {
     "COMP_TYPE": "DispelCasterLevelCheckBonus",
-    "enGB": "+<Value> bonus to caster level checks when dispelling"
+    "enGB": "+<Value> bonus to caster level checks when dispelling",
+    "frFR": "Bonus de +<Value> aux tests de niveau de lanceur lors d'une dissipation",
+    "ruRU": "+<Value> бонус к проверкам уровня заклинателя при развенчании магии"
   },
   {
     "COMP_TYPE": "Evasion",
-    "enGB": "Grants Evasion on <SavingThrow> saves"
+    "enGB": "Grants Evasion on <SavingThrow> saves",
+    "frFR": "Confère l'Esquive totale aux jets de <SavingThrow>",
+    "ruRU": "Дарует Уклонение для спасбросков типа <SavingThrow>"
   },
   {
     "COMP_TYPE": "IncreaseCasterLevel",
-    "enGB": "+<Value> <Descriptor> bonus to Caster Level"
+    "enGB": "+<Value> <Descriptor> bonus to Caster Level",
+    "frFR": "Bonus de <Descriptor> de +<Value> au niveau de lanceur",
+    "ruRU": "+<Value> (<Descriptor>) бонус к уровню заклинателя"
   },
   {
     "COMP_TYPE": "IncreaseCastersSavingThrowTypeDC",
-    "enGB": "+<BonusDC> bonus to DC of spells targeting <Type> saves"
+    "enGB": "+<BonusDC> bonus to DC of spells targeting <Type> saves",
+    "frFR": "Bonus de +<BonusDC> au DD des sorts ciblant les jets de <Type>",
+    "ruRU": "+<BonusDC> бонус к сложности заклинаний, требующих спасброска типа <Type>"
   },
   {
     "COMP_TYPE": "IncreaseSpellSchoolDC",
-    "enGB": "+<BonusDC> <Descriptor> bonus to DC of <School> spells"
+    "enGB": "+<BonusDC> <Descriptor> bonus to DC of <School> spells",
+    "frFR": "Bonus de <Descriptor> de +<BonusDC> au DD des sorts de l'école <School>",
+    "ruRU": "+<BonusDC> (<Descriptor>) бонус к сложности заклинаний школы <School>"
   },
   {
     "COMP_TYPE": "IncreaseSpellSchoolCasterLevel",
-    "enGB": "+<BonusLevel> <Descriptor> bonus to Caster Level of <School> spells"
+    "enGB": "+<BonusLevel> <Descriptor> bonus to Caster Level of <School> spells",
+    "frFR": "Bonus de <Descriptor> de +<BonusLevel> au niveau de lanceur des sorts de l'école <School>",
+    "ruRU": "+<BonusLevel> (<Descriptor>) бонус к уровню заклинателя для заклинаний школы <School>"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstSchool",
-    "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <School> spells"
+    "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <School> spells",
+    "frFR": "Bonus de <ModifierDescriptor> de +<Value> aux jets de sauvegarde contre les sorts de l'école <School>",
+    "ruRU": "+<Value> (<ModifierDescriptor>) бонус к спасброскам против заклинаний школы <School>"
   },
   {
     "COMP_TYPE": "SavingThrowContextBonusAgainstDescriptor",
-    "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <SpellDescriptor> effects"
+    "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <SpellDescriptor> effects",
+    "frFR": "Bonus de <ModifierDescriptor> de +<Value> aux jets de sauvegarde contre les effets de type <SpellDescriptor>",
+    "ruRU": "+<Value> (<ModifierDescriptor>) бонус к спасброскам против эффектов типа <SpellDescriptor>"
   },
   {
     "COMP_TYPE": "IncreaseSpellDescriptorCasterLevel",
-    "enGB": "+<BonusCasterLevel> <ModifierDescriptor> bonus to Caster Level of <Descriptor> spells <FlagCondition: SpellsOnly>"
+    "enGB": "+<BonusCasterLevel> <ModifierDescriptor> bonus to Caster Level of <Descriptor> spells <FlagCondition: SpellsOnly>",
+    "frFR": "Bonus de <ModifierDescriptor> de +<BonusCasterLevel> au niveau de lanceur des sorts de type <Descriptor> <FlagCondition: SpellsOnly>",
+    "ruRU": "+<BonusCasterLevel> (<ModifierDescriptor>) бонус к уровню заклинателя для заклинаний типа <Descriptor> <FlagCondition: SpellsOnly>"
   },
   {
     "COMP_TYPE": "IncreaseSpellDescriptorDC",
-    "enGB": "+<BonusDC> <ModifierDescriptor> bonus to DC of <Descriptor> spells <FlagCondition: SpellsOnly>"
+    "enGB": "+<BonusDC> <ModifierDescriptor> bonus to DC of <Descriptor> spells <FlagCondition: SpellsOnly>",
+    "frFR": "Bonus de <ModifierDescriptor> de +<BonusDC> au DD des sorts de type <Descriptor> <FlagCondition: SpellsOnly>",
+    "ruRU": "+<BonusDC> (<ModifierDescriptor>) бонус к сложности заклинаний типа <Descriptor> <FlagCondition: SpellsOnly>"
   },
   {
     "COMP_TYPE": "IncreaseSpellContextDescriptorDC",
-    "enGB": "+<Value> <ModifierDescriptor> bonus to DC of <Descriptor> spells <FlagCondition: SpellsOnly>"
+    "enGB": "+<Value> <ModifierDescriptor> bonus to DC of <Descriptor> spells <FlagCondition: SpellsOnly>",
+    "frFR": "Bonus de <ModifierDescriptor> de +<Value> au DD des sorts de type <Descriptor> <FlagCondition: SpellsOnly>",
+    "ruRU": "+<Value> (<ModifierDescriptor>) бонус к сложности заклинаний типа <Descriptor> <FlagCondition: SpellsOnly>"
   },
   {
     "COMP_TYPE": "SpellPenetrationBonus",
-    "enGB": "+<Value> <Descriptor> bonus to spell penetration checks <FlagCondition: CheckFact>"
+    "enGB": "+<Value> <Descriptor> bonus to spell penetration checks <FlagCondition: CheckFact>",
+    "frFR": "Bonus de <Descriptor> de +<Value> aux tests de pénétration magique <FlagCondition: CheckFact>",
+    "ruRU": "+<Value> (<Descriptor>) бонус к проверкам на преодоление устойчивости к магии <FlagCondition: CheckFact>"
   },
   {
     "COMP_TYPE": "TTAddDamageResistancePhysical",
-    "enGB": "DR <Value>/<FlagCondition: BypassedByMaterial, BypassedByMagic>"
+    "enGB": "DR <Value>/<FlagCondition: BypassedByMaterial, BypassedByMagic>",
+    "frFR": "RD <Value>/<FlagCondition: BypassedByMaterial, BypassedByMagic>",
+    "ruRU": "ПЗ <Value>/<FlagCondition: BypassedByMaterial, BypassedByMagic>"
   },
   {
     "COMP_TYPE": "WeaponAttackTypeDamageBonus",
-    "enGB": "+<Value> bonus to damage of <Type> weapons"
+    "enGB": "+<Value> bonus to damage of <Type> weapons",
+    "frFR": "+<Value> bonus aux dégâts des armes de type <Type>",
+    "ruRU": "+<Value> бонус к урону оружия типа <Type>"
   },
   {
     "COMP_TYPE": "WeaponCategoryAttackBonus",
-    "enGB": "+<AttackBonus> <Descriptor> bonus to attack rolls with <Category>"
+    "enGB": "+<AttackBonus> <Descriptor> bonus to attack rolls with <Category>",
+    "frFR": "Bonus de <Descriptor> de +<AttackBonus> à l'attaque avec : <Category>",
+    "ruRU": "+<AttackBonus> (<Descriptor>) бонус к атаке оружием категории <Category>"
   },
   {
     "COMP_TYPE": "WeaponCriticalEdgeIncreaseStackable",
-    "enGB": "Threat range of <IncludeCategories> is increased by <Value>"
+    "enGB": "Threat range of <IncludeCategories> is increased by <Value>",
+    "frFR": "La zone de critique de <IncludeCategories> est augmentée de <Value>",
+    "ruRU": "Диапазон критической угрозы для <IncludeCategories> увеличивается на <Value>"
   },
   {
     "COMP_TYPE": "WeaponParametersAttackBonus",
-    "enGB": "+<AttackBonus> <Descriptor> bonus to attack rolls with <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>"
+    "enGB": "+<AttackBonus> <Descriptor> bonus to attack rolls with <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>",
+    "frFR": "Bonus de <Descriptor> de +<AttackBonus> à l'attaque avec <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>",
+    "ruRU": "+<AttackBonus> (<Descriptor>) бонус к атаке оружием <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>"
   },
   {
     "COMP_TYPE": "WeaponParametersDamageBonus",
-    "enGB": "+<DamageBonus> bonus to damage rolls with <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>"
+    "enGB": "+<DamageBonus> bonus to damage rolls with <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>",
+    "frFR": "Bonus de +<DamageBonus> aux dégâts avec <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>",
+    "ruRU": "+<DamageBonus> бонус к урону оружием <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>"
   },
   {
     "COMP_TYPE": "WeaponTypeDamageBonus",
-    "enGB": "+<DamageBonus> bonus to damage rolls with <m_WeaponType>"
+    "enGB": "+<DamageBonus> bonus to damage rolls with <m_WeaponType>",
+    "frFR": "Bonus de +<DamageBonus> aux dégâts avec les armes de type <m_WeaponType>",
+    "ruRU": "+<DamageBonus> бонус к урону оружием типа <m_WeaponType>"
   },
   {
     "COMP_TYPE": "IncreaseSpellDC",
-    "enGB": "add <BonusDC> to the DC of <m_spell.GUID>"
+    "enGB": "add <BonusDC> to the DC of <m_spell.GUID>",
+    "frFR": "ajoute <BonusDC> au DD de <m_spell.GUID>",
+    "ruRU": "добавляет <BonusDC> к сложности заклинания <m_spell.GUID>"
   },
   {
     "COMP_TYPE": "AddSpellsPerDay",
-    "enGB": "Add <Amount> of spellslot for spell of level <Levels[]>"
+    "enGB": "Add <Amount> of spellslot for spell of level <Levels[]>",
+    "frFR": "Ajoute <Amount> emplacements de sorts pour les sorts de niveau <Levels[]>",
+    "ruRU": "Добавляет <Amount> ячеек заклинаний для заклинаний <Levels[]> уровня"
   },
   {
     "COMP_TYPE": "ACBonusAgainstAttacks",
-    "enGB": "+<Value> <Descriptor> bonus to AC against <FlagCondition: AgainstMeleeOnly, AgainstRangedOnly, OnlySneakAttack, NotTouch, IsTouch, OnlyAttacksOfOpportunity>"
+    "enGB": "+<Value> <Descriptor> bonus to AC against <FlagCondition: AgainstMeleeOnly, AgainstRangedOnly, OnlySneakAttack, NotTouch, IsTouch, OnlyAttacksOfOpportunity>",
+    "frFR": "Bonus de <Descriptor> de +<Value> à la CA contre : <FlagCondition: AgainstMeleeOnly, AgainstRangedOnly, OnlySneakAttack, NotTouch, IsTouch, OnlyAttacksOfOpportunity>",
+    "ruRU": "+<Value> (<Descriptor>) бонус к КЗ против <FlagCondition: AgainstMeleeOnly, AgainstRangedOnly, OnlySneakAttack, NotTouch, IsTouch, OnlyAttacksOfOpportunity>"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstAlignment",
-    "enGB": "+<Value> <Descriptor> bonus to saving throws against <Alignment>"
+    "enGB": "+<Value> <Descriptor> bonus to saving throws against <Alignment>",
+    "frFR": "Bonus de <Descriptor> de +<Value> aux jets de sauvegarde contre <Alignment>",
+    "ruRU": "+<Value> (<Descriptor>) бонус к спасброскам против существ с мировоззрением <Alignment>"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstDescriptor",
-    "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <SpellDescriptor>"
+    "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <SpellDescriptor>",
+    "frFR": "Bonus de <ModifierDescriptor> de +<Value> aux jets de sauvegarde contre <SpellDescriptor>",
+    "ruRU": "+<Value> (<ModifierDescriptor>) бонус к спасброскам против эффектов типа <SpellDescriptor>"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstSpecificSpells",
-    "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <m_Spells[]>"
+    "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <m_Spells[]>",
+    "frFR": "Bonus de <ModifierDescriptor> de +<Value> aux jets de sauvegarde contre <m_Spells[]>",
+    "ruRU": "+<Value> (<ModifierDescriptor>) бонус к спасброскам против заклинаний <m_Spells[]>"
   },
   {
     "COMP_TYPE": "AbilityAoERadius",
-    "enGB": "Affects all units in <m_Radius> radius (<m_TargetType>)"
+    "enGB": "Affects all units in <m_Radius> radius (<m_TargetType>)",
+    "frFR": "Affecte toutes les unités dans un rayon de <m_Radius> (<m_TargetType>)",
+    "ruRU": "Затрагивает всех существ в радиусе <m_Radius> (<m_TargetType>)"
   },
   {
     "COMP_TYPE": "AbilityDeliverChain",
-    "enGB": "Chains to <TargetsCount> additional targets within <Radius> <FlagCondition: m_IgnoreFirst, m_UsedTargetsAgain>"
+    "enGB": "Chains to <TargetsCount> additional targets within <Radius> <FlagCondition: m_IgnoreFirst, m_UsedTargetsAgain>",
+    "frFR": "Se propage à <TargetsCount> cibles additionnelles dans un rayon de <Radius> <FlagCondition: m_IgnoreFirst, m_UsedTargetsAgain>",
+    "ruRU": "Переносится на <TargetsCount> доп. целей в радиусе <Radius> <FlagCondition: m_IgnoreFirst, m_UsedTargetsAgain>"
   },
   {
     "COMP_TYPE": "AbilityDeliverDelay",
-    "enGB": "Delayed by <DelaySeconds> seconds"
+    "enGB": "Delayed by <DelaySeconds> seconds",
+    "frFR": "Retardé de <DelaySeconds> secondes",
+    "ruRU": "Задержка: <DelaySeconds> сек."
   },
   {
     "COMP_TYPE": "AbilityDeliverProjectile",
-    "enGB": "Fires <m_Projectiles> projectiles <FlagCondition: NeedAttackRoll, Type, m_Length>"
+    "enGB": "Fires <m_Projectiles> projectiles <FlagCondition: NeedAttackRoll, Type, m_Length>",
+    "frFR": "Tire <m_Projectiles> projectiles <FlagCondition: NeedAttackRoll, Type, m_Length>",
+    "ruRU": "Выпускает <m_Projectiles> снарядов <FlagCondition: NeedAttackRoll, Type, m_Length>"
   },
   {
     "COMP_TYPE": "AbilityDeliverTouch",
-    "enGB": "Delivered via touch attack (weapon: <m_TouchWeapon>)"
+    "enGB": "Delivered via touch attack (weapon: <m_TouchWeapon>)",
+    "frFR": "Délivré via une attaque de contact (arme : <m_TouchWeapon>)",
+    "ruRU": "Доставляется атакой касанием (оружие: <m_TouchWeapon>)"
   },
   {
     "COMP_TYPE": "AbilityEffectMiss",
-    "enGB": "On miss: <MissAction>"
+    "enGB": "On miss: <MissAction>",
+    "frFR": "En cas d'échec : <MissAction>",
+    "ruRU": "При промахе: <MissAction>"
   },
   {
     "COMP_TYPE": "AbilityEffectRunAction",
-    "enGB": "Target must make a <SavingThrowType> save or <Actions> <FlagCondition: IgnoreCaster>"
+    "enGB": "Target must make a <SavingThrowType> save or <Actions> <FlagCondition: IgnoreCaster>",
+    "frFR": "La cible doit réussir un jet de <SavingThrowType> ou <Actions> <FlagCondition: IgnoreCaster>",
+    "ruRU": "Цель должна совершить спасбросок <SavingThrowType>, иначе <Actions> <FlagCondition: IgnoreCaster>"
   },
   {
     "COMP_TYPE": "AbilityResourceLogic",
-    "enGB": "Requires <Amount> <m_RequiredResource> <FlagCondition: CostIsCustom>"
+    "enGB": "Requires <Amount> <m_RequiredResource> <FlagCondition: CostIsCustom>",
+    "frFR": "Requiert <Amount> util. de <m_RequiredResource> <FlagCondition: CostIsCustom>",
+    "ruRU": "Требует <Amount> ед. ресурса <m_RequiredResource> <FlagCondition: CostIsCustom>"
   },
   {
     "COMP_TYPE": "AbilityScoreCheckBonus",
-    "enGB": "+<Bonus> <Descriptor> bonus to <Stat> checks"
+    "enGB": "+<Bonus> <Descriptor> bonus to <Stat> checks",
+    "frFR": "Bonus de <Descriptor> de +<Bonus> aux tests de <Stat>",
+    "ruRU": "+<Bonus> (<Descriptor>) бонус к проверкам характеристики <Stat>"
   },
   {
     "COMP_TYPE": "AbilitySpawnFx",
-    "enGB": "Visual Effect: <PrefabLink> at <Anchor> (<Time>) <FlagCondition: Delay>"
+    "enGB": "Visual Effect: <PrefabLink> at <Anchor> (<Time>) <FlagCondition: Delay>",
+    "frFR": "Effet Visuel : <PrefabLink> sur <Anchor> (<Time>) <FlagCondition: Delay>",
+    "ruRU": "Визуальный эффект: <PrefabLink> в <Anchor> (<Time>) <FlagCondition: Delay>"
   },
   {
     "COMP_TYPE": "AbilityTargetHasFact",
-    "enGB": "Target <FlagCondition: Inverted> has <m_CheckedFacts> <FlagCondition: FromCaster>"
+    "enGB": "Target <FlagCondition: Inverted> has <m_CheckedFacts> <FlagCondition: FromCaster>",
+    "frFR": "La cible <FlagCondition: Inverted> possède <m_CheckedFacts> <FlagCondition: FromCaster>",
+    "ruRU": "Цель <FlagCondition: Inverted> обладает особенностью <m_CheckedFacts> <FlagCondition: FromCaster>"
   },
   {
     "COMP_TYPE": "AbilityTargetsAround",
-    "enGB": "Affects all <m_TargetType> within <m_Radius> radius <FlagCondition: m_IncludeDead>"
+    "enGB": "Affects all <m_TargetType> within <m_Radius> radius <FlagCondition: m_IncludeDead>",
+    "frFR": "Affecte toutes les <m_TargetType> dans un rayon de <m_Radius> <FlagCondition: m_IncludeDead>",
+    "ruRU": "Затрагивает всех существ (<m_TargetType>) в радиусе <m_Radius> <FlagCondition: m_IncludeDead>"
   },
   {
     "COMP_TYPE": "AbilityUsagesCountTrigger",
-    "enGB": "Every <m_TriggerCount> usages: <Action>"
+    "enGB": "Every <m_TriggerCount> usages: <Action>",
+    "frFR": "Toutes les <m_TriggerCount> utilisations : <Action>",
+    "ruRU": "Каждые <m_TriggerCount> исп.: <Action>"
   },
   {
     "COMP_TYPE": "AbilityUseOnRest",
-    "enGB": "Used during rest for <Type> (Value: <BaseValue>)"
+    "enGB": "Used during rest for <Type> (Value: <BaseValue>)",
+    "frFR": "Utilisé pendant le repos pour : <Type> (Valeur : <BaseValue>)",
+    "ruRU": "Используется во время отдыха для <Type> (Значение: <BaseValue>)"
   },
   {
     "COMP_TYPE": "ACBonusAgainstBuffOwner",
-    "enGB": "+<Bonus> <Descriptor> bonus to AC against owners of <m_CheckedBuff> <FlagCondition: CheckAlignment>"
+    "enGB": "+<Bonus> <Descriptor> bonus to AC against owners of <m_CheckedBuff> <FlagCondition: CheckAlignment>",
+    "frFR": "Bonus de <Descriptor> de +<Bonus> à la CA contre les porteurs de <m_CheckedBuff> <FlagCondition: CheckAlignment>",
+    "ruRU": "+<Bonus> (<Descriptor>) бонус к КЗ против существ под эффектом <m_CheckedBuff> <FlagCondition: CheckAlignment>"
   },
   {
     "COMP_TYPE": "ACBonusAgainstFactOwner",
-    "enGB": "+<Bonus> <Descriptor> bonus to AC against <FlagCondition: NoFact> owners of <m_CheckedFact>"
+    "enGB": "+<Bonus> <Descriptor> bonus to AC against <FlagCondition: NoFact> owners of <m_CheckedFact>",
+    "frFR": "Bonus de <Descriptor> de +<Bonus> à la CA contre les possesseurs <FlagCondition: NoFact> de <m_CheckedFact>",
+    "ruRU": "+<Bonus> (<Descriptor>) бонус к КЗ против существ <FlagCondition: NoFact> с особенностью <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "ACBonusAgainstSize",
-    "enGB": "+<Value> <Descriptor> bonus to AC against <Size> enemies <FlagCondition: SizeDelta>"
+    "enGB": "+<Value> <Descriptor> bonus to AC against <Size> enemies <FlagCondition: SizeDelta>",
+    "frFR": "Bonus de <Descriptor> de +<Value> à la CA contre les ennemis de taille <Size> <FlagCondition: SizeDelta>",
+    "ruRU": "+<Value> (<Descriptor>) бонус к КЗ против врагов размера <Size> <FlagCondition: SizeDelta>"
   },
   {
     "COMP_TYPE": "ACBonusAgainstSpellsWithDescriptor",
-    "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against spells with <SpellDescriptor> descriptor"
+    "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against spells with <SpellDescriptor> descriptor",
+    "frFR": "Bonus de <Descriptor> de +<ArmorClassBonus> à la CA contre les sorts avec le descripteur <SpellDescriptor>",
+    "ruRU": "+<ArmorClassBonus> (<Descriptor>) бонус к КЗ против заклинаний с дескриптором <SpellDescriptor>"
   },
   {
     "COMP_TYPE": "ACBonusAgainstWeaponCategory",
-    "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against <Category> weapons"
+    "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against <Category> weapons",
+    "frFR": "Bonus de <Descriptor> de +<ArmorClassBonus> à la CA contre les armes de type <Category>",
+    "ruRU": "+<ArmorClassBonus> (<Descriptor>) бонус к КЗ против оружия категории <Category>"
   },
   {
     "COMP_TYPE": "ACBonusAgainstWeaponGroup",
-    "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against weapons from <FighterGroup> group"
+    "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against weapons from <FighterGroup> group",
+    "frFR": "Bonus de <Descriptor> de +<ArmorClassBonus> à la CA contre les armes du groupe <FighterGroup>",
+    "ruRU": "+<ArmorClassBonus> (<Descriptor>) бонус к КЗ против оружия из группы <FighterGroup>"
   },
   {
     "COMP_TYPE": "ACBonusAgainstWeaponSubcategory",
-    "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against <SubCategory> weapons"
+    "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against <SubCategory> weapons",
+    "frFR": "Bonus de <Descriptor> de +<ArmorClassBonus> à la CA contre les armes de la sous-catégorie <SubCategory>",
+    "ruRU": "+<ArmorClassBonus> (<Descriptor>) бонус к КЗ против оружия подкатегории <SubCategory>"
   },
   {
     "COMP_TYPE": "ACBonusAgainstWeaponType",
-    "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against <m_Type> weapons"
+    "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against <m_Type> weapons",
+    "frFR": "Bonus de <Descriptor> de +<ArmorClassBonus> à la CA contre les armes de type <m_Type>",
+    "ruRU": "+<ArmorClassBonus> (<Descriptor>) бонус к КЗ против оружия типа <m_Type>"
   },
   {
     "COMP_TYPE": "ACContextBonusAgainstFactOwner",
-    "enGB": "+<Bonus> <Descriptor> bonus to AC against <FlagCondition: NoFact> owners of <m_CheckedFact> (<Alignment>)"
+    "enGB": "+<Bonus> <Descriptor> bonus to AC against <FlagCondition: NoFact> owners of <m_CheckedFact> (<Alignment>)",
+    "frFR": "Bonus de <Descriptor> de +<Bonus> à la CA contre les possesseurs <FlagCondition: NoFact> de <m_CheckedFact> (<Alignment>)",
+    "ruRU": "+<Bonus> (<Descriptor>) бонус к КЗ против существ <FlagCondition: NoFact> с особенностью <m_CheckedFact> (<Alignment>)"
   },
   {
     "COMP_TYPE": "AddAbilityResources",
-    "enGB": "Increases <m_Resource> uses per day by <Amount> <FlagCondition: UseThisAsResource>"
+    "enGB": "Increases <m_Resource> uses per day by <Amount> <FlagCondition: UseThisAsResource>",
+    "frFR": "Augmente les utilisations par jour de <m_Resource> de <Amount> <FlagCondition: UseThisAsResource>",
+    "ruRU": "Увеличивает число использований <m_Resource> в день на <Amount> <FlagCondition: UseThisAsResource>"
   },
   {
     "COMP_TYPE": "AddAbilityResourceTrigger",
-    "enGB": "When <m_Resource> is used: <Action> <FlagCondition: m_AlsoTriggerByIncrease>"
+    "enGB": "When <m_Resource> is used: <Action> <FlagCondition: m_AlsoTriggerByIncrease>",
+    "frFR": "Quand <m_Resource> est utilisé : <Action> <FlagCondition: m_AlsoTriggerByIncrease>",
+    "ruRU": "При использовании <m_Resource>: <Action> <FlagCondition: m_AlsoTriggerByIncrease>"
   },
   {
     "COMP_TYPE": "AddAbilityUseTargetTrigger",
-    "enGB": "When target is hit by <m_Spells>: <Action> <FlagCondition: ToCaster, TriggerOnEffectApply>"
+    "enGB": "When target is hit by <m_Spells>: <Action> <FlagCondition: ToCaster, TriggerOnEffectApply>",
+    "frFR": "Quand la cible est touchée par <m_Spells> : <Action> <FlagCondition: ToCaster, TriggerOnEffectApply>",
+    "ruRU": "При попадании <m_Spells> по цели: <Action> <FlagCondition: ToCaster, TriggerOnEffectApply>"
   },
   {
     "COMP_TYPE": "AddAbilityUseTrigger",
-    "enGB": "When using <m_Ability>: <Action> <FlagCondition: AfterCast, ActionsOnTarget, FromSpellbook, MinSpellLevel, CheckDescriptor, CheckAoE, CheckSpellSchool, CheckRange, CheckSourceItemType, OnlyOnce>"
+    "enGB": "When using <m_Ability>: <Action> <FlagCondition: AfterCast, ActionsOnTarget, FromSpellbook, MinSpellLevel, CheckDescriptor, CheckAoE, CheckSpellSchool, CheckRange, CheckSourceItemType, OnlyOnce>",
+    "frFR": "Lors de l'utilisation de <m_Ability> : <Action> <FlagCondition: AfterCast, ActionsOnTarget, FromSpellbook, MinSpellLevel, CheckDescriptor, CheckAoE, CheckSpellSchool, CheckRange, CheckSourceItemType, OnlyOnce>",
+    "ruRU": "При использовании способности <m_Ability>: <Action> <FlagCondition: AfterCast, ActionsOnTarget, FromSpellbook, MinSpellLevel, CheckDescriptor, CheckAoE, CheckSpellSchool, CheckRange, CheckSourceItemType, OnlyOnce>"
   },
   {
     "COMP_TYPE": "AddAdditionalLimb",
-    "enGB": "Grants an additional natural attack with <m_Weapon>"
+    "enGB": "Grants an additional natural attack with <m_Weapon>",
+    "frFR": "Confère une attaque naturelle additionnelle avec : <m_Weapon>",
+    "ruRU": "Дарует доп. естественную атаку (<m_Weapon>)"
   },
   {
     "COMP_TYPE": "AddAreaEffect",
-    "enGB": "Grants an aura of <m_AreaEffect>"
+    "enGB": "Grants an aura of <m_AreaEffect>",
+    "frFR": "Confère une aura de <m_AreaEffect>",
+    "ruRU": "Дарует ауру (<m_AreaEffect>)"
   },
   {
     "COMP_TYPE": "AddBuffOnCombatStart",
-    "enGB": "At the start of combat, gain <m_Feature> <FlagCondition: CheckParty>"
+    "enGB": "At the start of combat, gain <m_Feature> <FlagCondition: CheckParty>",
+    "frFR": "Au début du combat, gagne <m_Feature> <FlagCondition: CheckParty>",
+    "ruRU": "В начале боя дарует <m_Feature> <FlagCondition: CheckParty>"
   },
   {
     "COMP_TYPE": "AddCasterLevelForAbility",
-    "enGB": "+<Bonus> <Descriptor> bonus to caster level for <m_Spell>"
+    "enGB": "+<Bonus> <Descriptor> bonus to caster level for <m_Spell>",
+    "frFR": "Bonus de <Descriptor> de +<Bonus> au niveau de lanceur pour <m_Spell>",
+    "ruRU": "+<Bonus> (<Descriptor>) бонус к уровню заклинателя для способности <m_Spell>"
   },
   {
     "COMP_TYPE": "AddCasterLevelForSpellbook",
-    "enGB": "+<Bonus> <Descriptor> bonus to caster level for <m_Spellbooks>"
+    "enGB": "+<Bonus> <Descriptor> bonus to caster level for <m_Spellbooks>",
+    "frFR": "Bonus de <Descriptor> de +<Bonus> au niveau de lanceur pour <m_Spellbooks>",
+    "ruRU": "+<Bonus> (<Descriptor>) бонус к уровню заклинателя для книги заклинаний <m_Spellbooks>"
   },
   {
     "COMP_TYPE": "AddCondition",
-    "enGB": "Grants <Condition> condition"
+    "enGB": "Grants <Condition> condition",
+    "frFR": "Confère l'état : <Condition>",
+    "ruRU": "Дарует состояние: <Condition>"
   },
   {
     "COMP_TYPE": "AddConditionalWeaponDamageBonus",
-    "enGB": "+<Value> <Descriptor> damage bonus to <RangeType> <Category> attacks"
+    "enGB": "+<Value> <Descriptor> damage bonus to <RangeType> <Category> attacks",
+    "frFR": "Bonus de <Descriptor> de +<Value> aux dégâts avec les attaques de type <RangeType> (<Category>)",
+    "ruRU": "+<Value> (<Descriptor>) бонус к урону <RangeType> атак оружием категории <Category>"
   },
   {
     "COMP_TYPE": "AddConditionImmunity",
-    "enGB": "Immunity to <Condition>"
+    "enGB": "Immunity to <Condition>",
+    "frFR": "Immunité à l'état : <Condition>",
+    "ruRU": "Иммунитет к состоянию: <Condition>"
   },
   {
     "COMP_TYPE": "AddConditionTrigger",
-    "enGB": "When <Conditions> is <m_TriggerType>: <Action>"
+    "enGB": "When <Conditions> is <m_TriggerType>: <Action>",
+    "frFR": "Quand <Conditions> est <m_TriggerType> : <Action>",
+    "ruRU": "Когда <Conditions> становится <m_TriggerType>: <Action>"
   },
   {
     "COMP_TYPE": "AddContextStatBonus",
-    "enGB": "+<Value> <Descriptor> bonus to <Stat> <FlagCondition: Multiplier>"
+    "enGB": "+<Value> <Descriptor> bonus to <Stat> <FlagCondition: Multiplier>",
+    "frFR": "Bonus de <Descriptor> de +<Value> à <Stat> <FlagCondition: Multiplier>",
+    "ruRU": "+<Value> (<Descriptor>) бонус к характеристике <Stat> <FlagCondition: Multiplier>"
   },
   {
     "COMP_TYPE": "AddCumulativeDamageBonusX3",
-    "enGB": "Damage increases with each consecutive hit (+1 per hit) <FlagCondition: OnlyNaturalAttacks>"
+    "enGB": "Damage increases with each consecutive hit (+1 per hit) <FlagCondition: OnlyNaturalAttacks>",
+    "frFR": "Les dégâts augmentent avec chaque coup consécutif (+1 par coup) <FlagCondition: OnlyNaturalAttacks>",
+    "ruRU": "Урон растет с каждым последовательным попаданием (+1 за попадание) <FlagCondition: OnlyNaturalAttacks>"
   },
   {
     "COMP_TYPE": "AddEnergyDamageDivisor",
-    "enGB": "Damage from <AffectedEnergyType> is halved"
+    "enGB": "Damage from <AffectedEnergyType> is halved",
+    "frFR": "Les dégâts de <AffectedEnergyType> sont divisés par deux",
+    "ruRU": "Урон типа <AffectedEnergyType> уменьшается вдвое"
   },
   {
     "COMP_TYPE": "AddEnergyDamageImmunity",
-    "enGB": "Immunity to <EnergyType> <FlagCondition: HealOnDamage>"
+    "enGB": "Immunity to <EnergyType> <FlagCondition: HealOnDamage>",
+    "frFR": "Immunité à : <EnergyType> <FlagCondition: HealOnDamage>",
+    "ruRU": "Иммунитет к типу урона <EnergyType> <FlagCondition: HealOnDamage>"
   },
   {
     "COMP_TYPE": "AddEnergyDamageTrigger",
-    "enGB": "When taking <DamageType> damage: <Actions> <FlagCondition: SpellsOnly>"
+    "enGB": "When taking <DamageType> damage: <Actions> <FlagCondition: SpellsOnly>",
+    "frFR": "En recevant des dégâts de <DamageType> : <Actions> <FlagCondition: SpellsOnly>",
+    "ruRU": "При получении урона типа <DamageType>: <Actions> <FlagCondition: SpellsOnly>"
   },
   {
     "COMP_TYPE": "AddEnergyImmunity",
-    "enGB": "Immunity to <Type>"
+    "enGB": "Immunity to <Type>",
+    "frFR": "Immunité à : <Type>",
+    "ruRU": "Иммунитет к <Type>"
   },
   {
     "COMP_TYPE": "AddEnergyVulnerability",
-    "enGB": "Vulnerability (+50% damage) to <Type>"
+    "enGB": "Vulnerability (+50% damage) to <Type>",
+    "frFR": "Vulnérabilité (+50% dégâts) à : <Type>",
+    "ruRU": "Уязвимость (+50% урона) к <Type>"
   },
   {
     "COMP_TYPE": "AddFactContextActions",
-    "enGB": "Action on: <FlagCondition: Activated, Deactivated, NewRound>"
+    "enGB": "Action on: <FlagCondition: Activated, Deactivated, NewRound>",
+    "frFR": "Action lors de : <FlagCondition: Activated, Deactivated, NewRound>",
+    "ruRU": "Действие при: <FlagCondition: Activated, Deactivated, NewRound>"
   },
   {
     "COMP_TYPE": "AddFactIfArchetype",
-    "enGB": "Grants <m_Feature> if the owner is a <m_CharacterClass> (<m_Archetype>)"
+    "enGB": "Grants <m_Feature> if the owner is a <m_CharacterClass> (<m_Archetype>)",
+    "frFR": "Confère <m_Feature> si le possesseur est un <m_CharacterClass> (<m_Archetype>)",
+    "ruRU": "Дарует <m_Feature>, если владелец — <m_CharacterClass> (<m_Archetype>)"
   },
   {
     "COMP_TYPE": "AddFacts",
-    "enGB": "Grants the following facts: <m_Facts> <FlagCondition: CasterLevel>"
+    "enGB": "Grants the following facts: <m_Facts> <FlagCondition: CasterLevel>",
+    "frFR": "Confère les dons/capacités suivants : <m_Facts> <FlagCondition: CasterLevel>",
+    "ruRU": "Дарует следующие особенности: <m_Facts> <FlagCondition: CasterLevel>"
   },
   {
     "COMP_TYPE": "AddFactsToMount",
-    "enGB": "Grants the following facts to the mount: <m_Facts> <FlagCondition: CasterLevel>"
+    "enGB": "Grants the following facts to the mount: <m_Facts> <FlagCondition: CasterLevel>",
+    "frFR": "Confère les dons/capacités suivants à la monture : <m_Facts> <FlagCondition: CasterLevel>",
+    "ruRU": "Дарует следующие особенности верховому животному: <m_Facts> <FlagCondition: CasterLevel>"
   },
   {
     "COMP_TYPE": "AddFeatureIfHasFact",
-    "enGB": "Grants <m_Feature> <FlagCondition: Not> the owner has <m_CheckedFact>"
+    "enGB": "Grants <m_Feature> <FlagCondition: Not> the owner has <m_CheckedFact>",
+    "frFR": "Confère <m_Feature> <FlagCondition: Not> le possesseur a <m_CheckedFact>",
+    "ruRU": "Дарует <m_Feature>, <FlagCondition: Not> у владельца есть <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "AddFeatureOnApply",
-    "enGB": "Grants <m_Feature> when this effect is applied"
+    "enGB": "Grants <m_Feature> when this effect is applied",
+    "frFR": "Confère <m_Feature> quand cet effet est appliqué",
+    "ruRU": "Дарует <m_Feature> при применении этого эффекта"
   },
   {
     "COMP_TYPE": "AddFeatureOnClassLevel",
-    "enGB": "Grants <m_Feature> when <m_Class> level is <Level> <FlagCondition: BeforeThisLevel>"
+    "enGB": "Grants <m_Feature> when <m_Class> level is <Level> <FlagCondition: BeforeThisLevel>",
+    "frFR": "Confère <m_Feature> quand le niveau de <m_Class> est <Level> <FlagCondition: BeforeThisLevel>",
+    "ruRU": "Дарует <m_Feature>, когда уровень класса <m_Class> — <Level> <FlagCondition: BeforeThisLevel>"
   },
   {
     "COMP_TYPE": "AddFeatureToPet",
-    "enGB": "Grants <m_Feature> to <m_PetType>"
+    "enGB": "Grants <m_Feature> to <m_PetType>",
+    "frFR": "Confère <m_Feature> à : <m_PetType>",
+    "ruRU": "Дарует <m_Feature> существу типа <m_PetType>"
   },
   {
     "COMP_TYPE": "AddFlatCriticalRangeIncrease",
-    "enGB": "Increases critical range by <CriticalRangeIncrease> <FlagCondition: AllWeapons>"
+    "enGB": "Increases critical range by <CriticalRangeIncrease> <FlagCondition: AllWeapons>",
+    "frFR": "Augmente la zone de critique de <CriticalRangeIncrease> <FlagCondition: AllWeapons>",
+    "ruRU": "Увеличивает диапазон критического удара на <CriticalRangeIncrease> <FlagCondition: AllWeapons>"
   },
   {
     "COMP_TYPE": "AddFortification",
-    "enGB": "Grants <Bonus> fortification (chance to ignore critical hits and precision damage)"
+    "enGB": "Grants <Bonus> fortification (chance to ignore critical hits and precision damage)",
+    "frFR": "Confère <Bonus> de fortification (chance d'ignorer les coups critiques et dégâts de précision)",
+    "ruRU": "Дарует <Bonus> укрепления (шанс игнорировать критические удары и точный урон)"
   },
   {
     "COMP_TYPE": "AddFortificationObsolete",
-    "enGB": "Grants <Chance>% fortification"
+    "enGB": "Grants <Chance>% fortification",
+    "frFR": "Confère <Chance>% de fortification",
+    "ruRU": "Дарует <Chance>% укрепления"
   },
   {
     "COMP_TYPE": "AddHealTrigger",
-    "enGB": "When healed: <Action> <FlagCondition: HealerAction, OnHealDamage, OnHealStatDamage, OnHealEnergyDrain>"
+    "enGB": "When healed: <Action> <FlagCondition: HealerAction, OnHealDamage, OnHealStatDamage, OnHealEnergyDrain>",
+    "frFR": "En recevant des soins : <Action> <FlagCondition: HealerAction, OnHealDamage, OnHealStatDamage, OnHealEnergyDrain>",
+    "ruRU": "При получении исцеления: <Action> <FlagCondition: HealerAction, OnHealDamage, OnHealStatDamage, OnHealEnergyDrain>"
   },
   {
     "COMP_TYPE": "AddImmunityToAbilityScoreDamage",
-    "enGB": "Immunity to ability score damage"
+    "enGB": "Immunity to ability score damage",
+    "frFR": "Immunité aux dégâts de caractéristiques",
+    "ruRU": "Иммунитет к урону характеристикам"
   },
   {
     "COMP_TYPE": "AddImmunityToCriticalHits",
-    "enGB": "Immunity to critical hits"
+    "enGB": "Immunity to critical hits",
+    "frFR": "Immunité aux coups critiques",
+    "ruRU": "Иммунитет к критическим ударам"
   },
   {
     "COMP_TYPE": "AddImmunityToPrecisionDamage",
-    "enGB": "Immunity to precision damage (sneak attacks)"
+    "enGB": "Immunity to precision damage (sneak attacks)",
+    "frFR": "Immunité aux dégâts de précision (attaques sournoises)",
+    "ruRU": "Иммунитет к точному урону (скрытым атакам)"
   },
   {
     "COMP_TYPE": "AddIncomingDamageTrigger",
-    "enGB": "When taking damage: <Actions> <FlagCondition: ActionsOnInitiator, TriggerOnStatDamageOrEnergyDrain, CheckAoE, CheckSpellSchool, CheckEnergyDamageType>"
+    "enGB": "When taking damage: <Actions> <FlagCondition: ActionsOnInitiator, TriggerOnStatDamageOrEnergyDrain, CheckAoE, CheckSpellSchool, CheckEnergyDamageType>",
+    "frFR": "En recevant des dégâts : <Actions> <FlagCondition: ActionsOnInitiator, TriggerOnStatDamageOrEnergyDrain, CheckAoE, CheckSpellSchool, CheckEnergyDamageType>",
+    "ruRU": "При получении урона: <Actions> <FlagCondition: ActionsOnInitiator, TriggerOnStatDamageOrEnergyDrain, CheckAoE, CheckSpellSchool, CheckEnergyDamageType>"
   },
   {
     "COMP_TYPE": "AddInitiatorAttackRollTrigger",
-    "enGB": "On attack: <Action> <FlagCondition: OnlyHit, OnlyMiss, CriticalHit, OnlyNatural20, SneakAttack, OnlySpells>"
+    "enGB": "On attack: <Action> <FlagCondition: OnlyHit, OnlyMiss, CriticalHit, OnlyNatural20, SneakAttack, OnlySpells>",
+    "frFR": "A l'attaque : <Action> <FlagCondition: OnlyHit, OnlyMiss, CriticalHit, OnlyNatural20, SneakAttack, OnlySpells>",
+    "ruRU": "При атаке: <Action> <FlagCondition: OnlyHit, OnlyMiss, CriticalHit, OnlyNatural20, SneakAttack, OnlySpells>"
   },
   {
     "COMP_TYPE": "AddInitiatorAttackWithWeaponTrigger",
-    "enGB": "On weapon attack: <Action> <FlagCondition: OnlyHit, CriticalHit, OnAttackOfOpportunity, OnlySneakAttack, CheckWeaponRangeType, AllNaturalAndUnarmed, OnCharge>"
+    "enGB": "On weapon attack: <Action> <FlagCondition: OnlyHit, CriticalHit, OnAttackOfOpportunity, OnlySneakAttack, CheckWeaponRangeType, AllNaturalAndUnarmed, OnCharge>",
+    "frFR": "A l'attaque à l'arme : <Action> <FlagCondition: OnlyHit, CriticalHit, OnAttackOfOpportunity, OnlySneakAttack, CheckWeaponRangeType, AllNaturalAndUnarmed, OnCharge>",
+    "ruRU": "При атаке оружием: <Action> <FlagCondition: OnlyHit, CriticalHit, OnAttackOfOpportunity, OnlySneakAttack, CheckWeaponRangeType, AllNaturalAndUnarmed, OnCharge>"
   },
   {
     "COMP_TYPE": "AddInitiatorSavingThrowTrigger",
-    "enGB": "On saving throw: <Action> <FlagCondition: OnlyPass, OnlyFail, SpecificSave, ChooseSave>"
+    "enGB": "On saving throw: <Action> <FlagCondition: OnlyPass, OnlyFail, SpecificSave, ChooseSave>",
+    "frFR": "Au jet de sauvegarde : <Action> <FlagCondition: OnlyPass, OnlyFail, SpecificSave, ChooseSave>",
+    "ruRU": "При спасброске: <Action> <FlagCondition: OnlyPass, OnlyFail, SpecificSave, ChooseSave>"
   },
   {
     "COMP_TYPE": "AdditionalAbilityEffectRunActionOnClickedTarget",
-    "enGB": "Additional action on clicked target: <Action>"
+    "enGB": "Additional action on clicked target: <Action>",
+    "frFR": "Action additionnelle sur la cible cliquée : <Action>",
+    "ruRU": "Доп. действие на выбранную цель: <Action>"
   },
   {
     "COMP_TYPE": "AdditionalAoeForMagicHack",
-    "enGB": "Grants additional area of effect for magic hacks"
+    "enGB": "Grants additional area of effect for magic hacks",
+    "frFR": "Confère une zone d'effet additionnelle pour les piratages magiques",
+    "ruRU": "Дарует доп. область эффекта для магических хаков"
   },
   {
     "COMP_TYPE": "AddMechanicsFeature",
-    "enGB": "Grants the following mechanics feature: <m_Feature>"
+    "enGB": "Grants the following mechanics feature: <m_Feature>",
+    "frFR": "Confère la capacité technique suivante : <m_Feature>",
+    "ruRU": "Дарует следующую механику: <m_Feature>"
   },
   {
     "COMP_TYPE": "AddOutgoingDamageTrigger",
-    "enGB": "When dealing damage: <Actions> <FlagCondition: ActionsOnInitiator, TriggerOnStatDamageOrEnergyDrain, CheckEnergyDamageType, EnergyType, TargetKilledByThisDamage>"
+    "enGB": "When dealing damage: <Actions> <FlagCondition: ActionsOnInitiator, TriggerOnStatDamageOrEnergyDrain, CheckEnergyDamageType, EnergyType, TargetKilledByThisDamage>",
+    "frFR": "En infligeant des dégâts : <Actions> <FlagCondition: ActionsOnInitiator, TriggerOnStatDamageOrEnergyDrain, CheckEnergyDamageType, EnergyType, TargetKilledByThisDamage>",
+    "ruRU": "при нанесении урона: <Actions> <FlagCondition: ActionsOnInitiator, TriggerOnStatDamageOrEnergyDrain, CheckEnergyDamageType, EnergyType, TargetKilledByThisDamage>"
   },
   {
     "COMP_TYPE": "AddOutgoingDamageTriggerTTT",
-    "enGB": "When dealing damage (TTT): <Actions> <FlagCondition: OncePerAttackRoll, IgnoreDamageFromThisFact>"
+    "enGB": "When dealing damage (TTT): <Actions> <FlagCondition: OncePerAttackRoll, IgnoreDamageFromThisFact>",
+    "frFR": "En infligeant des dégâts (TTT) : <Actions> <FlagCondition: OncePerAttackRoll, IgnoreDamageFromThisFact>",
+    "ruRU": "При нанесении урона (TTT): <Actions> <FlagCondition: OncePerAttackRoll, IgnoreDamageFromThisFact>"
   },
   {
     "COMP_TYPE": "AddOutgoingPhysicalDamageProperty",
-    "enGB": "Weapon attacks gain: <FlagCondition: AddMagic, AddMaterial, Material, AddForm, Form, AddAlignment, Alignment, MyAlignment, AddReality, Reality, AgainstFactOwner>"
+    "enGB": "Weapon attacks gain: <FlagCondition: AddMagic, AddMaterial, Material, AddForm, Form, AddAlignment, Alignment, MyAlignment, AddReality, Reality, AgainstFactOwner>",
+    "frFR": "Les attaques à l'arme gagnent : <FlagCondition: AddMagic, AddMaterial, Material, AddForm, Form, AddAlignment, Alignment, MyAlignment, AddReality, Reality, AgainstFactOwner>",
+    "ruRU": "Атаки оружием получают: <FlagCondition: AddMagic, AddMaterial, Material, AddForm, Form, AddAlignment, Alignment, MyAlignment, AddReality, Reality, AgainstFactOwner>"
   },
   {
     "COMP_TYPE": "AddPartyEncumbrance",
-    "enGB": "Increases party encumbrance by <Value>"
+    "enGB": "Increases party encumbrance by <Value>",
+    "frFR": "Augmente l'encombrement du groupe de <Value>",
+    "ruRU": "Увеличивает нагрузку группы на <Value>"
   },
   {
     "COMP_TYPE": "AddPet",
-    "enGB": "Grants a <Type> (<m_Pet>) <FlagCondition: UpgradeFeature>"
+    "enGB": "Grants a <Type> (<m_Pet>) <FlagCondition: UpgradeFeature>",
+    "frFR": "Confère un compagnon de type <Type> (<m_Pet>) <FlagCondition: UpgradeFeature>",
+    "ruRU": "Дарует существо типа <Type> (<m_Pet>) <FlagCondition: UpgradeFeature>"
   },
   {
     "COMP_TYPE": "AddRestTrigger",
-    "enGB": "On rest: <Action>"
+    "enGB": "On rest: <Action>",
+    "frFR": "Au repos : <Action>",
+    "ruRU": "При отдыхе: <Action>"
   },
   {
     "COMP_TYPE": "AddSneakAttackRollTrigger",
-    "enGB": "On sneak attack: <Action> <FlagCondition: OnlyOnFullAttack, OnlyOnFirstHit, CriticalHit>"
+    "enGB": "On sneak attack: <Action> <FlagCondition: OnlyOnFullAttack, OnlyOnFirstHit, CriticalHit>",
+    "frFR": "A l'attaque sournoise : <Action> <FlagCondition: OnlyOnFullAttack, OnlyOnFirstHit, CriticalHit>",
+    "ruRU": "При скрытой атаке: <Action> <FlagCondition: OnlyOnFullAttack, OnlyOnFirstHit, CriticalHit>"
   },
   {
     "COMP_TYPE": "AddSpellDiceBonusTrigger",
-    "enGB": "Grants bonus to spell dice: <DiceBonuses> <FlagCondition: CheckSpellDescriptor>"
+    "enGB": "Grants bonus to spell dice: <DiceBonuses> <FlagCondition: CheckSpellDescriptor>",
+    "frFR": "Confère un bonus aux dés de sorts : <DiceBonuses> <FlagCondition: CheckSpellDescriptor>",
+    "ruRU": "Дарует бонус к костям заклинаний: <DiceBonuses> <FlagCondition: CheckSpellDescriptor>"
   },
   {
     "COMP_TYPE": "AddSpellImmunity",
-    "enGB": "Immunity to <Type> spells <FlagCondition: Alignment, SpellDescriptor>"
+    "enGB": "Immunity to <Type> spells <FlagCondition: Alignment, SpellDescriptor>",
+    "frFR": "Immunité aux sorts de type <Type> <FlagCondition: Alignment, SpellDescriptor>",
+    "ruRU": "Иммунитет к заклинаниям типа <Type> <FlagCondition: Alignment, SpellDescriptor>"
   },
   {
     "COMP_TYPE": "AddStatBonusIfHasFactTTT",
-    "enGB": "Grants <Value> <Descriptor> bonus to <Stat> if having fact: <m_CheckedFacts> <FlagCondition: InvertCondition, RequireAllFacts>"
+    "enGB": "Grants <Value> <Descriptor> bonus to <Stat> if having fact: <m_CheckedFacts> <FlagCondition: InvertCondition, RequireAllFacts>",
+    "frFR": "Confère un bonus de <Descriptor> de <Value> à <Stat> si le possesseur a : <m_CheckedFacts> <FlagCondition: InvertCondition, RequireAllFacts>",
+    "ruRU": "Дарует <Value> (<Descriptor>) бонус к характеристике <Stat>, если есть особенность: <m_CheckedFacts> <FlagCondition: InvertCondition, RequireAllFacts>"
   },
   {
     "COMP_TYPE": "AddTargetAttackRollTrigger",
-    "enGB": "When attacked: <ActionOnSelf> (Self) and <ActionsOnAttacker> (Attacker) <FlagCondition: OnlyHit, CriticalHit, OnlyMelee, NotReach>"
+    "enGB": "When attacked: <ActionOnSelf> (Self) and <ActionsOnAttacker> (Attacker) <FlagCondition: OnlyHit, CriticalHit, OnlyMelee, NotReach>",
+    "frFR": "En étant attaqué : <ActionOnSelf> (Soi) et <ActionsOnAttacker> (Attaquant) <FlagCondition: OnlyHit, CriticalHit, OnlyMelee, NotReach>",
+    "ruRU": "При атаке на владельца: <ActionOnSelf> (на себя) и <ActionsOnAttacker> (на атакующего) <FlagCondition: OnlyHit, CriticalHit, OnlyMelee, NotReach>"
   },
   {
     "COMP_TYPE": "AddTargetAttackWithWeaponTrigger",
-    "enGB": "When attacked with weapon: <ActionOnSelf> (Self) and <ActionsOnAttacker> (Attacker) <FlagCondition: TriggerBeforeAttack, WaitForAttackResolve, OnlyHit, CriticalHit, OnlyMelee, OnlyRanged>"
+    "enGB": "When attacked with weapon: <ActionOnSelf> (Self) and <ActionsOnAttacker> (Attacker) <FlagCondition: TriggerBeforeAttack, WaitForAttackResolve, OnlyHit, CriticalHit, OnlyMelee, OnlyRanged>",
+    "frFR": "En étant attaqué à l'arme : <ActionOnSelf> (Soi) et <ActionsOnAttacker> (Attaquant) <FlagCondition: TriggerBeforeAttack, WaitForAttackResolve, OnlyHit, CriticalHit, OnlyMelee, OnlyRanged>",
+    "ruRU": "При атаке оружием на владельца: <ActionOnSelf> (на себя) и <ActionsOnAttacker> (на атакующего) <FlagCondition: TriggerBeforeAttack, WaitForAttackResolve, OnlyHit, CriticalHit, OnlyMelee, OnlyRanged>"
   },
   {
     "COMP_TYPE": "AddUndetectableAlignment",
-    "enGB": "Alignment is undetectable to magical means"
+    "enGB": "Alignment is undetectable to magical means",
+    "frFR": "L'alignement est indétectable par la magie",
+    "ruRU": "Мировоззрение не обнаруживается магическими средствами"
   },
   {
     "COMP_TYPE": "AddWeaponEnhancementBonusToStat",
-    "enGB": "Grants <Descriptor> bonus to <Stat> equal to weapon's enhancement bonus multiplied by <Multiplier>"
+    "enGB": "Grants <Descriptor> bonus to <Stat> equal to weapon's enhancement bonus multiplied by <Multiplier>",
+    "frFR": "Confère un bonus de <Descriptor> à <Stat> égal au bonus d'altération de l'arme multiplié par <Multiplier>",
+    "ruRU": "Дарует <Descriptor> бонус к характеристике <Stat>, равный бонусу усиления оружия, умноженному на <Multiplier>"
   },
   {
     "COMP_TYPE": "AddWearinessHours",
-    "enGB": "Increases time before fatigue by <Hours> hours"
+    "enGB": "Increases time before fatigue by <Hours> hours",
+    "frFR": "Augmente le temps avant la fatigue de <Hours> heures",
+    "ruRU": "Увеличивает время до наступления усталости на <Hours> ч."
   },
   {
     "COMP_TYPE": "ArmorClassBonusAgainstAlignment",
-    "enGB": "Grants <Value>+<Bonus> <Descriptor> bonus to AC against <alignment> attackers"
+    "enGB": "Grants <Value>+<Bonus> <Descriptor> bonus to AC against <alignment> attackers",
+    "frFR": "Confère un bonus de <Descriptor> de <Value>+<Bonus> à la CA contre les attaquants d'alignement <alignment>",
+    "ruRU": "Дарует <Value>+<Bonus> (<Descriptor>) бонус к КЗ против атакующих с мировоззрением <alignment>"
   },
   {
     "COMP_TYPE": "AttackBonusAgainstAlignment",
-    "enGB": "Grants <DamageBonus>+<Bonus> <Descriptor> bonus to attack rolls against <Alignment> <FlagCondition: OnlyMelee>"
+    "enGB": "Grants <DamageBonus>+<Bonus> <Descriptor> bonus to attack rolls against <Alignment> <FlagCondition: OnlyMelee>",
+    "frFR": "Confère un bonus de <Descriptor> de <DamageBonus>+<Bonus> aux jets d'attaque contre <Alignment> <FlagCondition: OnlyMelee>",
+    "ruRU": "Дарует <DamageBonus>+<Bonus> (<Descriptor>) бонус к атаке против существ с мировоззрением <Alignment> <FlagCondition: OnlyMelee>"
   },
   {
     "COMP_TYPE": "AttackBonusAgainstFactOwner",
-    "enGB": "Grants <AttackBonus>+<Bonus> <Descriptor> bonus to attack rolls against targets having <FlagCondition: Not> <m_CheckedFact>"
+    "enGB": "Grants <AttackBonus>+<Bonus> <Descriptor> bonus to attack rolls against targets having <FlagCondition: Not> <m_CheckedFact>",
+    "frFR": "Confère un bonus de <Descriptor> de <AttackBonus>+<Bonus> aux jets d'attaque contre les cibles <FlagCondition: Not> ayant <m_CheckedFact>",
+    "ruRU": "Дарует <AttackBonus>+<Bonus> (<Descriptor>) бонус к атаке против существ, <FlagCondition: Not> обладающих особенностью <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "AttackBonusAgainstFriendly",
-    "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls against friendly units"
+    "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls against friendly units",
+    "frFR": "Confère un bonus de <Descriptor> de <AttackBonus> aux jets d'attaque contre les alliés",
+    "ruRU": "Дарует <AttackBonus> (<Descriptor>) бонус к атаке против союзников"
   },
   {
     "COMP_TYPE": "AttackBonusAgainstSize",
-    "enGB": "Grants <Value> <Descriptor> bonus to attack rolls against <Size> <FlagCondition: OnlyForMelee, OnlyForRanged, SizeMoreThan>"
+    "enGB": "Grants <Value> <Descriptor> bonus to attack rolls against <Size> <FlagCondition: OnlyForMelee, OnlyForRanged, SizeMoreThan>",
+    "frFR": "Confère un bonus de <Descriptor> de <Value> aux jets d'attaque contre les ennemis de taille <Size> <FlagCondition: OnlyForMelee, OnlyForRanged, SizeMoreThan>",
+    "ruRU": "Дарует <Value> (<Descriptor>) бонус к атаке против существ размера <Size> <FlagCondition: OnlyForMelee, OnlyForRanged, SizeMoreThan>"
   },
   {
     "COMP_TYPE": "AuraFeatureComponent",
-    "enGB": "Grants an aura applying: <m_Buff>"
+    "enGB": "Grants an aura applying: <m_Buff>",
+    "frFR": "Confère une aura appliquant : <m_Buff>",
+    "ruRU": "Дарует ауру, накладывающую: <m_Buff>"
   },
   {
     "COMP_TYPE": "AutoConfirmCritAgainstFlanked",
-    "enGB": "Automatically confirms critical hits against flanked targets"
+    "enGB": "Automatically confirms critical hits against flanked targets",
+    "frFR": "Confirme automatiquement les coups critiques contre les cibles prises en tenaille",
+    "ruRU": "Автоматически подтверждает критические удары против врагов в окружении"
   },
   {
     "COMP_TYPE": "BackToBackBetter",
-    "enGB": "Grants +2 bonus to AC when flanked if an ally with <m_BackToBackBetterFact> is within <Radius> feet"
+    "enGB": "Grants +2 bonus to AC when flanked if an ally with <m_BackToBackBetterFact> is within <Radius> feet",
+    "frFR": "Confère +2 bonus à la CA contre les prises en tenaille si un allié avec <m_BackToBackBetterFact> est à moins de <Radius> pieds",
+    "ruRU": "Дарует +2 бонус к КЗ за окружение, если союзник с особенностью <m_BackToBackBetterFact> находится в радиусе <Radius> ф."
   },
   {
     "COMP_TYPE": "BindAbilitiesToHighest",
-    "enGB": "Calculates <m_Abilities> using the highest mental ability score and caster level"
+    "enGB": "Calculates <m_Abilities> using the highest mental ability score and caster level",
+    "frFR": "Calcule <m_Abilities> en utilisant la plus haute caractéristique mentale et le niveau de lanceur",
+    "ruRU": "Параметры способностей <m_Abilities> рассчитываются по высшей ментальной характеристике и уровню заклинателя"
   },
   {
     "COMP_TYPE": "Blindsense",
-    "enGB": "Grants <Range> feet Blindsense <FlagCondition: Blindsight>"
+    "enGB": "Grants <Range> feet Blindsense <FlagCondition: Blindsight>",
+    "frFR": "Confère <Range> pieds de Sens aveugle <FlagCondition: Blindsight>",
+    "ruRU": "Дарует Слепое чутье <Range> ф. <FlagCondition: Blindsight>"
   },
   {
     "COMP_TYPE": "BookOfDreamsSummonUnitsCountLogic",
-    "enGB": "Increases the number of summoned units by 1 (Book of Dreams logic)"
+    "enGB": "Increases the number of summoned units by 1 (Book of Dreams logic)",
+    "frFR": "Augmente le nombre d'unités invoquées de 1 (logique Livre des Rêves)",
+    "ruRU": "Увеличивает число призываемых существ на 1 (логика Книги Снов)"
   },
   {
     "COMP_TYPE": "BuffDescriptorImmunity",
-    "enGB": "Immunity to effects with descriptor: <Descriptor> <FlagCondition: CheckFact>"
+    "enGB": "Immunity to effects with descriptor: <Descriptor> <FlagCondition: CheckFact>",
+    "frFR": "Immunité aux effets avec le descripteur : <Descriptor> <FlagCondition: CheckFact>",
+    "ruRU": "Иммунитет к эффектам с дескриптором: <Descriptor> <FlagCondition: CheckFact>"
   },
   {
     "COMP_TYPE": "BuffEnchantAnyWeapon",
-    "enGB": "Applies <m_EnchantmentBlueprint> to weapon/limb in <Slot>"
+    "enGB": "Applies <m_EnchantmentBlueprint> to weapon/limb in <Slot>",
+    "frFR": "Applique <m_EnchantmentBlueprint> à l'arme/membre dans <Slot>",
+    "ruRU": "Наделяет оружие/конечность в слоте <Slot> чарами <m_EnchantmentBlueprint>"
   },
   {
     "COMP_TYPE": "BuffExtraAttack",
-    "enGB": "Grants <Number> extra attack(s) <FlagCondition: Haste, Penalized>"
+    "enGB": "Grants <Number> extra attack(s) <FlagCondition: Haste, Penalized>",
+    "frFR": "Confère <Number> attaque(s) supplémentaire(s) <FlagCondition: Haste, Penalized>",
+    "ruRU": "Дарует <Number> доп. атаку/атаки <FlagCondition: Haste, Penalized>"
   },
   {
     "COMP_TYPE": "BuffExtraEffects",
-    "enGB": "If having <m_CheckedBuff>, also grants <m_ExtraEffectBuff> <FlagCondition: m_ExceptionFact>"
+    "enGB": "If having <m_CheckedBuff>, also grants <m_ExtraEffectBuff> <FlagCondition: m_ExceptionFact>",
+    "frFR": "Si le possesseur a <m_CheckedBuff>, confère aussi : <m_ExtraEffectBuff> <FlagCondition: m_ExceptionFact>",
+    "ruRU": "Если есть особенность <m_CheckedBuff>, также дарует <m_ExtraEffectBuff> <FlagCondition: m_ExceptionFact>"
   },
   {
     "COMP_TYPE": "BuffOnHealthTickingTrigger",
-    "enGB": "If HP falls below <HealthPercent>%, applies: <m_TriggeredBuff>"
+    "enGB": "If HP falls below <HealthPercent>%, applies: <m_TriggeredBuff>",
+    "frFR": "Si les PV tombent sous <HealthPercent>%, applique : <m_TriggeredBuff>",
+    "ruRU": "Если здоровье падает ниже <HealthPercent>%, накладывает: <m_TriggeredBuff>"
   },
   {
     "COMP_TYPE": "BuffStatusCondition",
-    "enGB": "Applies <Condition> <FlagCondition: SaveEachRound, SaveType>"
+    "enGB": "Applies <Condition> <FlagCondition: SaveEachRound, SaveType>",
+    "frFR": "Applique l'état : <Condition> <FlagCondition: SaveEachRound, SaveType>",
+    "ruRU": "Накладывает состояние: <Condition> <FlagCondition: SaveEachRound, SaveType>"
   },
   {
     "COMP_TYPE": "BuffSubstitutionOnApply",
-    "enGB": "When gaining <m_GainedFact> (or descriptor <SpellDescriptor>), replaces it with <m_SubstituteBuff> <FlagCondition: CheckConditionImmunity>"
+    "enGB": "When gaining <m_GainedFact> (or descriptor <SpellDescriptor>), replaces it with <m_SubstituteBuff> <FlagCondition: CheckConditionImmunity>",
+    "frFR": "En recevant <m_GainedFact> (ou le descripteur <SpellDescriptor>), le remplace par <m_SubstituteBuff> <FlagCondition: CheckConditionImmunity>",
+    "ruRU": "При получении <m_GainedFact> (или эффекта с дескриптором <SpellDescriptor>), заменяет его на <m_SubstituteBuff> <FlagCondition: CheckConditionImmunity>"
   },
   {
     "COMP_TYPE": "ChirurgeonSpell",
-    "enGB": "Special Chirurgeon spell effect"
+    "enGB": "Special Chirurgeon spell effect",
+    "frFR": "Effet de sort spécial de Chirurgeon",
+    "ruRU": "Особый эффект заклинания Хирурга"
   },
   {
     "COMP_TYPE": "CMBBonusAgainstSize",
-    "enGB": "Grants <Value> <Descriptor> bonus to CMB against <Size> targets"
+    "enGB": "Grants <Value> <Descriptor> bonus to CMB against <Size> targets",
+    "frFR": "Confère un bonus de <Descriptor> de <Value> au BMO contre les cibles de taille <Size>",
+    "ruRU": "Дарует <Value> (<Descriptor>) бонус к БМК против существ размера <Size>"
   },
   {
     "COMP_TYPE": "CombatStateTrigger",
-    "enGB": "On combat start: <CombatStartActions> | On combat end: <CombatEndActions>"
+    "enGB": "On combat start: <CombatStartActions> | On combat end: <CombatEndActions>",
+    "frFR": "Au début du combat : <CombatStartActions> | A la fin du combat : <CombatEndActions>",
+    "ruRU": "В начале боя: <CombatStartActions> | В конце боя: <CombatEndActions>"
   },
   {
     "COMP_TYPE": "ConstructHealth",
-    "enGB": "Construct biology: HP based on size, Constitution Disabled"
+    "enGB": "Construct biology: HP based on size, Constitution Disabled",
+    "frFR": "Biologie de créature artificielle : PV basés sur la taille, Constitution désactivée",
+    "ruRU": "Биология конструкта: ОЗ зависят от размера, Выносливость не действует"
   },
   {
     "COMP_TYPE": "ContextCalculateAbilityParams",
-    "enGB": "Calculates spell parameters using <StatType> <FlagCondition: ReplaceCasterLevel, ReplaceSpellLevel, UseKineticistMainStat>"
+    "enGB": "Calculates spell parameters using <StatType> <FlagCondition: ReplaceCasterLevel, ReplaceSpellLevel, UseKineticistMainStat>",
+    "frFR": "Calcule les paramètres de sort en utilisant <StatType> <FlagCondition: ReplaceCasterLevel, ReplaceSpellLevel, UseKineticistMainStat>",
+    "ruRU": "Параметры способностей рассчитываются по характеристике <StatType> <FlagCondition: ReplaceCasterLevel, ReplaceSpellLevel, UseKineticistMainStat>"
   },
   {
     "COMP_TYPE": "ContextCalculateSharedValue",
-    "enGB": "Calculates shared value <ValueType> from <Value> multiplied by <Modifier>"
+    "enGB": "Calculates shared value <ValueType> from <Value> multiplied by <Modifier>",
+    "frFR": "Calcule la valeur partagée <ValueType> à partir de <Value> multipliée par <Modifier>",
+    "ruRU": "Рассчитывает общее значение <ValueType> как <Value>, умноженное на <Modifier>"
   },
   {
     "COMP_TYPE": "ContextRankConfig",
-    "enGB": "Calculates <m_Type> rank based on <m_BaseValueType> (<m_Progression>)"
+    "enGB": "Calculates <m_Type> rank based on <m_BaseValueType> (<m_Progression>)",
+    "frFR": "Calcule le rang de <m_Type> basé sur <m_BaseValueType> (<m_Progression>)",
+    "ruRU": "Уровень <m_Type> рассчитывается по <m_BaseValueType> (<m_Progression>)"
   },
   {
     "COMP_TYPE": "ContextSetAbilityParams",
-    "enGB": "Sets spell parameters: DC <DC>, CL <CasterLevel>, Concentration <Concentration> <FlagCondition: Add10ToDC>"
+    "enGB": "Sets spell parameters: DC <DC>, CL <CasterLevel>, Concentration <Concentration> <FlagCondition: Add10ToDC>",
+    "frFR": "Définit les paramètres de sort : DD <DC>, CL <CasterLevel>, Concentration <Concentration> <FlagCondition: Add10ToDC>",
+    "ruRU": "Устанавливает параметры способностей: СЛ <DC>, УЗ <CasterLevel>, Концентрация <Concentration> <FlagCondition: Add10ToDC>"
   },
   {
     "COMP_TYPE": "CraftBonus",
-    "enGB": "Grants <m_Value> bonus to <m_BonusFor> crafting skill checks"
+    "enGB": "Grants <m_Value> bonus to <m_BonusFor> crafting skill checks",
+    "frFR": "Confère un bonus de +<m_Value> aux tests de craft pour : <m_BonusFor>",
+    "ruRU": "Дарует +<m_Value> бонус к проверкам навыка создания предметов (<m_BonusFor>)"
   },
   {
     "COMP_TYPE": "CraftInfoComponent",
-    "enGB": "Crafting info: <SpellType> (Save: <SavingThrow>, AOE: <AOEType>)"
+    "enGB": "Crafting info: <SpellType> (Save: <SavingThrow>, AOE: <AOEType>)",
+    "frFR": "Infos de craft : <SpellType> (Sauvegarde : <SavingThrow>, AOE : <AOEType>)",
+    "ruRU": "Инфо о создании: <SpellType> (Спасбросок: <SavingThrow>, Область: <AOEType>)"
   },
   {
     "COMP_TYPE": "CritAutoconfirmAgainstAlignment",
-    "enGB": "Automatically confirms critical hits against <EnemyAlignment> targets"
+    "enGB": "Automatically confirms critical hits against <EnemyAlignment> targets",
+    "frFR": "Confirme automatiquement les coups critiques contre les cibles d'alignement <EnemyAlignment>",
+    "ruRU": "Автоматически подтверждает критические удары по существам с мировоззрением <EnemyAlignment>"
   },
   {
     "COMP_TYPE": "CriticalConfirmationBonus",
-    "enGB": "Grants <Value>+<Bonus> bonus to critical hit confirmation <FlagCondition: OnlyPositiveValue, CheckWeaponRangeType>"
+    "enGB": "Grants <Value>+<Bonus> bonus to critical hit confirmation <FlagCondition: OnlyPositiveValue, CheckWeaponRangeType>",
+    "frFR": "Confère un bonus de <Value>+<Bonus> à la confirmation des critiques <FlagCondition: OnlyPositiveValue, CheckWeaponRangeType>",
+    "ruRU": "Дарует +<Value>+<Bonus> бонус к подтверждению критического удара <FlagCondition: OnlyPositiveValue, CheckWeaponRangeType>"
   },
   {
     "COMP_TYPE": "CustomKnowledgeCheck",
-    "enGB": "Uses <m_Stat> for knowledge checks"
+    "enGB": "Uses <m_Stat> for knowledge checks",
+    "frFR": "Utilise <m_Stat> pour les tests de connaissances",
+    "ruRU": "Для проверок знаний используется характеристика <m_Stat>"
   },
   {
     "COMP_TYPE": "DamageBonusAgainstFactOwner",
-    "enGB": "Grants <DamageBonus> (or <Bonus>) <Descriptor> bonus to damage rolls against targets having <m_CheckedFact>"
+    "enGB": "Grants <DamageBonus> (or <Bonus>) <Descriptor> bonus to damage rolls against targets having <m_CheckedFact>",
+    "frFR": "Confère un bonus de <Descriptor> de <DamageBonus> (ou <Bonus>) aux dégâts contre les cibles ayant : <m_CheckedFact>",
+    "ruRU": "Дарует <DamageBonus> (или <Bonus>) (<Descriptor>) бонус к урону против существ с особенностью <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "DamageReductionAgainstFactOwner",
-    "enGB": "Reduces damage from attacks by <Reduction> if the attacker has <m_CheckedFact>"
+    "enGB": "Reduces damage from attacks by <Reduction> if the attacker has <m_CheckedFact>",
+    "frFR": "Réduit les dégâts des attaques de <Reduction> si l'attaquant a : <m_CheckedFact>",
+    "ruRU": "Получаемый урон уменьшается на <Reduction>, если у атакующего есть особенность <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "DamageReductionAgainstRangedWeapons",
-    "enGB": "Reduces damage from <m_Type> by <ReductionTrue> (and <ReductionFalse> for other ranged weapons)"
+    "enGB": "Reduces damage from <m_Type> by <ReductionTrue> (and <ReductionFalse> for other ranged weapons)",
+    "frFR": "Réduit les dégâts de <m_Type> de <ReductionTrue> (et <ReductionFalse> pour les autres armes à distance)",
+    "ruRU": "Урон от <m_Type> уменьшается на <ReductionTrue> (и на <ReductionFalse> для остального дистанционного оружия)"
   },
   {
     "COMP_TYPE": "DamageReductionAgainstSpells",
-    "enGB": "Reduces damage from <m_Spells> by <Reduction>"
+    "enGB": "Reduces damage from <m_Spells> by <Reduction>",
+    "frFR": "Réduit les dégâts de <m_Spells> de <Reduction>",
+    "ruRU": "Урон от <m_Spells> уменьшается на <Reduction>"
   },
   {
     "COMP_TYPE": "DeathActions",
-    "enGB": "Upon death: <Actions> <FlagCondition: OnlyNaturalDeath, m_WithUnconsciousLifeState>"
+    "enGB": "Upon death: <Actions> <FlagCondition: OnlyNaturalDeath, m_WithUnconsciousLifeState>",
+    "frFR": "A la mort : <Actions> <FlagCondition: OnlyNaturalDeath, m_WithUnconsciousLifeState>",
+    "ruRU": "При смерти: <Actions> <FlagCondition: OnlyNaturalDeath, m_WithUnconsciousLifeState>"
   },
   {
     "COMP_TYPE": "DeflectArrows",
-    "enGB": "Grants Deflect Arrows (Restriction: <m_Restriction>)"
+    "enGB": "Grants Deflect Arrows (Restriction: <m_Restriction>)",
+    "frFR": "Confère Parade de flèches (Restriction : <m_Restriction>)",
+    "ruRU": "Дарует черту Отражение стрел (Ограничение: <m_Restriction>)"
   },
   {
     "COMP_TYPE": "DistanceAttackBonus",
-    "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls depending on target distance"
+    "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls depending on target distance",
+    "frFR": "Confère un bonus de <Descriptor> de <AttackBonus> à l'attaque selon la distance de la cible",
+    "ruRU": "Дарует <AttackBonus> (<Descriptor>) бонус к атаке, зависящий от расстояния до цели"
   },
   {
     "COMP_TYPE": "DistanceDamageBonus",
-    "enGB": "Grants <DamageBonus> <Descriptor> bonus to damage rolls depending on target distance"
+    "enGB": "Grants <DamageBonus> <Descriptor> bonus to damage rolls depending on target distance",
+    "frFR": "Confère un bonus de <Descriptor> de <DamageBonus> aux dégâts selon la distance de la cible",
+    "ruRU": "Дарует <DamageBonus> (<Descriptor>) бонус к урону, зависящий от расстояния до цели"
   },
   {
     "COMP_TYPE": "DraconicBloodlineArcana",
-    "enGB": "Spells with <Descriptor> descriptor deal +1 damage per die"
+    "enGB": "Spells with <Descriptor> descriptor deal +1 damage per die",
+    "frFR": "Les sorts avec le descripteur <Descriptor> infligent +1 dégât par dé",
+    "ruRU": "Заклинания с дескриптором <Descriptor> наносят +1 урона за кость"
   },
   {
     "COMP_TYPE": "FactsChangeTrigger",
-    "enGB": "Triggers <OnFactAdded> when <m_CheckedFact> is added | <OnFactRemoved> when removed"
+    "enGB": "Triggers <OnFactAdded> when <m_CheckedFact> is added | <OnFactRemoved> when removed",
+    "frFR": "Déclenche <OnFactAdded> quand <m_CheckedFact> est ajouté | <OnFactRemoved> quand il est retiré",
+    "ruRU": "Эффект <OnFactAdded> при получении <m_CheckedFact> | <OnFactRemoved> при потере"
   },
   {
     "COMP_TYPE": "FeatureTagsComponent",
-    "enGB": "Tags: <FeatureTags>"
+    "enGB": "Tags: <FeatureTags>",
+    "frFR": "Tags : <FeatureTags>",
+    "ruRU": "Теги: <FeatureTags>"
   },
   {
     "COMP_TYPE": "FlankedAttackBonus",
-    "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls against flanked or flat-footed targets"
+    "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls against flanked or flat-footed targets",
+    "frFR": "Confère un bonus de <Descriptor> de <AttackBonus> à l'attaque contre les cibles prises en tenaille ou prises au dépourvu",
+    "ruRU": "Дарует <AttackBonus> (<Descriptor>) бонус к атаке против противников, застигнутых врасплох или в окружении"
   },
   {
     "COMP_TYPE": "FlatFootedIgnore",
-    "enGB": "Character ignores flat-footed status (Type: <Type>)"
+    "enGB": "Character ignores flat-footed status (Type: <Type>)",
+    "frFR": "Le personnage ignore l'état pris au dépourvu (Type : <Type>)",
+    "ruRU": "Персонаж игнорирует состояние «застигнут врасплох» (Тип: <Type>)"
   },
   {
     "COMP_TYPE": "FormationACBonus",
-    "enGB": "Grants AC bonus while in formation: <Bonus> <FlagCondition: UnitProperty>"
+    "enGB": "Grants AC bonus while in formation: <Bonus> <FlagCondition: UnitProperty>",
+    "frFR": "Confère un bonus à la CA en formation : <Bonus> <FlagCondition: UnitProperty>",
+    "ruRU": "Дарует бонус к КЗ в строю: <Bonus> <FlagCondition: UnitProperty>"
   },
   {
     "COMP_TYPE": "FreeActionSpell",
-    "enGB": "Allows casting <m_Ability> as a free action <FlagCondition: m_CheckAbilityType>"
+    "enGB": "Allows casting <m_Ability> as a free action <FlagCondition: m_CheckAbilityType>",
+    "frFR": "Permet de lancer <m_Ability> comme une action gratuite <FlagCondition: m_CheckAbilityType>",
+    "ruRU": "Позволяет использовать <m_Ability> как свободное действие <FlagCondition: m_CheckAbilityType>"
   },
   {
     "COMP_TYPE": "FullSpeedInStealth",
-    "enGB": "Character moves at full movement speed while in stealth"
+    "enGB": "Character moves at full movement speed while in stealth",
+    "frFR": "Le personnage se déplace à vitesse normale en étant furtif",
+    "ruRU": "Персонаж перемещается с полной скоростью в режиме скрытности"
   },
   {
     "COMP_TYPE": "GentlePersuasionConditioning",
-    "enGB": "Alignment shift conditioning: punishment <m_PunishmentBuff>, reward <m_RewardBuff>"
+    "enGB": "Alignment shift conditioning: punishment <m_PunishmentBuff>, reward <m_RewardBuff>",
+    "frFR": "Conditionnement du changement d'alignement : punition <m_PunishmentBuff>, récompense <m_RewardBuff>",
+    "ruRU": "Условие сдвига мировоззрения: наказание <m_PunishmentBuff>, награда <m_RewardBuff>"
   },
   {
     "COMP_TYPE": "HalfOfPairComponent",
-    "enGB": "Pair synergy: applies <m_Buff> if another unit with this effect is within <m_DistanceToActivateInFeet> feet"
+    "enGB": "Pair synergy: applies <m_Buff> if another unit with this effect is within <m_DistanceToActivateInFeet> feet",
+    "frFR": "Synergie de paire : applique <m_Buff> si une autre unité avec cet effet est à moins de <m_DistanceToActivateInFeet> pieds",
+    "ruRU": "Парная синергия: накладывает <m_Buff>, если другой персонаж с этим эффектом находится в радиусе <m_DistanceToActivateInFeet> ф."
   },
   {
     "COMP_TYPE": "IgnoreAttacksOfOpportunityForSpellList",
-    "enGB": "Cast <m_Abilities> without provoking attacks of opportunity <FlagCondition: CheckSchool, CheckAbilityType, CheckDescriptor>"
+    "enGB": "Cast <m_Abilities> without provoking attacks of opportunity <FlagCondition: CheckSchool, CheckAbilityType, CheckDescriptor>",
+    "frFR": "Lance <m_Abilities> sans provoquer d'attaques d'opportunité <FlagCondition: CheckSchool, CheckAbilityType, CheckDescriptor>",
+    "ruRU": "Использует <m_Abilities> без провокации внеочередных атак <FlagCondition: CheckSchool, CheckAbilityType, CheckDescriptor>"
   },
   {
     "COMP_TYPE": "IgnoreDamageReductionOnAttack",
-    "enGB": "Ignores Damage Reduction on <m_WeaponType> attacks <FlagCondition: CriticalHit, OnlyOnFullAttack, OnlyOnFirstAttack, OnlyNaturalAttacks, CheckEnemyFact>"
+    "enGB": "Ignores Damage Reduction on <m_WeaponType> attacks <FlagCondition: CriticalHit, OnlyOnFullAttack, OnlyOnFirstAttack, OnlyNaturalAttacks, CheckEnemyFact>",
+    "frFR": "Ignore la réduction de dégâts (RD) sur les attaques de type <m_WeaponType> <FlagCondition: CriticalHit, OnlyOnFullAttack, OnlyOnFirstAttack, OnlyNaturalAttacks, CheckEnemyFact>",
+    "ruRU": "Игнорирует преодоление устойчивости к урону (ПЗ) атаками типа <m_WeaponType> <FlagCondition: CriticalHit, OnlyOnFullAttack, OnlyOnFirstAttack, OnlyNaturalAttacks, CheckEnemyFact>"
   },
   {
     "COMP_TYPE": "IgnoreDamageReductionOnTarget",
-    "enGB": "Ignores DR of target <FlagCondition: CheckTargetAlignment>"
+    "enGB": "Ignores DR of target <FlagCondition: CheckTargetAlignment>",
+    "frFR": "Ignore la RD de la cible <FlagCondition: CheckTargetAlignment>",
+    "ruRU": "Игнорирует ПЗ цели <FlagCondition: CheckTargetAlignment>"
   },
   {
     "COMP_TYPE": "IgnoreSpellResistanceForSpells",
-    "enGB": "Ignores Spell Resistance for <m_AbilityList> <FlagCondition: AllSpells>"
+    "enGB": "Ignores Spell Resistance for <m_AbilityList> <FlagCondition: AllSpells>",
+    "frFR": "Ignore la résistance à la magie pour <m_AbilityList> <FlagCondition: AllSpells>",
+    "ruRU": "Игнорирует устойчивость к магии для <m_AbilityList> <FlagCondition: AllSpells>"
   },
   {
     "COMP_TYPE": "IncomingDamageAndHealingModifier",
-    "enGB": "Modifies incoming <Type> by <ModifierPercents>% <FlagCondition: m_DamageWeaponType, m_SourceToTargetFactionType, m_AoeEntry>"
+    "enGB": "Modifies incoming <Type> by <ModifierPercents>% <FlagCondition: m_DamageWeaponType, m_SourceToTargetFactionType, m_AoeEntry>",
+    "frFR": "Modifie <Type> entrant de <ModifierPercents>% <FlagCondition: m_DamageWeaponType, m_SourceToTargetFactionType, m_AoeEntry>",
+    "ruRU": "Изменяет входящий <Type> на <ModifierPercents>% <FlagCondition: m_DamageWeaponType, m_SourceToTargetFactionType, m_AoeEntry>"
   },
   {
     "COMP_TYPE": "IncreaseDiceSizeOnAttackCustomProgressions",
-    "enGB": "Increases weapon dice size by <AdditionalSize> (or <Value>) <FlagCondition: CheckWeaponCategories, CheckWeaponSubCategories>"
+    "enGB": "Increases weapon dice size by <AdditionalSize> (or <Value>) <FlagCondition: CheckWeaponCategories, CheckWeaponSubCategories>",
+    "frFR": "Augmente la taille des dés d'arme de <AdditionalSize> (ou <Value>) <FlagCondition: CheckWeaponCategories, CheckWeaponSubCategories>",
+    "ruRU": "Увеличивает размер костей оружия на <AdditionalSize> (или <Value>) <FlagCondition: CheckWeaponCategories, CheckWeaponSubCategories>"
   },
   {
     "COMP_TYPE": "IncreaseFeatRankByGroup",
-    "enGB": "Increases rank for all feats belonging to the <Group> group"
+    "enGB": "Increases rank for all feats belonging to the <Group> group",
+    "frFR": "Augmente le rang des dons appartenant au groupe <Group>",
+    "ruRU": "Повышает ранг всех черт группы <Group>"
   },
   {
     "COMP_TYPE": "IncreaseResourceAmount",
-    "enGB": "Increases <m_Resource> maximum amount by <Value>"
+    "enGB": "Increases <m_Resource> maximum amount by <Value>",
+    "frFR": "Augmente le nombre d'utilisations de <m_Resource> de <Value>",
+    "ruRU": "Увеличивает макс. число использований ресурса <m_Resource> на <Value>"
   },
   {
     "COMP_TYPE": "IncreaseResourceAmountBySharedValue",
-    "enGB": "Adjusts <m_Resource> maximum amount by <Value> <FlagCondition: Decrease>"
+    "enGB": "Adjusts <m_Resource> maximum amount by <Value> <FlagCondition: Decrease>",
+    "frFR": "Ajuste le nombre max d'utilisations de <m_Resource> de <Value> <FlagCondition: Decrease>",
+    "ruRU": "Изменяет макс. число использований ресурса <m_Resource> на <Value> <FlagCondition: Decrease>"
   },
   {
     "COMP_TYPE": "IncreaseSpellSpellbookDC",
-    "enGB": "Grants <BonusDC> <Descriptor> bonus to spell DC for <m_Spellbooks>"
+    "enGB": "Grants <BonusDC> <Descriptor> bonus to spell DC for <m_Spellbooks>",
+    "frFR": "Confère un bonus de +<BonusDC> <Descriptor> au DD des sorts pour : <m_Spellbooks>",
+    "ruRU": "Дарует +<BonusDC> (<Descriptor>) бонус к СЛ заклинаний книги <m_Spellbooks>"
   },
   {
     "COMP_TYPE": "InitiatorCritAutoconfirm",
-    "enGB": "Character automatically confirms critical hits"
+    "enGB": "Character automatically confirms critical hits",
+    "frFR": "Le personnage confirme automatiquement ses coups critiques",
+    "ruRU": "Персонаж автоматически подтверждает критические удары"
   },
   {
     "COMP_TYPE": "InitiatorDisarmTrapTrigger",
-    "enGB": "On disarm success: <OnDisarmSuccess> | On failure: <OnDisarmFail>"
+    "enGB": "On disarm success: <OnDisarmSuccess> | On failure: <OnDisarmFail>",
+    "frFR": "Désamorçage réussi : <OnDisarmSuccess> | Échec : <OnDisarmFail>",
+    "ruRU": "При успехе снятия ловушки: <OnDisarmSuccess> | При провале: <OnDisarmFail>"
   },
   {
     "COMP_TYPE": "InitiatorSavingThrowTrigger",
-    "enGB": "Triggers <OnSuccessfulSave> on successful save | <OnFailedSave> on failure"
+    "enGB": "Triggers <OnSuccessfulSave> on successful save | <OnFailedSave> on failure",
+    "frFR": "Déclenche <OnSuccessfulSave> sur un jet réussi | <OnFailedSave> sur un échec",
+    "ruRU": "Вызывает <OnSuccessfulSave> при успехе | <OnFailedSave> при провале спасброска"
   },
   {
     "COMP_TYPE": "KineticistMainStatBonusPropertyGetter",
-    "enGB": "Returns Kineticist's main stat bonus"
+    "enGB": "Returns Kineticist's main stat bonus",
+    "frFR": "Retourne le bonus de la caractéristique principale du Kinétiste",
+    "ruRU": "Возвращает бонус основной характеристики Кинетика"
   },
   {
     "COMP_TYPE": "ManeuverBonus",
-    "enGB": "Grants <Bonus> <Descriptor> bonus to <Type> maneuvers <FlagCondition: Mythic, IgnoreFactRank>"
+    "enGB": "Grants <Bonus> <Descriptor> bonus to <Type> maneuvers <FlagCondition: Mythic, IgnoreFactRank>",
+    "frFR": "Confère un bonus de <Descriptor> de <Bonus> aux manœuvres de type <Type> <FlagCondition: Mythic, IgnoreFactRank>",
+    "ruRU": "Дарует +<Bonus> (<Descriptor>) бонус к проверкам маневра <Type> <FlagCondition: Mythic, IgnoreFactRank>"
   },
   {
     "COMP_TYPE": "ManeuverDefenceBonus",
-    "enGB": "Grants <Bonus> <Descriptor> bonus to CMD against <Type> maneuvers"
+    "enGB": "Grants <Bonus> <Descriptor> bonus to CMD against <Type> maneuvers",
+    "frFR": "Confère un bonus de <Descriptor> de <Bonus> à la DDM contre les manœuvres de type <Type>",
+    "ruRU": "Дарует +<Bonus> (<Descriptor>) бонус к ЗБМ против маневра <Type>"
   },
   {
     "COMP_TYPE": "ManeuverImmunity",
-    "enGB": "Immunity to <Type> combat maneuvers"
+    "enGB": "Immunity to <Type> combat maneuvers",
+    "frFR": "Immunité aux manœuvres de combat de type <Type>",
+    "ruRU": "Иммунитет к маневру <Type>"
   },
   {
     "COMP_TYPE": "ManeuverOnAttack",
-    "enGB": "Upon hit with <Category> weapon, perform <Maneuver> maneuver"
+    "enGB": "Upon hit with <Category> weapon, perform <Maneuver> maneuver",
+    "frFR": "En touchant avec une arme de type <Category>, effectue une manœuvre de <Maneuver>",
+    "ruRU": "При попадании оружием категории <Category> выполняет маневр <Maneuver>"
   },
   {
     "COMP_TYPE": "ManeuverTrigger",
-    "enGB": "Triggers <Action> on <ManeuverType> maneuver <FlagCondition: OnlySuccess>"
+    "enGB": "Triggers <Action> on <ManeuverType> maneuver <FlagCondition: OnlySuccess>",
+    "frFR": "Déclenche <Action> sur une manœuvre de type <ManeuverType> <FlagCondition: OnlySuccess>",
+    "ruRU": "Вызывает <Action> при маневре <ManeuverType> <FlagCondition: OnlySuccess>"
   },
   {
     "COMP_TYPE": "MaxDexBonusIncrease",
-    "enGB": "Increases Max Dex Bonus for <Category> by <Bonus> (or <ContextBonus>) <FlagCondition: ReplaceContextIfGreater, CheckCategory>"
+    "enGB": "Increases Max Dex Bonus for <Category> by <Bonus> (or <ContextBonus>) <FlagCondition: ReplaceContextIfGreater, CheckCategory>",
+    "frFR": "Augmente le Bonus Max de Dex pour <Category> de <Bonus> (ou <ContextBonus>) <FlagCondition: ReplaceContextIfGreater, CheckCategory>",
+    "ruRU": "Увеличивает макс. бонус Ловкости для категории <Category> на <Bonus> (или <ContextBonus>) <FlagCondition: ReplaceContextIfGreater, CheckCategory>"
   },
   {
     "COMP_TYPE": "MithralEnchantment",
-    "enGB": "Item is made of Mithral (Reduced Weight, -10% ASF, +2 Max Dex, -3 ACP, counts as one category lighter)"
+    "enGB": "Item is made of Mithral (Reduced Weight, -10% ASF, +2 Max Dex, -3 ACP, counts as one category lighter)",
+    "frFR": "L'objet est en Mithral (poids réduit, -10% ASF, +2 Max Dex, -3 ACP, une catégorie plus légère)",
+    "ruRU": "Предмет сделан из мифрила (вес уменьшен, шанс провала заклинаний -10%, макс. бонус Ловкости +2, штраф за доспех -3, категория считается на одну легче)"
   },
   {
     "COMP_TYPE": "ModifyD20",
-    "enGB": "Modifies <Rule> d20 rolls: <FlagCondition: Replace, TakeBest, AddBonus, WithChance, RerollOnlyIfFailed, RerollOnlyIfSuccess, AgainstAlignment, SpecificSkill, SpecificDescriptor, AddSavingThrowBonus, TandemTrip>"
+    "enGB": "Modifies <Rule> d20 rolls: <FlagCondition: Replace, TakeBest, AddBonus, WithChance, RerollOnlyIfFailed, RerollOnlyIfSuccess, AgainstAlignment, SpecificSkill, SpecificDescriptor, AddSavingThrowBonus, TandemTrip>",
+    "frFR": "Modifie les jets de d20 pour <Rule> : <FlagCondition: Replace, TakeBest, AddBonus, WithChance, RerollOnlyIfFailed, RerollOnlyIfSuccess, AgainstAlignment, SpecificSkill, SpecificDescriptor, AddSavingThrowBonus, TandemTrip>",
+    "ruRU": "Изменяет броски d20 для <Rule>: <FlagCondition: Replace, TakeBest, AddBonus, WithChance, RerollOnlyIfFailed, RerollOnlyIfSuccess, AgainstAlignment, SpecificSkill, SpecificDescriptor, AddSavingThrowBonus, TandemTrip>"
   },
   {
     "COMP_TYPE": "OnSpawnBuff",
-    "enGB": "Applies <m_Buff> upon spawning <FlagCondition: m_CheckRadius, m_CheckCasterFact>"
+    "enGB": "Applies <m_Buff> upon spawning <FlagCondition: m_CheckRadius, m_CheckCasterFact>",
+    "frFR": "Applique <m_Buff> à l'apparition <FlagCondition: m_CheckRadius, m_CheckCasterFact>",
+    "ruRU": "Накладывает <m_Buff> при появлении <FlagCondition: m_CheckRadius, m_CheckCasterFact>"
   },
   {
     "COMP_TYPE": "OutflankAttackBonus",
-    "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls while flanking an enemy with an ally who also has Outflank"
+    "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls while flanking an enemy with an ally who also has Outflank",
+    "frFR": "Confère un bonus de <Descriptor> de <AttackBonus> à l'attaque en prenant en tenaille avec un allié ayant la même aptitude",
+    "ruRU": "Дарует +<AttackBonus> (<Descriptor>) бонус к атаке при окружении противника союзником, который также владеет чертой «Удар в спину»"
   },
   {
     "COMP_TYPE": "OutflankDamageBonus",
-    "enGB": "Grants <DamageBonus> <Descriptor> bonus to damage rolls while flanking an enemy with an ally who also has Outflank"
+    "enGB": "Grants <DamageBonus> <Descriptor> bonus to damage rolls while flanking an enemy with an ally who also has Outflank",
+    "frFR": "Confère un bonus de <Descriptor> de <DamageBonus> aux dégâts en prenant en tenaille avec un allié ayant la même aptitude",
+    "ruRU": "Дарует +<DamageBonus> (<Descriptor>) бонус к урону при окружении противника союзником, который также владеет чертой «Удар в спину»"
   },
   {
     "COMP_TYPE": "PreciseShot",
-    "enGB": "Removes the -4 penalty for shooting into melee"
+    "enGB": "Removes the -4 penalty for shooting into melee",
+    "frFR": "Supprime la pénalité de -4 pour les tirs au corps à corps",
+    "ruRU": "Снимает штраф -4 на стрельбу вблизи"
   },
   {
     "COMP_TYPE": "PrerequisiteFeature",
-    "enGB": "Requires feature: <m_Feature> <FlagCondition: CheckInProgression>"
+    "enGB": "Requires feature: <m_Feature> <FlagCondition: CheckInProgression>",
+    "frFR": "Requiert le don : <m_Feature> <FlagCondition: CheckInProgression>",
+    "ruRU": "Требует наличие особенности: <m_Feature> <FlagCondition: CheckInProgression>"
   },
   {
     "COMP_TYPE": "PrerequisiteStatValue",
-    "enGB": "Requires <Stat> score of at least <Value> <FlagCondition: CheckInProgression>"
+    "enGB": "Requires <Stat> score of at least <Value> <FlagCondition: CheckInProgression>",
+    "frFR": "Requiert une valeur de <Stat> d'au moins <Value> <FlagCondition: CheckInProgression>",
+    "ruRU": "Требует значение характеристики <Stat> не ниже <Value> <FlagCondition: CheckInProgression>"
   },
   {
     "COMP_TYPE": "PropertyCalculatorComponent",
-    "enGB": "Calculates <Name> property using <Value> <FlagCondition: SaveToContext>"
+    "enGB": "Calculates <Name> property using <Value> <FlagCondition: SaveToContext>",
+    "frFR": "Calcule la propriété <Name> en utilisant <Value> <FlagCondition: SaveToContext>",
+    "ruRU": "Свойство <Name> рассчитывается как <Value> <FlagCondition: SaveToContext>"
   },
   {
     "COMP_TYPE": "PureRecommendation",
-    "enGB": "Level-up Recommendation: <Priority>"
+    "enGB": "Level-up Recommendation: <Priority>",
+    "frFR": "Recommandation de passage de niveau : <Priority>",
+    "ruRU": "Рекомендация при повышении уровня: <Priority>"
   },
   {
     "COMP_TYPE": "RecalculateOnFactsChange",
-    "enGB": "Recalculates when <m_CheckedFacts> change"
+    "enGB": "Recalculates when <m_CheckedFacts> change",
+    "frFR": "Recalcule quand <m_CheckedFacts> change",
+    "ruRU": "Перерасчет при изменении особенностей <m_CheckedFacts>"
   },
   {
     "COMP_TYPE": "RecalculateOnStatChange",
-    "enGB": "Recalculates when <Stat> changes"
+    "enGB": "Recalculates when <Stat> changes",
+    "frFR": "Recalcule quand <Stat> change",
+    "ruRU": "Перерасчет при изменении характеристики <Stat>"
   },
   {
     "COMP_TYPE": "RecommendationHasClasses",
-    "enGB": "Recommended for classes: <m_Classes>"
+    "enGB": "Recommended for classes: <m_Classes>",
+    "frFR": "Recommandé pour les classes : <m_Classes>",
+    "ruRU": "Рекомендуется для классов: <m_Classes>"
   },
   {
     "COMP_TYPE": "RecommendationHasFeature",
-    "enGB": "Recommended if character has: <m_Feature> (or <m_Features>)"
+    "enGB": "Recommended if character has: <m_Feature> (or <m_Features>)",
+    "frFR": "Recommandé si le personnage possède : <m_Feature> (ou <m_Features>)",
+    "ruRU": "Рекомендуется, если у персонажа есть: <m_Feature> (или <m_Features>)"
   },
   {
     "COMP_TYPE": "RecommendationNoFeatFromGroup",
-    "enGB": "Recommended if character lacks feats from group: <Group>"
+    "enGB": "Recommended if character lacks feats from group: <Group>",
+    "frFR": "Recommandé si le personnage n'a pas de dons du groupe <Group>",
+    "ruRU": "Рекомендуется, если у персонажа нет черт из группы <Group>"
   },
   {
     "COMP_TYPE": "RecommendationStatMiminum",
-    "enGB": "Recommended if <Stat> is at least <MinimalValue>"
+    "enGB": "Recommended if <Stat> is at least <MinimalValue>",
+    "frFR": "Recommandé si <Stat> est au moins à <MinimalValue>",
+    "ruRU": "Рекомендуется, если значение <Stat> не ниже <MinimalValue>"
   },
   {
     "COMP_TYPE": "RecommendationWeaponTypeFocus",
-    "enGB": "Recommended weapon focus/type: <m_WeaponTypes> <FlagCondition: HasFocus>"
+    "enGB": "Recommended weapon focus/type: <m_WeaponTypes> <FlagCondition: HasFocus>",
+    "frFR": "Recommandé pour les armes : <m_WeaponTypes> <FlagCondition: HasFocus>",
+    "ruRU": "Рекомендуется для оружия: <m_WeaponTypes> <FlagCondition: HasFocus>"
   },
   {
     "COMP_TYPE": "RedirectDamageToPet",
-    "enGB": "Redirects <AmountPercents>% of incoming damage to the character's pet"
+    "enGB": "Redirects <AmountPercents>% of incoming damage to the character's pet",
+    "frFR": "Redirige <AmountPercents>% des dégâts reçus vers le compagnon animal",
+    "ruRU": "Перенаправляет <AmountPercents>% входящего урона на питомца"
   },
   {
     "COMP_TYPE": "RemoveWhenCombatEnded",
-    "enGB": "Removes the effect automatically when combat ends"
+    "enGB": "Removes the effect automatically when combat ends",
+    "frFR": "Retire l'effet automatiquement à la fin du combat",
+    "ruRU": "Эффект автоматически снимается в конце боя"
   },
   {
     "COMP_TYPE": "ReplaceCastSource",
-    "enGB": "Changes spellcasting animation source to <CastSource>"
+    "enGB": "Changes spellcasting animation source to <CastSource>",
+    "frFR": "Remplace la source de l'animation d'incantation par <CastSource>",
+    "ruRU": "Изменяет источник анимации заклинания на <CastSource>"
   },
   {
     "COMP_TYPE": "ReplaceSourceBone",
-    "enGB": "Changes visual effect source bone to <SourceBoneName>"
+    "enGB": "Changes visual effect source bone to <SourceBoneName>",
+    "frFR": "Remplace l'os source de l'effet visuel par <SourceBoneName>",
+    "ruRU": "Изменяет кость-источник визуального эффекта на <SourceBoneName>"
   },
   {
     "COMP_TYPE": "SacredWeaponFavoriteDamageOverride",
-    "enGB": "Sacred Weapon: Overrides <m_WeaponCategory> damage to <Value>"
+    "enGB": "Sacred Weapon: Overrides <m_WeaponCategory> damage to <Value>",
+    "frFR": "Arme Sacrée : Remplace les dégâts de <m_WeaponCategory> par <Value>",
+    "ruRU": "Священное оружие: изменяет урон категории <m_WeaponCategory> на <Value>"
   },
   {
     "COMP_TYPE": "SavesFixerFactReplacer",
-    "enGB": "Legacy Fixer: replaces <m_OldFact> with <m_NewFact>"
+    "enGB": "Legacy Fixer: replaces <m_OldFact> with <m_NewFact>",
+    "frFR": "Fixer Hérité : remplace <m_OldFact> par <m_NewFact>",
+    "ruRU": "Исправитель: заменяет <m_OldFact> на <m_NewFact>"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstFact",
-    "enGB": "Grants <Bonus> <Descriptor> bonus to saving throws against targets having <m_CheckedFact>"
+    "enGB": "Grants <Bonus> <Descriptor> bonus to saving throws against targets having <m_CheckedFact>",
+    "frFR": "Confère un bonus de <Descriptor> de <Bonus> aux jets de sauvegarde contre les ennemis ayant : <m_CheckedFact>",
+    "ruRU": "Дарует +<Bonus> (<Descriptor>) бонус к спасброскам против существ с особенностью <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstFactMultiple",
-    "enGB": "Grants <Bonus> <Descriptor> bonus to saving throws against targets having any of <m_CheckedFacts>"
+    "enGB": "Grants <Bonus> <Descriptor> bonus to saving throws against targets having any of <m_CheckedFacts>",
+    "frFR": "Confère un bonus de <Descriptor> de <Bonus> aux jets de sauvegarde contre les ennemis ayant l'un des dons suivants : <m_CheckedFacts>",
+    "ruRU": "Дарует +<Bonus> (<Descriptor>) бонус к спасброскам против существ с любой из особенностей: <m_CheckedFacts>"
   },
   {
     "COMP_TYPE": "SetAttackerMissChance",
-    "enGB": "Sets attacker miss chance to <Value>% <FlagCondition: m_Type>"
+    "enGB": "Sets attacker miss chance to <Value>% <FlagCondition: m_Type>",
+    "frFR": "Définit les chances de rater de l'attaquant à <Value>% <FlagCondition: m_Type>",
+    "ruRU": "Устанавливает шанс промаха атакующего равным <Value>% <FlagCondition: m_Type>"
   },
   {
     "COMP_TYPE": "SpecificBuffImmunity",
-    "enGB": "Grants immunity to <m_Buff> effect"
+    "enGB": "Grants immunity to <m_Buff> effect",
+    "frFR": "Confère l'immunité à l'effet : <m_Buff>",
+    "ruRU": "Дарует иммунитет к эффекту: <m_Buff>"
   },
   {
     "COMP_TYPE": "SpellComponent",
-    "enGB": "Identifies this effect as a spell from the <School> school"
+    "enGB": "Identifies this effect as a spell from the <School> school",
+    "frFR": "Identifie cet effet comme un sort de l'école <School>",
+    "ruRU": "Определяет этот эффект как заклинание школы <School>"
   },
   {
     "COMP_TYPE": "SpellDescriptorComponent",
-    "enGB": "Adds <Descriptor> descriptor to the effect"
+    "enGB": "Adds <Descriptor> descriptor to the effect",
+    "frFR": "Ajoute le descripteur <Descriptor> à l'effet",
+    "ruRU": "Добавляет дескриптор <Descriptor> к эффекту"
   },
   {
     "COMP_TYPE": "SpellImmunityToSpellDescriptor",
-    "enGB": "Grants immunity to spells with <Descriptor> descriptors <FlagCondition: m_CasterIgnoreImmunityFact>"
+    "enGB": "Grants immunity to spells with <Descriptor> descriptors <FlagCondition: m_CasterIgnoreImmunityFact>",
+    "frFR": "Confère l'immunité aux sorts avec les descripteurs <Descriptor> <FlagCondition: m_CasterIgnoreImmunityFact>",
+    "ruRU": "Дарует иммунитет к заклинаниям с дескрипторами <Descriptor> <FlagCondition: m_CasterIgnoreImmunityFact>"
   },
   {
     "COMP_TYPE": "SpellListComponent",
-    "enGB": "Adds the ability to <m_SpellList> at level <SpellLevel>"
+    "enGB": "Adds the ability to <m_SpellList> at level <SpellLevel>",
+    "frFR": "Ajoute la capacité de <m_SpellList> au niveau <SpellLevel>",
+    "ruRU": "Добавляет способность <m_SpellList> на <SpellLevel> уровне"
   },
   {
     "COMP_TYPE": "SpellResistanceAgainstAlignment",
-    "enGB": "Grants <Value> Spell Resistance against <Alignment> casters"
+    "enGB": "Grants <Value> Spell Resistance against <Alignment> casters",
+    "frFR": "Confère <Value> de résistance à la magie contre les lanceurs d'alignement <Alignment>",
+    "ruRU": "Дарует устойчивость к магии <Value> против заклинателей с мировоззрением <Alignment>"
   },
   {
     "COMP_TYPE": "SpellTurning",
-    "enGB": "Reflects incoming spells back at the caster <FlagCondition: m_SpellResistanceOnly, m_SpellDescriptorOnly, m_SpecificSpellsOnly>"
+    "enGB": "Reflects incoming spells back at the caster <FlagCondition: m_SpellResistanceOnly, m_SpellDescriptorOnly, m_SpecificSpellsOnly>",
+    "frFR": "Renvoie les sorts entrants vers leur lanceur <FlagCondition: m_SpellResistanceOnly, m_SpellDescriptorOnly, m_SpecificSpellsOnly>",
+    "ruRU": "Отражает входящие заклинания обратно в заклинателя <FlagCondition: m_SpellResistanceOnly, m_SpellDescriptorOnly, m_SpecificSpellsOnly>"
   },
   {
     "COMP_TYPE": "SpendChargesOnSpellCast",
-    "enGB": "Casting <m_Spell> consumes charges from item <m_BlueprintItemReference> (Filter: <m_ItemFilter>)"
+    "enGB": "Casting <m_Spell> consumes charges from item <m_BlueprintItemReference> (Filter: <m_ItemFilter>)",
+    "frFR": "Lancer <m_Spell> consomme des charges de l'objet <m_BlueprintItemReference> (Filtre : <m_ItemFilter>)",
+    "ruRU": "Использование <m_Spell> расходует заряды предмета <m_BlueprintItemReference> (Фильтр: <m_ItemFilter>)"
   },
   {
     "COMP_TYPE": "TacticalCombatResurrection",
-    "enGB": "Tactical Combat: healing can resurrect units in the squad"
+    "enGB": "Tactical Combat: healing can resurrect units in the squad",
+    "frFR": "Combat Tactique : les soins peuvent ressusciter les unités dans l'escouade",
+    "ruRU": "Тактический бой: исцеление может воскрешать существ из отряда"
   },
   {
     "COMP_TYPE": "TacticalCombatVisibleFeature",
-    "enGB": "Feature is visible during Tactical Combat inspection"
+    "enGB": "Feature is visible during Tactical Combat inspection",
+    "frFR": "La capacité est visible lors de l'inspection en combat tactique",
+    "ruRU": "Особенность видна при осмотре в тактическом бою"
   },
   {
     "COMP_TYPE": "UndeadHealth",
-    "enGB": "Uses Charisma instead of Constitution for HP (Undead trait)"
+    "enGB": "Uses Charisma instead of Constitution for HP (Undead trait)",
+    "frFR": "Utilise le Charisme à la place de la Constitution pour les PV (trait Mort-vivant)",
+    "ruRU": "Использует Харизму вместо Выносливости для расчета ОЗ (черта нежити)"
   },
   {
     "COMP_TYPE": "UnitDeathTrigger",
-    "enGB": "Triggers <Actions> when a unit dies within <RadiusInMeters>m <FlagCondition: Faction, CheckUnitTag>"
+    "enGB": "Triggers <Actions> when a unit dies within <RadiusInMeters>m <FlagCondition: Faction, CheckUnitTag>",
+    "frFR": "Déclenche <Actions> quand une unité meurt à moins de <RadiusInMeters>m <FlagCondition: Faction, CheckUnitTag>",
+    "ruRU": "Вызывает <Actions>, когда существо умирает в радиусе <RadiusInMeters> м. <FlagCondition: Faction, CheckUnitTag>"
   },
   {
     "COMP_TYPE": "WeaponGroupAttackBonus",
-    "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls with <WeaponGroup> weapons <FlagCondition: multiplyByContext>"
+    "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls with <WeaponGroup> weapons <FlagCondition: multiplyByContext>",
+    "frFR": "Confère un bonus de <Descriptor> de <AttackBonus> à l'attaque avec les armes du groupe <WeaponGroup> <FlagCondition: multiplyByContext>",
+    "ruRU": "Дарует +<AttackBonus> (<Descriptor>) бонус к атаке оружием группы <WeaponGroup> <FlagCondition: multiplyByContext>"
   },
   {
     "COMP_TYPE": "WeaponGroupAttackBonusTTT",
-    "enGB": "[TTT] Grants <AttackBonus> <Descriptor> bonus to attack rolls with <WeaponGroup> weapons"
+    "enGB": "[TTT] Grants <AttackBonus> <Descriptor> bonus to attack rolls with <WeaponGroup> weapons",
+    "frFR": "[TTT] Confère un bonus de <Descriptor> de <AttackBonus> à l'attaque avec les armes du groupe <WeaponGroup>",
+    "ruRU": "[TTT] Дарует +<AttackBonus> (<Descriptor>) бонус к атаке оружием группы <WeaponGroup>"
   },
   {
     "COMP_TYPE": "WeaponGroupDamageBonus",
-    "enGB": "Grants <DamageBonus> (plus <AdditionalValue>) <Descriptor> bonus to damage rolls with <WeaponGroup> weapons"
+    "enGB": "Grants <DamageBonus> (plus <AdditionalValue>) <Descriptor> bonus to damage rolls with <WeaponGroup> weapons",
+    "frFR": "Confère un bonus de <Descriptor> de <DamageBonus> (plus <AdditionalValue>) aux dégâts avec les armes du groupe <WeaponGroup>",
+    "ruRU": "Дарует +<DamageBonus> (плюс <AdditionalValue>) (<Descriptor>) бонус к урону оружием группы <WeaponGroup>"
   },
   {
     "COMP_TYPE": "WeaponGroupDamageBonusTTT",
-    "enGB": "[TTT] Grants <DamageBonus> (plus <AdditionalValue>) <Descriptor> bonus to damage rolls with <WeaponGroup> weapons"
+    "enGB": "[TTT] Grants <DamageBonus> (plus <AdditionalValue>) <Descriptor> bonus to damage rolls with <WeaponGroup> weapons",
+    "frFR": "[TTT] Confère un bonus de <Descriptor> de <DamageBonus> (plus <AdditionalValue>) aux dégâts avec les armes du groupe <WeaponGroup>",
+    "ruRU": "[TTT] Дарует +<DamageBonus> (плюс <AdditionalValue>) (<Descriptor>) бонус к урону оружием группы <WeaponGroup>"
   },
   {
     "COMP_TYPE": "ResistEnergy",
-    "enGB": "Grants <Value> resistance to <Type> damage <FlagCondition: UsePool>"
+    "enGB": "Grants <Value> resistance to <Type> damage <FlagCondition: UsePool>",
+    "frFR": "Confère une résistance de <Value> aux dégâts de <Type> <FlagCondition: UsePool>",
+    "ruRU": "Дарует устойчивость <Value> к урону типа <Type> <FlagCondition: UsePool>"
   }
 ]
