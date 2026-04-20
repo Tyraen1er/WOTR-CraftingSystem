@@ -221,7 +221,7 @@ namespace CraftingSystem
                         h => h.HandleWarning("FORGE : Cet équipement est en cours de modification !")
                     );
 
-                    Main.ModEntry.Logger.Log($"[SÉCURITÉ] Retrait bloqué pour {item.Name} car un projet est actif.");
+                    // Main.ModEntry.Logger.Log($"[SÉCURITÉ] Retrait bloqué pour {item.Name} car un projet est actif.");
                     return false; 
                 }
             }

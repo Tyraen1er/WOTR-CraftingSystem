@@ -236,6 +236,19 @@ namespace CraftingSystem
                         {
                             data[field.Name] = val;
                         }
+                        else if (val is System.Collections.IEnumerable enumerable && !(val is string))
+                        {
+                            var list = new List<object>();
+                            foreach (var item in enumerable)
+                            {
+                                if (item == null) list.Add(null);
+                                else if (item.GetType().IsPrimitive || item is string) list.Add(item);
+                                else if (item.GetType().IsEnum) list.Add($"{item.ToString()} ({(int)item})");
+                                else if (item is BlueprintReferenceBase bpRef2) list.Add(new { Guid = bpRef2.Guid.ToString() });
+                                else list.Add(item.GetType().Name);
+                            }
+                            data[field.Name] = list;
+                        }
                         else if (val is Kingmaker.Localization.LocalizedString locString)
                         {
                             data[field.Name] = locString.Key;

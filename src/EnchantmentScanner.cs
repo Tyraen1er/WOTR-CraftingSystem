@@ -81,6 +81,7 @@ namespace CraftingSystem
     public static class EnchantmentScanner
     {
         public static List<EnchantmentData> MasterList = new List<EnchantmentData>();
+        public static Dictionary<string, EnchantmentData> GuidMap = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
         private static bool _hasSyncedThisSession = false;
         public static bool IsSyncing = false;
         public static int ProcessedCount = 0;
@@ -107,8 +108,15 @@ namespace CraftingSystem
                     }
 
                     MasterList = list;
+                    GuidMap = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
+                    foreach (var e in list)
+                    {
+                        if (string.IsNullOrEmpty(e.Guid)) continue;
+                        if (!GuidMap.ContainsKey(e.Guid)) GuidMap.Add(e.Guid, e);
+                        else Main.ModEntry.Logger.Warning($"[SYNC] Doublon de GUID détecté dans Enchantments.json : {e.Guid} ({e.Name})");
+                    }
                     LastSyncMessage = $"JSON chargé ({MasterList.Count} entrées).";
-                    Main.ModEntry.Logger.Log($"[SYNC] JSON d'enchantements chargé : {MasterList.Count} entrées.");
+                    // Main.ModEntry.Logger.Log($"[SYNC] JSON d'enchantements chargé : {MasterList.Count} entrées.");
                 }
                 else
                 {
@@ -167,7 +175,7 @@ namespace CraftingSystem
                                 }
                                 overrides[ov.Guid] = ov;
                             }
-                            Main.ModEntry.Logger.Log($"[SYNC] Overrides chargés : {overrides.Count}");
+                            // Main.ModEntry.Logger.Log($"[SYNC] Overrides chargés : {overrides.Count}");
                         }
                         catch (Exception ex) { Main.ModEntry.Logger.Error($"[SYNC] Impossible de parser Enchantments.json : {ex}"); }
                     }
@@ -243,7 +251,7 @@ namespace CraftingSystem
                     
                     // Attend que tous les workers aient fini la lecture brute
                     Task.WaitAll(tasks.ToArray());
-                    Main.ModEntry.Logger.Log($"[SYNC] Scan binaire terminé : {foundEnchants.Count} enchantements extraits parmis {TotalCount} blueprints !");
+                    // Main.ModEntry.Logger.Log($"[SYNC] Scan binaire terminé : {foundEnchants.Count} enchantements extraits parmis {TotalCount} blueprints !");
                     
                     LastSyncMessage = Helpers.GetString("ui_sync_integration", "Integration and filtering of overrides (JSON)...");
 
@@ -277,12 +285,17 @@ namespace CraftingSystem
                     lock (MasterList)
                     {
                         MasterList = syncedList;
+                        GuidMap = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
+                        foreach (var e in syncedList)
+                        {
+                            if (!GuidMap.ContainsKey(e.Guid)) GuidMap.Add(e.Guid, e);
+                        }
                     }
 
                     // --- RÉUSSITE TOTALE ---
                     _hasSyncedThisSession = true;
                     LastSyncMessage = string.Format(Helpers.GetString("ui_sync_success", "Sync successful ({0} enchantments)."), MasterList.Count);
-                    Main.ModEntry.Logger.Log($"[SYNC] Synchronisation terminée avec succès. {MasterList.Count} enchantements répertoriés.");
+                    // Main.ModEntry.Logger.Log($"[SYNC] Synchronisation terminée avec succès. {MasterList.Count} enchantements répertoriés.");
                 }
                 catch (Exception ex)
                 {
@@ -316,12 +329,13 @@ namespace CraftingSystem
             if (string.IsNullOrEmpty(guid)) return null;
             lock (MasterList)
             {
-                var result = MasterList.FirstOrDefault(e => string.Equals(e.Guid, guid, StringComparison.OrdinalIgnoreCase));
-                if (result == null && guid.Length > 10)
+                if (GuidMap.TryGetValue(guid, out var result)) return result;
+                
+                if (guid.Length > 10)
                 {
                     Main.ModEntry.Logger.Warning($"[DEBUG] GetByGuid FAILED to find: {guid}. MasterList count: {MasterList.Count}");
                 }
-                return result;
+                return null;
             }
         }
     }

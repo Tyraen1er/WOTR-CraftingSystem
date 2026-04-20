@@ -38,6 +38,17 @@ namespace CraftingSystem
         private string activeDescriptionPopup = "";
         private string activeDescriptionTitle = "";
         
+        // Paging & Optimization
+        private List<EnchantmentData> cachedFilteredEnchantments = new List<EnchantmentData>();
+        private int currentPage = 0;
+        private int itemsPerPage = 15;
+        private bool filtersDirty = true;
+        private string lastSearch = "";
+        private int lastCategoryCount = -1;
+        private int lastTypeCount = -1;
+        private ItemEntity lastSelectedItem = null;
+        private string pageInput = "";
+        
         // Auto-scale reference
         private const float REFERENCE_WIDTH = 2560f;
         private const float REFERENCE_HEIGHT = 1440f;
@@ -170,14 +181,16 @@ namespace CraftingSystem
                 ShowSettings = false;
                 lastOpenState = true;
 
-                // --- DUMP DEMANDÉ PAR L'UTILISATEUR ---
+                // --- DUMP DÉSACTIVÉ ---
+                /*
                 Main.ModEntry.Logger.Log("[DUMPER] L'interface s'ouvre, lancement du dump structurel...");
-                BlueprintDumper.DumpByGuid("b183bd491793d194c9e4c96cd11769b1", 2);
+                BlueprintDumper.DumpByGuid("9205b68509ff1db41915bb4f3aba3a04", 2);
                 
                 // Mass Dumper
                 System.Threading.Tasks.Task.Run(() => {
                     EnchantmentDumper.DumpAllUniqueComponents();
                 });
+                */
             }
 
             UpdateAutoScale();
@@ -378,6 +391,23 @@ namespace CraftingSystem
             Div(scale);
             GUILayout.Space(10);
             
+            // --- GESTION DU REFILTRAGE ---
+            if (selectedItem != lastSelectedItem || enchantmentSearch != lastSearch || activeCategories.Count != lastCategoryCount || activeTypes.Count != lastTypeCount || filtersDirty)
+            {
+                lastSelectedItem = selectedItem;
+                lastSearch = enchantmentSearch;
+                lastCategoryCount = activeCategories.Count;
+                lastTypeCount = activeTypes.Count;
+                filtersDirty = false;
+
+                RebuildFilteredList();
+                currentPage = 0; // Reset page on filter change
+            }
+            
+            GUILayout.Space(20);
+            Div(scale);
+            GUILayout.Space(10);
+            
             // --- SECTION : ENCHANTEMENTS DÉJÀ PRÉSENTS ---
             GUILayout.Label(Helpers.GetString("ui_applied_enchants", "Applied Enchantments:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
             var currentEnchants = selectedItem.Enchantments.ToList();
@@ -534,78 +564,68 @@ namespace CraftingSystem
             }
             else
             {
-                var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
-                bool isReadyForSpecial = CraftingCalculator.IsItemReadyForSpecialEnchants(selectedItem, currentSelectedList);
-                bool isWeaponOrArmor = selectedItem.Blueprint is BlueprintItemWeapon || selectedItem.Blueprint is BlueprintItemArmor;
-                
-                // On utilise la liste pré-filtrée par type ET on trie pour mettre les cochés en haut !
-                var displayedEnchants = typeFilteredAvailable
-                    .OrderByDescending(e => queuedEnchantGuids.Contains(e.Guid)) 
-                    .ThenBy(e => e.Name)
-                    .ToList();
+                // -- NAVIGATION DE PAGINATION --
+                itemsPerPage = Mathf.Max(1, itemsPerPage);
+                int totalItems = cachedFilteredEnchantments.Count;
+                int totalPages = Mathf.Max(1, Mathf.CeilToInt((float)totalItems / itemsPerPage));
+                if (currentPage >= totalPages) currentPage = totalPages - 1;
 
-                foreach (var data in displayedEnchants)
+                GUILayout.BeginHorizontal();
+                GUI.enabled = (currentPage > 0);
+                if (CButton("<<", GUILayout.Width(50 * scale))) currentPage--;
+                GUI.enabled = true;
+                
+                GUILayout.FlexibleSpace();
+                
+                // -- ALLER À LA PAGE --
+                GUILayout.Label(Helpers.GetString("ui_pagination_goto", "Aller à : "), GUILayout.Width(60 * scale));
+                pageInput = CTextField(pageInput, GUILayout.Width(40 * scale));
+                if (CButton(Helpers.GetString("ui_btn_go", "Go"), GUILayout.Width(40 * scale)))
                 {
+                    if (int.TryParse(pageInput, out int p))
+                    {
+                        currentPage = Mathf.Clamp(p - 1, 0, totalPages - 1);
+                        pageInput = (currentPage + 1).ToString();
+                    }
+                }
+                
+                GUILayout.FlexibleSpace();
+                GUILayout.Label(string.Format(Helpers.GetString("ui_pagination_info", "Page {0} / {1} ({2} items)"), currentPage + 1, totalPages, totalItems), new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.FlexibleSpace();
+                
+                GUI.enabled = (currentPage < totalPages - 1);
+                if (CButton(">>", GUILayout.Width(50 * scale))) currentPage++;
+                GUI.enabled = true;
+                GUILayout.EndHorizontal();
+
+                GUILayout.Space(5);
+
+                var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
+                
+                // On ne boucle QUE sur les éléments de la page actuelle
+                int startIdx = currentPage * itemsPerPage;
+                int endIdx = Mathf.Min(startIdx + itemsPerPage, cachedFilteredEnchantments.Count);
+
+                for (int i = startIdx; i < endIdx; i++)
+                {
+                    var data = cachedFilteredEnchantments[i];
                     bool isQueued = queuedEnchantGuids.Contains(data.Guid);
 
-                    // --- FILTRE DES CATÉGORIES (LOGIQUE 'ET' STRICTE) ---
-                    if (!isQueued && activeCategories.Count > 0)
-                    {
-                        var cleanCats = data.Categories != null ? data.Categories.Where(c => !string.Equals(c, "Discovered", StringComparison.OrdinalIgnoreCase)).ToList() : new List<string>();
-                        if (cleanCats.Count == 0) cleanCats.Add(Helpers.GetString("ui_cat_untyped", "Untyped"));
-
-                        bool matchAll = true; 
-                        foreach (var activeCat in activeCategories)
-                        {
-                            if (!cleanCats.Contains(activeCat, StringComparer.OrdinalIgnoreCase))
-                            {
-                                matchAll = false;
-                                break;
-                            }
-                        }
-                        if (!matchAll) continue; 
-                    }
-
-                    // --- FILTRE D'OBJET NORMAL (SI PAS DE +1) ---
-                    if (CraftingSettings.RequirePlusOneFirst && isWeaponOrArmor && !isReadyForSpecial && !isQueued)
-                    {
-                        bool isAllowed = CraftingCalculator.IsEnchantmentAllowedOnNormalItem(data);
-                        
-                        // LOG DE TRAÇAGE POUR LE +1 REQUIRED
-                        /*if (CraftingSettings.RequirePlusOneFirst && UnityEngine.Time.frameCount % 300 == 0) // Toutes les 5s env
-                        {
-                            Main.ModEntry.Logger.Log($"[FILTRE-REPORT] {data.Name} -> Caché car isReadyForSpecial={isReadyForSpecial} et IsAllowedOnNormal={isAllowed}");
-                        }*/
-
-                        if (!isAllowed) continue; 
-                    }
-
-                    // --- FILTRE RECHERCHE ---
                     var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
                     string displayName = GetDisplayName(bp, data);
-                    if (!string.IsNullOrEmpty(enchantmentSearch) && !displayName.ToLower().Contains(enchantmentSearch.ToLower())) continue;
-                    
-                    // --- FILTRE SOURCE ---
-                    if (CraftingSettings.CurrentSourceFilter == SourceFilter.TTRPG && data.Source != "TTRPG") continue;
-                    if (CraftingSettings.CurrentSourceFilter == SourceFilter.Owlcat && data.Source != "TTRPG" && data.Source != "Owlcat") continue;
-                    if (CraftingSettings.CurrentSourceFilter == SourceFilter.OwlcatPlus && data.Source != "TTRPG" && data.Source != "Owlcat" && data.Source != "Owlcat+") continue;
-                    if (CraftingSettings.CurrentSourceFilter == SourceFilter.Mods && (data.Source == "TTRPG" || data.Source == "Owlcat" || data.Source == "Owlcat+")) continue;
                     
                     long costToPay;
                     if (isQueued)
                     {
-                        // Pour les déjà sélectionnés : prix basé sur l'ordre historique
                         int idx = currentSelectedList.FindIndex(e => e.Guid == data.Guid);
                         var preceding = currentSelectedList.Take(idx);
                         costToPay = CraftingCalculator.GetMarginalCost(selectedItem, preceding, data, CraftingSettings.CostMultiplier);
                     }
                     else
                     {
-                        // Pour les nouveaux : prix par rapport à TOUT le panier
                         costToPay = CraftingCalculator.GetMarginalCost(selectedItem, currentSelectedList, data, CraftingSettings.CostMultiplier);
                     }
                     int days = CraftingCalculator.GetCraftingDays(costToPay, CraftingSettings.InstantCrafting);
-                    
                     if (data.GoldOverride >= 0) costToPay = (long)(data.GoldOverride * CraftingSettings.CostMultiplier);
 
                     string internalName = bp != null ? bp.name : (data.Name ?? "");
@@ -613,7 +633,6 @@ namespace CraftingSystem
                     GUILayout.BeginHorizontal(GUI.skin.box);
                     GUIStyle toggleStyle = new GUIStyle(GUI.skin.toggle) { richText = true };
                     
-                    // -- NOM + ICÔNE INFO [?] --
                     bool newSelected = CToggleStyled(isQueued, $"{displayName} <color=#888888>({internalName})</color>", toggleStyle, GUILayout.ExpandWidth(true));
                     
                     string descForData = GetLocalizedDescription(bp, data);
@@ -632,10 +651,7 @@ namespace CraftingSystem
                             activeDescriptionPopup = descForData;
                         }
                     }
-                    else
-                    {
-                        GUILayout.Space(25 * scale);
-                    }
+                    else GUILayout.Space(25 * scale);
 
                     string currency = Helpers.GetString("ui_currency_gp", "gp");
                     string daysLabel = Helpers.GetString("ui_time_days_short", "d");
@@ -644,7 +660,6 @@ namespace CraftingSystem
                     if (newSelected && !isQueued) 
                     {
                         string baseName = System.Text.RegularExpressions.Regex.Replace(internalName, @"\d+$", "");
-                        
                         if (baseName.ToLower().Contains("enhancement"))
                         {
                             queuedEnchantGuids.RemoveAll(guid => 
@@ -660,10 +675,14 @@ namespace CraftingSystem
                                 return false;
                             });
                         }
-
                         queuedEnchantGuids.Add(data.Guid);
+                        filtersDirty = true;
                     }
-                    if (!newSelected && isQueued) queuedEnchantGuids.Remove(data.Guid);
+                    if (!newSelected && isQueued) 
+                    {
+                        queuedEnchantGuids.Remove(data.Guid);
+                        filtersDirty = true;
+                    }
 
                     GUILayout.EndHorizontal();
                 }
@@ -870,6 +889,79 @@ namespace CraftingSystem
             {
                 CraftingSettings.SaveSettings();
             }
+        }
+
+        private void RebuildFilteredList()
+        {
+            if (selectedItem == null) 
+            {
+                cachedFilteredEnchantments.Clear();
+                return;
+            }
+
+            List<EnchantmentData> rawAvailable;
+            lock (EnchantmentScanner.MasterList)
+            {
+                rawAvailable = EnchantmentScanner.MasterList.ToList();
+            }
+
+            // 1. Filtrage par Type
+            var typeFiltered = rawAvailable.Where(d => activeTypes.Contains(d.Type) || queuedEnchantGuids.Contains(d.Guid)).ToList();
+
+            // 2. Préparation des helpers de filtrage
+            bool isWeaponOrArmor = selectedItem.Blueprint is BlueprintItemWeapon || selectedItem.Blueprint is BlueprintItemArmor;
+            var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
+            bool isReadyForSpecial = CraftingCalculator.IsItemReadyForSpecialEnchants(selectedItem, currentSelectedList);
+
+            var result = new List<EnchantmentData>();
+
+            foreach (var data in typeFiltered)
+            {
+                bool isQueued = queuedEnchantGuids.Contains(data.Guid);
+
+                // --- FILTRE DES CATÉGORIES ---
+                if (!isQueued && activeCategories.Count > 0)
+                {
+                    var cleanCats = data.Categories != null ? data.Categories.Where(c => !string.Equals(c, "Discovered", StringComparison.OrdinalIgnoreCase)).ToList() : new List<string>();
+                    if (cleanCats.Count == 0) cleanCats.Add(Helpers.GetString("ui_cat_untyped", "Untyped"));
+
+                    bool matchAll = true; 
+                    foreach (var activeCat in activeCategories)
+                    {
+                        if (!cleanCats.Contains(activeCat, StringComparer.OrdinalIgnoreCase))
+                        {
+                            matchAll = false;
+                            break;
+                        }
+                    }
+                    if (!matchAll) continue; 
+                }
+
+                // --- FILTRE D'OBJET NORMAL (+1) ---
+                if (CraftingSettings.RequirePlusOneFirst && isWeaponOrArmor && !isReadyForSpecial && !isQueued)
+                {
+                    if (!CraftingCalculator.IsEnchantmentAllowedOnNormalItem(data)) continue; 
+                }
+
+                // --- FILTRE RECHERCHE ---
+                var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
+                string displayName = GetDisplayName(bp, data);
+                if (!string.IsNullOrEmpty(lastSearch) && !displayName.ToLower().Contains(lastSearch.ToLower())) continue;
+
+                // --- FILTRE SOURCE ---
+                if (CraftingSettings.CurrentSourceFilter == SourceFilter.TTRPG && data.Source != "TTRPG") continue;
+                if (CraftingSettings.CurrentSourceFilter == SourceFilter.Owlcat && data.Source != "TTRPG" && data.Source != "Owlcat") continue;
+                if (CraftingSettings.CurrentSourceFilter == SourceFilter.OwlcatPlus && data.Source != "TTRPG" && data.Source != "Owlcat" && data.Source != "Owlcat+") continue;
+                if (CraftingSettings.CurrentSourceFilter == SourceFilter.Mods && (data.Source == "TTRPG" || data.Source == "Owlcat" || data.Source == "Owlcat+")) continue;
+
+                result.Add(data);
+            }
+
+            // 3. Tri (Sélectionnés d'abord, puis alphabétique)
+            cachedFilteredEnchantments = result
+                .OrderByDescending(e => queuedEnchantGuids.Contains(e.Guid))
+                .ThenBy(e => e.Name)
+                .ToList();
         }
 
         private void Div(float scale)
