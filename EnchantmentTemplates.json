@@ -1,1257 +1,1006 @@
 [
   {
     "COMP_TYPE": "AddDamageResistanceEnergy",
-    "Priority": "1",
     "enGB": "Resistance to <Type> of <Value>"
   },
   {
     "COMP_TYPE": "AddStatBonus",
-    "Priority": "2",
     "enGB": "+<Value> <Descriptor> bonus to <Stat>"
   },
   {
     "COMP_TYPE": "AddDamageResistancePhysical",
-    "Priority": "3",
     "enGB": "DR <Value>/<FlagCondition: BypassedByMaterial, BypassedByForm, BypassedByMagic, BypassedByAlignment, BypassedByReality, BypassedByWeaponType, BypassedByMeleeWeapon, BypassedByEpic>"
   },
   {
     "COMP_TYPE": "AddSpellResistance",
-    "Priority": "4",
     "enGB": "Spell Resistance <Value>"
   },
   {
     "COMP_TYPE": "AddCasterLevel",
-    "Priority": "5",
     "enGB": "+<Bonus> <Descriptor> bonus to caster level"
   },
   {
     "COMP_TYPE": "AddConcealment",
-    "Priority": "6",
     "enGB": "<Concealment> concealment (<Descriptor>) <FlagCondition: CheckDistance, CheckWeaponRangeType>"
   },
   {
     "COMP_TYPE": "IncreaseAllSpellsDC",
-    "Priority": "7",
     "enGB": "add <BonusDC> to all spell"
   },
   {
     "COMP_TYPE": "AddFeatureOnAlignment",
-    "Priority": "8",
     "enGB": "Grants <m_Facts[]> if alignment is <Alignment>"
   },
   {
     "COMP_TYPE": "AddImmunityToEnergyDrain",
-    "Priority": "9",
     "enGB": "Immunity to Energy Drain"
   },
   {
     "COMP_TYPE": "AddItemCasterLevelBonus",
-    "Priority": "10",
     "enGB": "+<Bonus> level for <ItemType>"
   },
   {
     "COMP_TYPE": "AdditionalDiceOnDamage",
-    "Priority": "11",
     "enGB": "Adds <DiceValue> <DamageTypeDescription> on damage <FlagCondition: CheckWeaponType, CheckAbilityType, CheckSpellDescriptor, CheckEnergyDamageType>"
   },
   {
     "COMP_TYPE": "AdditionalDiceOnAttack",
-    "Priority": "12",
     "enGB": "Adds <Value> <DamageType> on attack <FlagCondition: OnlyOnFullAttack, OnlyOnFirstAttack, OnHit, CriticalHit, OnlySneakAttack, OnCharge, OnAttackOfOpportunity>"
   },
   {
     "COMP_TYPE": "AdditionalSneakDamageOnHit",
-    "Priority": "13",
     "enGB": "Adds <PhysicalDamageDice> sneak damage <FlagCondition: OnlyNoDexToAC>"
   },
   {
     "COMP_TYPE": "AddMetamagicFeat",
-    "Priority": "14",
     "enGB": "Apply metamagic <Metamagic>"
   },
   {
     "COMP_TYPE": "AddOutgoingDamageBonus",
-    "Priority": "15",
     "enGB": "Increase outgoing <DamageType> by <OriginalDamageFactor> <FlagCondition: Condition>"
   },
   {
     "COMP_TYPE": "AddSpellKnownTemporary",
-    "Priority": "16",
     "enGB": "Grants the spell <m_Spell> (Level <Level>) <FlagCondition: OnlySpontaneous>"
   },
   {
     "COMP_TYPE": "AdvanceArmorStats",
-    "Priority": "17",
     "enGB": "Modifies armor: Max Dex <MaxDexBonusShift>, Check Penalty <ArmorCheckPenaltyShift>, Spell Failure <ArcaneSpellFailureShift>"
   },
   {
     "COMP_TYPE": "AllAttacksEnhancement",
-    "Priority": "18",
     "enGB": "+<Bonus> <Descriptor> enhancement bonus to all attacks"
   },
   {
     "COMP_TYPE": "AttackBonusConditional",
-    "Priority": "19",
     "enGB": "+<Bonus> <Descriptor> attack bonus <FlagCondition: Conditions>"
   },
   {
     "COMP_TYPE": "AttackOfOpportunityAttackBonus",
-    "Priority": "20",
     "enGB": "+<Bonus> <Descriptor> attack bonus on attacks of opportunity <FlagCondition: NotAttackOfOpportunity>"
   },
   {
     "COMP_TYPE": "AttackOfOpportunityDamageBonus",
-    "Priority": "21",
     "enGB": "Adds <DamageBonus> to damage on attacks of opportunity <FlagCondition: CheckWeaponRangeType>"
   },
   {
     "COMP_TYPE": "AttackStatReplacement",
-    "Priority": "22",
     "enGB": "Replaces attack stat with <ReplacementStat> <FlagCondition: CheckWeaponTypes>"
   },
   {
     "COMP_TYPE": "AttackTypeAttackBonus",
-    "Priority": "23",
     "enGB": "+<AttackBonus> <Descriptor> attack bonus with <Type> weapons <FlagCondition: AllTypesExcept, CheckFact>"
   },
   {
     "COMP_TYPE": "AutoMetamagic",
-    "Priority": "24",
     "enGB": "Automatically apply <Metamagic> metamagic to <m_AllowedAbilities> <FlagCondition: School, Descriptor, MaxSpellLevel>"
   },
   {
     "COMP_TYPE": "BuffAllSavesBonus",
-    "Priority": "25",
     "enGB": "+<Value> <Descriptor> bonus to all saving throws"
   },
   {
     "COMP_TYPE": "BuffAllSkillsBonus",
-    "Priority": "26",
     "enGB": "+<Value> <Descriptor> bonus to all skills <FlagCondition: Multiplier>"
   },
   {
     "COMP_TYPE": "BuffContextStatBonus",
-    "Priority": "27",
     "enGB": "+<Value> <Descriptor> bonus to <Stat> <FlagCondition: HasMinimal>"
   },
   {
     "COMP_TYPE": "BuffDescriptorImmunity",
-    "Priority": "28",
     "enGB": "Immunity to effects with the descriptor: <Descriptor> <FlagCondition: CheckFact>"
   },
   {
     "COMP_TYPE": "BuffEnchantWornItem",
-    "Priority": "29",
     "enGB": "Enchant item in <Slot> with <m_EnchantmentBlueprint> <FlagCondition: AllWeapons>"
   },
   {
     "COMP_TYPE": "BuffMovementSpeed",
-    "Priority": "30",
     "enGB": "<Value> <Descriptor> bonus to movement speed <FlagCondition: CappedOnMultiplier, CappedMinimum>"
   },
   {
     "COMP_TYPE": "ConcentrationBonus",
-    "Priority": "31",
     "enGB": "+<Value> bonus to concentration checks <FlagCondition: CheckFact>"
   },
   {
     "COMP_TYPE": "DamageBonusConditional",
-    "Priority": "32",
     "enGB": "+<Bonus> <Descriptor> damage bonus <FlagCondition: Conditions, OnlyWeaponDamage>"
   },
   {
     "COMP_TYPE": "DamageOverTime",
-    "Priority": "33",
     "enGB": "Deals <Damage> <EnergyType> damage each round <FlagCondition: InstantStartTick>"
   },
   {
     "COMP_TYPE": "DiceDamageBonusOnSpell",
-    "Priority": "34",
     "enGB": "+<Value> damage per die of <m_Spells> <FlagCondition: UseContextBonus>"
   },
   {
     "COMP_TYPE": "DispelCasterLevelCheckBonus",
-    "Priority": "35",
     "enGB": "+<Value> bonus to caster level checks when dispelling"
   },
   {
     "COMP_TYPE": "Evasion",
-    "Priority": "36",
     "enGB": "Grants Evasion on <SavingThrow> saves"
   },
   {
     "COMP_TYPE": "IncreaseCasterLevel",
-    "Priority": "37",
     "enGB": "+<Value> <Descriptor> bonus to Caster Level"
   },
   {
     "COMP_TYPE": "IncreaseCastersSavingThrowTypeDC",
-    "Priority": "38",
     "enGB": "+<BonusDC> bonus to DC of spells targeting <Type> saves"
   },
   {
     "COMP_TYPE": "IncreaseSpellSchoolDC",
-    "Priority": "39",
     "enGB": "+<BonusDC> <Descriptor> bonus to DC of <School> spells"
   },
   {
     "COMP_TYPE": "IncreaseSpellSchoolCasterLevel",
-    "Priority": "40",
     "enGB": "+<BonusLevel> <Descriptor> bonus to Caster Level of <School> spells"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstSchool",
-    "Priority": "41",
     "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <School> spells"
   },
   {
     "COMP_TYPE": "SavingThrowContextBonusAgainstDescriptor",
-    "Priority": "42",
     "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <SpellDescriptor> effects"
   },
   {
     "COMP_TYPE": "IncreaseSpellDescriptorCasterLevel",
-    "Priority": "43",
     "enGB": "+<BonusCasterLevel> <ModifierDescriptor> bonus to Caster Level of <Descriptor> spells <FlagCondition: SpellsOnly>"
   },
   {
     "COMP_TYPE": "IncreaseSpellDescriptorDC",
-    "Priority": "44",
     "enGB": "+<BonusDC> <ModifierDescriptor> bonus to DC of <Descriptor> spells <FlagCondition: SpellsOnly>"
   },
   {
     "COMP_TYPE": "IncreaseSpellContextDescriptorDC",
-    "Priority": "45",
     "enGB": "+<Value> <ModifierDescriptor> bonus to DC of <Descriptor> spells <FlagCondition: SpellsOnly>"
   },
   {
     "COMP_TYPE": "SpellPenetrationBonus",
-    "Priority": "46",
     "enGB": "+<Value> <Descriptor> bonus to spell penetration checks <FlagCondition: CheckFact>"
   },
   {
     "COMP_TYPE": "TTAddDamageResistancePhysical",
-    "Priority": "47",
     "enGB": "DR <Value>/<FlagCondition: BypassedByMaterial, BypassedByMagic>"
   },
   {
     "COMP_TYPE": "WeaponAttackTypeDamageBonus",
-    "Priority": "48",
     "enGB": "+<Value> bonus to damage of <Type> weapons"
   },
   {
     "COMP_TYPE": "WeaponCategoryAttackBonus",
-    "Priority": "49",
     "enGB": "+<AttackBonus> <Descriptor> bonus to attack rolls with <Category>"
   },
   {
     "COMP_TYPE": "WeaponCriticalEdgeIncreaseStackable",
-    "Priority": "50",
     "enGB": "Threat range of <IncludeCategories> is increased by <Value>"
   },
   {
     "COMP_TYPE": "WeaponParametersAttackBonus",
-    "Priority": "51",
     "enGB": "+<AttackBonus> <Descriptor> bonus to attack rolls with <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>"
   },
   {
     "COMP_TYPE": "WeaponParametersDamageBonus",
-    "Priority": "52",
     "enGB": "+<DamageBonus> bonus to damage rolls with <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>"
   },
   {
     "COMP_TYPE": "WeaponTypeDamageBonus",
-    "Priority": "53",
     "enGB": "+<DamageBonus> bonus to damage rolls with <m_WeaponType>"
   },
   {
     "COMP_TYPE": "IncreaseSpellDC",
-    "Priority": "54",
     "enGB": "add <BonusDC> to the DC of <m_spell.GUID>"
   },
   {
     "COMP_TYPE": "AddSpellsPerDay",
-    "Priority": "55",
     "enGB": "Add <Amount> of spellslot for spell of level <Levels[]>"
   },
   {
     "COMP_TYPE": "ACBonusAgainstAttacks",
-    "Priority": "56",
     "enGB": "+<Value> <Descriptor> bonus to AC against <FlagCondition: AgainstMeleeOnly, AgainstRangedOnly, OnlySneakAttack, NotTouch, IsTouch, OnlyAttacksOfOpportunity>"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstAlignment",
-    "Priority": "57",
     "enGB": "+<Value> <Descriptor> bonus to saving throws against <Alignment>"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstDescriptor",
-    "Priority": "58",
     "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <SpellDescriptor>"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstSpecificSpells",
-    "Priority": "59",
     "enGB": "+<Value> <ModifierDescriptor> bonus to saving throws against <m_Spells[]>"
   },
   {
     "COMP_TYPE": "AbilityAoERadius",
-    "Priority": "60",
     "enGB": "Affects all units in <m_Radius> radius (<m_TargetType>)"
   },
   {
     "COMP_TYPE": "AbilityDeliverChain",
-    "Priority": "61",
     "enGB": "Chains to <TargetsCount> additional targets within <Radius> <FlagCondition: m_IgnoreFirst, m_UsedTargetsAgain>"
   },
   {
     "COMP_TYPE": "AbilityDeliverDelay",
-    "Priority": "62",
     "enGB": "Delayed by <DelaySeconds> seconds"
   },
   {
     "COMP_TYPE": "AbilityDeliverProjectile",
-    "Priority": "63",
     "enGB": "Fires <m_Projectiles> projectiles <FlagCondition: NeedAttackRoll, Type, m_Length>"
   },
   {
     "COMP_TYPE": "AbilityDeliverTouch",
-    "Priority": "64",
     "enGB": "Delivered via touch attack (weapon: <m_TouchWeapon>)"
   },
   {
     "COMP_TYPE": "AbilityEffectMiss",
-    "Priority": "65",
     "enGB": "On miss: <MissAction>"
   },
   {
     "COMP_TYPE": "AbilityEffectRunAction",
-    "Priority": "66",
     "enGB": "Target must make a <SavingThrowType> save or <Actions> <FlagCondition: IgnoreCaster>"
   },
   {
     "COMP_TYPE": "AbilityResourceLogic",
-    "Priority": "67",
     "enGB": "Requires <Amount> <m_RequiredResource> <FlagCondition: CostIsCustom>"
   },
   {
     "COMP_TYPE": "AbilityScoreCheckBonus",
-    "Priority": "68",
     "enGB": "+<Bonus> <Descriptor> bonus to <Stat> checks"
   },
   {
     "COMP_TYPE": "AbilitySpawnFx",
-    "Priority": "69",
     "enGB": "Visual Effect: <PrefabLink> at <Anchor> (<Time>) <FlagCondition: Delay>"
   },
   {
     "COMP_TYPE": "AbilityTargetHasFact",
-    "Priority": "70",
     "enGB": "Target <FlagCondition: Inverted> has <m_CheckedFacts> <FlagCondition: FromCaster>"
   },
   {
     "COMP_TYPE": "AbilityTargetsAround",
-    "Priority": "71",
     "enGB": "Affects all <m_TargetType> within <m_Radius> radius <FlagCondition: m_IncludeDead>"
   },
   {
     "COMP_TYPE": "AbilityUsagesCountTrigger",
-    "Priority": "72",
     "enGB": "Every <m_TriggerCount> usages: <Action>"
   },
   {
     "COMP_TYPE": "AbilityUseOnRest",
-    "Priority": "73",
     "enGB": "Used during rest for <Type> (Value: <BaseValue>)"
   },
   {
     "COMP_TYPE": "ACBonusAgainstBuffOwner",
-    "Priority": "74",
     "enGB": "+<Bonus> <Descriptor> bonus to AC against owners of <m_CheckedBuff> <FlagCondition: CheckAlignment>"
   },
   {
     "COMP_TYPE": "ACBonusAgainstFactOwner",
-    "Priority": "75",
     "enGB": "+<Bonus> <Descriptor> bonus to AC against <FlagCondition: NoFact> owners of <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "ACBonusAgainstSize",
-    "Priority": "76",
     "enGB": "+<Value> <Descriptor> bonus to AC against <Size> enemies <FlagCondition: SizeDelta>"
   },
   {
     "COMP_TYPE": "ACBonusAgainstSpellsWithDescriptor",
-    "Priority": "77",
     "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against spells with <SpellDescriptor> descriptor"
   },
   {
     "COMP_TYPE": "ACBonusAgainstWeaponCategory",
-    "Priority": "78",
     "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against <Category> weapons"
   },
   {
     "COMP_TYPE": "ACBonusAgainstWeaponGroup",
-    "Priority": "79",
     "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against weapons from <FighterGroup> group"
   },
   {
     "COMP_TYPE": "ACBonusAgainstWeaponSubcategory",
-    "Priority": "80",
     "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against <SubCategory> weapons"
   },
   {
     "COMP_TYPE": "ACBonusAgainstWeaponType",
-    "Priority": "81",
     "enGB": "+<ArmorClassBonus> <Descriptor> bonus to AC against <m_Type> weapons"
   },
   {
     "COMP_TYPE": "ACContextBonusAgainstFactOwner",
-    "Priority": "82",
     "enGB": "+<Bonus> <Descriptor> bonus to AC against <FlagCondition: NoFact> owners of <m_CheckedFact> (<Alignment>)"
   },
   {
     "COMP_TYPE": "AddAbilityResources",
-    "Priority": "83",
     "enGB": "Increases <m_Resource> uses per day by <Amount> <FlagCondition: UseThisAsResource>"
   },
   {
     "COMP_TYPE": "AddAbilityResourceTrigger",
-    "Priority": "84",
     "enGB": "When <m_Resource> is used: <Action> <FlagCondition: m_AlsoTriggerByIncrease>"
   },
   {
     "COMP_TYPE": "AddAbilityUseTargetTrigger",
-    "Priority": "85",
     "enGB": "When target is hit by <m_Spells>: <Action> <FlagCondition: ToCaster, TriggerOnEffectApply>"
   },
   {
     "COMP_TYPE": "AddAbilityUseTrigger",
-    "Priority": "86",
     "enGB": "When using <m_Ability>: <Action> <FlagCondition: AfterCast, ActionsOnTarget, FromSpellbook, MinSpellLevel, CheckDescriptor, CheckAoE, CheckSpellSchool, CheckRange, CheckSourceItemType, OnlyOnce>"
   },
   {
     "COMP_TYPE": "AddAdditionalLimb",
-    "Priority": "87",
     "enGB": "Grants an additional natural attack with <m_Weapon>"
   },
   {
     "COMP_TYPE": "AddAreaEffect",
-    "Priority": "88",
     "enGB": "Grants an aura of <m_AreaEffect>"
   },
   {
     "COMP_TYPE": "AddBuffOnCombatStart",
-    "Priority": "89",
     "enGB": "At the start of combat, gain <m_Feature> <FlagCondition: CheckParty>"
   },
   {
     "COMP_TYPE": "AddCasterLevelForAbility",
-    "Priority": "90",
     "enGB": "+<Bonus> <Descriptor> bonus to caster level for <m_Spell>"
   },
   {
     "COMP_TYPE": "AddCasterLevelForSpellbook",
-    "Priority": "91",
     "enGB": "+<Bonus> <Descriptor> bonus to caster level for <m_Spellbooks>"
   },
   {
     "COMP_TYPE": "AddCondition",
-    "Priority": "92",
     "enGB": "Grants <Condition> condition"
   },
   {
     "COMP_TYPE": "AddConditionalWeaponDamageBonus",
-    "Priority": "93",
     "enGB": "+<Value> <Descriptor> damage bonus to <RangeType> <Category> attacks"
   },
   {
     "COMP_TYPE": "AddConditionImmunity",
-    "Priority": "94",
     "enGB": "Immunity to <Condition>"
   },
   {
     "COMP_TYPE": "AddConditionTrigger",
-    "Priority": "95",
     "enGB": "When <Conditions> is <m_TriggerType>: <Action>"
   },
   {
     "COMP_TYPE": "AddContextStatBonus",
-    "Priority": "96",
     "enGB": "+<Value> <Descriptor> bonus to <Stat> <FlagCondition: Multiplier>"
   },
   {
     "COMP_TYPE": "AddCumulativeDamageBonusX3",
-    "Priority": "97",
     "enGB": "Damage increases with each consecutive hit (+1 per hit) <FlagCondition: OnlyNaturalAttacks>"
   },
   {
     "COMP_TYPE": "AddEnergyDamageDivisor",
-    "Priority": "98",
     "enGB": "Damage from <AffectedEnergyType> is halved"
   },
   {
     "COMP_TYPE": "AddEnergyDamageImmunity",
-    "Priority": "99",
     "enGB": "Immunity to <EnergyType> <FlagCondition: HealOnDamage>"
   },
   {
     "COMP_TYPE": "AddEnergyDamageTrigger",
-    "Priority": "100",
     "enGB": "When taking <DamageType> damage: <Actions> <FlagCondition: SpellsOnly>"
   },
   {
     "COMP_TYPE": "AddEnergyImmunity",
-    "Priority": "101",
     "enGB": "Immunity to <Type>"
   },
   {
     "COMP_TYPE": "AddEnergyVulnerability",
-    "Priority": "102",
     "enGB": "Vulnerability (+50% damage) to <Type>"
   },
   {
     "COMP_TYPE": "AddFactContextActions",
-    "Priority": "103",
     "enGB": "Action on: <FlagCondition: Activated, Deactivated, NewRound>"
   },
   {
     "COMP_TYPE": "AddFactIfArchetype",
-    "Priority": "104",
     "enGB": "Grants <m_Feature> if the owner is a <m_CharacterClass> (<m_Archetype>)"
   },
   {
     "COMP_TYPE": "AddFacts",
-    "Priority": "105",
     "enGB": "Grants the following facts: <m_Facts> <FlagCondition: CasterLevel>"
   },
   {
     "COMP_TYPE": "AddFactsToMount",
-    "Priority": "106",
     "enGB": "Grants the following facts to the mount: <m_Facts> <FlagCondition: CasterLevel>"
   },
   {
     "COMP_TYPE": "AddFeatureIfHasFact",
-    "Priority": "107",
     "enGB": "Grants <m_Feature> <FlagCondition: Not> the owner has <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "AddFeatureOnApply",
-    "Priority": "108",
     "enGB": "Grants <m_Feature> when this effect is applied"
   },
   {
     "COMP_TYPE": "AddFeatureOnClassLevel",
-    "Priority": "109",
     "enGB": "Grants <m_Feature> when <m_Class> level is <Level> <FlagCondition: BeforeThisLevel>"
   },
   {
     "COMP_TYPE": "AddFeatureToPet",
-    "Priority": "110",
     "enGB": "Grants <m_Feature> to <m_PetType>"
   },
   {
     "COMP_TYPE": "AddFlatCriticalRangeIncrease",
-    "Priority": "111",
     "enGB": "Increases critical range by <CriticalRangeIncrease> <FlagCondition: AllWeapons>"
   },
   {
     "COMP_TYPE": "AddFortification",
-    "Priority": "112",
     "enGB": "Grants <Bonus> fortification (chance to ignore critical hits and precision damage)"
   },
   {
     "COMP_TYPE": "AddFortificationObsolete",
-    "Priority": "113",
     "enGB": "Grants <Chance>% fortification"
   },
   {
     "COMP_TYPE": "AddHealTrigger",
-    "Priority": "114",
     "enGB": "When healed: <Action> <FlagCondition: HealerAction, OnHealDamage, OnHealStatDamage, OnHealEnergyDrain>"
   },
   {
     "COMP_TYPE": "AddImmunityToAbilityScoreDamage",
-    "Priority": "115",
     "enGB": "Immunity to ability score damage"
   },
   {
     "COMP_TYPE": "AddImmunityToCriticalHits",
-    "Priority": "116",
     "enGB": "Immunity to critical hits"
   },
   {
     "COMP_TYPE": "AddImmunityToPrecisionDamage",
-    "Priority": "117",
     "enGB": "Immunity to precision damage (sneak attacks)"
   },
   {
     "COMP_TYPE": "AddIncomingDamageTrigger",
-    "Priority": "118",
     "enGB": "When taking damage: <Actions> <FlagCondition: ActionsOnInitiator, TriggerOnStatDamageOrEnergyDrain, CheckAoE, CheckSpellSchool, CheckEnergyDamageType>"
   },
   {
     "COMP_TYPE": "AddInitiatorAttackRollTrigger",
-    "Priority": "119",
     "enGB": "On attack: <Action> <FlagCondition: OnlyHit, OnlyMiss, CriticalHit, OnlyNatural20, SneakAttack, OnlySpells>"
   },
   {
     "COMP_TYPE": "AddInitiatorAttackWithWeaponTrigger",
-    "Priority": "120",
     "enGB": "On weapon attack: <Action> <FlagCondition: OnlyHit, CriticalHit, OnAttackOfOpportunity, OnlySneakAttack, CheckWeaponRangeType, AllNaturalAndUnarmed, OnCharge>"
   },
   {
     "COMP_TYPE": "AddInitiatorSavingThrowTrigger",
-    "Priority": "121",
     "enGB": "On saving throw: <Action> <FlagCondition: OnlyPass, OnlyFail, SpecificSave, ChooseSave>"
   },
   {
     "COMP_TYPE": "AdditionalAbilityEffectRunActionOnClickedTarget",
-    "Priority": "122",
     "enGB": "Additional action on clicked target: <Action>"
   },
   {
     "COMP_TYPE": "AdditionalAoeForMagicHack",
-    "Priority": "123",
     "enGB": "Grants additional area of effect for magic hacks"
   },
   {
     "COMP_TYPE": "AddMechanicsFeature",
-    "Priority": "124",
     "enGB": "Grants the following mechanics feature: <m_Feature>"
   },
   {
     "COMP_TYPE": "AddOutgoingDamageTrigger",
-    "Priority": "125",
     "enGB": "When dealing damage: <Actions> <FlagCondition: ActionsOnInitiator, TriggerOnStatDamageOrEnergyDrain, CheckEnergyDamageType, EnergyType, TargetKilledByThisDamage>"
   },
   {
     "COMP_TYPE": "AddOutgoingDamageTriggerTTT",
-    "Priority": "126",
     "enGB": "When dealing damage (TTT): <Actions> <FlagCondition: OncePerAttackRoll, IgnoreDamageFromThisFact>"
   },
   {
     "COMP_TYPE": "AddOutgoingPhysicalDamageProperty",
-    "Priority": "127",
     "enGB": "Weapon attacks gain: <FlagCondition: AddMagic, AddMaterial, Material, AddForm, Form, AddAlignment, Alignment, MyAlignment, AddReality, Reality, AgainstFactOwner>"
   },
   {
     "COMP_TYPE": "AddPartyEncumbrance",
-    "Priority": "128",
     "enGB": "Increases party encumbrance by <Value>"
   },
   {
     "COMP_TYPE": "AddPet",
-    "Priority": "129",
     "enGB": "Grants a <Type> (<m_Pet>) <FlagCondition: UpgradeFeature>"
   },
   {
     "COMP_TYPE": "AddRestTrigger",
-    "Priority": "130",
     "enGB": "On rest: <Action>"
   },
   {
     "COMP_TYPE": "AddSneakAttackRollTrigger",
-    "Priority": "131",
     "enGB": "On sneak attack: <Action> <FlagCondition: OnlyOnFullAttack, OnlyOnFirstHit, CriticalHit>"
   },
   {
     "COMP_TYPE": "AddSpellDiceBonusTrigger",
-    "Priority": "132",
     "enGB": "Grants bonus to spell dice: <DiceBonuses> <FlagCondition: CheckSpellDescriptor>"
   },
   {
     "COMP_TYPE": "AddSpellImmunity",
-    "Priority": "133",
     "enGB": "Immunity to <Type> spells <FlagCondition: Alignment, SpellDescriptor>"
   },
   {
     "COMP_TYPE": "AddStatBonusIfHasFactTTT",
-    "Priority": "134",
     "enGB": "Grants <Value> <Descriptor> bonus to <Stat> if having fact: <m_CheckedFacts> <FlagCondition: InvertCondition, RequireAllFacts>"
   },
   {
     "COMP_TYPE": "AddTargetAttackRollTrigger",
-    "Priority": "135",
     "enGB": "When attacked: <ActionOnSelf> (Self) and <ActionsOnAttacker> (Attacker) <FlagCondition: OnlyHit, CriticalHit, OnlyMelee, NotReach>"
   },
   {
     "COMP_TYPE": "AddTargetAttackWithWeaponTrigger",
-    "Priority": "136",
     "enGB": "When attacked with weapon: <ActionOnSelf> (Self) and <ActionsOnAttacker> (Attacker) <FlagCondition: TriggerBeforeAttack, WaitForAttackResolve, OnlyHit, CriticalHit, OnlyMelee, OnlyRanged>"
   },
   {
     "COMP_TYPE": "AddUndetectableAlignment",
-    "Priority": "137",
     "enGB": "Alignment is undetectable to magical means"
   },
   {
     "COMP_TYPE": "AddWeaponEnhancementBonusToStat",
-    "Priority": "138",
     "enGB": "Grants <Descriptor> bonus to <Stat> equal to weapon's enhancement bonus multiplied by <Multiplier>"
   },
   {
     "COMP_TYPE": "AddWearinessHours",
-    "Priority": "139",
     "enGB": "Increases time before fatigue by <Hours> hours"
   },
   {
     "COMP_TYPE": "ArmorClassBonusAgainstAlignment",
-    "Priority": "140",
     "enGB": "Grants <Value>+<Bonus> <Descriptor> bonus to AC against <alignment> attackers"
   },
   {
     "COMP_TYPE": "AttackBonusAgainstAlignment",
-    "Priority": "141",
     "enGB": "Grants <DamageBonus>+<Bonus> <Descriptor> bonus to attack rolls against <Alignment> <FlagCondition: OnlyMelee>"
   },
   {
     "COMP_TYPE": "AttackBonusAgainstFactOwner",
-    "Priority": "142",
     "enGB": "Grants <AttackBonus>+<Bonus> <Descriptor> bonus to attack rolls against targets having <FlagCondition: Not> <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "AttackBonusAgainstFriendly",
-    "Priority": "143",
     "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls against friendly units"
   },
   {
     "COMP_TYPE": "AttackBonusAgainstSize",
-    "Priority": "144",
     "enGB": "Grants <Value> <Descriptor> bonus to attack rolls against <Size> <FlagCondition: OnlyForMelee, OnlyForRanged, SizeMoreThan>"
   },
   {
     "COMP_TYPE": "AuraFeatureComponent",
-    "Priority": "145",
     "enGB": "Grants an aura applying: <m_Buff>"
   },
   {
     "COMP_TYPE": "AutoConfirmCritAgainstFlanked",
-    "Priority": "146",
     "enGB": "Automatically confirms critical hits against flanked targets"
   },
   {
     "COMP_TYPE": "BackToBackBetter",
-    "Priority": "147",
     "enGB": "Grants +2 bonus to AC when flanked if an ally with <m_BackToBackBetterFact> is within <Radius> feet"
   },
   {
     "COMP_TYPE": "BindAbilitiesToHighest",
-    "Priority": "148",
     "enGB": "Calculates <m_Abilities> using the highest mental ability score and caster level"
   },
   {
     "COMP_TYPE": "Blindsense",
-    "Priority": "149",
     "enGB": "Grants <Range> feet Blindsense <FlagCondition: Blindsight>"
   },
   {
     "COMP_TYPE": "BookOfDreamsSummonUnitsCountLogic",
-    "Priority": "150",
     "enGB": "Increases the number of summoned units by 1 (Book of Dreams logic)"
   },
   {
     "COMP_TYPE": "BuffDescriptorImmunity",
-    "Priority": "151",
     "enGB": "Immunity to effects with descriptor: <Descriptor> <FlagCondition: CheckFact>"
   },
   {
     "COMP_TYPE": "BuffEnchantAnyWeapon",
-    "Priority": "152",
     "enGB": "Applies <m_EnchantmentBlueprint> to weapon/limb in <Slot>"
   },
   {
     "COMP_TYPE": "BuffExtraAttack",
-    "Priority": "153",
     "enGB": "Grants <Number> extra attack(s) <FlagCondition: Haste, Penalized>"
   },
   {
     "COMP_TYPE": "BuffExtraEffects",
-    "Priority": "154",
     "enGB": "If having <m_CheckedBuff>, also grants <m_ExtraEffectBuff> <FlagCondition: m_ExceptionFact>"
   },
   {
     "COMP_TYPE": "BuffOnHealthTickingTrigger",
-    "Priority": "155",
     "enGB": "If HP falls below <HealthPercent>%, applies: <m_TriggeredBuff>"
   },
   {
     "COMP_TYPE": "BuffStatusCondition",
-    "Priority": "156",
     "enGB": "Applies <Condition> <FlagCondition: SaveEachRound, SaveType>"
   },
   {
     "COMP_TYPE": "BuffSubstitutionOnApply",
-    "Priority": "157",
     "enGB": "When gaining <m_GainedFact> (or descriptor <SpellDescriptor>), replaces it with <m_SubstituteBuff> <FlagCondition: CheckConditionImmunity>"
   },
   {
     "COMP_TYPE": "ChirurgeonSpell",
-    "Priority": "158",
     "enGB": "Special Chirurgeon spell effect"
   },
   {
     "COMP_TYPE": "CMBBonusAgainstSize",
-    "Priority": "159",
     "enGB": "Grants <Value> <Descriptor> bonus to CMB against <Size> targets"
   },
   {
     "COMP_TYPE": "CombatStateTrigger",
-    "Priority": "160",
     "enGB": "On combat start: <CombatStartActions> | On combat end: <CombatEndActions>"
   },
   {
     "COMP_TYPE": "ConstructHealth",
-    "Priority": "161",
     "enGB": "Construct biology: HP based on size, Constitution Disabled"
   },
   {
     "COMP_TYPE": "ContextCalculateAbilityParams",
-    "Priority": "162",
     "enGB": "Calculates spell parameters using <StatType> <FlagCondition: ReplaceCasterLevel, ReplaceSpellLevel, UseKineticistMainStat>"
   },
   {
     "COMP_TYPE": "ContextCalculateSharedValue",
-    "Priority": "163",
     "enGB": "Calculates shared value <ValueType> from <Value> multiplied by <Modifier>"
   },
   {
     "COMP_TYPE": "ContextRankConfig",
-    "Priority": "164",
     "enGB": "Calculates <m_Type> rank based on <m_BaseValueType> (<m_Progression>)"
   },
   {
     "COMP_TYPE": "ContextSetAbilityParams",
-    "Priority": "165",
     "enGB": "Sets spell parameters: DC <DC>, CL <CasterLevel>, Concentration <Concentration> <FlagCondition: Add10ToDC>"
   },
   {
     "COMP_TYPE": "CraftBonus",
-    "Priority": "166",
     "enGB": "Grants <m_Value> bonus to <m_BonusFor> crafting skill checks"
   },
   {
     "COMP_TYPE": "CraftInfoComponent",
-    "Priority": "167",
     "enGB": "Crafting info: <SpellType> (Save: <SavingThrow>, AOE: <AOEType>)"
   },
   {
     "COMP_TYPE": "CritAutoconfirmAgainstAlignment",
-    "Priority": "168",
     "enGB": "Automatically confirms critical hits against <EnemyAlignment> targets"
   },
   {
     "COMP_TYPE": "CriticalConfirmationBonus",
-    "Priority": "169",
     "enGB": "Grants <Value>+<Bonus> bonus to critical hit confirmation <FlagCondition: OnlyPositiveValue, CheckWeaponRangeType>"
   },
   {
     "COMP_TYPE": "CustomKnowledgeCheck",
-    "Priority": "170",
     "enGB": "Uses <m_Stat> for knowledge checks"
   },
   {
     "COMP_TYPE": "DamageBonusAgainstFactOwner",
-    "Priority": "171",
     "enGB": "Grants <DamageBonus> (or <Bonus>) <Descriptor> bonus to damage rolls against targets having <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "DamageReductionAgainstFactOwner",
-    "Priority": "172",
     "enGB": "Reduces damage from attacks by <Reduction> if the attacker has <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "DamageReductionAgainstRangedWeapons",
-    "Priority": "173",
     "enGB": "Reduces damage from <m_Type> by <ReductionTrue> (and <ReductionFalse> for other ranged weapons)"
   },
   {
     "COMP_TYPE": "DamageReductionAgainstSpells",
-    "Priority": "174",
     "enGB": "Reduces damage from <m_Spells> by <Reduction>"
   },
   {
     "COMP_TYPE": "DeathActions",
-    "Priority": "175",
     "enGB": "Upon death: <Actions> <FlagCondition: OnlyNaturalDeath, m_WithUnconsciousLifeState>"
   },
   {
     "COMP_TYPE": "DeflectArrows",
-    "Priority": "176",
     "enGB": "Grants Deflect Arrows (Restriction: <m_Restriction>)"
   },
   {
     "COMP_TYPE": "DistanceAttackBonus",
-    "Priority": "177",
     "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls depending on target distance"
   },
   {
     "COMP_TYPE": "DistanceDamageBonus",
-    "Priority": "178",
     "enGB": "Grants <DamageBonus> <Descriptor> bonus to damage rolls depending on target distance"
   },
   {
     "COMP_TYPE": "DraconicBloodlineArcana",
-    "Priority": "179",
     "enGB": "Spells with <Descriptor> descriptor deal +1 damage per die"
   },
   {
     "COMP_TYPE": "FactsChangeTrigger",
-    "Priority": "180",
     "enGB": "Triggers <OnFactAdded> when <m_CheckedFact> is added | <OnFactRemoved> when removed"
   },
   {
     "COMP_TYPE": "FeatureTagsComponent",
-    "Priority": "181",
     "enGB": "Tags: <FeatureTags>"
   },
   {
     "COMP_TYPE": "FlankedAttackBonus",
-    "Priority": "182",
     "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls against flanked or flat-footed targets"
   },
   {
     "COMP_TYPE": "FlatFootedIgnore",
-    "Priority": "183",
     "enGB": "Character ignores flat-footed status (Type: <Type>)"
   },
   {
     "COMP_TYPE": "FormationACBonus",
-    "Priority": "184",
     "enGB": "Grants AC bonus while in formation: <Bonus> <FlagCondition: UnitProperty>"
   },
   {
     "COMP_TYPE": "FreeActionSpell",
-    "Priority": "185",
     "enGB": "Allows casting <m_Ability> as a free action <FlagCondition: m_CheckAbilityType>"
   },
   {
     "COMP_TYPE": "FullSpeedInStealth",
-    "Priority": "186",
     "enGB": "Character moves at full movement speed while in stealth"
   },
   {
     "COMP_TYPE": "GentlePersuasionConditioning",
-    "Priority": "187",
     "enGB": "Alignment shift conditioning: punishment <m_PunishmentBuff>, reward <m_RewardBuff>"
   },
   {
     "COMP_TYPE": "HalfOfPairComponent",
-    "Priority": "188",
     "enGB": "Pair synergy: applies <m_Buff> if another unit with this effect is within <m_DistanceToActivateInFeet> feet"
   },
   {
     "COMP_TYPE": "IgnoreAttacksOfOpportunityForSpellList",
-    "Priority": "189",
     "enGB": "Cast <m_Abilities> without provoking attacks of opportunity <FlagCondition: CheckSchool, CheckAbilityType, CheckDescriptor>"
   },
   {
     "COMP_TYPE": "IgnoreDamageReductionOnAttack",
-    "Priority": "190",
     "enGB": "Ignores Damage Reduction on <m_WeaponType> attacks <FlagCondition: CriticalHit, OnlyOnFullAttack, OnlyOnFirstAttack, OnlyNaturalAttacks, CheckEnemyFact>"
   },
   {
     "COMP_TYPE": "IgnoreDamageReductionOnTarget",
-    "Priority": "191",
     "enGB": "Ignores DR of target <FlagCondition: CheckTargetAlignment>"
   },
   {
     "COMP_TYPE": "IgnoreSpellResistanceForSpells",
-    "Priority": "192",
     "enGB": "Ignores Spell Resistance for <m_AbilityList> <FlagCondition: AllSpells>"
   },
   {
     "COMP_TYPE": "IncomingDamageAndHealingModifier",
-    "Priority": "193",
     "enGB": "Modifies incoming <Type> by <ModifierPercents>% <FlagCondition: m_DamageWeaponType, m_SourceToTargetFactionType, m_AoeEntry>"
   },
   {
     "COMP_TYPE": "IncreaseDiceSizeOnAttackCustomProgressions",
-    "Priority": "194",
     "enGB": "Increases weapon dice size by <AdditionalSize> (or <Value>) <FlagCondition: CheckWeaponCategories, CheckWeaponSubCategories>"
   },
   {
     "COMP_TYPE": "IncreaseFeatRankByGroup",
-    "Priority": "195",
     "enGB": "Increases rank for all feats belonging to the <Group> group"
   },
   {
     "COMP_TYPE": "IncreaseResourceAmount",
-    "Priority": "196",
     "enGB": "Increases <m_Resource> maximum amount by <Value>"
   },
   {
     "COMP_TYPE": "IncreaseResourceAmountBySharedValue",
-    "Priority": "197",
     "enGB": "Adjusts <m_Resource> maximum amount by <Value> <FlagCondition: Decrease>"
   },
   {
     "COMP_TYPE": "IncreaseSpellSpellbookDC",
-    "Priority": "198",
     "enGB": "Grants <BonusDC> <Descriptor> bonus to spell DC for <m_Spellbooks>"
   },
   {
     "COMP_TYPE": "InitiatorCritAutoconfirm",
-    "Priority": "199",
     "enGB": "Character automatically confirms critical hits"
   },
   {
     "COMP_TYPE": "InitiatorDisarmTrapTrigger",
-    "Priority": "200",
     "enGB": "On disarm success: <OnDisarmSuccess> | On failure: <OnDisarmFail>"
   },
   {
     "COMP_TYPE": "InitiatorSavingThrowTrigger",
-    "Priority": "201",
     "enGB": "Triggers <OnSuccessfulSave> on successful save | <OnFailedSave> on failure"
   },
   {
     "COMP_TYPE": "KineticistMainStatBonusPropertyGetter",
-    "Priority": "202",
     "enGB": "Returns Kineticist's main stat bonus"
   },
   {
     "COMP_TYPE": "ManeuverBonus",
-    "Priority": "203",
     "enGB": "Grants <Bonus> <Descriptor> bonus to <Type> maneuvers <FlagCondition: Mythic, IgnoreFactRank>"
   },
   {
     "COMP_TYPE": "ManeuverDefenceBonus",
-    "Priority": "204",
     "enGB": "Grants <Bonus> <Descriptor> bonus to CMD against <Type> maneuvers"
   },
   {
     "COMP_TYPE": "ManeuverImmunity",
-    "Priority": "205",
     "enGB": "Immunity to <Type> combat maneuvers"
   },
   {
     "COMP_TYPE": "ManeuverOnAttack",
-    "Priority": "206",
     "enGB": "Upon hit with <Category> weapon, perform <Maneuver> maneuver"
   },
   {
     "COMP_TYPE": "ManeuverTrigger",
-    "Priority": "207",
     "enGB": "Triggers <Action> on <ManeuverType> maneuver <FlagCondition: OnlySuccess>"
   },
   {
     "COMP_TYPE": "MaxDexBonusIncrease",
-    "Priority": "208",
     "enGB": "Increases Max Dex Bonus for <Category> by <Bonus> (or <ContextBonus>) <FlagCondition: ReplaceContextIfGreater, CheckCategory>"
   },
   {
     "COMP_TYPE": "MithralEnchantment",
-    "Priority": "209",
     "enGB": "Item is made of Mithral (Reduced Weight, -10% ASF, +2 Max Dex, -3 ACP, counts as one category lighter)"
   },
   {
     "COMP_TYPE": "ModifyD20",
-    "Priority": "210",
     "enGB": "Modifies <Rule> d20 rolls: <FlagCondition: Replace, TakeBest, AddBonus, WithChance, RerollOnlyIfFailed, RerollOnlyIfSuccess, AgainstAlignment, SpecificSkill, SpecificDescriptor, AddSavingThrowBonus, TandemTrip>"
   },
   {
     "COMP_TYPE": "OnSpawnBuff",
-    "Priority": "211",
     "enGB": "Applies <m_Buff> upon spawning <FlagCondition: m_CheckRadius, m_CheckCasterFact>"
   },
   {
     "COMP_TYPE": "OutflankAttackBonus",
-    "Priority": "212",
     "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls while flanking an enemy with an ally who also has Outflank"
   },
   {
     "COMP_TYPE": "OutflankDamageBonus",
-    "Priority": "213",
     "enGB": "Grants <DamageBonus> <Descriptor> bonus to damage rolls while flanking an enemy with an ally who also has Outflank"
   },
   {
     "COMP_TYPE": "PreciseShot",
-    "Priority": "214",
     "enGB": "Removes the -4 penalty for shooting into melee"
   },
   {
     "COMP_TYPE": "PrerequisiteFeature",
-    "Priority": "215",
     "enGB": "Requires feature: <m_Feature> <FlagCondition: CheckInProgression>"
   },
   {
     "COMP_TYPE": "PrerequisiteStatValue",
-    "Priority": "216",
     "enGB": "Requires <Stat> score of at least <Value> <FlagCondition: CheckInProgression>"
   },
   {
     "COMP_TYPE": "PropertyCalculatorComponent",
-    "Priority": "217",
     "enGB": "Calculates <Name> property using <Value> <FlagCondition: SaveToContext>"
   },
   {
     "COMP_TYPE": "PureRecommendation",
-    "Priority": "218",
     "enGB": "Level-up Recommendation: <Priority>"
   },
   {
     "COMP_TYPE": "RecalculateOnFactsChange",
-    "Priority": "219",
     "enGB": "Recalculates when <m_CheckedFacts> change"
   },
   {
     "COMP_TYPE": "RecalculateOnStatChange",
-    "Priority": "220",
     "enGB": "Recalculates when <Stat> changes"
   },
   {
     "COMP_TYPE": "RecommendationHasClasses",
-    "Priority": "221",
     "enGB": "Recommended for classes: <m_Classes>"
   },
   {
     "COMP_TYPE": "RecommendationHasFeature",
-    "Priority": "222",
     "enGB": "Recommended if character has: <m_Feature> (or <m_Features>)"
   },
   {
     "COMP_TYPE": "RecommendationNoFeatFromGroup",
-    "Priority": "223",
     "enGB": "Recommended if character lacks feats from group: <Group>"
   },
   {
     "COMP_TYPE": "RecommendationStatMiminum",
-    "Priority": "224",
     "enGB": "Recommended if <Stat> is at least <MinimalValue>"
   },
   {
     "COMP_TYPE": "RecommendationWeaponTypeFocus",
-    "Priority": "225",
     "enGB": "Recommended weapon focus/type: <m_WeaponTypes> <FlagCondition: HasFocus>"
   },
   {
     "COMP_TYPE": "RedirectDamageToPet",
-    "Priority": "226",
     "enGB": "Redirects <AmountPercents>% of incoming damage to the character's pet"
   },
   {
     "COMP_TYPE": "RemoveWhenCombatEnded",
-    "Priority": "227",
     "enGB": "Removes the effect automatically when combat ends"
   },
   {
     "COMP_TYPE": "ReplaceCastSource",
-    "Priority": "228",
     "enGB": "Changes spellcasting animation source to <CastSource>"
   },
   {
     "COMP_TYPE": "ReplaceSourceBone",
-    "Priority": "229",
     "enGB": "Changes visual effect source bone to <SourceBoneName>"
   },
   {
     "COMP_TYPE": "SacredWeaponFavoriteDamageOverride",
-    "Priority": "230",
     "enGB": "Sacred Weapon: Overrides <m_WeaponCategory> damage to <Value>"
   },
   {
     "COMP_TYPE": "SavesFixerFactReplacer",
-    "Priority": "231",
     "enGB": "Legacy Fixer: replaces <m_OldFact> with <m_NewFact>"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstFact",
-    "Priority": "232",
     "enGB": "Grants <Bonus> <Descriptor> bonus to saving throws against targets having <m_CheckedFact>"
   },
   {
     "COMP_TYPE": "SavingThrowBonusAgainstFactMultiple",
-    "Priority": "233",
     "enGB": "Grants <Bonus> <Descriptor> bonus to saving throws against targets having any of <m_CheckedFacts>"
   },
   {
     "COMP_TYPE": "SetAttackerMissChance",
-    "Priority": "234",
     "enGB": "Sets attacker miss chance to <Value>% <FlagCondition: m_Type>"
   },
   {
     "COMP_TYPE": "SpecificBuffImmunity",
-    "Priority": "235",
     "enGB": "Grants immunity to <m_Buff> effect"
   },
   {
     "COMP_TYPE": "SpellComponent",
-    "Priority": "236",
     "enGB": "Identifies this effect as a spell from the <School> school"
   },
   {
     "COMP_TYPE": "SpellDescriptorComponent",
-    "Priority": "237",
     "enGB": "Adds <Descriptor> descriptor to the effect"
   },
   {
     "COMP_TYPE": "SpellImmunityToSpellDescriptor",
-    "Priority": "238",
     "enGB": "Grants immunity to spells with <Descriptor> descriptors <FlagCondition: m_CasterIgnoreImmunityFact>"
   },
   {
     "COMP_TYPE": "SpellListComponent",
-    "Priority": "239",
     "enGB": "Adds the ability to <m_SpellList> at level <SpellLevel>"
   },
   {
     "COMP_TYPE": "SpellResistanceAgainstAlignment",
-    "Priority": "240",
     "enGB": "Grants <Value> Spell Resistance against <Alignment> casters"
   },
   {
     "COMP_TYPE": "SpellTurning",
-    "Priority": "241",
     "enGB": "Reflects incoming spells back at the caster <FlagCondition: m_SpellResistanceOnly, m_SpellDescriptorOnly, m_SpecificSpellsOnly>"
   },
   {
     "COMP_TYPE": "SpendChargesOnSpellCast",
-    "Priority": "242",
     "enGB": "Casting <m_Spell> consumes charges from item <m_BlueprintItemReference> (Filter: <m_ItemFilter>)"
   },
   {
     "COMP_TYPE": "TacticalCombatResurrection",
-    "Priority": "243",
     "enGB": "Tactical Combat: healing can resurrect units in the squad"
   },
   {
     "COMP_TYPE": "TacticalCombatVisibleFeature",
-    "Priority": "244",
     "enGB": "Feature is visible during Tactical Combat inspection"
   },
   {
     "COMP_TYPE": "UndeadHealth",
-    "Priority": "245",
     "enGB": "Uses Charisma instead of Constitution for HP (Undead trait)"
   },
   {
     "COMP_TYPE": "UnitDeathTrigger",
-    "Priority": "246",
     "enGB": "Triggers <Actions> when a unit dies within <RadiusInMeters>m <FlagCondition: Faction, CheckUnitTag>"
   },
   {
     "COMP_TYPE": "WeaponGroupAttackBonus",
-    "Priority": "247",
     "enGB": "Grants <AttackBonus> <Descriptor> bonus to attack rolls with <WeaponGroup> weapons <FlagCondition: multiplyByContext>"
   },
   {
     "COMP_TYPE": "WeaponGroupAttackBonusTTT",
-    "Priority": "248",
     "enGB": "[TTT] Grants <AttackBonus> <Descriptor> bonus to attack rolls with <WeaponGroup> weapons"
   },
   {
     "COMP_TYPE": "WeaponGroupDamageBonus",
-    "Priority": "249",
     "enGB": "Grants <DamageBonus> (plus <AdditionalValue>) <Descriptor> bonus to damage rolls with <WeaponGroup> weapons"
   },
   {
     "COMP_TYPE": "WeaponGroupDamageBonusTTT",
-    "Priority": "250",
     "enGB": "[TTT] Grants <DamageBonus> (plus <AdditionalValue>) <Descriptor> bonus to damage rolls with <WeaponGroup> weapons"
   },
   {
     "COMP_TYPE": "ResistEnergy",
-    "Priority": "251",
     "enGB": "Grants <Value> resistance to <Type> damage <FlagCondition: UsePool>"
   }
 ]

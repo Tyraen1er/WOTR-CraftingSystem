@@ -23,6 +23,13 @@ using Kingmaker.Blueprints.JsonSystem.Converters;
 
 namespace CraftingSystem
 {
+    public class DescriptionTemplate
+    {
+        [JsonProperty("COMP_TYPE")]
+        public string ComponentType;
+        public string enGB;
+    }
+
     public class EnchantmentData
     {
         public string Name;
@@ -87,6 +94,7 @@ namespace CraftingSystem
         public static int ProcessedCount = 0;
         public static int TotalCount = 0;
         public static string LastSyncMessage = "En attente de synchronisation...";
+        public static List<DescriptionTemplate> DescriptionTemplates = new List<DescriptionTemplate>();
 
         public static void Load()
         {
@@ -121,6 +129,15 @@ namespace CraftingSystem
                 else
                 {
                     Main.ModEntry.Logger.Log("[SYNC] Aucun Enchantments.json trouvé — le scanner continuera sans overrides.");
+                }
+
+                // --- CHARGEMENT DES TEMPLATES DE DESCRIPTION ---
+                string descPath = Path.Combine(Main.ModEntry.Path, "EnchantmentTemplates.json");
+                if (File.Exists(descPath))
+                {
+                    string json = File.ReadAllText(descPath);
+                    DescriptionTemplates = JsonConvert.DeserializeObject<List<DescriptionTemplate>>(json) ?? new List<DescriptionTemplate>();
+                    Main.ModEntry.Logger.Log($"[SYNC] {DescriptionTemplates.Count} templates de description chargés.");
                 }
             }
             catch (Exception ex)

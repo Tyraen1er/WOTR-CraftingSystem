@@ -328,7 +328,7 @@
         "ui_settings_source_all_desc": {
             "enGB": "Show all",
             "frFR": "Tout afficher",
-			"ruRU": "Show all"
+			"ruRU": "Показать всё"
         },
         "ui_btn_ok": {
             "enGB": "OK",
@@ -389,6 +389,26 @@
             "enGB": "Multithreaded binary scanner: {0} / {1} processed...",
             "frFR": "Scanner binaire multithread : {0} / {1} traités...",
 			"ruRU": "Многопоточный бинарный сканер: {0} / {1} обработано ..."
+        },
+        "ui_pagination_info": {
+            "enGB": "Page {0} / {1} ({2} items)",
+            "frFR": "Page {0} / {1} ({2} objets)",
+            "ruRU": "Страница {0} / {1} ({2} предм.)"
+        },
+        "ui_pagination_goto": {
+            "enGB": "Go to: ",
+            "frFR": "Aller à : ",
+            "ruRU": "Перейти: "
+        },
+        "ui_btn_go": {
+            "enGB": "Go",
+            "frFR": "Ok",
+            "ruRU": "Ок"
+        },
+        "ui_description_autogen_prefix": {
+            "enGB": "<i>[auto-generated]</i> ",
+            "frFR": "<i>[auto-généré]</i> ",
+            "ruRU": "<i>[авто-генерация]</i> "
         }
     }
 }

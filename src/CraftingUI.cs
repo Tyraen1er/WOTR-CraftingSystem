@@ -203,8 +203,8 @@ namespace CraftingSystem
             workshop?.CheckAndFinishProjects();
 
             float scale = CraftingSettings.ScalePercent / 100f;
-            float width = 800f * scale; 
-            float height = 600f * scale;
+            float width = 1000f * scale; 
+            float height = Mathf.Min(900f * scale, Screen.height * 0.9f);
             Rect windowRect = new Rect((Screen.width - width) / 2f, (Screen.height - height) / 2f, width, height);
 
             if (Event.current != null && !windowRect.Contains(Event.current.mousePosition))
@@ -428,10 +428,15 @@ namespace CraftingSystem
                     GUILayout.Label($"{displayName} (+{pointValue})", GUILayout.ExpandWidth(true));
 
                     // POUR LES OBJETS DÉJÀ APPLIQUÉS (RÉSOLU DYNAMIQUEMENT)
-                    string appliedDesc = GetLocalizedDescription(ench.Blueprint, overrideData);
+                    DescriptionSource genSource = DescriptionSource.None;
+                    string appliedDesc = GetLocalizedDescription(ench.Blueprint, overrideData, out genSource);
                     if (!string.IsNullOrEmpty(appliedDesc))
                     {
-                        GUIContent infoContent = new GUIContent("<color=#3498db>?</color>");
+                        string color = "#3498db"; // Bleu (Official) par défaut
+                        if (genSource == DescriptionSource.Generated) color = "#f1c40f"; // Jaune
+                        else if (genSource == DescriptionSource.None) color = "#e74c3c"; // Rouge
+
+                        GUIContent infoContent = new GUIContent($"<color={color}>?</color>");
                         GUIStyle infoStyle = new GUIStyle(GUI.skin.button) { 
                             richText = true, 
                             fontStyle = FontStyle.Bold, 
@@ -565,7 +570,20 @@ namespace CraftingSystem
             else
             {
                 // -- NAVIGATION DE PAGINATION --
-                itemsPerPage = Mathf.Max(1, itemsPerPage);
+                // -- DYNAMIC PAGINATION CALCULATION --
+                float currentWindowHeight = Mathf.Min(900f * scale, Screen.height * 0.9f);
+                // Estimation très agressive des éléments fixes (Header, Search, Pagination, Bottom) pour UHD
+                float fixedHeight = 120f * scale; 
+                float availableHeight = currentWindowHeight - fixedHeight;
+                float itemHeight = 26f * scale; // Hauteur minimale d'une ligne d'enchantement
+                
+                int calculatedItemsPerPage = Mathf.Max(1, Mathf.FloorToInt(availableHeight / itemHeight));
+                if (calculatedItemsPerPage != itemsPerPage)
+                {
+                    itemsPerPage = calculatedItemsPerPage;
+                    filtersDirty = true; 
+                }
+
                 int totalItems = cachedFilteredEnchantments.Count;
                 int totalPages = Mathf.Max(1, Mathf.CeilToInt((float)totalItems / itemsPerPage));
                 if (currentPage >= totalPages) currentPage = totalPages - 1;
@@ -635,10 +653,15 @@ namespace CraftingSystem
                     
                     bool newSelected = CToggleStyled(isQueued, $"{displayName} <color=#888888>({internalName})</color>", toggleStyle, GUILayout.ExpandWidth(true));
                     
-                    string descForData = GetLocalizedDescription(bp, data);
+                    DescriptionSource descSource = DescriptionSource.None;
+                    string descForData = GetLocalizedDescription(bp, data, out descSource);
                     if (!string.IsNullOrEmpty(descForData))
                     {
-                        GUIContent infoContent = new GUIContent("<color=#3498db>?</color>");
+                        string color = "#3498db"; // Bleu (Official)
+                        if (descSource == DescriptionSource.Generated) color = "#f1c40f"; // Jaune
+                        else if (descSource == DescriptionSource.None) color = "#e74c3c"; // Rouge
+
+                        GUIContent infoContent = new GUIContent($"<color={color}>?</color>");
                         GUIStyle infoStyle = new GUIStyle(GUI.skin.button) { 
                             richText = true, 
                             fontStyle = FontStyle.Bold, 
@@ -970,25 +993,42 @@ namespace CraftingSystem
             GUI.Box(new Rect(rect.x, rect.y + rect.height + 5, rect.width, 2 * scale), "");
         }
 
-        private string GetLocalizedDescription(BlueprintItemEnchantment bp, EnchantmentData data)
+        private string GetLocalizedDescription(BlueprintItemEnchantment bp, EnchantmentData data, out DescriptionSource source)
         {
+            source = DescriptionSource.None;
+
             // 1. Priorité au Jeu (Description localisée officielle)
             if (bp != null)
             {
                 string localized = bp.m_Description?.ToString();
                 if (!string.IsNullOrEmpty(localized) && localized != bp.name) 
                 {
+                    source = DescriptionSource.Official;
                     return System.Text.RegularExpressions.Regex.Replace(localized, "<.*?>", string.Empty);
                 }
             }
 
-            // 2. Surcharge JSON (Seulement si le jeu est vide)
-            if (data != null && !string.IsNullOrEmpty(data.Description)) return data.Description;
+            // 2. Génération Dynamique via Composants (Fall-back si le jeu est vide)
+            if (bp != null)
+            {
+                string generated = EnchantmentDescriptionGenerator.Generate(bp);
+                if (!string.IsNullOrEmpty(generated)) 
+                {
+                    source = DescriptionSource.Generated;
+                    string prefix = Helpers.GetString("ui_description_autogen_prefix", "[auto-generated] ");
+                    return prefix + generated;
+                }
+            }
 
             // 3. Fallback sur le Commentaire développeur
-            if (bp != null && !string.IsNullOrEmpty(bp.Comment)) return bp.Comment;
+            if (bp != null && !string.IsNullOrEmpty(bp.Comment)) 
+            {
+                source = DescriptionSource.Official;
+                return bp.Comment;
+            }
 
-            return null;
+            source = DescriptionSource.None;
+            return "TODO";
         }
 
         private string GetDisplayName(BlueprintItemEnchantment bp, EnchantmentData data)

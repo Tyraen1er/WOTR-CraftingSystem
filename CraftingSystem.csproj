@@ -108,7 +108,7 @@
 
 <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
-      <ModFiles Include="$(TargetDir)$(TargetName).dll;Info.json;Localization.json;Enchantments.json" />
+      <ModFiles Include="$(TargetDir)$(TargetName).dll;Info.json;Localization.json;Enchantments.json;EnchantmentTemplates.json" />
     </ItemGroup>
     
     <Exec Command="python &quot;$(ProjectDir)convert_csv_to_json.py&quot; &quot;$(ProjectDir)Enchantments.csv&quot;" 
