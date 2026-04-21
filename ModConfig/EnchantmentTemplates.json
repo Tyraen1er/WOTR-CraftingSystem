@@ -12,6 +12,12 @@
     "ruRU": "+<Value> (<Descriptor>) бонус к характеристике <Stat>"
   },
   {
+    "COMP_TYPE": "AddStatBonusEquipment",
+    "enGB": "+<Value> <Descriptor> bonus to <Stat>",
+    "frFR": "Bonus de <Descriptor> de +<Value> à la stat <Stat>",
+    "ruRU": "+<Value> (<Descriptor>) бонус к характеристике <Stat>"
+  },
+  {
     "COMP_TYPE": "AddDamageResistancePhysical",
     "enGB": "DR <Value>/<FlagCondition: BypassedByMaterial, BypassedByForm, BypassedByMagic, BypassedByAlignment, BypassedByReality, BypassedByWeaponType, BypassedByMeleeWeapon, BypassedByEpic>",
     "frFR": "RD <Value>/<FlagCondition: BypassedByMaterial, BypassedByForm, BypassedByMagic, BypassedByAlignment, BypassedByReality, BypassedByWeaponType, BypassedByMeleeWeapon, BypassedByEpic>",

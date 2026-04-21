@@ -106,9 +106,16 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="ModConfig\Info.json" />
+    <None Include="ModConfig\Localization.json" />
+    <None Include="ModConfig\EnchantmentTemplates.json" />
+    <None Include="Enchantments.csv" />
+  </ItemGroup>
+
 <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
-      <ModFiles Include="$(TargetDir)$(TargetName).dll;Info.json;Localization.json;Enchantments.json;EnchantmentTemplates.json" />
+      <ModFiles Include="$(TargetDir)$(TargetName).dll;ModConfig\Info.json;ModConfig\Localization.json;Enchantments.json;ModConfig\EnchantmentTemplates.json" />
     </ItemGroup>
     
     <Exec Command="python &quot;$(ProjectDir)convert_csv_to_json.py&quot; &quot;$(ProjectDir)Enchantments.csv&quot;" 

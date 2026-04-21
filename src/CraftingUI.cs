@@ -30,6 +30,7 @@ namespace CraftingSystem
         
         private Vector2 scrollPosition;
         private Vector2 titleScrollPosition;
+        private Vector2 descriptionScrollPosition;
         public string feedbackMessage = "";
         private string newNameDraft = "";
         private string enchantmentSearch = "";
@@ -1075,7 +1076,7 @@ namespace CraftingSystem
             
             GUILayout.Space(10);
             
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUI.skin.box);
+            descriptionScrollPosition = GUILayout.BeginScrollView(descriptionScrollPosition, GUI.skin.box);
             GUILayout.Label(activeDescriptionPopup, new GUIStyle(GUI.skin.label) { wordWrap = true, richText = true, fontSize = (int)(14 * scale) });
             GUILayout.EndScrollView();
             

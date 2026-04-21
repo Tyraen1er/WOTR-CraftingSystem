@@ -1,0 +1,472 @@
+TYPES:
+$AddCondition$774f4594-0fc1-4d9c-b00d-60d17aded471
+$AddCondition$b35b5739-56c6-4dfa-ab37-7f37a236807e
+$AddCondition$d949a8ff-a428-48fe-b393-6affbbb410c5
+$AddCondition$f3d8a01c-e92e-4413-887b-22ed768ddb39
+$AddCondition$f629ca55-5821-4560-9ef7-11e8b0c3c56f
+$AddConditionImmunity$03cdfde7-ba77-4929-b6d2-54a6fa10e2fa
+$AddConditionImmunity$060f8386-ac1d-47fd-b018-44bec4ea7697
+$AddConditionImmunity$13af3a48-6120-4f54-8c84-a3a8a24d1419
+$AddConditionImmunity$15d6e7db-c654-40d9-acc9-5fdd0231eb57
+$AddConditionImmunity$167dc3eb-3a43-4bd5-a93d-ff4613fce4a6
+$AddConditionImmunity$167dc3eb-3a43-4bd5-a93d-ff4613fce4a6(Clone)
+$AddConditionImmunity$1cdc2e66-08fd-451a-a319-ddd13687563d
+$AddConditionImmunity$1d813786-8bcd-4b2f-a57b-3275278e5a29
+$AddConditionImmunity$21c61330-75bf-4077-a069-9e7743dde367
+$AddConditionImmunity$239b195a-56b1-4c5f-bf1e-73e17b239947
+$AddConditionImmunity$239b195a-56b1-4c5f-bf1e-73e17b239947(Clone)
+$AddConditionImmunity$372a9d38-6c53-4ca9-9022-178c660aeb6c
+$AddConditionImmunity$3a290ece-f547-4e06-ba51-2e1a72eb22aa
+$AddConditionImmunity$3f15b091-c37d-4bcf-b3bb-5ce646a0a6fd
+$AddConditionImmunity$495c6ec6-3744-4197-aafb-fb3ea5f0eb46
+$AddConditionImmunity$495c6ec6-3744-4197-aafb-fb3ea5f0eb46(Clone)
+$AddConditionImmunity$53a2d25a-6247-4113-a724-bd862f84709a
+$AddConditionImmunity$54851ff3-4730-492c-9c8a-cb68fe04c059
+$AddConditionImmunity$54851ff3-4730-492c-9c8a-cb68fe04c059(Clone)
+$AddConditionImmunity$5b63fea4-a3cb-42f3-b5b5-9af3281257d5
+$AddConditionImmunity$608f8ef1-b74f-43c6-a252-00abc7d8e81f
+$AddConditionImmunity$6d70a9c3-63a7-4809-99d7-6dc3fea1cdfd
+$AddConditionImmunity$7b39b239-e363-40a2-9e25-2b102f1df280
+$AddConditionImmunity$7ce50915-2c67-4eec-ad0c-9f46139c0b38
+$AddConditionImmunity$a4b2e1f1-546e-4cb2-a0f3-f711749ba09c
+$AddConditionImmunity$a7d8f282-f7ba-4a40-bcf0-ba7e665dfbd8
+$AddConditionImmunity$a7d8f282-f7ba-4a40-bcf0-ba7e665dfbd8(Clone)
+$AddConditionImmunity$bf0d6539-c85d-4aed-a7d9-6d6f8e74d8b2
+$AddConditionImmunity$c52f9f80-e2a8-4eba-9d76-2faa1e17f359
+$AddConditionImmunity$c806efbc-a0ab-4b8f-b966-9fbfa54a2c2c
+$AddConditionImmunity$d30a7b9b-886e-45be-bac8-df1b622c9be3
+$AddConditionImmunity$d3b764e7-b35e-4883-87be-c2d91eae1e5d
+$AddConditionImmunity$e2f2c1f8-e51c-4424-8eb5-317c42f0fb59
+$AddConditionImmunity$e4babc37-4627-4ccb-8894-4cf98c2869ff
+$AddConditionImmunity$e6e1d474-3855-406b-9d83-167d162f27b1
+$AddConditionImmunity$e7b24fb8-fe54-4865-899f-22872646a616
+$AddConditionImmunity$ec002b44-ae4d-4b66-a5e2-bf011defbaf5
+$AddConditionImmunity$fdcd7e27-8cb3-4b2d-b8ee-534ab9bf32b9
+$AddConditionImmunityEquipment$28942d3e-1df0-4921-a7bf-4562d0aab2f5
+$AddConditionImmunityEquipment$35286b3c-c11b-41c7-9894-6ccccb159780
+$AddConditionImmunityEquipment$44e5ca3f-6cd3-4f90-97ce-d16dababcfbb
+$AddConditionImmunityEquipment$455cc020-bdcf-4e04-862f-8e139d0d21e2
+$AddConditionImmunityEquipment$45746592-f56a-4575-84d0-f51f38d9974d
+$AddConditionImmunityEquipment$580e722c-9d14-4a14-a16b-38150e3bccb8
+$AddConditionImmunityEquipment$5d7d4f89-99ee-4446-b728-bc91d5a7169c
+$AddConditionImmunityEquipment$6148a8c7-3cf5-4af9-a9d1-72f1ac560c7d
+$AddConditionImmunityEquipment$9c260e31-13b1-4b7d-bf6c-b04def1eb07f
+$AddConditionImmunityEquipment$9f328854-37d8-49dd-bbf5-6c3ed3fec3db
+$AddConditionImmunityEquipment$cb27daa0-ae39-4e24-8726-925e2ecfeeac
+$AddConditionImmunityEquipment$d6fe38a3-0b6d-4043-bc1f-8430dc0bf8e7
+$AddConditionImmunityEquipment$f20ca1a7-6138-4bef-8a05-32ba0b55e2ab
+$AddConditionImmunityEquipment$f384d738-d35e-4797-9569-272cc4b674df
+$AddConditionTrigger$1444da0f-fa24-4de5-b6bf-0ba6e56b4798
+$AddConditionTrigger$41d2d861-4c8a-4c00-a0f1-8406012569d6
+$AddConditionalWeaponDamageBonus
+$AttackBonusConditional$29381c89-2a69-4c9c-86cd-be87fdd86f70
+$AttackBonusConditional$2cd33297-aa8f-4958-9744-18e29332c88b
+$AttackBonusConditional$3b02af1d-0fb1-4458-a27f-1342f8427d32
+$AttackBonusConditional$3db281dc-17ff-4c3e-a31a-0623f70da1f9
+$AttackBonusConditional$3f07efd4-42ed-475f-a73d-caf1d82570b3
+$AttackBonusConditional$73d55b59-8079-48ca-b81e-963d646069ea
+$AttackBonusConditional$8740a18c-5e0e-4c5f-9933-75fece5251be
+$AttackBonusConditional$942127cf-f688-4207-865a-a9fb834f79f5
+$AttackBonusConditional$b2cdb107-61db-4bbf-9cd3-465dc3a5ca1d
+$AttackBonusConditional$d292e562-5aa0-4964-ab4c-c0ee04ae8f90
+$AttackBonusConditional$d397c6a2-0b40-4e7b-ab18-dfb284f66113
+$AttackBonusConditional$e8deddc4-cd3e-4990-aefc-f6592e516280
+$BuffStatusCondition$d13f2327-7108-4335-9f08-7f20968b36e7
+$DamageBonusConditional$1023290b-15b8-4afb-a62d-4c9107029915
+$DamageBonusConditional$7205152f-cbd9-4b6f-a0fd-3cbc72e6d528
+$DamageBonusConditional$b3263877-b480-4bd4-8f59-17e2ac0b0b84
+$GentlePersuasionConditioning$a24ac56d-48a8-40a4-92b4-e25c061b5a7c
+$WeaponConditionalDamageDice
+$WeaponConditionalDamageDice$1abcba3c-3f24-4137-b0fa-4faba6b43c99
+$WeaponConditionalDamageDice$366d8c91-8913-46e0-a89e-c625f9648475
+$WeaponConditionalDamageDice$4c07d855-a10d-426e-89c9-f99508252a47
+$WeaponConditionalDamageDice$4d163635-1dd5-4f1d-a636-c0b0234ebcab
+$WeaponConditionalDamageDice$6014eaad-c1a4-43ba-a106-c0ee940c182b
+$WeaponConditionalDamageDice$6aa24334-d84f-43b7-80de-3e7cefefddb7
+$WeaponConditionalDamageDice$8821cb31-06f0-4fc0-856d-bf4d720c5c72
+$WeaponConditionalDamageDice$8d6a545d-9f1f-420b-bc0a-1f24d9380cf0
+$WeaponConditionalDamageDice$945ef19b-3fa4-4146-bd7e-dd4fbe86712c
+$WeaponConditionalDamageDice$999c5e47-d336-4482-8302-1c99fe4a59f1
+$WeaponConditionalDamageDice$c2afe5d3-8604-4e69-b4da-e55814f39f37
+$WeaponConditionalDamageDice$c5fb0af8-9aca-434f-bcc6-92a889dfc1b7
+$WeaponConditionalDamageDice$c6c5f2a5-66b3-4414-aa27-400f951352e7
+$WeaponConditionalDamageDice$d5857643-fbd1-4137-94fd-aa37a5297e85
+$WeaponConditionalDamageDice$d6fd7faf-edf8-40ce-a3dc-cecebb35495a
+$WeaponConditionalDamageDice$ecc287c5-8b67-437e-b5be-fc4869844593
+$WeaponConditionalDamageDice$ee0200bb-90c1-4625-855c-dab0de0d4557
+$WeaponConditionalDamageDiceTTT
+$WeaponConditionalEnhancementBonus$202af32f-9e17-44cc-b429-e6fe34456f74
+$WeaponConditionalEnhancementBonus$2a5cfdd9-7b83-400f-a9d1-d60fc1b3e916
+$WeaponConditionalEnhancementBonus$35c1e999-c045-457b-9d5c-fe7424580e59
+$WeaponConditionalEnhancementBonus$63334ef8-fd2d-4004-8501-2a84239b2234
+$WeaponConditionalEnhancementBonus$90de676a-57b3-43c0-8fee-ef7b332cc0c8
+$WeaponConditionalEnhancementBonus$a6f07b42-47bb-4675-8fd4-0354e5a9fe98
+$WeaponConditionalEnhancementBonus$c3420665-b0ee-4913-85da-cf1c29966347
++<AttackBonus> (<Descriptor>) бонус к атаке оружием <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>
++<AttackBonus> (<Descriptor>) бонус к атаке оружием типа <Type> <FlagCondition: AllTypesExcept, CheckFact>
++<AttackBonus> <Descriptor> attack bonus with <Type> weapons <FlagCondition: AllTypesExcept, CheckFact>
++<AttackBonus> <Descriptor> bonus to attack rolls with <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>
++<Bonus> (<Descriptor>) бонус к КЗ против существ <FlagCondition: NoFact> с особенностью <m_CheckedFact>
++<Bonus> (<Descriptor>) бонус к КЗ против существ <FlagCondition: NoFact> с особенностью <m_CheckedFact> (<Alignment>)
++<Bonus> (<Descriptor>) бонус к КЗ против существ под эффектом <m_CheckedBuff> <FlagCondition: CheckAlignment>
++<Bonus> (<Descriptor>) бонус к атаке <FlagCondition: Conditions>
++<Bonus> (<Descriptor>) бонус к атаке при внеочередных атаках <FlagCondition: NotAttackOfOpportunity>
++<Bonus> (<Descriptor>) бонус к урону <FlagCondition: Conditions, OnlyWeaponDamage>
++<Bonus> <Descriptor> attack bonus <FlagCondition: Conditions>
++<Bonus> <Descriptor> attack bonus on attacks of opportunity <FlagCondition: NotAttackOfOpportunity>
++<Bonus> <Descriptor> bonus to AC against <FlagCondition: NoFact> owners of <m_CheckedFact>
++<Bonus> <Descriptor> bonus to AC against <FlagCondition: NoFact> owners of <m_CheckedFact> (<Alignment>)
++<Bonus> <Descriptor> bonus to AC against owners of <m_CheckedBuff> <FlagCondition: CheckAlignment>
++<Bonus> <Descriptor> damage bonus <FlagCondition: Conditions, OnlyWeaponDamage>
++<BonusCasterLevel> (<ModifierDescriptor>) бонус к уровню заклинателя для заклинаний типа <Descriptor> <FlagCondition: SpellsOnly>
++<BonusCasterLevel> <ModifierDescriptor> bonus to Caster Level of <Descriptor> spells <FlagCondition: SpellsOnly>
++<BonusDC> (<ModifierDescriptor>) бонус к сложности заклинаний типа <Descriptor> <FlagCondition: SpellsOnly>
++<BonusDC> <ModifierDescriptor> bonus to DC of <Descriptor> spells <FlagCondition: SpellsOnly>
++<DamageBonus> bonus to damage rolls with <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>
++<DamageBonus> бонус к урону оружием <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>
++<Value> (<Descriptor>) бонус к КЗ против <FlagCondition: AgainstMeleeOnly, AgainstRangedOnly, OnlySneakAttack, NotTouch, IsTouch, OnlyAttacksOfOpportunity>
++<Value> (<Descriptor>) бонус к КЗ против врагов размера <Size> <FlagCondition: SizeDelta>
++<Value> (<Descriptor>) бонус к проверкам на преодоление устойчивости к магии <FlagCondition: CheckFact>
++<Value> (<Descriptor>) бонус к характеристике <Stat> <FlagCondition: HasMinimal>
++<Value> (<Descriptor>) бонус к характеристике <Stat> <FlagCondition: Multiplier>
++<Value> (<Descriptor>) бонус ко всем навыкам <FlagCondition: Multiplier>
++<Value> (<ModifierDescriptor>) бонус к сложности заклинаний типа <Descriptor> <FlagCondition: SpellsOnly>
++<Value> <Descriptor> bonus to <Stat> <FlagCondition: HasMinimal>
++<Value> <Descriptor> bonus to <Stat> <FlagCondition: Multiplier>
++<Value> <Descriptor> bonus to AC against <FlagCondition: AgainstMeleeOnly, AgainstRangedOnly, OnlySneakAttack, NotTouch, IsTouch, OnlyAttacksOfOpportunity>
++<Value> <Descriptor> bonus to AC against <Size> enemies <FlagCondition: SizeDelta>
++<Value> <Descriptor> bonus to all skills <FlagCondition: Multiplier>
++<Value> <Descriptor> bonus to spell penetration checks <FlagCondition: CheckFact>
++<Value> <ModifierDescriptor> bonus to DC of <Descriptor> spells <FlagCondition: SpellsOnly>
++<Value> bonus to concentration checks <FlagCondition: CheckFact>
++<Value> damage per die of <m_Spells> <FlagCondition: UseContextBonus>
++<Value> dégâts par dé de <m_Spells> <FlagCondition: UseContextBonus>
++<Value> бонус к проверкам концентрации <FlagCondition: CheckFact>
++<Value> урона за каждую кость заклинания <m_Spells> <FlagCondition: UseContextBonus>
+<Concealment> concealment (<Descriptor>) <FlagCondition: CheckDistance, CheckWeaponRangeType>
+<Value> (<Descriptor>) бонус к скорости перемещения <FlagCondition: CappedOnMultiplier, CappedMinimum>
+<Value> <Descriptor> bonus to movement speed <FlagCondition: CappedOnMultiplier, CappedMinimum>
+AddCondition
+AddConditionImmunity
+AddConditionTrigger
+AddConditionalWeaponDamageBonus
+Adds <DamageBonus> to damage on attacks of opportunity <FlagCondition: CheckWeaponRangeType>
+Adds <DiceValue> <DamageTypeDescription> on damage <FlagCondition: CheckWeaponType, CheckAbilityType, CheckSpellDescriptor, CheckEnergyDamageType>
+Adds <PhysicalDamageDice> sneak damage <FlagCondition: OnlyNoDexToAC>
+Adds <Value> <DamageType> on attack <FlagCondition: OnlyOnFullAttack, OnlyOnFirstAttack, OnHit, CriticalHit, OnlySneakAttack, OnCharge, OnAttackOfOpportunity>
+Adjusts <m_Resource> maximum amount by <Value> <FlagCondition: Decrease>
+Affecte toutes les <m_TargetType> dans un rayon de <m_Radius> <FlagCondition: m_IncludeDead>
+Affects all <m_TargetType> within <m_Radius> radius <FlagCondition: m_IncludeDead>
+Ajoute <DamageBonus> aux dégâts lors d'une attaque d'opportunité <FlagCondition: CheckWeaponRangeType>
+Ajoute <DiceValue> <DamageTypeDescription> aux dégâts <FlagCondition: CheckWeaponType, CheckAbilityType, CheckSpellDescriptor, CheckEnergyDamageType>
+Ajoute <PhysicalDamageDice> dégâts de précision <FlagCondition: OnlyNoDexToAC>
+Ajoute <Value> <DamageType> à l'attaque <FlagCondition: OnlyOnFullAttack, OnlyOnFirstAttack, OnHit, CriticalHit, OnlySneakAttack, OnCharge, OnAttackOfOpportunity>
+Ajuste le nombre max d'utilisations de <m_Resource> de <Value> <FlagCondition: Decrease>
+Allows casting <m_Ability> as a free action <FlagCondition: m_CheckAbilityType>
+Applies <Condition> <FlagCondition: SaveEachRound, SaveType>
+Applies <m_Buff> upon spawning <FlagCondition: m_CheckRadius, m_CheckCasterFact>
+Applique <m_Buff> à l'apparition <FlagCondition: m_CheckRadius, m_CheckCasterFact>
+Applique automatiquement la métamagie <Metamagic> à <m_AllowedAbilities> <FlagCondition: School, Descriptor, MaxSpellLevel>
+Applique l'état : <Condition> <FlagCondition: SaveEachRound, SaveType>
+At the start of combat, gain <m_Feature> <FlagCondition: CheckParty>
+AttackBonusConditional
+Au début du combat, gagne <m_Feature> <FlagCondition: CheckParty>
+Augmente la taille des dés d'arme de <AdditionalSize> (ou <Value>) <FlagCondition: CheckWeaponCategories, CheckWeaponSubCategories>
+Augmente la zone de critique de <CriticalRangeIncrease> <FlagCondition: AllWeapons>
+Augmente le Bonus Max de Dex pour <Category> de <Bonus> (ou <ContextBonus>) <FlagCondition: ReplaceContextIfGreater, CheckCategory>
+Augmente les dégâts de <DamageType> sortants de <OriginalDamageFactor> <FlagCondition: Condition>
+Augmente les utilisations par jour de <m_Resource> de <Amount> <FlagCondition: UseThisAsResource>
+Automatically apply <Metamagic> metamagic to <m_AllowedAbilities> <FlagCondition: School, Descriptor, MaxSpellLevel>
+Bonus de +<DamageBonus> aux dégâts avec <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>
+Bonus de +<Value> aux tests de concentration <FlagCondition: CheckFact>
+Bonus de <Descriptor> de +<AttackBonus> à l'attaque avec <m_WeaponBlueprint> <FlagCondition: Ranged, OnlyTwoHanded>
+Bonus de <Descriptor> de +<AttackBonus> à l'attaque avec les armes de type <Type> <FlagCondition: AllTypesExcept, CheckFact>
+Bonus de <Descriptor> de +<Bonus> aux dégâts <FlagCondition: Conditions, OnlyWeaponDamage>
+Bonus de <Descriptor> de +<Bonus> à l'attaque <FlagCondition: Conditions>
+Bonus de <Descriptor> de +<Bonus> à l'attaque lors d'une attaque d'opportunité <FlagCondition: NotAttackOfOpportunity>
+Bonus de <Descriptor> de +<Bonus> à la CA contre les porteurs de <m_CheckedBuff> <FlagCondition: CheckAlignment>
+Bonus de <Descriptor> de +<Bonus> à la CA contre les possesseurs <FlagCondition: NoFact> de <m_CheckedFact>
+Bonus de <Descriptor> de +<Bonus> à la CA contre les possesseurs <FlagCondition: NoFact> de <m_CheckedFact> (<Alignment>)
+Bonus de <Descriptor> de +<Value> aux tests de pénétration magique <FlagCondition: CheckFact>
+Bonus de <Descriptor> de +<Value> à <Stat> <FlagCondition: HasMinimal>
+Bonus de <Descriptor> de +<Value> à <Stat> <FlagCondition: Multiplier>
+Bonus de <Descriptor> de +<Value> à la CA contre : <FlagCondition: AgainstMeleeOnly, AgainstRangedOnly, OnlySneakAttack, NotTouch, IsTouch, OnlyAttacksOfOpportunity>
+Bonus de <Descriptor> de +<Value> à la CA contre les ennemis de taille <Size> <FlagCondition: SizeDelta>
+Bonus de <Descriptor> de +<Value> à toutes les compétences <FlagCondition: Multiplier>
+Bonus de <Descriptor> de <Value> à la vitesse de déplacement <FlagCondition: CappedOnMultiplier, CappedMinimum>
+Bonus de <ModifierDescriptor> de +<BonusCasterLevel> au niveau de lanceur des sorts de type <Descriptor> <FlagCondition: SpellsOnly>
+Bonus de <ModifierDescriptor> de +<BonusDC> au DD des sorts de type <Descriptor> <FlagCondition: SpellsOnly>
+Bonus de <ModifierDescriptor> de +<Value> au DD des sorts de type <Descriptor> <FlagCondition: SpellsOnly>
+BuffStatusCondition
+Calculates <Name> property using <Value> <FlagCondition: SaveToContext>
+Calculates spell parameters using <StatType> <FlagCondition: ReplaceCasterLevel, ReplaceSpellLevel, UseKineticistMainStat>
+Calcule la propriété <Name> en utilisant <Value> <FlagCondition: SaveToContext>
+Calcule les paramètres de sort en utilisant <StatType> <FlagCondition: ReplaceCasterLevel, ReplaceSpellLevel, UseKineticistMainStat>
+Camouflage : <Concealment> (<Descriptor>) <FlagCondition: CheckDistance, CheckWeaponRangeType>
+Cast <m_Abilities> without provoking attacks of opportunity <FlagCondition: CheckSchool, CheckAbilityType, CheckDescriptor>
+Chains to <TargetsCount> additional targets within <Radius> <FlagCondition: m_IgnoreFirst, m_UsedTargetsAgain>
+Conditionnement du changement d'alignement : punition <m_PunishmentBuff>, récompense <m_RewardBuff>
+Confère <Number> attaque(s) supplémentaire(s) <FlagCondition: Haste, Penalized>
+Confère <Range> pieds de Sens aveugle <FlagCondition: Blindsight>
+Confère <m_Feature> <FlagCondition: Not> le possesseur a <m_CheckedFact>
+Confère <m_Feature> quand le niveau de <m_Class> est <Level> <FlagCondition: BeforeThisLevel>
+Confère l'immunité aux sorts avec les descripteurs <Descriptor> <FlagCondition: m_CasterIgnoreImmunityFact>
+Confère l'état : <Condition>
+Confère le sort <m_Spell> (Niveau <Level>) <FlagCondition: OnlySpontaneous>
+Confère les dons/capacités suivants : <m_Facts> <FlagCondition: CasterLevel>
+Confère les dons/capacités suivants à la monture : <m_Facts> <FlagCondition: CasterLevel>
+Confère un bonus aux dés de sorts : <DiceBonuses> <FlagCondition: CheckSpellDescriptor>
+Confère un bonus de <Descriptor> de <AttackBonus> à l'attaque avec les armes du groupe <WeaponGroup> <FlagCondition: multiplyByContext>
+Confère un bonus de <Descriptor> de <AttackBonus>+<Bonus> aux jets d'attaque contre les cibles <FlagCondition: Not> ayant <m_CheckedFact>
+Confère un bonus de <Descriptor> de <Bonus> aux manœuvres de type <Type> <FlagCondition: Mythic, IgnoreFactRank>
+Confère un bonus de <Descriptor> de <DamageBonus>+<Bonus> aux jets d'attaque contre <Alignment> <FlagCondition: OnlyMelee>
+Confère un bonus de <Descriptor> de <Value> aux jets d'attaque contre les ennemis de taille <Size> <FlagCondition: OnlyForMelee, OnlyForRanged, SizeMoreThan>
+Confère un bonus de <Descriptor> de <Value> à <Stat> si le possesseur a : <m_CheckedFacts> <FlagCondition: InvertCondition, RequireAllFacts>
+Confère un bonus de <Value>+<Bonus> à la confirmation des critiques <FlagCondition: OnlyPositiveValue, CheckWeaponRangeType>
+Confère un bonus à la CA en formation : <Bonus> <FlagCondition: UnitProperty>
+Confère un compagnon de type <Type> (<m_Pet>) <FlagCondition: UpgradeFeature>
+Confère une résistance de <Value> aux dégâts de <Type> <FlagCondition: UsePool>
+DR <Value>/<FlagCondition: BypassedByMaterial, BypassedByForm, BypassedByMagic, BypassedByAlignment, BypassedByReality, BypassedByWeaponType, BypassedByMeleeWeapon, BypassedByEpic>
+DR <Value>/<FlagCondition: BypassedByMaterial, BypassedByMagic>
+Damage increases with each consecutive hit (+1 per hit) <FlagCondition: OnlyNaturalAttacks>
+DamageBonusConditional
+Deals <Damage> <EnergyType> damage each round <FlagCondition: InstantStartTick>
+Définit les chances de rater de l'attaquant à <Value>% <FlagCondition: m_Type>
+Définit les paramètres de sort : DD <DC>, CL <CasterLevel>, Concentration <Concentration> <FlagCondition: Add10ToDC>
+Effet Visuel : <PrefabLink> sur <Anchor> (<Time>) <FlagCondition: Delay>
+En recevant <m_GainedFact> (ou le descripteur <SpellDescriptor>), le remplace par <m_SubstituteBuff> <FlagCondition: CheckConditionImmunity>
+Enchant item in <Slot> with <m_EnchantmentBlueprint> <FlagCondition: AllWeapons>
+Enchante l'objet dans <Slot> avec <m_EnchantmentBlueprint> <FlagCondition: AllWeapons>
+Fires <m_Projectiles> projectiles <FlagCondition: NeedAttackRoll, Type, m_Length>
+GentlePersuasionConditioning
+Grants <AttackBonus> <Descriptor> bonus to attack rolls with <WeaponGroup> weapons <FlagCondition: multiplyByContext>
+Grants <AttackBonus>+<Bonus> <Descriptor> bonus to attack rolls against targets having <FlagCondition: Not> <m_CheckedFact>
+Grants <Bonus> <Descriptor> bonus to <Type> maneuvers <FlagCondition: Mythic, IgnoreFactRank>
+Grants <Condition> condition
+Grants <DamageBonus>+<Bonus> <Descriptor> bonus to attack rolls against <Alignment> <FlagCondition: OnlyMelee>
+Grants <Number> extra attack(s) <FlagCondition: Haste, Penalized>
+Grants <Range> feet Blindsense <FlagCondition: Blindsight>
+Grants <Value> <Descriptor> bonus to <Stat> if having fact: <m_CheckedFacts> <FlagCondition: InvertCondition, RequireAllFacts>
+Grants <Value> <Descriptor> bonus to attack rolls against <Size> <FlagCondition: OnlyForMelee, OnlyForRanged, SizeMoreThan>
+Grants <Value> resistance to <Type> damage <FlagCondition: UsePool>
+Grants <Value>+<Bonus> bonus to critical hit confirmation <FlagCondition: OnlyPositiveValue, CheckWeaponRangeType>
+Grants <m_Feature> <FlagCondition: Not> the owner has <m_CheckedFact>
+Grants <m_Feature> when <m_Class> level is <Level> <FlagCondition: BeforeThisLevel>
+Grants AC bonus while in formation: <Bonus> <FlagCondition: UnitProperty>
+Grants a <Type> (<m_Pet>) <FlagCondition: UpgradeFeature>
+Grants bonus to spell dice: <DiceBonuses> <FlagCondition: CheckSpellDescriptor>
+Grants immunity to spells with <Descriptor> descriptors <FlagCondition: m_CasterIgnoreImmunityFact>
+Grants the following facts to the mount: <m_Facts> <FlagCondition: CasterLevel>
+Grants the following facts: <m_Facts> <FlagCondition: CasterLevel>
+Grants the spell <m_Spell> (Level <Level>) <FlagCondition: OnlySpontaneous>
+If having <m_CheckedBuff>, also grants <m_ExtraEffectBuff> <FlagCondition: m_ExceptionFact>
+Ignore la RD de la cible <FlagCondition: CheckTargetAlignment>
+Ignore la réduction de dégâts (RD) sur les attaques de type <m_WeaponType> <FlagCondition: CriticalHit, OnlyOnFullAttack, OnlyOnFirstAttack, OnlyNaturalAttacks, CheckEnemyFact>
+Ignore la résistance à la magie pour <m_AbilityList> <FlagCondition: AllSpells>
+Ignores DR of target <FlagCondition: CheckTargetAlignment>
+Ignores Damage Reduction on <m_WeaponType> attacks <FlagCondition: CriticalHit, OnlyOnFullAttack, OnlyOnFirstAttack, OnlyNaturalAttacks, CheckEnemyFact>
+Ignores Spell Resistance for <m_AbilityList> <FlagCondition: AllSpells>
+Immunity to <Condition>
+Immunity to <EnergyType> <FlagCondition: HealOnDamage>
+Immunity to <Type> spells <FlagCondition: Alignment, SpellDescriptor>
+Immunity to effects with descriptor: <Descriptor> <FlagCondition: CheckFact>
+Immunity to effects with the descriptor: <Descriptor> <FlagCondition: CheckFact>
+Immunité aux effets avec le descripteur : <Descriptor> <FlagCondition: CheckFact>
+Immunité aux sorts de type <Type> <FlagCondition: Alignment, SpellDescriptor>
+Immunité à : <EnergyType> <FlagCondition: HealOnDamage>
+Immunité à l'état : <Condition>
+Increase outgoing <DamageType> by <OriginalDamageFactor> <FlagCondition: Condition>
+Increases <m_Resource> uses per day by <Amount> <FlagCondition: UseThisAsResource>
+Increases Max Dex Bonus for <Category> by <Bonus> (or <ContextBonus>) <FlagCondition: ReplaceContextIfGreater, CheckCategory>
+Increases critical range by <CriticalRangeIncrease> <FlagCondition: AllWeapons>
+Increases weapon dice size by <AdditionalSize> (or <Value>) <FlagCondition: CheckWeaponCategories, CheckWeaponSubCategories>
+Inflige <Damage> dégâts de <EnergyType> chaque round <FlagCondition: InstantStartTick>
+La cible <FlagCondition: Inverted> possède <m_CheckedFacts> <FlagCondition: FromCaster>
+Lance <m_Abilities> sans provoquer d'attaques d'opportunité <FlagCondition: CheckSchool, CheckAbilityType, CheckDescriptor>
+Les attaques à l'arme gagnent : <FlagCondition: AddMagic, AddMaterial, Material, AddForm, Form, AddAlignment, Alignment, MyAlignment, AddReality, Reality, AgainstFactOwner>
+Les dégâts augmentent avec chaque coup consécutif (+1 par coup) <FlagCondition: OnlyNaturalAttacks>
+Modifie <Type> entrant de <ModifierPercents>% <FlagCondition: m_DamageWeaponType, m_SourceToTargetFactionType, m_AoeEntry>
+Modifie les jets de d20 pour <Rule> : <FlagCondition: Replace, TakeBest, AddBonus, WithChance, RerollOnlyIfFailed, RerollOnlyIfSuccess, AgainstAlignment, SpecificSkill, SpecificDescriptor, AddSavingThrowBonus, TandemTrip>
+Modifies <Rule> d20 rolls: <FlagCondition: Replace, TakeBest, AddBonus, WithChance, RerollOnlyIfFailed, RerollOnlyIfSuccess, AgainstAlignment, SpecificSkill, SpecificDescriptor, AddSavingThrowBonus, TandemTrip>
+Modifies incoming <Type> by <ModifierPercents>% <FlagCondition: m_DamageWeaponType, m_SourceToTargetFactionType, m_AoeEntry>
+OnConditionAdded
+OnConditionAdded (0)
+OnConditionRemoved
+OnConditionRemoved (1)
+Permet de lancer <m_Ability> comme une action gratuite <FlagCondition: m_CheckAbilityType>
+RD <Value>/<FlagCondition: BypassedByMaterial, BypassedByForm, BypassedByMagic, BypassedByAlignment, BypassedByReality, BypassedByWeaponType, BypassedByMeleeWeapon, BypassedByEpic>
+RD <Value>/<FlagCondition: BypassedByMaterial, BypassedByMagic>
+Recommandé pour les armes : <m_WeaponTypes> <FlagCondition: HasFocus>
+Recommended weapon focus/type: <m_WeaponTypes> <FlagCondition: HasFocus>
+Reflects incoming spells back at the caster <FlagCondition: m_SpellResistanceOnly, m_SpellDescriptorOnly, m_SpecificSpellsOnly>
+Remplace la statistique d'attaque par <ReplacementStat> <FlagCondition: CheckWeaponTypes>
+Renvoie les sorts entrants vers leur lanceur <FlagCondition: m_SpellResistanceOnly, m_SpellDescriptorOnly, m_SpecificSpellsOnly>
+Replaces attack stat with <ReplacementStat> <FlagCondition: CheckWeaponTypes>
+Requiert <Amount> util. de <m_RequiredResource> <FlagCondition: CostIsCustom>
+Requiert le don : <m_Feature> <FlagCondition: CheckInProgression>
+Requiert une valeur de <Stat> d'au moins <Value> <FlagCondition: CheckInProgression>
+Requires <Amount> <m_RequiredResource> <FlagCondition: CostIsCustom>
+Requires <Stat> score of at least <Value> <FlagCondition: CheckInProgression>
+Requires feature: <m_Feature> <FlagCondition: CheckInProgression>
+Se propage à <TargetsCount> cibles additionnelles dans un rayon de <Radius> <FlagCondition: m_IgnoreFirst, m_UsedTargetsAgain>
+Sets attacker miss chance to <Value>% <FlagCondition: m_Type>
+Sets spell parameters: DC <DC>, CL <CasterLevel>, Concentration <Concentration> <FlagCondition: Add10ToDC>
+Si le possesseur a <m_CheckedBuff>, confère aussi : <m_ExtraEffectBuff> <FlagCondition: m_ExceptionFact>
+Target <FlagCondition: Inverted> has <m_CheckedFacts> <FlagCondition: FromCaster>
+Tire <m_Projectiles> projectiles <FlagCondition: NeedAttackRoll, Type, m_Length>
+Visual Effect: <PrefabLink> at <Anchor> (<Time>) <FlagCondition: Delay>
+Weapon attacks gain: <FlagCondition: AddMagic, AddMaterial, Material, AddForm, Form, AddAlignment, Alignment, MyAlignment, AddReality, Reality, AgainstFactOwner>
+When gaining <m_GainedFact> (or descriptor <SpellDescriptor>), replaces it with <m_SubstituteBuff> <FlagCondition: CheckConditionImmunity>
+Автоматически применяет метамагию <Metamagic> к <m_AllowedAbilities> <FlagCondition: School, Descriptor, MaxSpellLevel>
+Атаки оружием получают: <FlagCondition: AddMagic, AddMaterial, Material, AddForm, Form, AddAlignment, Alignment, MyAlignment, AddReality, Reality, AgainstFactOwner>
+В начале боя дарует <m_Feature> <FlagCondition: CheckParty>
+Визуальный эффект: <PrefabLink> в <Anchor> (<Time>) <FlagCondition: Delay>
+Выпускает <m_Projectiles> снарядов <FlagCondition: NeedAttackRoll, Type, m_Length>
+Дарует +<AttackBonus> (<Descriptor>) бонус к атаке оружием группы <WeaponGroup> <FlagCondition: multiplyByContext>
+Дарует +<Bonus> (<Descriptor>) бонус к проверкам маневра <Type> <FlagCondition: Mythic, IgnoreFactRank>
+Дарует +<Value>+<Bonus> бонус к подтверждению критического удара <FlagCondition: OnlyPositiveValue, CheckWeaponRangeType>
+Дарует <AttackBonus>+<Bonus> (<Descriptor>) бонус к атаке против существ, <FlagCondition: Not> обладающих особенностью <m_CheckedFact>
+Дарует <DamageBonus>+<Bonus> (<Descriptor>) бонус к атаке против существ с мировоззрением <Alignment> <FlagCondition: OnlyMelee>
+Дарует <Number> доп. атаку/атаки <FlagCondition: Haste, Penalized>
+Дарует <Value> (<Descriptor>) бонус к атаке против существ размера <Size> <FlagCondition: OnlyForMelee, OnlyForRanged, SizeMoreThan>
+Дарует <Value> (<Descriptor>) бонус к характеристике <Stat>, если есть особенность: <m_CheckedFacts> <FlagCondition: InvertCondition, RequireAllFacts>
+Дарует <m_Feature>, <FlagCondition: Not> у владельца есть <m_CheckedFact>
+Дарует <m_Feature>, когда уровень класса <m_Class> — <Level> <FlagCondition: BeforeThisLevel>
+Дарует Слепое чутье <Range> ф. <FlagCondition: Blindsight>
+Дарует бонус к КЗ в строю: <Bonus> <FlagCondition: UnitProperty>
+Дарует бонус к костям заклинаний: <DiceBonuses> <FlagCondition: CheckSpellDescriptor>
+Дарует заклинание <m_Spell> (<Level> ур.) <FlagCondition: OnlySpontaneous>
+Дарует иммунитет к заклинаниям с дескрипторами <Descriptor> <FlagCondition: m_CasterIgnoreImmunityFact>
+Дарует следующие особенности верховому животному: <m_Facts> <FlagCondition: CasterLevel>
+Дарует следующие особенности: <m_Facts> <FlagCondition: CasterLevel>
+Дарует состояние: <Condition>
+Дарует существо типа <Type> (<m_Pet>) <FlagCondition: UpgradeFeature>
+Дарует устойчивость <Value> к урону типа <Type> <FlagCondition: UsePool>
+Действие при: <FlagCondition: Activated, Deactivated, NewRound>
+Добавляет <DamageBonus> к урону при внеочередных атаках <FlagCondition: CheckWeaponRangeType>
+Добавляет <DiceValue> <DamageTypeDescription> к урону <FlagCondition: CheckWeaponType, CheckAbilityType, CheckSpellDescriptor, CheckEnergyDamageType>
+Добавляет <PhysicalDamageDice> урона от скрытой атаки <FlagCondition: OnlyNoDexToAC>
+Добавляет <Value> <DamageType> при атаке <FlagCondition: OnlyOnFullAttack, OnlyOnFirstAttack, OnHit, CriticalHit, OnlySneakAttack, OnCharge, OnAttackOfOpportunity>
+Если есть особенность <m_CheckedBuff>, также дарует <m_ExtraEffectBuff> <FlagCondition: m_ExceptionFact>
+Заменяет характеристику атаки на <ReplacementStat> <FlagCondition: CheckWeaponTypes>
+Затрагивает всех существ (<m_TargetType>) в радиусе <m_Radius> <FlagCondition: m_IncludeDead>
+Игнорирует ПЗ цели <FlagCondition: CheckTargetAlignment>
+Игнорирует преодоление устойчивости к урону (ПЗ) атаками типа <m_WeaponType> <FlagCondition: CriticalHit, OnlyOnFullAttack, OnlyOnFirstAttack, OnlyNaturalAttacks, CheckEnemyFact>
+Игнорирует устойчивость к магии для <m_AbilityList> <FlagCondition: AllSpells>
+Изменяет броски d20 для <Rule>: <FlagCondition: Replace, TakeBest, AddBonus, WithChance, RerollOnlyIfFailed, RerollOnlyIfSuccess, AgainstAlignment, SpecificSkill, SpecificDescriptor, AddSavingThrowBonus, TandemTrip>
+Изменяет входящий <Type> на <ModifierPercents>% <FlagCondition: m_DamageWeaponType, m_SourceToTargetFactionType, m_AoeEntry>
+Изменяет макс. число использований ресурса <m_Resource> на <Value> <FlagCondition: Decrease>
+Иммунитет к заклинаниям типа <Type> <FlagCondition: Alignment, SpellDescriptor>
+Иммунитет к состоянию: <Condition>
+Иммунитет к типу урона <EnergyType> <FlagCondition: HealOnDamage>
+Иммунитет к эффектам с дескриптором: <Descriptor> <FlagCondition: CheckFact>
+Использует <m_Abilities> без провокации внеочередных атак <FlagCondition: CheckSchool, CheckAbilityType, CheckDescriptor>
+Маскировка <Concealment> (<Descriptor>) <FlagCondition: CheckDistance, CheckWeaponRangeType>
+Наделяет предмет в слоте <Slot> чарами <m_EnchantmentBlueprint> <FlagCondition: AllWeapons>
+Накладывает <m_Buff> при появлении <FlagCondition: m_CheckRadius, m_CheckCasterFact>
+Накладывает состояние: <Condition> <FlagCondition: SaveEachRound, SaveType>
+Наносит <Damage> урона (<EnergyType>) каждый раунд <FlagCondition: InstantStartTick>
+Отражает входящие заклинания обратно в заклинателя <FlagCondition: m_SpellResistanceOnly, m_SpellDescriptorOnly, m_SpecificSpellsOnly>
+ПЗ <Value>/<FlagCondition: BypassedByMaterial, BypassedByForm, BypassedByMagic, BypassedByAlignment, BypassedByReality, BypassedByWeaponType, BypassedByMeleeWeapon, BypassedByEpic>
+ПЗ <Value>/<FlagCondition: BypassedByMaterial, BypassedByMagic>
+Параметры способностей рассчитываются по характеристике <StatType> <FlagCondition: ReplaceCasterLevel, ReplaceSpellLevel, UseKineticistMainStat>
+Переносится на <TargetsCount> доп. целей в радиусе <Radius> <FlagCondition: m_IgnoreFirst, m_UsedTargetsAgain>
+Позволяет использовать <m_Ability> как свободное действие <FlagCondition: m_CheckAbilityType>
+При получении <m_GainedFact> (или эффекта с дескриптором <SpellDescriptor>), заменяет его на <m_SubstituteBuff> <FlagCondition: CheckConditionImmunity>
+Рекомендуется для оружия: <m_WeaponTypes> <FlagCondition: HasFocus>
+Свойство <Name> рассчитывается как <Value> <FlagCondition: SaveToContext>
+Требует <Amount> ед. ресурса <m_RequiredResource> <FlagCondition: CostIsCustom>
+Требует значение характеристики <Stat> не ниже <Value> <FlagCondition: CheckInProgression>
+Требует наличие особенности: <m_Feature> <FlagCondition: CheckInProgression>
+Увеличивает диапазон критического удара на <CriticalRangeIncrease> <FlagCondition: AllWeapons>
+Увеличивает исходящий урон (<DamageType>) в <OriginalDamageFactor> раз <FlagCondition: Condition>
+Увеличивает макс. бонус Ловкости для категории <Category> на <Bonus> (или <ContextBonus>) <FlagCondition: ReplaceContextIfGreater, CheckCategory>
+Увеличивает размер костей оружия на <AdditionalSize> (или <Value>) <FlagCondition: CheckWeaponCategories, CheckWeaponSubCategories>
+Увеличивает число использований <m_Resource> в день на <Amount> <FlagCondition: UseThisAsResource>
+Урон растет с каждым последовательным попаданием (+1 за попадание) <FlagCondition: OnlyNaturalAttacks>
+Устанавливает параметры способностей: СЛ <DC>, УЗ <CasterLevel>, Концентрация <Concentration> <FlagCondition: Add10ToDC>
+Устанавливает шанс промаха атакующего равным <Value>% <FlagCondition: m_Type>
+Цель <FlagCondition: Inverted> обладает особенностью <m_CheckedFacts> <FlagCondition: FromCaster>
+
+FLAGS:
+CheckAbilityType
+CheckAlignment
+CheckAoE
+CheckArmorCategory
+CheckCategory
+CheckConditionImmunity
+CheckDamageDealt
+CheckDamagePhysicalTypeNot
+CheckDescriptor
+CheckDistance
+CheckEnemyFact
+CheckEnergyDamageType
+CheckFact
+CheckInProgression
+CheckParty
+CheckPhysicalDamageForm
+CheckRange
+CheckResource
+CheckSchool
+CheckSourceItemType
+CheckSpellDescriptor
+CheckSpellParent
+CheckSpellSchool
+CheckSpellbook
+CheckSummonedUnitAlignment
+CheckSummonedUnitFact
+CheckTargetAlignment
+CheckTargetFact
+CheckUnitTag
+CheckWeapon
+CheckWeaponAttackType
+CheckWeaponBlueprint
+CheckWeaponCategories
+CheckWeaponCategory
+CheckWeaponCatergoy
+CheckWeaponGroup
+CheckWeaponRangeType
+CheckWeaponSubCategories
+CheckWeaponType
+CheckWeaponTypes
+CheckWielder
+Not
+NotAttackOfOpportunity
+NotCriticalHit
+NotExtraAttack
+NotReach
+NotSneakAttack
+NotTouch
+NotUnarmed
+NotZeroDamage
+OnlyAttacksOfOpportunity
+OnlyFail
+OnlyFinessable
+OnlyFlatFooted
+OnlyForAttacks
+OnlyForFullAttack
+OnlyForMelee
+OnlyForRanged
+OnlyHit
+OnlyMelee
+OnlyMiss
+OnlyNatural20
+OnlyNaturalAttacks
+OnlyNaturalDeath
+OnlyNoDexToAC
+OnlyOnFirstAttack
+OnlyOnFirstHit
+OnlyOnFullAttack
+OnlyOnParty
+OnlyOnce
+OnlyPass
+OnlyPositiveValue
+OnlyRanged
+OnlySneakAttack
+OnlySpecificItemBlueprint
+OnlySpells
+OnlySpontaneous
+OnlySuccess
+OnlyToOffHandBonus
+OnlyTwoHanded
+OnlyWeaponDamage
