@@ -41,34 +41,22 @@
 			"ruRU": "«Как пожелаете. Что-нибудь еще? »"
         },
         "ui_title_workshop": {
-            "enGB": "Workshop",
-            "frFR": "Atelier",
-			"ruRU": "Мастерская"
+            "enGB": "Workshop", "frFR": "Atelier", "ruRU": "Мастерская"
         },
         "ui_title_config": {
-            "enGB": "Configuration",
-            "frFR": "Configuration",
-			"ruRU": "Конфигурация"
+            "enGB": "Configuration", "frFR": "Configuration", "ruRU": "Конфигурация"
         },
         "ui_title_details": {
-            "enGB": "Details: ",
-            "frFR": "Détails : ",
-			"ruRU": "Подробно: "
+            "enGB": "Details: ", "frFR": "Détails : ", "ruRU": "Подробно: "
         },
         "ui_title_select": {
-            "enGB": "Item Selection",
-            "frFR": "Sélection d'objet",
-			"ruRU": "Выбор объекта"
+            "enGB": "Item Selection", "frFR": "Sélection d'objet", "ruRU": "Выбор объекта"
         },
         "ui_feedback_renamed": {
-            "enGB": "The item has been renamed!",
-            "frFR": "L'objet a été renommé !",
-			"ruRU": "Предмет был переименован!"
+            "enGB": "The item has been renamed!", "frFR": "L'objet a été renommé !", "ruRU": "Предмет был переименован!"
         },
         "ui_feedback_autoname_gen": {
-            "enGB": "Automatic name generated.",
-            "frFR": "Nom automatique généré.",
-			"ruRU": "Автогенерация имени."
+            "enGB": "Automatic name generated.", "frFR": "Nom automatique généré.", "ruRU": "Автогенерация имени."
         },
         "log_project_started": {
             "enGB": "<color=#E2C675>[Workshop]</color> <b>{0}</b> has been sent to the forge for <b>{1} gp</b>.",
@@ -76,284 +64,172 @@
 			"ruRU": "<color=#E2C675>[Workshop]</color> <b>{0}</b> был отправлен в кузницу для <b>{1} gp</b>."
         },
         "ui_feedback_projects_started": {
-            "enGB": "Projects started: {0} enchantment(s).",
-            "frFR": "Projets lancés : {0} enchantement(s).",
-			"ruRU": "Запущено проектов: {0} зачарования(s)."
+            "enGB": "Projects started: {0} enchantment(s).", "frFR": "Projets lancés : {0} enchantement(s).", "ruRU": "Запущено проектов: {0} зачарования(s)."
         },
         "ui_feedback_no_funds": {
-            "enGB": "Unexpected error: insufficient funds at the time of payment.",
-            "frFR": "Erreur inattendue : fonds insuffisants au moment du paiement.",
-			"ruRU": "Непредвиденная ошибка: на момент оплаты недостаточно средств."
+            "enGB": "Unexpected error: insufficient funds at the time of payment.", "frFR": "Erreur inattendue : fonds insuffisants au moment du paiement.", "ruRU": "Непредвиденная ошибка: на момент оплаты недостаточно средств."
         },
         "ui_btn_back": {
-            "enGB": "<< BACK",
-            "frFR": "<< RETOUR",
-			"ruRU": "<< НАЗАД"
+            "enGB": "<< BACK", "frFR": "<< RETOUR", "ruRU": "<< НАЗАД"
         },
         "ui_btn_options": {
-            "enGB": "Options",
-            "frFR": "Options",
-			"ruRU": "Опции"
+            "enGB": "Options", "frFR": "Options", "ruRU": "Опции"
         },
         "ui_no_item_stashed": {
-            "enGB": "\n   (No item is stored in the workshop)",
-            "frFR": "\n   (Aucun objet n'est stocké dans l'atelier)",
-			"ruRU": "\n   (В мастерской нет предметов)"
+            "enGB": "\n   (No item is stored in the workshop)", "frFR": "\n   (Aucun objet n'est stocké dans l'atelier)", "ruRU": "\n   (В мастерской нет предметов)"
         },
         "ui_in_forge": {
-            "enGB": " (In forge...)",
-            "frFR": " (En forge...)",
-			"ruRU": " (В кузне...)"
+            "enGB": " (In forge...)", "frFR": " (En forge...)", "ruRU": " (В кузне...)"
         },
         "ui_wilcer_working": {
-            "enGB": "<b>WILCER IS CURRENTLY WORKING ON THIS ITEM</b>",
-            "frFR": "<b>WILCER EST EN TRAIN DE TRAVAILLER SUR CET OBJET</b>",
-			"ruRU": "<b>СЕЙЧАС ВИЛЬСЕР РАБОТАЕТ НАД ЭТИМ ТОВАРОМ</b>"
+            "enGB": "<b>WILCER IS CURRENTLY WORKING ON THIS ITEM</b>", "frFR": "<b>WILCER EST EN TRAIN DE TRAVAILLER SUR CET OBJET</b>", "ruRU": "<b>СЕЙЧАС ВИЛЬСЕР РАБОТАЕТ НАД ЭТИМ ТОВАРОМ</b>"
         },
         "ui_time_remaining": {
-            "enGB": "Estimated remaining time: {0:F1} days",
-            "frFR": "Temps restant estimé : {0:F1} jours",
-			"ruRU": "Примерное оставшееся время: {0:F1} суток"
+            "enGB": "Estimated remaining time: {0:F1} days", "frFR": "Temps restant estimé : {0:F1} jours", "ruRU": "Примерное оставшееся время: {0:F1} суток"
         },
         "ui_btn_close_ui": {
-            "enGB": "Close Interface",
-            "frFR": "Fermer l'interface",
-			"ruRU": "Закрыть интерфейс"
+            "enGB": "Close Interface", "frFR": "Fermer l'interface", "ruRU": "Закрыть интерфейс"
         },
         "ui_special_action_rename": {
-            "enGB": "Special Action: Rename item (Free)",
-            "frFR": "Action Spéciale : Renommer l'objet (Gratuit)",
-			"ruRU": "Спец. действие: Переименовать предмет (Бесплатно)"
+            "enGB": "Special Action: Rename item (Free)", "frFR": "Action Spéciale : Renommer l'objet (Gratuit)", "ruRU": "Спец. действие: Переименовать предмет (Бесплатно)"
         },
         "ui_btn_rename": {
-            "enGB": "Rename",
-            "frFR": "Renommer",
-			"ruRU": "Переименовать"
+            "enGB": "Rename", "frFR": "Renommer", "ruRU": "Переименовать"
         },
         "ui_btn_auto": {
-            "enGB": "Auto",
-            "frFR": "Auto",
-			"ruRU": "Авто"
+            "enGB": "Auto", "frFR": "Auto", "ruRU": "Авто"
         },
         "ui_applied_enchants": {
-            "enGB": "Applied Enchantments:",
-            "frFR": "Enchantements appliqués :",
-			"ruRU": "Применённые зачарования:"
+            "enGB": "Applied Enchantments:", "frFR": "Enchantements appliqués :", "ruRU": "Применённые зачарования:"
         },
         "ui_no_magic_enchants": {
-            "enGB": "<i>(No magic enchantment)</i>",
-            "frFR": "<i>(Aucun enchantement magique)</i>",
-			"ruRU": "<i>(Отсутствуют чары на предмете)</i>"
+            "enGB": "<i>(No magic enchantment)</i>", "frFR": "<i>(Aucun enchantement magique)</i>", "ruRU": "<i>(Отсутствуют чары на предмете)</i>"
         },
         "ui_btn_remove": {
-            "enGB": "Remove",
-            "frFR": "Retirer",
-			"ruRU": "Снять"
+            "enGB": "Remove", "frFR": "Retirer", "ruRU": "Снять"
         },
         "ui_available_enchants": {
-            "enGB": "Available Enchantments:",
-            "frFR": "Enchantements disponibles :",
-			"ruRU": "Доступные зачарования:"
+            "enGB": "Available Enchantments:", "frFR": "Enchantements disponibles :", "ruRU": "Доступные зачарования:"
         },
         "ui_filter_weapons": {
-            "enGB": " Weapons",
-            "frFR": " Armes",
-			"ruRU": "Оружие"
+            "enGB": " Weapons", "frFR": " Armes", "ruRU": "Оружие"
         },
         "ui_filter_armors": {
-            "enGB": " Armors",
-            "frFR": " Armures",
-			"ruRU": "Броня"
+            "enGB": " Armors", "frFR": " Armures", "ruRU": "Броня"
         },
         "ui_filter_others": {
-            "enGB": " Others",
-            "frFR": " Autres",
-			"ruRU": "Прочее"
+            "enGB": " Others", "frFR": " Autres", "ruRU": "Прочее"
         },
         "ui_search_label": {
-            "enGB": "Search: ",
-            "frFR": "Recherche : ",
-			"ruRU": "Поиск: "
+            "enGB": "Search: ", "frFR": "Recherche : ", "ruRU": "Поиск: "
         },
         "ui_filter_active_btn": {
-            "enGB": "Filters ({0}) \u25bc",
-            "frFR": "Filtres ({0}) \u25bc",
-			"ruRU": "Фильтр ({0}) \u25bc"
+            "enGB": "Filters ({0}) \u25bc", "frFR": "Filtres ({0}) \u25bc", "ruRU": "Фильтр ({0}) \u25bc"
         },
         "ui_filter_all_btn": {
-            "enGB": "Filters (All) \u25bc",
-            "frFR": "Filtres (Tous) \u25bc",
-			"ruRU": "Фильтр (Все) \u25bc"
+            "enGB": "Filters (All) \u25bc", "frFR": "Filtres (Tous) \u25bc", "ruRU": "Фильтр (Все) \u25bc"
         },
         "ui_filter_check_all": {
-            "enGB": "Check All",
-            "frFR": "Tout cocher",
-			"ruRU": "Выбрать все"
+            "enGB": "Check All", "frFR": "Tout cocher", "ruRU": "Выбрать все"
         },
         "ui_filter_uncheck_all": {
-            "enGB": "Uncheck All",
-            "frFR": "Tout décocher",
-			"ruRU": "Сброс"
+            "enGB": "Uncheck All", "frFR": "Tout décocher", "ruRU": "Сброс"
         },
         "ui_filter_none_active": {
-            "enGB": " <i>(No filter active = Show all)</i>",
-            "frFR": " <i>(Aucun filtre actif = Tout afficher)</i>",
-			"ruRU": " <i>(Фильтр не выбран = Показать всё)</i>"
+            "enGB": " <i>(No filter active = Show all)</i>", "frFR": " <i>(Aucun filtre actif = Tout afficher)</i>", "ruRU": " <i>(Фильтр не выбран = Показать всё)</i>"
         },
         "ui_scan_in_progress": {
-            "enGB": "Scan in progress \u2014 no enchantment available for now.",
-            "frFR": "Scan en cours \u2014 aucun enchantement disponible pour l'instant.",
-			"ruRU": "Сканирование продолжается \u2014 на данный момент зачарование недоступно."
+            "enGB": "Scan in progress \u2014 no enchantment available for now.", "frFR": "Scan en cours \u2014 aucun enchantement disponible pour l'instant.", "ruRU": "Сканирование продолжается \u2014 на данный момент зачарование недоступно."
         },
         "ui_current_level": {
-            "enGB": "Current level: {0}/{1}",
-            "frFR": "Niveau actuel : {0}/{1}",
-			"ruRU": "Текущий уровень: {0}/{1}"
+            "enGB": "Current level: {0}/{1}", "frFR": "Niveau actuel : {0}/{1}", "ruRU": "Текущий уровень: {0}/{1}"
         },
         "ui_selection_total": {
-            "enGB": "Selection: +{0} \u2014 Total: {1} gp / ~{2} d",
-            "frFR": "S\u00e9lection : +{0} \u2014 Total : {1} po / ~{2} j",
-			"ruRU": "Выбор: +{0} \u2014 Total: {1} gp / ~{2} d"
+            "enGB": "Selection: +{0} \u2014 Total: {1} gp / ~{2} d", "frFR": "S\u00e9lection : +{0} \u2014 Total : {1} po / ~{2} j", "ruRU": "Выбор: +{0} \u2014 Total: {1} gp / ~{2} d"
         },
         "ui_btn_validate_selection": {
-            "enGB": "Confirm Selection",
-            "frFR": "Valider la sélection",
-			"ruRU": "Подтвердите выбор"
+            "enGB": "Confirm Selection", "frFR": "Valider la sélection", "ruRU": "Подтвердите выбор"
         },
         "ui_btn_cancel_selection": {
-            "enGB": "Cancel Selection",
-            "frFR": "Annuler la sélection",
-			"ruRU": "Отмена выбора"
+            "enGB": "Cancel Selection", "frFR": "Annuler la sélection", "ruRU": "Отмена выбора"
         },
         "ui_settings_title": {
-            "enGB": "Workshop Settings",
-            "frFR": "Réglages de l'Atelier",
-			"ruRU": "Настройки Мастерской"
+            "enGB": "Workshop Settings", "frFR": "Réglages de l'Atelier", "ruRU": "Настройки Мастерской"
         },
         "ui_settings_cost_mult": {
-            "enGB": " Cost Multiplier: ",
-            "frFR": " Multiplicateur de coût : ",
-			"ruRU": " Коэффициент затрат: "
+            "enGB": " Cost Multiplier: ", "frFR": " Multiplicateur de coût : ", "ruRU": " Коэффициент затрат: "
         },
         "ui_settings_instant_craft": {
-            "enGB": "Instant Crafting",
-            "frFR": "Craft Instantané",
-			"ruRU": "Мгновенное создание"
+            "enGB": "Instant Crafting", "frFR": "Craft Instantané", "ruRU": "Мгновенное создание"
         },
         "ui_feedback_all_forges_done": {
-            "enGB": "All active forging projects have been completed instantly!",
-            "frFR": "Toutes les forges en cours ont été terminées instantanément !",
-			"ruRU": "Все текущие проекты по ковке были завершены в кратчайшие сроки!"
+            "enGB": "All active forging projects have been completed instantly!", "frFR": "Toutes les forges en cours ont été terminées instantanément !", "ruRU": "Все текущие проекты по ковке были завершены в кратчайшие сроки!"
         },
         "ui_settings_enforce_limit": {
-            "enGB": " Enforce Bonus Limits (Pathfinder)",
-            "frFR": " Appliquer les limites de bonus (Pathfinder)",
-			"ruRU": " Внедрение ограничений на бонусы (Pathfinder)"
+            "enGB": " Enforce Bonus Limits (Pathfinder)", "frFR": " Appliquer les limites de bonus (Pathfinder)", "ruRU": " Внедрение ограничений на бонусы (Pathfinder)"
         },
         "ui_settings_max_enhancement": {
-            "enGB": " Max Enhancement: +{0}",
-            "frFR": " Max Altération : +{0}",
-			"ruRU": " Max Enhancement: +{0}"
+            "enGB": " Max Enhancement: +{0}", "frFR": " Max Altération : +{0}", "ruRU": " Max Enhancement: +{0}"
         },
         "ui_settings_max_total": {
-            "enGB": " Max Total: +{0}",
-            "frFR": " Max Total : +{0}",
-			"ruRU": " Max Total: +{0}"
+            "enGB": " Max Total: +{0}", "frFR": " Max Total : +{0}", "ruRU": " Max Total: +{0}"
         },
         "ui_settings_require_plus_one": {
-            "enGB": " TTRPG Prerequisite: At least +1 Enhancement to apply any enchants",
-            "frFR": " Prérequis du JDR : +1 Altération minimum pour pouvoir enchanter",
-			"ruRU": " Предварительное условие для настольной игры: как минимум +1 улучшение для применения любых зачарований"
+            "enGB": " TTRPG Prerequisite: At least +1 Enhancement to apply any enchants", "frFR": " Prérequis du JDR : +1 Altération minimum pour pouvoir enchanter", "ruRU": " Предварительное условие для настольной игры: как минимум +1 улучшение для применения любых зачарований"
         },
         "ui_settings_slot_penalty": {
-            "enGB": " Apply Slot Penalty (x1.5 cost if inappropriate slot)",
-            "frFR": " Appliquer pénalité d'emplacement (Coût x1.5 si inapproprié)",
-			"ruRU": " Применить штраф за слот (стоимость x1,5, если слот неподходящий)"
+            "enGB": " Apply Slot Penalty (x1.5 cost if inappropriate slot)", "frFR": " Appliquer pénalité d'emplacement (Coût x1.5 si inapproprié)", "ruRU": " Применить штраф за слот (стоимость x1,5, если слот неподходящий)"
         },
         "ui_settings_epic_multiplier": {
-            "enGB": " Enable Epic Multiplier (x10 cost for Epic enchants)",
-            "frFR": " Activer multiplicateur Épique (Coût x10 pour enchants épiques)",
-			"ruRU": " Включить эпический множитель (стоимость x10 для эпических зачарований)"
+            "enGB": " Enable Epic Multiplier (x10 cost for Epic enchants)", "frFR": " Activer multiplicateur Épique (Coût x10 pour enchants épiques)", "ruRU": " Включить эпический множитель (стоимость x10 для эпических зачарований)"
         },
         "ui_settings_source_display": {
-            "enGB": "Source display:",
-            "frFR": "Affichage des sources :",
-			"ruRU": "Отображение источника:"
+            "enGB": "Source display:", "frFR": "Affichage des sources :", "ruRU": "Отображение источника:"
         },
         "ui_settings_source_all": {
-            "enGB": "All",
-            "frFR": "Tout",
-			"ruRU": "Все"
+            "enGB": "All", "frFR": "Tout", "ruRU": "Все"
         },
         "ui_settings_diagnostic": {
-            "enGB": "Diagnostic Tools:",
-            "frFR": "Outils de diagnostic :",
-			"ruRU": "Инструменты диагностики:"
+            "enGB": "Diagnostic Tools:", "frFR": "Outils de diagnostic :", "ruRU": "Инструменты диагностики:"
         },
         "ui_settings_force_sync": {
-            "enGB": "Force Synchronization (Full Scan)",
-            "frFR": "Forcer la synchronisation (Scan intégral)",
-			"ruRU": "Принудительная синхронизация (Полное сканирование)"
+            "enGB": "Force Synchronization (Full Scan)", "frFR": "Forcer la synchronisation (Scan intégral)", "ruRU": "Принудительная синхронизация (Полное сканирование)"
         },
         "ui_unknown_enchant_name": {
-            "enGB": "Unknown Enchantment",
-            "frFR": "Enchantement inconnu",
-			"ruRU": "Неизвестное зачарование"
+            "enGB": "Unknown Enchantment", "frFR": "Enchantement inconnu", "ruRU": "Неизвестное зачарование"
         },
         "ui_sync_success": {
-            "enGB": "Sync successful ({0} enchantments).",
-            "frFR": "Sync réussie ({0} enchantements).",
-			"ruRU": "Синхронизация успешна ({0} зачарований)."
+            "enGB": "Sync successful ({0} enchantments).", "frFR": "Sync réussie ({0} enchantements).", "ruRU": "Синхронизация успешна ({0} зачарований)."
         },
         "ui_settings_source_ttrpg": {
-            "enGB": "TTRPG (TTRPG enchantments only)",
-            "frFR": "TTRPG (Uniquement les enchantements du TTRPG)",
-			"ruRU": "TTRPG (TTRPG только зачарования настольной игры)"
+            "enGB": "TTRPG (TTRPG enchantments only)", "frFR": "TTRPG (Uniquement les enchantements du TTRPG)", "ruRU": "TTRPG (TTRPG только зачарования настольной игры)"
         },
         "ui_settings_source_owlcat": {
-            "enGB": "Owlcat (All generic in-game enchantments)",
-            "frFR": "Owlcat (Tous les enchantements génériques du jeu)",
-			"ruRU": "Owlcat (Все стандартные внутриигровые зачарования)"
+            "enGB": "Owlcat (All generic in-game enchantments)", "frFR": "Owlcat (Tous les enchantements génériques du jeu)", "ruRU": "Owlcat (Все стандартные внутриигровые зачарования)"
         },
         "ui_settings_source_owlcatplus": {
-            "enGB": "Owlcat+ (All game enchantments, including unique items)",
-            "frFR": "Owlcat+ (Tous les enchantements du jeu, y compris les items uniques)",
-			"ruRU": "Owlcat+ (Все игровые зачарования, включая уникальные предметы)"
+            "enGB": "Owlcat+ (All game enchantments, including unique items)", "frFR": "Owlcat+ (Tous les enchantements du jeu, y compris les items uniques)", "ruRU": "Owlcat+ (Все игровые зачарования, включая уникальные предметы)"
         },
         "ui_settings_source_mods": {
-            "enGB": "Mod (All non-base game enchantments)",
-            "frFR": "Mod (Tous les enchantements ne provenant pas du jeu)",
-			"ruRU": "Mod (Все зачарования, не входящие в базовую игру)"
+            "enGB": "Mod (All non-base game enchantments)", "frFR": "Mod (Tous les enchantements ne provenant pas du jeu)", "ruRU": "Mod (Все зачарования, не входящие в базовую игру)"
         },
         "ui_settings_source_all_desc": {
-            "enGB": "Show all",
-            "frFR": "Tout afficher",
-			"ruRU": "Показать всё"
+            "enGB": "Show all", "frFR": "Tout afficher", "ruRU": "Показать всё"
         },
         "ui_btn_ok": {
-            "enGB": "OK",
-            "frFR": "OK",
-			"ruRU": "ОК"
+            "enGB": "OK", "frFR": "OK", "ruRU": "ОК"
         },
         "ui_btn_workshop_short": {
-            "enGB": "Workshop",
-            "frFR": "Atelier",
-			"ruRU": "Мастерская"
+            "enGB": "Workshop", "frFR": "Atelier", "ruRU": "Мастерская"
         },
         "ui_cat_untyped": {
-            "enGB": "Untyped",
-            "frFR": "Sans catégorie",
-			"ruRU": "Нетипичный"
+            "enGB": "Untyped", "frFR": "Sans catégorie", "ruRU": "Нетипичный"
         },
         "ui_currency_gp": {
-            "enGB": "gp",
-            "frFR": "po",
-			"ruRU": "gp"
+            "enGB": "gp", "frFR": "po", "ruRU": "gp"
         },
         "ui_time_days_short": {
-            "enGB": "d",
-            "frFR": "j",
-			"ruRU": "d"
+            "enGB": "d", "frFR": "j", "ruRU": "d"
         },
         "err_require_plus_one": {
             "enGB": "TTRPG rules: Equipment must have at least an 'Enhancement' (+1) before receiving special enchantments.",
@@ -409,146 +285,6 @@
             "enGB": "<i>[auto-generated]</i> ",
             "frFR": "<i>[auto-généré]</i> ",
             "ruRU": "<i>[авто-генерация]</i> "
-        },
-        "field_OnlyHit": { "enGB": "on hit", "frFR": "sur coup porté", "ruRU": "при попадании" },
-        "field_CriticalHit": { "enGB": "on critical hit", "frFR": "sur coup critique", "ruRU": "при крите" },
-        "field_OnAttackOfOpportunity": { "enGB": "on AoO", "frFR": "sur att. d'opp.", "ruRU": "при внеоч. атаке" },
-        "field_OnlySneakAttack": { "enGB": "sneak attack only", "frFR": "att. sournoise uniquement", "ruRU": "только скрытая атака" },
-        "field_OnCharge": { "enGB": "on charge", "frFR": "en charge", "ruRU": "при натиске" },
-        "field_Activated": { "enGB": "activated", "frFR": "activé", "ruRU": "при активации" },
-        "field_Deactivated": { "enGB": "deactivated", "frFR": "désactivé", "ruRU": "при деактивации" },
-        "field_NewRound": { "enGB": "every round", "frFR": "chaque round", "ruRU": "каждый раунд" },
-        "action_ContextActionDealDamage": { "enGB": "deals damage", "frFR": "inflige des dégâts", "ruRU": "наносит урон" },
-        "action_ContextActionApplyBuff": { "enGB": "applies an effect", "frFR": "applique un effet", "ruRU": "накладывает эффект" },
-        "action_ContextActionHealStatDamage": { "enGB": "heals", "frFR": "soigne", "ruRU": "лечит" },
-        "action_ContextActionSavingThrow": { "enGB": "requires a save", "frFR": "requiert un jet de sauvegarde", "ruRU": "требует спасброска" },
-        "action_SavingThrow": { "enGB": "requires a save", "frFR": "requiert un jet de sauvegarde", "ruRU": "требует спасброска" },
-        "ui_on_save_failed": { "enGB": "if failed:", "frFR": "si échec :", "ruRU": "при провале:" },
-        "ui_on_save_passed": { "enGB": "if passed:", "frFR": "si réussite :", "ruRU": "при успехе:" },
-        "ui_buff": { "enGB": "effect", "frFR": "effet", "ruRU": "эффект" },
-        "ui_spell": { "enGB": "spell", "frFR": "sort", "ruRU": "заклинание" },
-        "action_ContextActionConditional": { "enGB": "conditional effect", "frFR": "effet conditionnel", "ruRU": "условный эффект" },
-        "action_Conditional": { "enGB": "conditional effect", "frFR": "effet conditionnel", "ruRU": "условный эффект" },
-        "action_ContextActionRemoveBuff": { "enGB": "removes an effect", "frFR": "supprime un effet", "ruRU": "удаляет эффект" },
-        "action_ContextActionSpawnMonster": { "enGB": "summons a creature", "frFR": "invoque une créature", "ruRU": "призывает существо" },
-        "action_ContextActionDispelMagic": { "enGB": "dispels magic", "frFR": "dissipe la magie", "ruRU": "развеивает магию" },
-        "action_ContextActionCastSpell": { "enGB": "casts a spell", "frFR": "lance un sort", "ruRU": "творит заклинание" },
-        "action_ContextActionOnHitEffect": { "enGB": "impact effect", "frFR": "effet à l'impact", "ruRU": "эффект при ударе" },
-        "action_ContextActionSkillCheck": { "enGB": "skill check", "frFR": "test de compétence", "ruRU": "проверка навыка" },
-        "action_ContextActionProvokeAttackOfOpportunity": { "enGB": "provokes AoO", "frFR": "provoque une att. d'opp.", "ruRU": "провоцирует внеоч. атаку" },
-        "action_ContextActionBreathWeaponDamage": { "enGB": "breath weapon", "frFR": "souffle", "ruRU": "дыхание" },
-        "action_ContextActionArmorEnchantPool": { "enGB": "enchants armor", "frFR": "enchante l'armure", "ruRU": "зачаровывает доспех" },
-        "action_ContextActionWeaponEnchantPool": { "enGB": "enchants weapon", "frFR": "enchante l'arme", "ruRU": "зачаровывает оружие" },
-        "action_ContextActionMakeMeleeAttack": { "enGB": "melee attack", "frFR": "attaque au corps à corps", "ruRU": "ближняя атака" },
-        "action_ContextActionRepeatedActions": { "enGB": "repeated effects", "frFR": "effets répétés", "ruRU": "повторяющиеся эффекты" },
-        "action_ContextActionProjectileAttack": { "enGB": "projectile attack", "frFR": "attaque de projectile", "ruRU": "атака снарядом" },
-        "ui_if": { "enGB": "if", "frFR": "si", "ruRU": "если" },
-        "ui_then": { "enGB": "then", "frFR": "alors", "ruRU": "то" },
-        "ui_else": { "enGB": "else", "frFR": "sinon", "ruRU": "иначе" },
-        "ui_and": { "enGB": "and", "frFR": "et", "ruRU": "и" },
-        "field_isShieldEquipped": { "enGB": "shield is equipped", "frFR": "si un bouclier est équipé", "ruRU": "если щит экипирован" },
-        "field_isTwoHandedEquipped": { "enGB": "wielded with two hands", "frFR": "si maniée à deux mains", "ruRU": "если двуручное" },
-        "field_isTwoHandedEquiped": { "enGB": "wielded with two hands", "frFR": "si maniée à deux mains", "ruRU": "если двуручное" },
-        "field_OnlyTwoHanded": { "enGB": "wielded with two hands", "frFR": "si maniée à deux mains", "ruRU": "если двуручное" },
-        "field_OnlyMelee": { "enGB": "melee attacks only", "frFR": "au corps à corps uniquement", "ruRU": "только ближний бой" },
-        "field_OnlyRanged": { "enGB": "ranged attacks only", "frFR": "à distance uniquement", "ruRU": "только дальний бой" },
-        "field_OnlyHit": { "enGB": "on hit", "frFR": "sur coup porté", "ruRU": "при попадании" },
-        "field_OnlyMiss": { "enGB": "on miss", "frFR": "sur échec", "ruRU": "при промахе" },
-        "field_OnlyCriticalHit": { "enGB": "on critical hit", "frFR": "sur coup critique", "ruRU": "при крит. ударе" },
-        "field_NotCriticalHit": { "enGB": "except critical hits", "frFR": "hors coups critiques", "ruRU": "кроме крит. ударов" },
-        "field_OnlySneakAttack": { "enGB": "sneak attacks only", "frFR": "attaques sournoises uniquement", "ruRU": "только скрытые атаки" },
-        "field_NotSneakAttack": { "enGB": "except sneak attacks", "frFR": "hors attaques sournoises", "ruRU": "кроме скрытых атак" },
-        "field_OnlyAttacksOfOpportunity": { "enGB": "on attacks of opportunity", "frFR": "sur attaque d'opportunité", "ruRU": "при внеочередной атаке" },
-        "field_NotAttackOfOpportunity": { "enGB": "except attacks of opportunity", "frFR": "hors attaques d'opportunité", "ruRU": "кроме внеочередных атак" },
-        "field_OnlyFlatFooted": { "enGB": "if target is flat-footed", "frFR": "si la cible est prise au dépourvu", "ruRU": "если цель застигнута врасплох" },
-        "field_OnlyNoDexToAC": { "enGB": "if target has no Dex to AC", "frFR": "si la cible n'a pas de Bonus de Dex à sa CA", "ruRU": "если у цели нет бонуса Ловкости к КЗ" },
-        "field_NotTouch": { "enGB": "not on touch attacks", "frFR": "hors attaques de contact", "ruRU": "кроме атак касанием" },
-        "field_NotZeroDamage": { "enGB": "if damage is handled", "frFR": "si des dégâts sont infligés", "ruRU": "если урон нанесен" },
-        "field_NotUnarmed": { "enGB": "except unarmed attacks", "frFR": "hors attaques à mains nues", "ruRU": "кроме безоружных атак" },
-        "field_OnlyPass": { "enGB": "only if check succeeds", "frFR": "si l'épreuve est réussie", "ruRU": "только при успехе" },
-        "field_OnlyFail": { "enGB": "only if check fails", "frFR": "si l'épreuve échoue", "ruRU": "только при провале" },
-        "field_CheckEnergyDamageType": { "enGB": "damage type check", "frFR": "vérification du type d'énergie", "ruRU": "проверка типа урона" },
-        "action_ContextActionRemoveBuff": { "enGB": "remove an effect", "frFR": "supprime un effet", "ruRU": "снимает эффект" },
-        "cond_ContextConditionIsEnemy": { "enGB": "target is an enemy", "frFR": "la cible est un ennemi", "ruRU": "цель — враг" },
-        "cond_ContextConditionDistanceToTarget": { "enGB": "distance to target", "frFR": "distance de la cible", "ruRU": "расстояние до цели" },
-        "cond_ContextConditionIsShieldEquipped": { "enGB": "shield is equipped", "frFR": "un bouclier est équipé", "ruRU": "щит экипирован" },
-        "cond_ContextConditionHasFact": { "enGB": "has fact", "frFR": "possède le don/faveur", "ruRU": "имеет особенность" },
-        "cond_ContextConditionCharacterClass": { "enGB": "character class", "frFR": "classe de personnage", "ruRU": "класс персонажа" },
-        "cond_CharacterClass": { "enGB": "class is {0}", "frFR": "la classe est {0}", "ruRU": "класс {0}" },
-        "cond_HasBuff": { "enGB": "effect {0} is active", "frFR": "l'effet {0} est présent", "ruRU": "эффект {0} активен" },
-        "cond_Alignment": { "enGB": "alignment is {0}", "frFR": "l'alignement est {0}", "ruRU": "мировоззрение {0}" },
-        "cond_HasFact": { "enGB": "has {0}", "frFR": "possède {0}", "ruRU": "имеет {0}" },
-        "align_Good": { "enGB": "Good", "frFR": "Bon", "ruRU": "Доброе" },
-        "align_Evil": { "enGB": "Evil", "frFR": "Mauvais", "ruRU": "Злое" },
-        "align_Lawful": { "enGB": "Lawful", "frFR": "Loyal", "ruRU": "Законопослушное" },
-        "align_Chaotic": { "enGB": "Chaotic", "frFR": "Chaotique", "ruRU": "Хаотичное" },
-        "align_Neutral": { "enGB": "Neutral", "frFR": "Neutre", "ruRU": "Нейтральное" },
-        "base_CharacterLevel": { "enGB": "character level", "frFR": "niveaux de personnage", "ruRU": "уровней персонажа" },
-        "base_CasterLevel": { "enGB": "caster level", "frFR": "niveaux de lanceur de sorts", "ruRU": "уровней заклинателя" },
-        "base_StatBonus": { "enGB": "{0} bonus", "frFR": "bonus de {0}", "ruRU": "бонус {0}" },
-        "base_ClassLevel": { "enGB": "class level", "frFR": "niveaux de classe", "ruRU": "уровней класса" },
-        "base_BaseAttackBonus": { "enGB": "BAB", "frFR": "BBA", "ruRU": "БМА" },
-        "prog_AsIs": { "enGB": "per {0}", "frFR": "par {0}", "ruRU": "за {0}" },
-        "prog_Div2": { "enGB": "every 2 {0}", "frFR": "tous les 2 {0}", "ruRU": "за каждые 2 {0}" },
-        "prog_StartPlusDivStep": { "enGB": "every {0} {1} (after {2})", "frFR": "tous les {0} {1} (après {2})", "ruRU": "каждые {0} {1} (после {2})" },
-        "prog_OnePlusDivStep": { "enGB": "every {0} {1}", "frFR": "tous les {0} {1}", "ruRU": "каждые {0} {1}" },
-        "prog_MultiplyByModifier": { "enGB": "x{0} {1}", "frFR": "x{0} {1}", "ruRU": "x{0} {1}" },
-        "ui_rank_based": { "enGB": "rank-based", "frFR": "selon le rang", "ruRU": "зависит от уровня" },
-        "cond_CompareStat": { "enGB": "stat check", "frFR": "test de caractéristique", "ruRU": "сравнение характеристик" },
-        "cond_CompareStatSpecific": { "enGB": "{0} check", "frFR": "test de {0}", "ruRU": "проверка {0}" },
-        "cond_ContextConditionIsEnemy": { "enGB": "is enemy", "frFR": "est un ennemi", "ruRU": "враг" },
-        "cond_ContextConditionDistanceToTarget": { "enGB": "distance check", "frFR": "vérification de distance", "ruRU": "проверка дистанции" },
-        "ui_dice_format": { "enGB": "{0}d{1}", "frFR": "{0}d{1}", "ruRU": "{0}к{1}" },
-        "energy_Fire": { "enGB": "fire", "frFR": "feu", "ruRU": "огнем" },
-        "energy_Cold": { "enGB": "cold", "frFR": "froid", "ruRU": "холодом" },
-        "energy_Electricity": { "enGB": "electricity", "frFR": "électricité", "ruRU": "электричеством" },
-        "energy_Acid": { "enGB": "acid", "frFR": "acide", "ruRU": "кислотой" },
-        "energy_Sonic": { "enGB": "sonic", "frFR": "sonique", "ruRU": "звуком" },
-        "energy_Positive": { "enGB": "positive", "frFR": "positive", "ruRU": "положительной энергией" },
-        "energy_Negative": { "enGB": "negative", "frFR": "négative", "ruRU": "отрицательной энергией" },
-        "energy_Holy": { "enGB": "holy", "frFR": "sacré", "ruRU": "священным уроном" },
-        "energy_Unholy": { "enGB": "unholy", "frFR": "impie", "ruRU": "нечестивым уроном" },
-        "energy_Divine": { "enGB": "divine", "frFR": "divin", "ruRU": "божественной энергией" },
-        "energy_Magic": { "enGB": "magic", "frFR": "magique", "ruRU": "магией" },
-        "energy_Force": { "enGB": "force", "frFR": "de force", "ruRU": "силовым уроном" },
-        "phys_Slashing": { "enGB": "slashing", "frFR": "tranchant", "ruRU": "рубящим" },
-        "phys_Piercing": { "enGB": "piercing", "frFR": "perçant", "ruRU": "колющим" },
-        "phys_Bludgeoning": { "enGB": "bludgeoning", "frFR": "contondant", "ruRU": "дробящим" },
-        "phys_PiercingAndSlashing": { "enGB": "piercing & slashing", "frFR": "perçant et tranchant", "ruRU": "колющим и рубящим" },
-        "type_Energy": { "enGB": "energy", "frFR": "d'énergie", "ruRU": "энергией" },
-        "type_Physical": { "enGB": "physical", "frFR": "physique", "ruRU": "физического типа" },
-        "field_CheckEnergyDamageType": { "enGB": "check energy type", "frFR": "vérification d'énergie", "ruRU": "проверка типа энергии" },
-        "field_EnergyType": { "enGB": "energy type", "frFR": "type d'énergie", "ruRU": "тип энергии" },
-        "ConstructClass": { "enGB": "Construct", "frFR": "Créature artificielle", "ruRU": "Конструкт" },
-        "enum_StatType_Strength": { "enGB": "Strength", "frFR": "Force", "ruRU": "Сила" },
-        "enum_StatType_Dexterity": { "enGB": "Dexterity", "frFR": "Dextérité", "ruRU": "Ловкость" },
-        "enum_StatType_Constitution": { "enGB": "Constitution", "frFR": "Constitution", "ruRU": "Выносливость" },
-        "enum_StatType_Intelligence": { "enGB": "Intelligence", "frFR": "Intelligence", "ruRU": "Интеллект" },
-        "enum_StatType_Wisdom": { "enGB": "Wisdom", "frFR": "Sagesse", "ruRU": "Мудрость" },
-        "enum_StatType_Charisma": { "enGB": "Charisma", "frFR": "Charisme", "ruRU": "Харизма" },
-        "enum_SavingThrowType_Fortitude": { "enGB": "Fortitude", "frFR": "Vigueur", "ruRU": "Стойкость" },
-        "enum_SavingThrowType_Reflex": { "enGB": "Reflex", "frFR": "Réflexes", "ruRU": "Реакция" },
-        "enum_SavingThrowType_Will": { "enGB": "Will", "frFR": "Volonté", "ruRU": "Воля" },
-        "enum_DamageEnergyType_Fire": { "enGB": "fire", "frFR": "feu", "ruRU": "огнем" },
-        "enum_DamageEnergyType_Cold": { "enGB": "cold", "frFR": "froid", "ruRU": "холодом" },
-        "enum_DamageEnergyType_Electricity": { "enGB": "electricity", "frFR": "électricité", "ruRU": "электричеством" },
-        "enum_DamageEnergyType_Acid": { "enGB": "acid", "frFR": "acide", "ruRU": "кислотой" },
-        "enum_DamageEnergyType_Sonic": { "enGB": "sonic", "frFR": "sonique", "ruRU": "звуком" },
-        "enum_DamageEnergyType_Positive": { "enGB": "positive", "frFR": "positive", "ruRU": "положительной энергией" },
-        "enum_DamageEnergyType_Negative": { "enGB": "negative", "frFR": "négative", "ruRU": "отрицательной энергией" },
-        "enum_ModifierDescriptor_Enhancement": { "enGB": "Enhancement", "frFR": "Altération", "ruRU": "Усиление" },
-        "enum_ModifierDescriptor_Profane": { "enGB": "Profane", "frFR": "Profane", "ruRU": "Профанный" },
-        "enum_ModifierDescriptor_Sacred": { "enGB": "Sacred", "frFR": "Sacré", "ruRU": "Священный" },
-        "enum_ModifierDescriptor_Morale": { "enGB": "Morale", "frFR": "Moral", "ruRU": "Боевой дух" },
-        "enum_ModifierDescriptor_Alchemical": { "enGB": "Alchemical", "frFR": "Alchimique", "ruRU": "Алхимический" },
-        "enum_ModifierDescriptor_Circumstance": { "enGB": "Circumstance", "frFR": "Circonstance", "ruRU": "Обстоятельство" },
-        "enum_ModifierDescriptor_Competence": { "enGB": "Competence", "frFR": "Compétence", "ruRU": "Компетентность" },
-        "enum_ModifierDescriptor_Deflection": { "enGB": "Deflection", "frFR": "Parade", "ruRU": "Отражение" },
-        "enum_ModifierDescriptor_Dodge": { "enGB": "Dodge", "frFR": "Esquive", "ruRU": "Уклонение" },
-        "enum_ModifierDescriptor_Insight": { "enGB": "Insight", "frFR": "Intuition", "ruRU": "Проницательность" },
-        "enum_ModifierDescriptor_Luck": { "enGB": "Luck", "frFR": "Chance", "ruRU": "Удача" },
-        "enum_ModifierDescriptor_NaturalArmor": { "enGB": "Natural Armor", "frFR": "Armure naturelle", "ruRU": "Природная броня" },
-        "enum_ModifierDescriptor_Resistance": { "enGB": "Resistance", "frFR": "Résistance", "ruRU": "Сопротивление" },
-        "enum_ModifierDescriptor_Size": { "enGB": "Size", "frFR": "Taille", "ruRU": "Размер" }
+        }
     }
 }

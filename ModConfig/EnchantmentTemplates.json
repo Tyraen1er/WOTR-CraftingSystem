@@ -8,13 +8,13 @@
   {
     "COMP_TYPE": "AddStatBonus",
     "enGB": "+<Value> <Descriptor> bonus to <Stat>",
-    "frFR": "Bonus de <Descriptor> de +<Value> à la stat <Stat>",
+    "frFR": "+<Value> de bonus <Descriptor> à la <Stat>",
     "ruRU": "+<Value> (<Descriptor>) бонус к характеристике <Stat>"
   },
   {
     "COMP_TYPE": "AddStatBonusEquipment",
     "enGB": "+<Value> <Descriptor> bonus to <Stat>",
-    "frFR": "Bonus de <Descriptor> de +<Value> à la stat <Stat>",
+    "frFR": "+<Value> de bonus <Descriptor> à la <Stat>",
     "ruRU": "+<Value> (<Descriptor>) бонус к характеристике <Stat>"
   },
   {

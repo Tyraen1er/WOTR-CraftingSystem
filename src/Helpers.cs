@@ -31,17 +31,41 @@ namespace CraftingSystem
 
         public static void LoadLocalization(string modPath)
         {
+            CustomStrings.Clear();
+            RawLocalization = new JObject();
+            var allStrings = new JObject();
+            RawLocalization["strings"] = allStrings;
+
+            LoadFile(Path.Combine(modPath, "Localization.json"), allStrings);
+            LoadFile(Path.Combine(modPath, "EnchantmentDescriptionGlossary.json"), allStrings);
+
+            // Applique la localisation immédiatement pour remplir CustomStrings
+            string locale = "enGB";
             try {
-                string locFile = Path.Combine(modPath, "Localization.json");
-                if (File.Exists(locFile)) {
-                    string json = File.ReadAllText(locFile);
-                    RawLocalization = JObject.Parse(json);
-                    Main.ModEntry.Logger.Log("Loaded Localization.json successfully.");
+                locale = LocalizationManager.CurrentLocale.ToString();
+            } catch { }
+
+            ApplyLocalization(locale);
+        }
+
+        private static void LoadFile(string filePath, JObject targetContainer)
+        {
+            try {
+                if (File.Exists(filePath)) {
+                    string json = File.ReadAllText(filePath);
+                    var content = JObject.Parse(json);
+                    var strings = content["strings"] as JObject;
+                    if (strings != null) {
+                        foreach (var prop in strings.Properties()) {
+                            targetContainer[prop.Name] = prop.Value;
+                        }
+                        Main.ModEntry.Logger.Log($"Loaded {Path.GetFileName(filePath)} successfully.");
+                    }
                 } else {
-                    Main.ModEntry.Logger.Warning("Localization.json not found!");
+                    Main.ModEntry.Logger.Warning($"{Path.GetFileName(filePath)} not found!");
                 }
             } catch (Exception ex) {
-                Main.ModEntry.Logger.Error($"Failed to load Localization.json: {ex.Message}");
+                Main.ModEntry.Logger.Error($"Failed to load {Path.GetFileName(filePath)}: {ex.Message}");
             }
         }
 

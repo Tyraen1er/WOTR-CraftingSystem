@@ -14,10 +14,13 @@ namespace CraftingSystem
     {
         public class DumpedEnchantment
         {
+            [JsonProperty("GUID")]
             public string Guid;
             public string Name;
-            public string Type;
-            public string Comment;
+            public string name;
+            public string Description;
+            public string generatedDescription;
+            public List<Dictionary<string, object>> Components;
         }
 
         public static void DumpAll()
@@ -44,18 +47,30 @@ namespace CraftingSystem
                         
                         if (bp != null)
                         {
-                            string type = "Other";
-                            if (bp is BlueprintWeaponEnchantment) type = "Weapon";
-                            else if (bp is BlueprintArmorEnchantment) type = "Armor";
 
-                            dumpList.Add(new DumpedEnchantment
-                            {
-                                Guid = bp.AssetGuid.ToString(), 
-                                Name = bp.name,
-                                Type = type,
-                                Comment = bp.Comment
-                            });
-                        }
+                             var components = new List<Dictionary<string, object>>();
+                             var enumerable = GetComponentsFromBlueprint(bp);
+                             if (enumerable != null)
+                             {
+                                 foreach (var comp in enumerable)
+                                 {
+                                     if (comp == null) continue;
+                                     var compData = ExtractComponentData(comp);
+                                     compData["$COMP_TYPE"] = comp.GetType().Name;
+                                     components.Add(compData);
+                                 }
+                             }
+
+                             dumpList.Add(new DumpedEnchantment
+                             {
+                                 Guid = bp.AssetGuid.ToString(), 
+                                 Name = EnchantmentDescriptionGenerator.GetBlueprintDisplayName(bp),
+                                 name = bp.name,
+                                 Description = bp.m_Description?.ToString() ?? "",
+                                 generatedDescription = EnchantmentDescriptionGenerator.Generate(bp) ?? "",
+                                 Components = components
+                             });
+                         }
                     }
                 }
 
@@ -239,15 +254,30 @@ namespace CraftingSystem
                         else if (val is System.Collections.IEnumerable enumerable && !(val is string))
                         {
                             var list = new List<object>();
+                            int count = 0;
                             foreach (var item in enumerable)
                             {
+                                if (count++ > 50) { list.Add("... (truncated)"); break; }
                                 if (item == null) list.Add(null);
                                 else if (item.GetType().IsPrimitive || item is string) list.Add(item);
                                 else if (item.GetType().IsEnum) list.Add($"{item.ToString()} ({(int)item})");
                                 else if (item is BlueprintReferenceBase bpRef2) list.Add(new { Guid = bpRef2.Guid.ToString() });
+                                else if (depth < maxDepth + 1) // Recurse slightly for elements in lists
+                                {
+                                    var itemData = ExtractComponentData(item, depth + 1, maxDepth + 1);
+                                    itemData["$TYPE"] = item.GetType().Name;
+                                    list.Add(itemData);
+                                }
                                 else list.Add(item.GetType().Name);
                             }
                             data[field.Name] = list;
+                        }
+                        else if (depth < maxDepth && val != null && !val.GetType().IsPrimitive && !val.GetType().IsEnum && (val.GetType().FullName?.StartsWith("Kingmaker") == true))
+                        {
+                            var subType = val.GetType();
+                            var subData = ExtractComponentData(val, depth + 1, maxDepth);
+                            subData["$TYPE"] = subType.Name;
+                            data[field.Name] = subData;
                         }
                         else if (val is Kingmaker.Localization.LocalizedString locString)
                         {

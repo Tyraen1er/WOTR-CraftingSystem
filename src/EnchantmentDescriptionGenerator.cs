@@ -37,16 +37,36 @@ namespace CraftingSystem
                 if (comp == null) continue;
 
                 string typeName = comp.GetType().Name;
-                var template = EnchantmentScanner.DescriptionTemplates.FirstOrDefault(t => t.ComponentType == typeName);
+                
+                // On ignore les composants techniques de calcul qui ne sont pas des enchantements directs
+                if (typeName == "ContextRankConfig" || typeName == "ContextCalculateSharedValue") continue;
 
-                if (template != null)
+                string resolved = null;
+
+                // 1. Priorité aux handlers spécifiques pour les composants complexes
+                if (typeName == "AdditionalDiceOnAttack") 
                 {
-                    string templateText = GetLocalizedTemplate(template);
-                    string resolved = ResolveTemplate(templateText, comp, bp);
-                    if (!string.IsNullOrEmpty(resolved))
+                    resolved = SummarizeAdditionalDiceOnAttack(comp, bp);
+                }
+                else if (typeName == "AddStatBonusEquipment")
+                {
+                    resolved = SummarizeAddStatBonus(comp, bp);
+                }
+                
+                // 2. Sinon, on utilise le système de template JSON
+                if (string.IsNullOrEmpty(resolved))
+                {
+                    var template = EnchantmentScanner.DescriptionTemplates.FirstOrDefault(t => t.ComponentType == typeName);
+                    if (template != null)
                     {
-                        lines.Add("- " + resolved);
+                        string templateText = GetLocalizedTemplate(template);
+                        resolved = ResolveTemplate(templateText, comp, bp);
                     }
+                }
+
+                if (!string.IsNullOrEmpty(resolved))
+                {
+                    lines.Add("- " + resolved);
                 }
             }
 
@@ -83,7 +103,7 @@ namespace CraftingSystem
 
                 // Résolution simple de champ
                 return GetFieldValue(tag, comp, parentBp);
-            }).Trim();
+            }).Replace("+-", "-").Trim();
         }
 
         private static string ResolveFlagCondition(string tag, object comp, BlueprintItemEnchantment parentBp)
@@ -148,8 +168,7 @@ namespace CraftingSystem
         private static string FormatValue(object val, BlueprintItemEnchantment parentBp)
         {
             string result = InternalFormatValue(val, parentBp);
-            string sanitized = SanitizeLocalString(result);
-            return string.IsNullOrEmpty(sanitized) ? "???" : sanitized;
+            return SanitizeLocalString(result);
         }
 
         private static string InternalFormatValue(object val, BlueprintItemEnchantment parentBp)
@@ -203,7 +222,21 @@ namespace CraftingSystem
             {
                 string key = $"enum_{type.Name}_{val}";
                 string localized = Helpers.GetString(key, "");
-                return string.IsNullOrEmpty(localized) ? val.ToString() : localized;
+                if (string.IsNullOrEmpty(localized))
+                {
+                    // Fallback : essayer d'utiliser la valeur brute comme clé (ex: SkillAthletics)
+                    string fallbackKey = val.ToString();
+                    localized = Helpers.GetString(fallbackKey, "");
+                }
+
+                if (string.IsNullOrEmpty(localized))
+                {
+                    // Nettoyage des enums techniques pour l'affichage
+                    string fallback = val.ToString();
+                    if (fallback == "None" || fallback == "Untyped") return "";
+                    return fallback;
+                }
+                return localized;
             }
 
             // Gestion spécifique des structures complexes
@@ -214,16 +247,29 @@ namespace CraftingSystem
             if (type.Name.EndsWith("CastSpell")) return SummarizeCastSpell(val, parentBp);
             if (type.Name.EndsWith("DealDamage")) return SummarizeDamageAction(val, parentBp);
             if (type.Name.EndsWith("ConditionalSaved")) return SummarizeConditionalSaved(val, parentBp);
+            if (type.Name == "ContextActionOnOwner" || type.Name == "ContextActionOnInitiator" || type.Name == "ContextActionOnContextCaster") 
+                return SummarizeActionOnSelf(val, GetContextLabel(type.Name), parentBp);
+            if (type.Name == "ContextActionsOnPet") return SummarizeActionsOnPet(val, parentBp);
 
             // Conditions Spécifiques pour extraire les noms (Classe, Buff)
             if (type.Name == "ContextConditionCharacterClass") return SummarizeConditionCharacterClass(val, parentBp);
             if (type.Name == "ContextConditionHasBuff") return SummarizeConditionHasBuff(val, parentBp);
             if (type.Name == "ContextConditionCompareStat") return SummarizeConditionCompareStat(val, parentBp);
             if (type.Name == "ContextConditionAlignment") return SummarizeConditionAlignment(val, parentBp);
-            if (type.Name == "ContextConditionHasFact") return SummarizeConditionHasFact(val, parentBp);
-            if (type.Name == "ContextConditionIsEnemy") return SummarizeConditionIsEnemy(val, parentBp);
-            if (type.Name == "ContextConditionDistanceToTarget") return SummarizeConditionDistanceToTarget(val, parentBp);
+            if (type.Name.EndsWith("HasFact")) return SummarizeConditionHasFact(val, parentBp);
+            if (type.Name == "ContextConditionHasBuffWithDescriptor") return SummarizeConditionHasBuffWithDescriptor(val, parentBp);
+            if (type.Name == "AdditionalDiceOnAttack") return SummarizeAdditionalDiceOnAttack(val, parentBp);
             if (type.Name == "AddStatBonusEquipment") return SummarizeAddStatBonus(val, parentBp);
+            
+            if (type.Name == "SpellDescriptorWrapper")
+            {
+                string s = val.ToString() ?? "";
+                if (s.StartsWith("SpellDescriptorWrapper [") && s.EndsWith("]"))
+                {
+                    s = s.Substring("SpellDescriptorWrapper [".Length, s.Length - "SpellDescriptorWrapper [".Length - 1);
+                }
+                return s;
+            }
 
             // Pour éviter les noms de types techniques comme Kingmaker.ActionList
             if (type.FullName.StartsWith("Kingmaker") && !type.IsPrimitive && type != typeof(string))
@@ -253,7 +299,12 @@ namespace CraftingSystem
                 return string.IsNullOrEmpty(fallback) ? type.Name : fallback;
             }
 
-            return val.ToString();
+            // Fallback final : tente de trouver une traduction pour la représentation textuelle brute dans le glossaire
+            string raw = val.ToString();
+            string localizedRaw = Helpers.GetString(raw, "");
+            if (!string.IsNullOrEmpty(localizedRaw)) return localizedRaw;
+
+            return raw;
         }
 
         private static string SummarizeContextValue(ContextValue cv, BlueprintItemEnchantment parentBp)
@@ -276,7 +327,7 @@ namespace CraftingSystem
                         var config = parentBp.ComponentsArray.FirstOrDefault(c => c.GetType().Name == "ContextRankConfig" && 
                                      GetFieldValueRecursive(c, "m_Type")?.ToString() == rankType);
                         
-                        if (config != null) return SummarizeRankConfig(config);
+                        if (config != null) return SummarizeRankConfig(config, parentBp);
                     }
                     return Helpers.GetString("ui_rank_based", "(rank)");
                 }
@@ -286,24 +337,41 @@ namespace CraftingSystem
             catch { return cv.Value.ToString(); }
         }
 
-        private static string SummarizeRankConfig(object config)
+        private static string SummarizeRankConfig(object config, BlueprintItemEnchantment parentBp)
         {
             try
             {
-                string baseValType = GetFieldValueRecursive(config, "m_BaseValueType")?.ToString() ?? "CharacterLevel";
+                // Traduction des types de base techniques en noms conviviaux
+                string baseValType = (GetFieldValueRecursive(config, "m_BaseValueType")?.ToString() ?? "CharacterLevel")
+                                    .Replace("SummClassLevelWithArchetype", "ClassLevel")
+                                    .Replace("BaseStat", "Stat");
+
                 string progression = GetFieldValueRecursive(config, "m_Progression")?.ToString() ?? "AsIs";
                 int step = (int)(GetFieldValueRecursive(config, "m_StepLevel") ?? 0);
                 int start = (int)(GetFieldValueRecursive(config, "m_StartLevel") ?? 0);
 
                 string baseLabel = Helpers.GetString("base_" + baseValType, baseValType);
+                if (baseLabel == "ClassLevel") baseLabel = Helpers.GetString("ui_class_level", "class level");
+                if (baseLabel == "CharacterLevel") baseLabel = Helpers.GetString("ui_character_level", "character level");
 
-                if (progression == "AsIs") return string.Format(Helpers.GetString("prog_AsIs", "per {0}"), baseLabel);
-                if (progression == "Div2") return string.Format(Helpers.GetString("prog_Div2", "every 2 {0}"), baseLabel);
-                if (progression == "StartPlusDivStep") return string.Format(Helpers.GetString("prog_StartPlusDivStep", "every {0} {1} (after {2})"), step, baseLabel, start);
-                if (progression == "OnePlusDivStep") return string.Format(Helpers.GetString("prog_OnePlusDivStep", "every {0} {1}"), step, baseLabel);
-                if (progression == "MultiplyByModifier") return string.Format(Helpers.GetString("prog_MultiplyByModifier", "x{0} {1}"), step, baseLabel);
+                string finalLabel = baseLabel;
+                if (baseValType == "StatBonus" || baseValType == "Stat")
+                {
+                    var statField = GetFieldRecursive(config.GetType(), "m_Stat");
+                    if (statField != null)
+                    {
+                        string statName = FormatValue(statField.GetValue(config), parentBp);
+                        finalLabel = string.Format(baseLabel, statName);
+                    }
+                }
 
-                return $"{progression}({baseLabel})";
+                if (progression == "AsIs") return string.Format(Helpers.GetString("prog_AsIs", "per {0}"), finalLabel);
+                if (progression == "Div2") return string.Format(Helpers.GetString("prog_Div2", "per partial level of {0}"), finalLabel);
+                if (progression == "StartPlusDivStep") return string.Format(Helpers.GetString("prog_StartPlusDivStep", "every {0} levels of {1} (after level {2})"), step, finalLabel, start);
+                if (progression == "OnePlusDivStep") return string.Format(Helpers.GetString("prog_OnePlusDivStep", "every {0} levels of {1}"), step, finalLabel);
+                if (progression == "MultiplyByModifier") return string.Format(Helpers.GetString("prog_MultiplyByModifier", "x{0} {1}"), step, finalLabel);
+
+                return $"{progression} ({finalLabel})";
             }
             catch { return "(rank)"; }
         }
@@ -443,6 +511,49 @@ namespace CraftingSystem
             catch { return "CastSpell"; }
         }
 
+        private static string GetContextLabel(string typeName)
+        {
+            if (typeName.Contains("Owner")) return Helpers.GetString("ui_label_owner", "Porteur");
+            if (typeName.Contains("Initiator")) return Helpers.GetString("ui_label_initiator", "Lanceur");
+            if (typeName.Contains("Caster")) return Helpers.GetString("ui_label_caster", "Lanceur");
+            if (typeName.Contains("Pet")) return Helpers.GetString("ui_label_pet", "Familier");
+            return typeName;
+        }
+
+        private static string SummarizeActionOnSelf(object action, string label, BlueprintItemEnchantment parentBp)
+        {
+            try
+            {
+                var type = action.GetType();
+                var actionsField = GetFieldRecursive(type, "Actions") ?? GetFieldRecursive(type, "m_Actions");
+                if (actionsField == null) return $"[{label}]";
+                
+                string inner = SummarizeElementsList(actionsField.GetValue(action), parentBp);
+                if (string.IsNullOrEmpty(inner)) return $"[{label}]";
+                
+                return $"[{label}] {inner}";
+            }
+            catch { return $"[{label}]"; }
+        }
+
+        private static string SummarizeActionsOnPet(object action, BlueprintItemEnchantment parentBp)
+        {
+            try
+            {
+                var type = action.GetType();
+                var actionsField = GetFieldRecursive(type, "Actions") ?? GetFieldRecursive(type, "m_Actions");
+                string label = Helpers.GetString("ui_label_pet", "Familier");
+                
+                if (actionsField == null) return $"[{label}]";
+                
+                string inner = SummarizeElementsList(actionsField.GetValue(action), parentBp);
+                if (string.IsNullOrEmpty(inner)) return $"[{label}]";
+                
+                return $"[{label}] {inner}";
+            }
+            catch { return "[Familier]"; }
+        }
+
         private static string SummarizeConditionalSaved(object action, BlueprintItemEnchantment parentBp)
         {
             try
@@ -481,25 +592,30 @@ namespace CraftingSystem
             try
             {
                 var type = damageAction.GetType();
-                var valueField = type.GetField("Value", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
-                var damageTypeField = type.GetField("DamageType", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
-
-                string diceText = "";
-                if (valueField != null)
-                {
-                    diceText = FormatValue(valueField.GetValue(damageAction), parentBp);
-                }
-
-                string typeText = "";
-                if (damageTypeField != null)
-                {
-                    typeText = FormatValue(damageTypeField.GetValue(damageAction), parentBp);
-                }
-
+                var valueField = GetFieldRecursive(type, "Value");
+                var value = valueField?.GetValue(damageAction);
+                string diceText = FormatValue(value, parentBp);
+                
+                var damageTypeField = GetFieldRecursive(type, "DamageType");
+                object damageTypeObj = damageTypeField?.GetValue(damageAction);
+                string typeText = damageTypeObj != null ? FormatValue(damageTypeObj, parentBp) : "";
+                
+                // Flags de dégâts
+                bool half = (bool)(GetFieldRecursive(type, "Half")?.GetValue(damageAction) ?? false);
+                bool noCrit = (bool)(GetFieldRecursive(type, "IgnoreCritical")?.GetValue(damageAction) ?? false);
+                bool drain = (bool)(GetFieldRecursive(type, "Drain")?.GetValue(damageAction) ?? false);
+                
                 string baseText = Helpers.GetString("action_ContextActionDealDamage", "deals damage");
                 if (string.IsNullOrEmpty(diceText) || diceText == "None") return baseText;
 
-                return $"{baseText} {diceText} ({typeText})";
+                List<string> extras = new List<string>();
+                if (!string.IsNullOrEmpty(typeText) && typeText != "None" && typeText != "False") extras.Add(typeText);
+                if (half) extras.Add(Helpers.GetString("ui_damage_half", "mi-dégâts"));
+                if (noCrit) extras.Add(Helpers.GetString("ui_damage_no_crit", "pas de critique"));
+                if (drain) extras.Add(Helpers.GetString("ui_damage_drain", "drain"));
+
+                string details = extras.Count > 0 ? $" ({string.Join(", ", extras)})" : "";
+                return $"{baseText} {diceText}{details}";
             }
             catch { return "DealDamage"; }
         }
@@ -527,7 +643,17 @@ namespace CraftingSystem
                 string bonus = FormatValue(bonusValueField?.GetValue(diceValue), parentBp);
 
                 string format = Helpers.GetString("ui_dice_format", "{0}d{1}");
-                string main = string.Format(format, count, diceSides);
+                string main = "";
+                
+                if (diceSides > 1) 
+                {
+                    main = string.Format(format, count, diceSides);
+                }
+                else 
+                {
+                    // Cas spécial pour 1d1 ou les valeurs plates déguisées en dés
+                    main = count;
+                }
 
                 if (!string.IsNullOrEmpty(bonus) && bonus != "0" && bonus != "None")
                 {
@@ -537,6 +663,93 @@ namespace CraftingSystem
                 return main;
             }
             catch { return "Dice"; }
+        }
+
+        private static string SummarizeAdditionalDiceOnAttack(object comp, BlueprintItemEnchantment parentBp)
+        {
+            try
+            {
+                var type = comp.GetType();
+                var useWeaponDiceField = GetFieldRecursive(type, "m_UseWeaponDice");
+                var valueField = GetFieldRecursive(type, "m_Value") ?? GetFieldRecursive(type, "Value");
+                var damageTypeField = GetFieldRecursive(type, "m_DamageType") ?? GetFieldRecursive(type, "DamageType");
+                
+                var initiatorCondField = GetFieldRecursive(type, "InitiatorConditions");
+                var targetCondField = GetFieldRecursive(type, "TargetConditions");
+                
+                var onHitField = GetFieldRecursive(type, "OnHit");
+                var onCritField = GetFieldRecursive(type, "CriticalHit");
+
+                bool useWeaponDice = (bool)(useWeaponDiceField?.GetValue(comp) ?? false);
+                string valueStr = useWeaponDice ? Helpers.GetString("ui_weapon_damage", "weapon damage") : FormatValue(valueField?.GetValue(comp), parentBp);
+                string damageType = FormatValue(damageTypeField?.GetValue(comp), parentBp);
+
+                if (valueStr == "0" || string.IsNullOrEmpty(valueStr)) valueStr = "";
+                if (damageType == "False" || damageType == "None") damageType = "";
+
+                string template = Helpers.GetString("template_AdditionalDiceOnAttack", "Adds {0} {1}");
+                string result = string.Format(template, valueStr, damageType).Trim();
+
+                // Conditions
+                string initiatorCondStr = initiatorCondField != null ? SummarizeConditions(initiatorCondField.GetValue(comp), parentBp) : "";
+                string targetCondStr = targetCondField != null ? SummarizeConditions(targetCondField.GetValue(comp), parentBp) : "";
+                
+                string allConds = "";
+                if (!string.IsNullOrEmpty(initiatorCondStr)) allConds = initiatorCondStr;
+                if (!string.IsNullOrEmpty(targetCondStr)) 
+                {
+                    if (!string.IsNullOrEmpty(allConds)) allConds += " et ";
+                    allConds += targetCondStr;
+                }
+
+                if (!string.IsNullOrEmpty(allConds))
+                {
+                    string uiIf = Helpers.GetString("ui_if", "if");
+                    result += $" {uiIf} [{allConds}]";
+                }
+
+                // Hit types
+                bool onHit = (bool)(onHitField?.GetValue(comp) ?? true);
+                bool onCrit = (bool)(onCritField?.GetValue(comp) ?? false);
+
+                if (onCrit && !onHit) result += $" ({Helpers.GetString("ui_on_crit", "sur coup critique")})";
+                else if (onHit && onCrit) result += $" ({Helpers.GetString("ui_on_hit_crit", "sur coup porté ou critique")})";
+                else if (onHit) result += $" ({Helpers.GetString("ui_on_hit", "sur coup porté")})";
+
+                return result;
+            }
+            catch { return "AdditionalDice"; }
+        }
+
+        private static string SummarizeConditionHasBuffWithDescriptor(object cond, BlueprintItemEnchantment parentBp)
+        {
+            try
+            {
+                var type = cond.GetType();
+                var descriptorField = GetFieldRecursive(type, "m_SpellDescriptor") ?? GetFieldRecursive(type, "SpellDescriptor");
+                var notField = GetFieldRecursive(type, "Not");
+
+                if (descriptorField == null) return Helpers.GetString("cond_HasBuffWithDescriptor_Generic", "possède un effet spécifique");
+
+                object descriptor = descriptorField.GetValue(cond);
+                string descriptorStr = FormatValue(descriptor, parentBp);
+                
+                // On essaie de localiser le ou les descripteurs (peuvent être séparés par des virgules)
+                var parts = descriptorStr.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                var localizedParts = parts.Select(p => {
+                    string loc = Helpers.GetString("descriptor_" + p, p);
+                    return loc == "descriptor_" + p ? p : loc;
+                });
+                
+                string localizedDescriptor = string.Join(", ", localizedParts);
+                
+                bool isNot = (bool)(notField?.GetValue(cond) ?? false);
+                string templateKey = isNot ? "cond_NotHasBuffWithDescriptor" : "cond_HasBuffWithDescriptor";
+                string defaultTemplate = isNot ? "doesn't have {0} effect" : "has {0} effect";
+                
+                return string.Format(Helpers.GetString(templateKey, defaultTemplate), localizedDescriptor);
+            }
+            catch { return "BuffDescriptor"; }
         }
 
         private static string SummarizeDamageType(object dmgType)
@@ -597,8 +810,12 @@ namespace CraftingSystem
 
         private static string SummarizeConditionHasFact(object cond, BlueprintItemEnchantment parentBp)
         {
-            var factField = cond.GetType().GetField("m_Fact", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            if (factField == null) return Helpers.GetString("cond_HasFact", "has fact");
+            var type = cond.GetType();
+            var factField = GetFieldRecursive(type, "m_Fact") 
+                         ?? GetFieldRecursive(type, "m_CheckedFact")
+                         ?? GetFieldRecursive(type, "Fact");
+
+            if (factField == null) return Helpers.GetString("cond_HasFact_Generic", "possède une capacité spécifique");
 
             string factName = FormatValue(factField.GetValue(cond), parentBp);
             return string.Format(Helpers.GetString("cond_HasFact", "has {0}"), factName);
@@ -647,13 +864,13 @@ namespace CraftingSystem
                 if (statField == null) return Helpers.GetString("cond_CompareStat", "stat check");
 
                 object statObj = statField.GetValue(cond);
-                string statName = statObj?.ToString() ?? "Stat";
+                string statName = FormatValue(statObj, parentBp);
                 return string.Format(Helpers.GetString("cond_CompareStatSpecific", "{0} check"), statName);
             }
             catch { return "CompareStat"; }
         }
 
-        private static string GetBlueprintDisplayName(SimpleBlueprint bp)
+        public static string GetBlueprintDisplayName(SimpleBlueprint bp)
         {
             if (bp == null) return "";
             try
