@@ -178,10 +178,13 @@
             "enGB": " TTRPG Prerequisite: At least +1 Enhancement to apply any enchants", "frFR": " Prérequis du JDR : +1 Altération minimum pour pouvoir enchanter", "ruRU": " Предварительное условие для настольной игры: как минимум +1 улучшение для применения любых зачарований"
         },
         "ui_settings_slot_penalty": {
-            "enGB": " Apply Slot Penalty (x1.5 cost if inappropriate slot)", "frFR": " Appliquer pénalité d'emplacement (Coût x1.5 si inapproprié)", "ruRU": " Применить штраф за слот (стоимость x1,5, если слот неподходящий)"
+            "enGB": " Apply Slot Penalty (x1.5)", "frFR": " Appliquer la pénalité d'emplacement (x1.5)", "ruRU": " Применить штраф за слот (x1,5)"
+        },
+        "ui_settings_enable_epic": {
+            "enGB": " Enable Epic Multiplier (x10)", "frFR": " Activer le multiplicateur Épique (x10)", "ruRU": " Включить эпический множитель (x10)"
         },
         "ui_settings_epic_multiplier": {
-            "enGB": " Enable Epic Multiplier (x10 cost for Epic enchants)", "frFR": " Activer multiplicateur Épique (Coût x10 pour enchants épiques)", "ruRU": " Включить эпический множитель (стоимость x10 для эпических зачарований)"
+            "enGB": " Epic Multiplier: x{0:F1}", "frFR": " Multiplicateur Épique : x{0:F1}", "ruRU": " Эпический множитель: x{0:F1}"
         },
         "ui_settings_source_display": {
             "enGB": "Source display:", "frFR": "Affichage des sources :", "ruRU": "Отображение источника:"

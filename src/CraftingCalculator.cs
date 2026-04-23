@@ -111,7 +111,7 @@ namespace CraftingSystem
         /// <item><description><b>Système d'Upgrade :</b> Détecte via <see cref="GetEnchantmentFamily"/> si un enchantement de même type est déjà présent pour ne facturer que la différence (ex: passer d'une Résistance 10 à 30).</description></item>
         /// <item><description><b>Pénalité de Slot (+50%) :</b> Appliquée si l'enchantement est posé sur un <c>ItemType</c> non listé dans ses slots autorisés.</description></item>
         /// <item><description><b>Capacités Multiples (+50%) :</b> Appliquée sur les Objets Merveilleux possédant déjà au moins un enchantement permanent ou en attente.</description></item>
-        /// <item><description><b>Coûts Épiques (x10) :</b> Appliqués en fin de calcul si l'enchantement est marqué comme <c>IsEpic</c>.</description></item>
+        /// <item><description><b>Coûts Épiques :</b> Appliqués en fin de calcul si l'enchantement est marqué comme <c>IsEpic</c> (multiplicateur configurable).</description></item>
         /// </list>
         /// </remarks>
         /// <param name="item">L'entité de l'objet à enchanter.</param>
@@ -202,7 +202,7 @@ namespace CraftingSystem
                 fixedCost = (long)(fixedCost * totalPenaltyMultiplier);
 
                 // Multiplicateur Épique
-                if (CraftingSettings.EnableEpicCosts && nextEnchant.IsEpic) fixedCost *= 10;
+                if (CraftingSettings.EnableEpicCosts && nextEnchant.IsEpic) fixedCost = (long)(fixedCost * CraftingSettings.EpicCostMultiplier);
                 
                 return fixedCost;
             }
@@ -247,7 +247,7 @@ namespace CraftingSystem
             // 6. Multiplicateur Épique
             if (CraftingSettings.EnableEpicCosts && nextEnchant.IsEpic)
             {
-                marginalCost *= 10;
+                marginalCost = (long)(marginalCost * CraftingSettings.EpicCostMultiplier);
             }
 
             return marginalCost;

@@ -20,10 +20,11 @@ namespace CraftingSystem
         public static int MaxTotalBonus = 10;
         public static int MaxEnhancementBonus = 5;
         public static bool RequirePlusOneFirst = true;
-        public static bool ApplySlotPenalty = false;
-        public static bool EnableEpicCosts = false;
+        public static bool ApplySlotPenalty = true;
+        public static bool EnableEpicCosts = true;
+        public const float EpicCostMultiplier = 10.0f;
         public static int ScalePercent = 100;
-        public static SourceFilter CurrentSourceFilter = SourceFilter.All;
+        public static SourceFilter CurrentSourceFilter = SourceFilter.Owlcat;
 
         // Constantes d'interface
         public const float BUTTON_OPTION_WIDTH_BASE = 160f;
@@ -42,10 +43,12 @@ namespace CraftingSystem
             [DataMember] public int MaxTotalBonus = 10;
             [DataMember] public int MaxEnhancementBonus = 5;
             [DataMember] public bool RequirePlusOneFirst = true;
+            [DataMember] public bool ApplySlotPenalty = true;
+            [DataMember] public bool EnableEpicCosts = true;
             [DataMember] public int ScalePercent = 100;
             [DataMember] public float OptionButtonBase = 160f;
             [DataMember] public float CloseButtonBase = 80f;
-            [DataMember] public SourceFilter SourceFilterValue = SourceFilter.All;
+            [DataMember] public SourceFilter SourceFilterValue = SourceFilter.Owlcat;
         }
 
         // =========================================================================
@@ -57,7 +60,11 @@ namespace CraftingSystem
             {
                 if (Main.ModEntry == null || string.IsNullOrEmpty(Main.ModEntry.Path)) return;
                 var path = Path.Combine(Main.ModEntry.Path, SETTINGS_FILENAME);
-                if (!File.Exists(path)) return;
+                if (!File.Exists(path))
+                {
+                    SaveSettings(); // Créer le fichier par défaut s'il n'existe pas
+                    return;
+                }
 
                 using (var fs = File.OpenRead(path))
                 {
@@ -71,6 +78,8 @@ namespace CraftingSystem
                     MaxTotalBonus = obj.MaxTotalBonus;
                     MaxEnhancementBonus = obj.MaxEnhancementBonus;
                     RequirePlusOneFirst = obj.RequirePlusOneFirst;
+                    ApplySlotPenalty = obj.ApplySlotPenalty;
+                    EnableEpicCosts = obj.EnableEpicCosts;
                     if (obj.ScalePercent > 0) ScalePercent = obj.ScalePercent;
                     CurrentSourceFilter = obj.SourceFilterValue;
                 }
@@ -93,6 +102,8 @@ namespace CraftingSystem
                     MaxTotalBonus = MaxTotalBonus,
                     MaxEnhancementBonus = MaxEnhancementBonus,
                     RequirePlusOneFirst = RequirePlusOneFirst,
+                    ApplySlotPenalty = ApplySlotPenalty,
+                    EnableEpicCosts = EnableEpicCosts,
                     ScalePercent = ScalePercent,
                     OptionButtonBase = BUTTON_OPTION_WIDTH_BASE,
                     CloseButtonBase = BUTTON_CLOSE_WIDTH_BASE,
