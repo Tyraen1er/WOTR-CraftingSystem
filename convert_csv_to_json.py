@@ -13,7 +13,7 @@ def convert_csv_to_json(csv_filepath):
         return False
 
     # Génération du nom de fichier de sortie (.json)
-    json_filepath = os.path.splitext(csv_filepath)[0] + '.json'
+    json_filepath = 'ModConfig\\' + os.path.splitext(csv_filepath)[0] + '.json'
     data = []
 
     # Listes de colonnes à traiter (en minuscules pour ignorer la casse des en-têtes)

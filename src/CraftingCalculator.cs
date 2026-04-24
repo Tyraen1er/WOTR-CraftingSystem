@@ -260,22 +260,35 @@ namespace CraftingSystem
         /// </summary>
         public static bool IsWrongSlot(ItemEntity item, EnchantmentData enchant)
         {
-            // S'il n'y a aucune restriction définie dans le JSON, il n'y a pas de malus
-            if (enchant == null || enchant.Slots == null || enchant.Slots.Count == 0)
+            if (enchant == null || item == null || item.Blueprint == null)
                 return false;
 
-            if (item == null || item.Blueprint == null)
-                return false;
+            string itemTypeStr = item.Blueprint.ItemType.ToString();
+            bool isWrong = false;
 
-            // Récupère l'enum ItemType (Kingmaker.Blueprints.Items.ItemType)
-            // et le convertit en texte ("Weapon", "Shield", "Ring", etc.)
-            string currentItemType = item.Blueprint.ItemType.ToString();
+            // 1. Priorité absolue aux restrictions explicites du JSON ("Slots")
+            if (enchant.Slots != null && enchant.Slots.Count > 0)
+            {
+                // Recherche insensible à la casse dans la liste des slots du JSON
+                isWrong = !enchant.Slots.Contains(itemTypeStr, StringComparer.OrdinalIgnoreCase);
+            }
+            else
+            {
+                // 2. Repli sur le type d'enchantement ("Type") si "Slots" est vide dans le JSON
+                bool isWeapon = item.Blueprint is BlueprintItemWeapon;
+                bool isArmor = item.Blueprint is BlueprintItemArmor;
 
-            // Vérifie si la liste de l'enchantement contient ce type exact (insensible à la casse)
-            bool isAllowed = enchant.Slots.Contains(currentItemType, StringComparer.OrdinalIgnoreCase);
+                if (string.Equals(enchant.Type, "Weapon", StringComparison.OrdinalIgnoreCase))
+                {
+                    isWrong = !isWeapon;
+                }
+                else if (string.Equals(enchant.Type, "Armor", StringComparison.OrdinalIgnoreCase))
+                {
+                    isWrong = !isArmor;
+                }
+            }
 
-            // Si ce type n'est pas autorisé, alors c'est le mauvais emplacement
-            return !isAllowed;
+            return isWrong;
         }
 
         public static bool IsWondrousItem(ItemEntity item)

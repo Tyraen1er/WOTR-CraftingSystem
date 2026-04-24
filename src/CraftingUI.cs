@@ -642,14 +642,13 @@ namespace CraftingSystem
                         costToPay = CraftingCalculator.GetMarginalCost(selectedItem, currentSelectedList, data, CraftingSettings.CostMultiplier);
                     }
                     int days = CraftingCalculator.GetCraftingDays(costToPay, CraftingSettings.InstantCrafting);
-                    if (data.GoldOverride >= 0) costToPay = (long)(data.GoldOverride * CraftingSettings.CostMultiplier);
 
                     string internalName = bp != null ? bp.name : (data.Name ?? "");
 
                     GUILayout.BeginHorizontal(GUI.skin.box);
                     GUIStyle toggleStyle = new GUIStyle(GUI.skin.toggle) { richText = true };
                     
-                    bool newSelected = CToggleStyled(isQueued, $"{displayName} <color=#888888>({internalName})</color>", toggleStyle, GUILayout.ExpandWidth(true));
+                    bool newSelected = CToggleStyled(isQueued, $"<size={(int)(10 * scale)}>{displayName}</size> <color=#888888>({internalName})</color>", toggleStyle, GUILayout.ExpandWidth(true));
                     
                     DescriptionSource descSource = DescriptionSource.None;
                     string descForData = GetLocalizedDescription(bp, data, out descSource);
@@ -673,6 +672,23 @@ namespace CraftingSystem
                         }
                     }
                     else GUILayout.Space(25 * scale);
+
+                    // -- AFFICHAGE DU SLOT ATTENDU (LOCALISÉ) --
+                    bool isWrong = CraftingCalculator.IsWrongSlot(selectedItem, data);
+                    string slotColor = isWrong ? "#f1c40f" : "#2ecc71"; // Jaune (Avertissement) / Vert (Correct)
+                    
+                    string expectedSlotsText = "";
+                    if (data.Slots != null && data.Slots.Count > 0)
+                    {
+                        var localizedSlots = data.Slots.Select(s => Helpers.GetString("ui_slot_" + s.ToLower(), s));
+                        expectedSlotsText = string.Join(", ", localizedSlots);
+                    }
+                    else
+                    {
+                        expectedSlotsText = Helpers.GetString("ui_slot_" + (data.Type?.ToLower() ?? "other"), data.Type ?? "Other");
+                    }
+
+                    GUILayout.Label($"<color={slotColor}>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(10 * scale), alignment = TextAnchor.MiddleRight }, GUILayout.Width(120 * scale));
 
                     string currency = Helpers.GetString("ui_currency_gp", "gp");
                     string daysLabel = Helpers.GetString("ui_time_days_short", "d");
