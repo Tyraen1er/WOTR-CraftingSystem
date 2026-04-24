@@ -85,15 +85,7 @@ namespace CraftingSystem
         {
             if (collection != CraftingBox) return;
 
-            if (item.Count > 1)
-            {
-                int toReturn = item.Count - 1;
-                var leftover = item.Split(toReturn);
-                Observable.Timer(TimeSpan.FromMilliseconds(50)).Subscribe(_ => 
-                {
-                    Game.Instance.Player.Inventory.Add(leftover);
-                });
-            }
+            // (La séparation des piles est désormais gérée par ItemsCollection_Add_Split_Patch)
 
             bool isWeapon = item.Blueprint is BlueprintItemWeapon;
             bool isArmor = item.Blueprint is BlueprintItemArmor;
@@ -193,6 +185,30 @@ namespace CraftingSystem
             {
                 __result = false;
                 return false;
+            }
+            return true;
+        }
+    }
+
+    // --- SÉPARATION SYNCHRONE AVANT L'AJOUT DANS LE COFFRE ---
+    [HarmonyPatch(typeof(Kingmaker.Items.ItemsCollection), nameof(Kingmaker.Items.ItemsCollection.Add), new Type[] { typeof(Kingmaker.Items.ItemEntity), typeof(bool) })]
+    public static class ItemsCollection_Add_Split_Patch
+    {
+        [HarmonyPrefix]
+        public static bool Prefix(Kingmaker.Items.ItemsCollection __instance, ItemEntity newItem)
+        {
+            if (__instance == DeferredInventoryOpener.CraftingBox && newItem.Count > 1)
+            {
+                // On extrait tout sauf 1
+                int toReturn = newItem.Count - 1;
+                var leftover = newItem.Split(toReturn);
+                
+                // On renvoie le reste au joueur immédiatement
+                // L'UI de l'inventaire se mettra à jour normalement
+                Kingmaker.Game.Instance.Player.Inventory.Add(leftover);
+                
+                // La référence 'newItem' originale (qui est trackée par l'UI pendant le drag&drop)
+                // ne contient plus qu'un seul exemplaire. On la laisse s'ajouter au coffre.
             }
             return true;
         }
