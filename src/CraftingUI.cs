@@ -405,9 +405,6 @@ namespace CraftingSystem
                 currentPage = 0; // Reset page on filter change
             }
             
-            GUILayout.Space(20);
-            Div(scale);
-            GUILayout.Space(10);
             
             // --- SECTION : ENCHANTEMENTS DÉJÀ PRÉSENTS ---
             GUILayout.Label(Helpers.GetString("ui_applied_enchants", "Applied Enchantments:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
@@ -990,8 +987,13 @@ namespace CraftingSystem
 
         private void Div(float scale)
         {
-            Rect rect = GUILayoutUtility.GetLastRect();
-            GUI.Box(new Rect(rect.x, rect.y + rect.height + 5, rect.width, 2 * scale), "");
+            GUILayout.Space(5 * scale);
+            GUIStyle lineStyle = new GUIStyle(GUI.skin.box);
+            lineStyle.border = new RectOffset(0, 0, 0, 0);
+            lineStyle.margin = new RectOffset(0, 0, 0, 0);
+            lineStyle.padding = new RectOffset(0, 0, 0, 0);
+            GUILayout.Box("", lineStyle, GUILayout.Height(1 * scale), GUILayout.ExpandWidth(true));
+            GUILayout.Space(5 * scale);
         }
 
         private string GetLocalizedDescription(BlueprintItemEnchantment bp, EnchantmentData data, out DescriptionSource source)
