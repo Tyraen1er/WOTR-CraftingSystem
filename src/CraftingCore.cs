@@ -149,12 +149,13 @@ namespace CraftingSystem
         {
             if (item == null || bp == null) return;
 
-            // NETTOYAGE : Si on ajoute une altération (+2), on retire l'ancienne (+1)
-            bool isEnhancement = bp.AssetGuid.ToString().Contains("Enhancement") || bp.name.Contains("Plus"); 
-            if (isEnhancement)
+            string family = CraftingCalculator.GetEnchantmentFamily(bp.name);
+            if (!string.IsNullOrEmpty(family))
             {
-                var oldEnhance = item.Enchantments.Where(e => e.Blueprint.name.Contains("Plus") || e.Blueprint.name.Contains("Enhancement")).ToList();
-                foreach (var old in oldEnhance) item.RemoveEnchantment(old);
+                var toRemove = item.Enchantments
+                    .Where(e => !e.IsTemporary && CraftingCalculator.GetEnchantmentFamily(e.Blueprint.name) == family)
+                    .ToList();
+                foreach (var old in toRemove) item.RemoveEnchantment(old);
             }
 
             // On évite les doublons exacts

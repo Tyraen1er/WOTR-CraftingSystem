@@ -322,11 +322,13 @@ namespace CraftingSystem
                             activeCategories.Clear();
                             showCategoryFilter = false;
                             
-                            // -- PRÉ-SÉLECTION DU TYPE --
                             activeTypes.Clear();
                             if (it.Blueprint is BlueprintItemWeapon) activeTypes.Add("Weapon");
                             else if (it.Blueprint is BlueprintItemArmor) activeTypes.Add("Armor");
                             else activeTypes.Add("Other");
+
+                            filtersDirty = true;
+                            currentPage = 0;
                         }
                     }
                     GUILayout.EndHorizontal();
@@ -393,8 +395,12 @@ namespace CraftingSystem
             GUILayout.Space(10);
             
             // --- GESTION DU REFILTRAGE ---
-            if (selectedItem != lastSelectedItem || enchantmentSearch != lastSearch || activeCategories.Count != lastCategoryCount || activeTypes.Count != lastTypeCount || filtersDirty)
+            bool selectionChanged = filtersDirty;
+            if (selectedItem != lastSelectedItem || enchantmentSearch != lastSearch || activeCategories.Count != lastCategoryCount || activeTypes.Count != lastTypeCount || selectionChanged)
             {
+                // On détecte si c'est UNIQUEMENT la sélection qui a changé
+                bool filtersUnchanged = (selectedItem == lastSelectedItem && enchantmentSearch == lastSearch && activeCategories.Count == lastCategoryCount && activeTypes.Count == lastTypeCount);
+                
                 lastSelectedItem = selectedItem;
                 lastSearch = enchantmentSearch;
                 lastCategoryCount = activeCategories.Count;
@@ -402,7 +408,10 @@ namespace CraftingSystem
                 filtersDirty = false;
 
                 RebuildFilteredList();
-                currentPage = 0; // Reset page on filter change
+                
+                // On ne reset la page que si les filtres (recherche, catégories, types) ont changé.
+                // Si c'est juste une coche/décoche, on reste sur la même page pour éviter de perdre sa place.
+                if (!filtersUnchanged) currentPage = 0;
             }
             
             
@@ -696,8 +705,8 @@ namespace CraftingSystem
                     
                     if (newSelected && !isQueued) 
                     {
-                        string baseName = System.Text.RegularExpressions.Regex.Replace(internalName, @"\d+$", "");
-                        if (baseName.ToLower().Contains("enhancement"))
+                        string baseName = CraftingCalculator.GetEnchantmentFamily(internalName);
+                        if (!string.IsNullOrEmpty(baseName))
                         {
                             queuedEnchantGuids.RemoveAll(guid => 
                             {
@@ -706,7 +715,7 @@ namespace CraftingSystem
                                 {
                                     var otherBp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(guid));
                                     string otherInternal = otherBp != null ? otherBp.name : (otherData.Name ?? "");
-                                    string otherBase = System.Text.RegularExpressions.Regex.Replace(otherInternal, @"\d+$", "");
+                                    string otherBase = CraftingCalculator.GetEnchantmentFamily(otherInternal);
                                     return otherBase == baseName;
                                 }
                                 return false;
@@ -741,10 +750,12 @@ namespace CraftingSystem
                 {
                     selectedList.Add(d);
                 }
+                /*
                 else if (UnityEngine.Time.frameCount % 60 == 0)
                 {
                     Main.ModEntry.Logger.Warning($"[PANIER-DEBUG] Guid={g} -> NON TROUVÉ DANS LA MASTERLIST");
                 }
+                */
             }
 
 
@@ -803,6 +814,7 @@ namespace CraftingSystem
                         
                         string fbBase = Helpers.GetString("ui_feedback_projects_started", "Projects started: {0} enchantment(s).");
                         feedbackMessage = string.Format(fbBase, selectedList.Count);
+                        filtersDirty = true;
                     }
                     else
                     {
@@ -949,12 +961,26 @@ namespace CraftingSystem
             bool isWeaponOrArmor = selectedItem.Blueprint is BlueprintItemWeapon || selectedItem.Blueprint is BlueprintItemArmor;
             var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
             bool isReadyForSpecial = CraftingCalculator.IsItemReadyForSpecialEnchants(selectedItem, currentSelectedList);
+            var presentGuids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var presentNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var e in selectedItem.Enchantments)
+            {
+                if (e.IsTemporary || e.Blueprint == null) continue;
+                presentGuids.Add(e.Blueprint.AssetGuid.ToString());
+                presentNames.Add(e.Blueprint.name);
+            }
 
             var result = new List<EnchantmentData>();
 
             foreach (var data in typeFiltered)
             {
                 bool isQueued = queuedEnchantGuids.Contains(data.Guid);
+                var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
+                if (bp == null) continue;
+
+                // --- FILTRE D'ENCHANTEMENTS DÉJÀ PRÉSENTS ---
+                // On compare le GUID (normalisé via le Blueprint) ET le nom interne
+                if (!isQueued && (presentGuids.Contains(bp.AssetGuid.ToString()) || presentNames.Contains(bp.name))) continue;
 
                 // --- FILTRE DES CATÉGORIES ---
                 if (!isQueued && activeCategories.Count > 0)
@@ -981,7 +1007,6 @@ namespace CraftingSystem
                 }
 
                 // --- FILTRE RECHERCHE ---
-                var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
                 string displayName = GetDisplayName(bp, data);
                 if (!string.IsNullOrEmpty(lastSearch) && !displayName.ToLower().Contains(lastSearch.ToLower())) continue;
 
@@ -994,10 +1019,9 @@ namespace CraftingSystem
                 result.Add(data);
             }
 
-            // 3. Tri (Sélectionnés d'abord, puis alphabétique)
+            // 3. Tri (Alphabétique uniquement pour garder une liste stable et éviter que les items ne sautent)
             cachedFilteredEnchantments = result
-                .OrderByDescending(e => queuedEnchantGuids.Contains(e.Guid))
-                .ThenBy(e => e.Name)
+                .OrderBy(e => e.Name)
                 .ToList();
         }
 

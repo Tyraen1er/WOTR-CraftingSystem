@@ -92,7 +92,8 @@ namespace CraftingSystem
         public static string GetEnchantmentFamily(string blueprintName)
         {
             if (string.IsNullOrEmpty(blueprintName)) return string.Empty;
-            return Regex.Replace(blueprintName, @"\d+", "");
+            // On retire uniquement les chiffres à la FIN du nom (ex: Dodge3 -> Dodge)
+            return Regex.Replace(blueprintName, @"\d+$", "");
         }
 
         public static long GetEnchantmentCost(ItemEntity item, EnchantmentData newEnchant = null, float costMultiplier = 1.0f)
@@ -174,13 +175,11 @@ namespace CraftingSystem
                     if (replacedOnItem != null)
                     {
                         string replacedGuid = replacedOnItem.Blueprint.AssetGuid.ToString();
-                        
-                        // /!\ IMPORTANT : Remplace la ligne ci-dessous par ton appel réel au gestionnaire JSON
-                        // Exemple : var oldData = EnchantmentScanner.GetByGuid(replacedGuid);
-                        // if (oldData != null) { 
-                        //     existingPointCost = oldData.PointCost; 
-                        //     existingGoldOverride = oldData.GoldOverride; 
-                        // }
+                        var oldData = EnchantmentScanner.GetByGuid(replacedGuid);
+                        if (oldData != null) { 
+                            existingPointCost = oldData.PointCost; 
+                            existingGoldOverride = oldData.GoldOverride; 
+                        }
                     }
                 }
             }

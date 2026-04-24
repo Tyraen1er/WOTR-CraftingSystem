@@ -350,10 +350,12 @@ namespace CraftingSystem
             {
                 if (GuidMap.TryGetValue(guid, out var result)) return result;
                 
+                /*
                 if (guid.Length > 10)
                 {
                     Main.ModEntry.Logger.Warning($"[DEBUG] GetByGuid FAILED to find: {guid}. MasterList count: {MasterList.Count}");
                 }
+                */
                 return null;
             }
         }
