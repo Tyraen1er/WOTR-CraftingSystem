@@ -35,6 +35,7 @@ namespace CraftingSystem
                 HarmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
                 
                 Helpers.LoadLocalization(modEntry.Path);
+                DeferredInventoryOpener.Initialize();
 
                 ModEntry.Logger.Log("Crafting System: Mod loaded and Harmony patched.");
                 return true;
@@ -50,7 +51,7 @@ namespace CraftingSystem
             
             UnityEngine.GUILayout.BeginHorizontal();
             UnityEngine.GUILayout.Label("Ouvrir la Forge (Interface Vanilla)", UnityEngine.GUILayout.Width(300));
-            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutInventory, "");
+            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutInventory, "", null, UnityEngine.GUILayout.Width(150));
             if (UnityEngine.GUILayout.Button("Ouvrir maintenant", UnityEngine.GUILayout.Width(150)))
             {
                 if (UnityModManager.UI.Instance != null) UnityModManager.UI.Instance.ToggleWindow();
@@ -60,7 +61,7 @@ namespace CraftingSystem
 
             UnityEngine.GUILayout.BeginHorizontal();
             UnityEngine.GUILayout.Label("Ouvrir la Forge (Menu Rapide IMGUI)", UnityEngine.GUILayout.Width(300));
-            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutIMGUI, "");
+            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutIMGUI, "", null, UnityEngine.GUILayout.Width(150));
             if (UnityEngine.GUILayout.Button("Ouvrir maintenant", UnityEngine.GUILayout.Width(150)))
             {
                 if (UnityModManager.UI.Instance != null) UnityModManager.UI.Instance.ToggleWindow();

@@ -74,6 +74,7 @@ namespace CraftingSystem
         {
             try
             {
+                if (Instance == null) Initialize();
                 Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Exécution de OpenUI sur le Main Thread pour le mode : {mode}");
 
                 if (Game.Instance == null || Game.Instance.Player == null || Game.Instance.Player.MainCharacter == null)
