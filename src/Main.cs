@@ -47,44 +47,29 @@ namespace CraftingSystem
 
         static void OnGUI(UnityModManager.ModEntry modEntry)
         {
-            UnityEngine.GUILayout.Label("Raccourcis clavier (configurables)");
+            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_title"));
             
             UnityEngine.GUILayout.BeginHorizontal();
-            UnityEngine.GUILayout.Label("Ouvrir la Forge (Interface Vanilla)", UnityEngine.GUILayout.Width(300));
-            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutInventory, "", null, UnityEngine.GUILayout.Width(150));
-            if (UnityEngine.GUILayout.Button("Ouvrir maintenant", UnityEngine.GUILayout.Width(150)))
+            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_vanilla"), UnityEngine.GUILayout.Width(250));
+            if (UnityEngine.GUILayout.Button(Helpers.GetString("ui_umm_open_now"), UnityEngine.GUILayout.Width(150)))
             {
-                if (UnityModManager.UI.Instance != null) UnityModManager.UI.Instance.ToggleWindow();
-                DeferredInventoryOpener.RequestUI(CraftingWindowMode.LootUI, 0.3f);
+                if (UnityModManager.UI.Instance != null && UnityModManager.UI.Instance.Opened) UnityModManager.UI.Instance.ToggleWindow();
+                DeferredInventoryOpener.RequestUI(CraftingWindowMode.LootUI, 0.2f);
             }
-            UnityEngine.GUILayout.EndHorizontal();
-
-            UnityEngine.GUILayout.BeginHorizontal();
-            UnityEngine.GUILayout.Label("Ouvrir la Forge (Menu Rapide IMGUI)", UnityEngine.GUILayout.Width(300));
-            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutIMGUI, "", null, UnityEngine.GUILayout.Width(150));
-            if (UnityEngine.GUILayout.Button("Ouvrir maintenant", UnityEngine.GUILayout.Width(150)))
-            {
-                if (UnityModManager.UI.Instance != null) UnityModManager.UI.Instance.ToggleWindow();
-                DeferredInventoryOpener.RequestUI(CraftingWindowMode.StoredItemIMGUI, 0.3f);
-            }
-            UnityEngine.GUILayout.EndHorizontal();
-
             UnityEngine.GUILayout.Space(20);
-            UnityEngine.GUILayout.Label("Paramètres de jeu (seront sauvegardés dans settings.json)");
-            
-            // On peut ajouter d'autres réglages ici si besoin
-            CraftingSettings.CostMultiplier = (float)Math.Round(DrawSlider("Multiplicateur de coût", CraftingSettings.CostMultiplier, 0.1f, 10.0f), 2);
-            CraftingSettings.InstantCrafting = UnityEngine.GUILayout.Toggle(CraftingSettings.InstantCrafting, "Craft instantané (Cheat)");
-        }
-
-        private static float DrawSlider(string label, float value, float min, float max)
-        {
-            UnityEngine.GUILayout.BeginHorizontal();
-            UnityEngine.GUILayout.Label(label, UnityEngine.GUILayout.Width(250));
-            float result = UnityEngine.GUILayout.HorizontalSlider(value, min, max, UnityEngine.GUILayout.Width(200));
-            UnityEngine.GUILayout.Label(result.ToString("F2"), UnityEngine.GUILayout.Width(50));
+            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutInventory, Helpers.GetString("ui_umm_shortcut"), null, UnityEngine.GUILayout.Width(150));
             UnityEngine.GUILayout.EndHorizontal();
-            return result;
+
+            UnityEngine.GUILayout.BeginHorizontal();
+            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_imgui"), UnityEngine.GUILayout.Width(250));
+            if (UnityEngine.GUILayout.Button(Helpers.GetString("ui_umm_open_now"), UnityEngine.GUILayout.Width(150)))
+            {
+                if (UnityModManager.UI.Instance != null && UnityModManager.UI.Instance.Opened) UnityModManager.UI.Instance.ToggleWindow();
+                DeferredInventoryOpener.RequestUI(CraftingWindowMode.StoredItemIMGUI, 0.2f);
+            }
+            UnityEngine.GUILayout.Space(20);
+            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutIMGUI, Helpers.GetString("ui_umm_shortcut"), null, UnityEngine.GUILayout.Width(150));
+            UnityEngine.GUILayout.EndHorizontal();
         }
 
         static void OnSaveGUI(UnityModManager.ModEntry modEntry)

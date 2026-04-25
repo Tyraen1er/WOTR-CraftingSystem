@@ -8,6 +8,7 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Ecnchantments;
+using Kingmaker.UI;
 
 namespace CraftingSystem
 {
@@ -1347,19 +1348,34 @@ namespace CraftingSystem
         {
             try
             {
-                // On cherche le HUD via la hiérarchie Unity, c'est souvent plus stable que les classes internes
-                var staticCanvas = GameObject.Find("StaticCanvas");
-                if (staticCanvas == null) return;
-
-                var hud = staticCanvas.transform.Find("HUD");
-                if (hud != null)
+                // Méthode propre via le moteur du jeu : masquer le StaticCanvas entier
+                // Cela cache le HUD, le Log, les fenêtres de service, etc.
+                if (StaticCanvas.Instance != null && StaticCanvas.Instance.CanvasGroup != null)
                 {
-                    hud.gameObject.SetActive(visible);
+                    StaticCanvas.Instance.CanvasGroup.alpha = visible ? 1f : 0f;
+                    StaticCanvas.Instance.CanvasGroup.blocksRaycasts = visible;
+                }
+
+                // Masquage du DynamicCanvas (bulles de texte, noms au-dessus des persos)
+                var dynamicCanvas = GameObject.Find("DynamicCanvas");
+                if (dynamicCanvas != null)
+                {
+                    var cg = dynamicCanvas.GetComponent<CanvasGroup>();
+                    if (cg != null)
+                    {
+                        cg.alpha = visible ? 1f : 0f;
+                        cg.blocksRaycasts = visible;
+                    }
+                    else
+                    {
+                        // Fallback si pas de CanvasGroup
+                        dynamicCanvas.SetActive(visible);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Main.ModEntry.Logger.Error($"[ATELIER] Failed to toggle HUD: {ex.Message}");
+                Main.ModEntry.Logger.Error($"[ATELIER] Failed to toggle cinematic UI: {ex.Message}");
             }
         }
 

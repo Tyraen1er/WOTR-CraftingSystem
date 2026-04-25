@@ -514,6 +514,31 @@
             "enGB": "Description",
             "frFR": "Description",
             "ruRU": "Описание"
+        },
+        "ui_umm_title": {
+            "enGB": "Workshop Configuration",
+            "frFR": "Configuration de la Forge",
+            "ruRU": "Конфигурация Кузницы"
+        },
+        "ui_umm_vanilla": {
+            "enGB": "Workshop Interface (Vanilla)",
+            "frFR": "Interface de l'Atelier (Vanilla)",
+            "ruRU": "Интерфейс Мастерской (Ванильный)"
+        },
+        "ui_umm_imgui": {
+            "enGB": "Enchantment Menu (IMGUI)",
+            "frFR": "Menu d'enchantement (IMGUI)",
+            "ruRU": "Меню зачарования (IMGUI)"
+        },
+        "ui_umm_open_now": {
+            "enGB": "Open Now",
+            "frFR": "Ouvrir maintenant",
+            "ruRU": "Открыть сейчас"
+        },
+        "ui_umm_shortcut": {
+            "enGB": "Shortcut",
+            "frFR": "Raccourci",
+            "ruRU": "Клавиша"
         }
     }
 }
