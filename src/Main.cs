@@ -25,6 +25,12 @@ namespace CraftingSystem
         {
             try {
                 ModEntry = modEntry;
+                CraftingSettings.LoadSettings();
+                
+                modEntry.OnGUI = OnGUI;
+                modEntry.OnSaveGUI = OnSaveGUI;
+                modEntry.OnUpdate = OnUpdate;
+
                 HarmonyInstance = new Harmony(modEntry.Info.Id);
                 HarmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
                 
@@ -35,6 +41,79 @@ namespace CraftingSystem
             } catch (Exception e) {
                 modEntry.Logger.Error($"Crafting System: Failed to load: {e}");
                 return false;
+            }
+        }
+
+        static void OnGUI(UnityModManager.ModEntry modEntry)
+        {
+            UnityEngine.GUILayout.Label("Raccourcis clavier (configurables)");
+            
+            UnityEngine.GUILayout.BeginHorizontal();
+            UnityEngine.GUILayout.Label("Ouvrir la Forge (Interface Vanilla)", UnityEngine.GUILayout.Width(300));
+            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutInventory, "");
+            if (UnityEngine.GUILayout.Button("Ouvrir maintenant", UnityEngine.GUILayout.Width(150)))
+            {
+                if (UnityModManager.UI.Instance != null) UnityModManager.UI.Instance.ToggleWindow();
+                DeferredInventoryOpener.RequestUI(CraftingWindowMode.LootUI, 0.3f);
+            }
+            UnityEngine.GUILayout.EndHorizontal();
+
+            UnityEngine.GUILayout.BeginHorizontal();
+            UnityEngine.GUILayout.Label("Ouvrir la Forge (Menu Rapide IMGUI)", UnityEngine.GUILayout.Width(300));
+            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutIMGUI, "");
+            if (UnityEngine.GUILayout.Button("Ouvrir maintenant", UnityEngine.GUILayout.Width(150)))
+            {
+                if (UnityModManager.UI.Instance != null) UnityModManager.UI.Instance.ToggleWindow();
+                DeferredInventoryOpener.RequestUI(CraftingWindowMode.StoredItemIMGUI, 0.3f);
+            }
+            UnityEngine.GUILayout.EndHorizontal();
+
+            UnityEngine.GUILayout.Space(20);
+            UnityEngine.GUILayout.Label("Paramètres de jeu (seront sauvegardés dans settings.json)");
+            
+            // On peut ajouter d'autres réglages ici si besoin
+            CraftingSettings.CostMultiplier = (float)Math.Round(DrawSlider("Multiplicateur de coût", CraftingSettings.CostMultiplier, 0.1f, 10.0f), 2);
+            CraftingSettings.InstantCrafting = UnityEngine.GUILayout.Toggle(CraftingSettings.InstantCrafting, "Craft instantané (Cheat)");
+        }
+
+        private static float DrawSlider(string label, float value, float min, float max)
+        {
+            UnityEngine.GUILayout.BeginHorizontal();
+            UnityEngine.GUILayout.Label(label, UnityEngine.GUILayout.Width(250));
+            float result = UnityEngine.GUILayout.HorizontalSlider(value, min, max, UnityEngine.GUILayout.Width(200));
+            UnityEngine.GUILayout.Label(result.ToString("F2"), UnityEngine.GUILayout.Width(50));
+            UnityEngine.GUILayout.EndHorizontal();
+            return result;
+        }
+
+        static void OnSaveGUI(UnityModManager.ModEntry modEntry)
+        {
+            CraftingSettings.SaveSettings();
+        }
+
+        static void OnUpdate(UnityModManager.ModEntry modEntry, float deltaTime)
+        {
+            if (DeferredInventoryOpener.PendingUIRequest != CraftingWindowMode.None)
+            {
+                // On utilise Time.unscaledDeltaTime car l'UMM peut mettre Time.timeScale à 0
+                DeferredInventoryOpener.PendingUITimer -= UnityEngine.Time.unscaledDeltaTime;
+                if (DeferredInventoryOpener.PendingUITimer <= 0)
+                {
+                    var mode = DeferredInventoryOpener.PendingUIRequest;
+                    DeferredInventoryOpener.PendingUIRequest = CraftingWindowMode.None;
+                    DeferredInventoryOpener.OpenUI(mode);
+                }
+            }
+
+            if (CraftingSettings.ShortcutInventory != null && CraftingSettings.ShortcutInventory.Down())
+            {
+                if (UnityModManager.UI.Instance != null && UnityModManager.UI.Instance.Opened) UnityModManager.UI.Instance.ToggleWindow();
+                DeferredInventoryOpener.RequestUI(CraftingWindowMode.LootUI, 0.3f);
+            }
+            if (CraftingSettings.ShortcutIMGUI != null && CraftingSettings.ShortcutIMGUI.Down())
+            {
+                if (UnityModManager.UI.Instance != null && UnityModManager.UI.Instance.Opened) UnityModManager.UI.Instance.ToggleWindow();
+                DeferredInventoryOpener.RequestUI(CraftingWindowMode.StoredItemIMGUI, 0.3f);
             }
         }
     }

@@ -1,0 +1,35 @@
+[
+  {
+    "Guid": "12345678-ABCD-1234-ABCD-1234567890AB",
+    "Name": "NomInterne_MyCustomFlaming",
+    "Type": "WeaponEnchantment", 
+    "EnchantNameKey": "ui_custom_flaming_name",
+    "EnchantDescKey": "ui_custom_flaming_desc",
+    "Prefix": "Flaming",
+    "Suffix": "",
+    "EnchantmentCost": 1,
+    "Components": [
+      {
+        "$type": "Kingmaker.Blueprints.Items.Ecnchantments.WeaponEnergyDamageDice, Assembly-CSharp",
+        "EnergyType": "Fire",
+        "DamageDice": {
+          "m_Type": "D6",
+          "m_Count": 1
+        }
+      },
+      {
+        "$type": "Kingmaker.UnitLogic.FactLogic.AddInitiatorAttackWithWeaponTrigger, Assembly-CSharp",
+        "OnlyHit": true,
+        "Action": {
+          "Actions": [
+            {
+              "$type": "Kingmaker.UnitLogic.Mechanics.Actions.ContextActionCastSpell, Assembly-CSharp",
+              "m_Spell": "!bp_2d81362af43aeac4387a3d4fced489c3", // GUID d'un sort (Fireball)
+              "DC": { "ValueType": "Simple", "Value": 15 }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

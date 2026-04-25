@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using UnityModManagerNet;
 
 namespace CraftingSystem
 {
@@ -24,7 +25,11 @@ namespace CraftingSystem
         public static bool EnableEpicCosts = true;
         public const float EpicCostMultiplier = 10.0f;
         public static int ScalePercent = 100;
-        public static SourceFilter CurrentSourceFilter = SourceFilter.Owlcat;
+        public static SourceFilter CurrentSourceFilter = SourceFilter.TTRPG;
+
+        // Raccourcis clavier (Synchronisés avec settings.json)
+        public static KeyBinding ShortcutInventory = new KeyBinding();
+        public static KeyBinding ShortcutIMGUI = new KeyBinding();
 
         // Constantes d'interface
         public const float BUTTON_OPTION_WIDTH_BASE = 160f;
@@ -48,7 +53,11 @@ namespace CraftingSystem
             [DataMember] public int ScalePercent = 100;
             [DataMember] public float OptionButtonBase = 160f;
             [DataMember] public float CloseButtonBase = 80f;
-            [DataMember] public SourceFilter SourceFilterValue = SourceFilter.Owlcat;
+            [DataMember] public SourceFilter SourceFilterValue = SourceFilter.TTRPG;
+            [DataMember] public int ShortcutInventoryKey = 0;
+            [DataMember] public int ShortcutInventoryMod = 0;
+            [DataMember] public int ShortcutIMGUIKey = 0;
+            [DataMember] public int ShortcutIMGUIMod = 0;
         }
 
         // =========================================================================
@@ -82,6 +91,10 @@ namespace CraftingSystem
                     EnableEpicCosts = obj.EnableEpicCosts;
                     if (obj.ScalePercent > 0) ScalePercent = obj.ScalePercent;
                     CurrentSourceFilter = obj.SourceFilterValue;
+
+                    // Reconstitution des KeyBindings
+                    ShortcutInventory = new KeyBinding { keyCode = (UnityEngine.KeyCode)obj.ShortcutInventoryKey, modifiers = (byte)obj.ShortcutInventoryMod };
+                    ShortcutIMGUI = new KeyBinding { keyCode = (UnityEngine.KeyCode)obj.ShortcutIMGUIKey, modifiers = (byte)obj.ShortcutIMGUIMod };
                 }
             }
             catch (Exception ex) { Main.ModEntry.Logger.Error($"[ATELIER] Failed to load UI settings: {ex}"); }
@@ -107,7 +120,11 @@ namespace CraftingSystem
                     ScalePercent = ScalePercent,
                     OptionButtonBase = BUTTON_OPTION_WIDTH_BASE,
                     CloseButtonBase = BUTTON_CLOSE_WIDTH_BASE,
-                    SourceFilterValue = CurrentSourceFilter
+                    SourceFilterValue = CurrentSourceFilter,
+                    ShortcutInventoryKey = (int)ShortcutInventory.keyCode,
+                    ShortcutInventoryMod = ShortcutInventory.modifiers,
+                    ShortcutIMGUIKey = (int)ShortcutIMGUI.keyCode,
+                    ShortcutIMGUIMod = ShortcutIMGUI.modifiers
                 };
 
                 using (var ms = new MemoryStream())
@@ -125,4 +142,4 @@ namespace CraftingSystem
             catch (Exception ex) { Main.ModEntry.Logger.Error($"[ATELIER] Failed to save UI settings: {ex}"); }
         }
     }
-}
+}

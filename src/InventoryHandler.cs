@@ -58,18 +58,49 @@ namespace CraftingSystem
             var mode = CurrentMode;
             CurrentMode = CraftingWindowMode.None;
 
-            Observable.Timer(TimeSpan.FromMilliseconds(300)).Subscribe(_ => 
+            RequestUI(mode, 0.3f);
+        }
+
+        public static CraftingWindowMode PendingUIRequest = CraftingWindowMode.None;
+        public static float PendingUITimer = 0f;
+
+        public static void RequestUI(CraftingWindowMode mode, float delay = 0.3f)
+        {
+            PendingUIRequest = mode;
+            PendingUITimer = delay;
+        }
+
+        public static void OpenUI(CraftingWindowMode mode)
+        {
+            try
             {
+                Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Exécution de OpenUI sur le Main Thread pour le mode : {mode}");
+
+                if (Game.Instance == null || Game.Instance.Player == null || Game.Instance.Player.MainCharacter == null)
+                {
+                    Main.ModEntry.Logger.Log("[ATELIER-DEBUG] ERREUR : Game.Instance, Player ou MainCharacter est null.");
+                    return;
+                }
+
                 var player = Game.Instance.Player.MainCharacter.Value;
+                if (player == null)
+                {
+                    Main.ModEntry.Logger.Log("[ATELIER-DEBUG] ERREUR : Le personnage principal (player) est null.");
+                    return;
+                }
+
                 if (mode == CraftingWindowMode.LootUI)
                 {
+                    Main.ModEntry.Logger.Log("[ATELIER-DEBUG] Lancement de l'événement ILootInterractionHandler...");
                     IsCraftingWindowOpen = true; 
                     EventBus.RaiseEvent<ILootInterractionHandler>(h => 
-                        h.HandleLootInterraction(player, new EntityViewBase[] { player.View }, LootContainerType.PlayerChest, OnInventoryClosed)
+                        h.HandleLootInterraction(player, new EntityViewBase[] { player.View }, LootContainerType.PlayerChest, Instance.OnInventoryClosed)
                     );
+                    Main.ModEntry.Logger.Log("[ATELIER-DEBUG] Événement ILootInterractionHandler envoyé avec succès.");
                 }
                 else if (mode == CraftingWindowMode.StoredItemIMGUI)
                 {
+                    Main.ModEntry.Logger.Log("[ATELIER-DEBUG] Ouverture de l'IMGUI...");
                     if (CraftingUI.Instance == null)
                     {
                         var go = new UnityEngine.GameObject("CraftingSystem_UI");
@@ -77,8 +108,13 @@ namespace CraftingSystem
                         go.AddComponent<CraftingUI>();
                     }
                     if (CraftingUI.Instance != null) CraftingUI.Instance.IsOpen = true;
+                    Main.ModEntry.Logger.Log("[ATELIER-DEBUG] IMGUI ouvert avec succès.");
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"[ATELIER-DEBUG] EXCEPTION CRITIQUE dans OpenUI : {ex}");
+            }
         }
 
         public void HandleItemsAdded(ItemsCollection collection, ItemEntity item, int count)
@@ -110,8 +146,9 @@ namespace CraftingSystem
             });
         }
 
-        private void OnInventoryClosed()
+        public void OnInventoryClosed()
         {
+            Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] OnInventoryClosed appelé ! IsCraftingWindowOpen était : {IsCraftingWindowOpen}");
             IsCraftingWindowOpen = false; 
             Game.Instance.Player.MainCharacter.Value.Ensure<UnitPartWilcerWorkshop>().SyncFromBox();
         }
@@ -250,8 +287,10 @@ namespace CraftingSystem
     {
         public static void Postfix(Kingmaker.UI.MVVM._VM.Loot.LootVM __instance)
         {
+            Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Un LootVM vient d'être instancié. IsCraftingWindowOpen = {DeferredInventoryOpener.IsCraftingWindowOpen}");
             if (DeferredInventoryOpener.IsCraftingWindowOpen)
             {
+                Main.ModEntry.Logger.Log("[ATELIER-DEBUG] LootVM intercepté avec succès, injection de l'Atelier...");
                 var mockLoot = new Kingmaker.UI.MVVM._VM.Loot.LootObjectVM("Atelier", "Enchantement", DeferredInventoryOpener.CraftingBox, Kingmaker.UI.MVVM._VM.Loot.LootContextVM.LootWindowMode.PlayerChest, 1);
                 var prop = typeof(Kingmaker.UI.MVVM._VM.Loot.LootVM).GetProperty("LootObjects") ?? typeof(Kingmaker.UI.MVVM._VM.Loot.LootVM).GetProperty("ContextLoot");
                 if (prop != null)
