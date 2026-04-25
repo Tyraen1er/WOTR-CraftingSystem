@@ -26,6 +26,7 @@ namespace CraftingSystem
         public const float EpicCostMultiplier = 10.0f;
         public static int ScalePercent = 100;
         public static SourceFilter CurrentSourceFilter = SourceFilter.TTRPG;
+        public static bool HasOpenedCheats = false;
 
         // Raccourcis clavier (Synchronisés avec settings.json)
         public static KeyBinding ShortcutInventory = new KeyBinding();
@@ -58,6 +59,7 @@ namespace CraftingSystem
             [DataMember] public int ShortcutInventoryMod = 0;
             [DataMember] public int ShortcutIMGUIKey = 0;
             [DataMember] public int ShortcutIMGUIMod = 0;
+            [DataMember] public bool HasOpenedCheats = false;
         }
 
         // =========================================================================
@@ -91,6 +93,7 @@ namespace CraftingSystem
                     EnableEpicCosts = obj.EnableEpicCosts;
                     if (obj.ScalePercent > 0) ScalePercent = obj.ScalePercent;
                     CurrentSourceFilter = obj.SourceFilterValue;
+                    HasOpenedCheats = obj.HasOpenedCheats;
 
                     // Reconstitution des KeyBindings
                     ShortcutInventory = new KeyBinding { keyCode = (UnityEngine.KeyCode)obj.ShortcutInventoryKey, modifiers = (byte)obj.ShortcutInventoryMod };
@@ -124,7 +127,8 @@ namespace CraftingSystem
                     ShortcutInventoryKey = (int)ShortcutInventory.keyCode,
                     ShortcutInventoryMod = ShortcutInventory.modifiers,
                     ShortcutIMGUIKey = (int)ShortcutIMGUI.keyCode,
-                    ShortcutIMGUIMod = ShortcutIMGUI.modifiers
+                    ShortcutIMGUIMod = ShortcutIMGUI.modifiers,
+                    HasOpenedCheats = HasOpenedCheats
                 };
 
                 using (var ms = new MemoryStream())

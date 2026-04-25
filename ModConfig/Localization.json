@@ -90,10 +90,25 @@
             "frFR": "<< RETOUR",
             "ruRU": "<< НАЗАД"
         },
-        "ui_btn_options": {
-            "enGB": "Options",
-            "frFR": "Options",
-            "ruRU": "Опции"
+        "ui_btn_cheats": {
+            "enGB": "Cheats",
+            "frFR": "Triches",
+            "ruRU": "Читы"
+        },
+        "ui_btn_info": {
+            "enGB": "Information",
+            "frFR": "Informations",
+            "ruRU": "Информация"
+        },
+        "ui_info_title": {
+            "enGB": "Crafting Rules (TTRPG)",
+            "frFR": "Règles d'Artisanat (JDR)",
+            "ruRU": "Правила создания (TTRPG)"
+        },
+        "ui_info_text": {
+            "enGB": "This interface is designed to allow you to enchant your equipment according to the official tabletop roleplaying rules (Pathfinder 1st Edition).\n\n<b>The rules:</b>\n\nGenerally speaking, the more complex and powerful the requested enchantment, the higher its price and crafting time. The number of days required is always 1/1000 of the calculated price (see official rules for detailed formulas).\n\nWeapons and armor can only be enchanted if they already possess a minimum +1 enhancement bonus.\n\nEach enchantment has a certain \"weight.\" Weapons and armor cannot exceed a total weight of 10 by combining their different enchantments. The total weight of the selected enchantments is indicated at the bottom left (enchantment weight). Other items have no limitation.\n\nAn enchantment is designed to be applied to specific pieces of equipment (slot column). However, the rules allow bypassing this limitation by applying a penalty factor of 1.5.\n\nAll these limitations can be bypassed in the \"cheats\" tab if you wish.",
+            "frFR": "Cette interface est conçue pour vous permettre d’enchanter votre équipement selon les règles officielles du jeu de rôle papier (Pathfinder 1ère édition).\n\n<b>Les règles :</b>\n\nDe façon générale, plus l’enchantement demandé est complexe et puissant et plus son prix et son temps de fabrication augmentent. Le nombre de jours nécessaires est toujours 1/1000 du prix calculé (voir les règles officielles pour les formules détaillées).\n\nLes armes et armures ne peuvent être enchantées qu’à la condition de posséder déjà un bonus de +1 d’altération minimum.\n\nChaque enchantement possède un certain « poids ». Les armes et armures ne peuvent pas dépasser un poids total de 10 en cumulant leurs différents enchantements. Le poids total des enchantements sélectionnés est indiqué en bas à gauche (poids des enchantements). Les autres items n’ont pas de limitation.\n\nUn enchantement est conçu pour être appliqué sur des pièces d’équipement spécifiques (colonne emplacement). Les règles permettent toutefois de contourner cette limitation en appliquant alors un facteur de pénalité de 1,5.\n\nToutes ces limitations peuvent être contournées dans l’onglet « triche » si vous le désirez.",
+            "ruRU": "Этот интерфейс разработан, чтобы вы могли зачаровывать свое снаряжение в соответствии с официальными правилами настольной ролевой игры (Pathfinder 1-й редакции).\n\n<b>Правила:</b>\n\nВ целом, чем сложнее и мощнее запрашиваемое зачарование, тем выше его цена и время изготовления. Количество необходимых дней всегда составляет 1/1000 от рассчитанной цены (подробные формулы см. в официальных правилах).\n\nОружие и доспехи могут быть зачарованы только в том случае, если они уже имеют бонус усиления как минимум +1.\n\nКаждое зачарование имеет определенный «вес». Оружие и доспехи не могут превышать общий вес 10 при сочетании их различных зачарований. Общий вес выбранных зачарований указан внизу слева (вес зачарований). У других предметов ограничений нет.\n\nЗачарование предназначено для применения к конкретным предметам экипировки (колонка «слот»). Однако правила позволяют обойти это ограничение, применив штрафной коэффициент 1,5.\n\nВсе эти ограничения можно обойти на вкладке «читы», если вы того пожелаете."
         },
         "ui_no_item_stashed": {
             "enGB": "\n   (No item is stored in the workshop)",
@@ -206,9 +221,9 @@
             "ruRU": "Сканирование продолжается \u2014 на данный момент зачарование недоступно."
         },
         "ui_current_level": {
-            "enGB": "Current level: {0}/{1}",
-            "frFR": "Niveau actuel : {0}/{1}",
-            "ruRU": "Текущий уровень: {0}/{1}"
+            "enGB": "Enchantment weight: {0}/{1}",
+            "frFR": "Poids des enchantements : {0}/{1}",
+            "ruRU": "Вес зачарования: {0}/{1}"
         },
         "ui_selection_total": {
             "enGB": "Selection: +{0} \u2014 Total: {1} gp / ~{2} d",
@@ -292,7 +307,7 @@
         },
         "ui_settings_diagnostic": {
             "enGB": "Diagnostic Tools:",
-            "frFR": "Outils de diagnostic :",
+            "frFR": "Outils de diagnostique :",
             "ruRU": "Инструменты диагностики:"
         },
         "ui_settings_force_sync": {
@@ -411,9 +426,9 @@
             "ruRU": "Ок"
         },
         "ui_description_autogen_prefix": {
-            "enGB": "<i>[auto-generated]</i> ",
-            "frFR": "<i>[auto-généré]</i> ",
-            "ruRU": "<i>[авто-генерация]</i> "
+            "enGB": "<i>[auto-generated]</i>\n",
+            "frFR": "<i>[auto-généré]</i>\n",
+            "ruRU": "<i>[авто-генерация]</i>\n"
         },
         "ui_slot_armor": {
             "enGB": "Armor",
@@ -494,6 +509,11 @@
             "enGB": "Wondrous",
             "frFR": "Merveilleux",
             "ruRU": "Прочее"
+        },
+        "ui_btn_description": {
+            "enGB": "Description",
+            "frFR": "Description",
+            "ruRU": "Описание"
         }
     }
 }

@@ -22,6 +22,7 @@ namespace CraftingSystem
             {
                 if (_isOpen == value) return;
                 _isOpen = value;
+                ToggleHUD(!_isOpen);
                 // Nous utilisons des Harmony Patchs externes pour la manette et la caméra
                 // (Les patchs se font dans InventoryHandler.cs)
             }
@@ -38,6 +39,7 @@ namespace CraftingSystem
         private bool lastOpenState = false;
         private string activeDescriptionPopup = "";
         private string activeDescriptionTitle = "";
+        private bool showAbadarWarning = false;
         
         // Paging & Optimization
         private List<EnchantmentData> cachedFilteredEnchantments = new List<EnchantmentData>();
@@ -161,16 +163,13 @@ namespace CraftingSystem
                 } else if (ShowSettings) { ShowSettings = false; }
                 else IsOpen = false;
                 inputCancelDown = false;
-                currentFocusIndex = 0;
             }
 
-            // Exiting entire UI via Start / Escape
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7)) {
                 IsOpen = false;
             }
 
-            if (!IsOpen)  
- 
+            if (!IsOpen) 
             {
                 lastOpenState = false;
                 return;
@@ -181,22 +180,11 @@ namespace CraftingSystem
                 selectedItem = null;
                 ShowSettings = false;
                 lastOpenState = true;
-
-                // --- DUMP DÉSACTIVÉ ---
-                /*
-                Main.ModEntry.Logger.Log("[DUMPER] L'interface s'ouvre, lancement du dump structurel...");
-                BlueprintDumper.DumpByGuid("9205b68509ff1db41915bb4f3aba3a04", 2);
-                
-                // Mass Dumper
-                System.Threading.Tasks.Task.Run(() => {
-                    EnchantmentDumper.DumpAllUniqueComponents();
-                });
-                */
             }
 
             UpdateAutoScale();
-
-            
+            processIndex = 0;
+            inputSubmitDown = false;
 
             EnchantmentScanner.StartSync();
 
@@ -216,18 +204,38 @@ namespace CraftingSystem
                 }
             }
             
+            Color oldColor = GUI.backgroundColor;
+            GUI.backgroundColor = new Color(0, 0, 0, 1.0f); // Totalement opaque
+            
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
+            
+            // On force l'opacité par un DrawTexture gris derrière la fenêtre
+            Color oldGUIColor = GUI.color;
+            GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f); // Gris principal
+            GUI.DrawTexture(windowRect, Texture2D.whiteTexture);
+            GUI.color = oldGUIColor;
+
             GUI.Window(999, windowRect, DrawWindowContent, "");
+            DrawBorder(windowRect, 2f, Color.gray);
             
             // --- FENÊTRE DE DESCRIPTION (POPUP) ---
             if (!string.IsNullOrEmpty(activeDescriptionPopup))
             {
-                float pW = 500f * scale;
-                float pH = 350f * scale;
+                float pW = 650f * scale;
+                float pH = 500f * scale;
                 Rect popupRect = new Rect((Screen.width - pW) / 2f, (Screen.height - pH) / 2f, pW, pH);
+                
+                // Force l'opacité de la popup
+                GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
+                GUI.DrawTexture(popupRect, Texture2D.whiteTexture);
+                GUI.color = oldGUIColor;
+
                 GUI.Window(998, popupRect, DrawDescriptionPopup, "");
+                DrawBorder(popupRect, 2f, Color.gray);
                 GUI.BringWindowToFront(998);
             }
+            
+            GUI.backgroundColor = oldColor;
 
             GUI.FocusWindow(string.IsNullOrEmpty(activeDescriptionPopup) ? 999 : 998);
         }
@@ -235,6 +243,12 @@ namespace CraftingSystem
         void DrawWindowContent(int windowID)
         {
             float scale = CraftingSettings.ScalePercent / 100f;
+            
+            // Force l'opacité interne de la fenêtre principale
+            Color oldColor = GUI.color;
+            GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
+            GUI.DrawTexture(new Rect(0, 0, 1000f * scale, Mathf.Min(900f * scale, Screen.height * 0.9f)), Texture2D.whiteTexture);
+            GUI.color = oldColor;
 
             if (!string.IsNullOrEmpty(feedbackMessage))
             {
@@ -256,10 +270,18 @@ namespace CraftingSystem
             GUILayout.EndScrollView();
             
             GUILayout.Space(10);
+
+            GUIStyle navStyle = new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold, fontSize = (int)(14 * scale) };
+
+            if (CButtonStyled(new GUIContent(Helpers.GetString("ui_btn_info", "Information")), navStyle, GUILayout.Width(130 * scale), GUILayout.Height(35 * scale)))
+            {
+                activeDescriptionTitle = Helpers.GetString("ui_info_title", "Crafting Rules");
+                activeDescriptionPopup = Helpers.GetString("ui_info_text");
+            }
             
             if (selectedItem != null && !ShowSettings)
             {
-                if (CButton(Helpers.GetString("ui_btn_back", "<< BACK"), GUILayout.Width(130 * scale), GUILayout.Height(30 * scale))) 
+                if (CButtonStyled(new GUIContent(Helpers.GetString("ui_btn_back", "<< BACK")), navStyle, GUILayout.Width(130 * scale), GUILayout.Height(35 * scale))) 
                 {
                     selectedItem = null;
                     newNameDraft = "";
@@ -274,17 +296,27 @@ namespace CraftingSystem
             float optionWidth = Mathf.Max(CraftingSettings.BUTTON_OPTION_WIDTH_BASE * scale, windowWidth * 0.14f);
             float closeWidth  = Mathf.Max(CraftingSettings.BUTTON_CLOSE_WIDTH_BASE  * scale, windowWidth * 0.06f);
 
-            if (CButton(ShowSettings ? Helpers.GetString("ui_btn_workshop_short", "Workshop") : Helpers.GetString("ui_btn_options", "Options"), GUILayout.Width(optionWidth), GUILayout.Height(30 * scale)))
+            string optLabel = ShowSettings ? Helpers.GetString("ui_btn_workshop_short", "Workshop") : Helpers.GetString("ui_btn_cheats", "Options");
+            if (CButtonStyled(new GUIContent(optLabel), navStyle, GUILayout.Width(optionWidth), GUILayout.Height(35 * scale)))
             {
-                ShowSettings = !ShowSettings;
+                if (!ShowSettings && !CraftingSettings.HasOpenedCheats)
+                {
+                    showAbadarWarning = true;
+                }
+                else
+                {
+                    ShowSettings = !ShowSettings;
+                    showAbadarWarning = false; // Reset if toggling back
+                }
             }
             
-            if (CButton("X", GUILayout.Width(closeWidth), GUILayout.Height(30 * scale))) IsOpen = false;
+            if (CButton("X", GUILayout.Width(closeWidth), GUILayout.Height(35 * scale))) IsOpen = false;
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
             
-            if (ShowSettings) DrawSettingsGUI(scale);
+            if (showAbadarWarning) DrawAbadarWarningGUI(scale);
+            else if (ShowSettings) DrawSettingsGUI(scale);
             else if (selectedItem != null) DrawItemModificationGUI(scale);
             else DrawInventoryGUI(scale);
         }
@@ -295,7 +327,15 @@ namespace CraftingSystem
             var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
             var items = workshop?.StashedItems ?? new List<ItemEntity>();
 
-            if (!items.Any()) GUILayout.Label(Helpers.GetString("ui_no_item_stashed", "\n   (No item is stored in the workshop)"));
+            if (!items.Any()) 
+            {
+                GUIStyle emptyStyle = new GUIStyle(GUI.skin.label) { 
+                    fontSize = (int)(14 * scale), 
+                    alignment = TextAnchor.MiddleCenter,
+                    richText = true
+                };
+                GUILayout.Label(Helpers.GetString("ui_no_item_stashed", "\n   (No item is stored in the workshop)"), emptyStyle);
+            }
             else 
             {
                 GUIStyle entryStyle = new GUIStyle(GUI.skin.button) { 
@@ -360,28 +400,29 @@ namespace CraftingSystem
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true, GUILayout.ExpandHeight(true));
             
             // --- SECTION RENOMMAGE ---
-            GUILayout.Label(Helpers.GetString("ui_special_action_rename", "Special Action: Rename item (Free)"));
+            GUILayout.Label(Helpers.GetString("ui_special_action_rename", "Special Action: Rename item (Free)"), new GUIStyle(GUI.skin.label) { fontSize = (int)(14 * scale) });
             GUILayout.BeginHorizontal();
             
             float windowWidth = 800f * scale;
-            float buttonsSpace = (100f + 80f + 25f) * scale;
+            float buttonsSpace = (120f + 100f + 25f) * scale;
             float padding = (45f + 20f) * scale; 
             float exactTextWidth = windowWidth - buttonsSpace - padding;
 
             GUIStyle textFieldStyle = new GUIStyle(GUI.skin.textField);
             textFieldStyle.wordWrap = false; 
+            textFieldStyle.fontSize = (int)(14 * scale);
 
-            newNameDraft = CTextFieldStyled(newNameDraft, textFieldStyle, GUILayout.Width(exactTextWidth), GUILayout.Height(30 * scale));
+            newNameDraft = CTextFieldStyled(newNameDraft, textFieldStyle, GUILayout.Width(exactTextWidth), GUILayout.Height(35 * scale));
             
             GUILayout.Space(10 * scale);
             
-            if (CButton(Helpers.GetString("ui_btn_rename", "Renommer"), GUILayout.Width(100 * scale), GUILayout.Height(30 * scale)))
+            if (CButton(Helpers.GetString("ui_btn_rename", "Renommer"), GUILayout.Width(120 * scale), GUILayout.Height(35 * scale)))
             {
                 ItemRenamer.RenameItem(selectedItem, newNameDraft);
                 feedbackMessage = Helpers.GetString("ui_feedback_renamed", "The item has been renamed!");
             }
 
-            if (selectedItem != null && CButton(Helpers.GetString("ui_btn_auto", "Auto"), GUILayout.Width(80 * scale), GUILayout.Height(30 * scale)))
+            if (selectedItem != null && CButton(Helpers.GetString("ui_btn_auto", "Auto"), GUILayout.Width(100 * scale), GUILayout.Height(35 * scale)))
             {
                 string autoName = ItemRenamer.GenerateAutoName(selectedItem);
                 ItemRenamer.RenameItem(selectedItem, autoName);
@@ -416,7 +457,7 @@ namespace CraftingSystem
             
             
             // --- SECTION : ENCHANTEMENTS DÉJÀ PRÉSENTS ---
-            GUILayout.Label(Helpers.GetString("ui_applied_enchants", "Applied Enchantments:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+            GUILayout.Label(Helpers.GetString("ui_applied_enchants", "Applied Enchantments:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(14 * scale) });
             var currentEnchants = selectedItem.Enchantments.ToList();
             if (!currentEnchants.Any()) 
             {
@@ -432,7 +473,7 @@ namespace CraftingSystem
                     if (pointValue < 0) pointValue = 0;
                     GUILayout.BeginHorizontal(GUI.skin.box);
                     string displayName = GetDisplayName(ench.Blueprint, overrideData);
-                    GUILayout.Label($"{displayName} (+{pointValue})", GUILayout.ExpandWidth(true));
+                    GUILayout.Label($"{displayName} (+{pointValue})", new GUIStyle(GUI.skin.label) { fontSize = (int)(14 * scale) }, GUILayout.ExpandWidth(true));
 
                     // POUR LES OBJETS DÉJÀ APPLIQUÉS (RÉSOLU DYNAMIQUEMENT)
                     DescriptionSource genSource = DescriptionSource.None;
@@ -460,7 +501,7 @@ namespace CraftingSystem
                     {
                         GUILayout.Space(25 * scale);
                     }
-                    if (CButton(Helpers.GetString("ui_btn_remove", "Remove"), GUILayout.Width(80 * scale)))
+                    if (CButton(Helpers.GetString("ui_btn_remove", "Remove"), GUILayout.Width(100 * scale), GUILayout.Height(30 * scale)))
                     {
                         selectedItem.RemoveEnchantment(ench);
                         selectedItem.Identify(); 
@@ -474,7 +515,7 @@ namespace CraftingSystem
             GUILayout.Space(10);
             
             // --- RECHERCHE + LISTE ---
-            GUILayout.Label(Helpers.GetString("ui_available_enchants", "Available Enchantments:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+            GUILayout.Label(Helpers.GetString("ui_available_enchants", "Available Enchantments:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(14 * scale) });
 
             // -- UI FILTRE DES TYPES --
             GUILayout.BeginHorizontal();
@@ -603,8 +644,11 @@ namespace CraftingSystem
                 GUILayout.FlexibleSpace();
                 
                 // -- ALLER À LA PAGE --
-                GUILayout.Label(Helpers.GetString("ui_pagination_goto", "Aller à : "), GUILayout.Width(60 * scale));
-                pageInput = CTextField(pageInput, GUILayout.Width(40 * scale));
+                GUIStyle paginationStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleLeft };
+                GUILayout.Label(Helpers.GetString("ui_pagination_goto", "Aller à : "), paginationStyle, GUILayout.Width(70 * scale));
+                
+                GUIStyle pageInputStyle = new GUIStyle(GUI.skin.textField) { fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter };
+                pageInput = CTextFieldStyled(pageInput, pageInputStyle, GUILayout.Width(50 * scale), GUILayout.Height(25 * scale));
                 if (CButton(Helpers.GetString("ui_btn_go", "Go"), GUILayout.Width(40 * scale)))
                 {
                     if (int.TryParse(pageInput, out int p))
@@ -615,7 +659,8 @@ namespace CraftingSystem
                 }
                 
                 GUILayout.FlexibleSpace();
-                GUILayout.Label(string.Format(Helpers.GetString("ui_pagination_info", "Page {0} / {1} ({2} items)"), currentPage + 1, totalPages, totalItems), new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+                GUIStyle pageInfoStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(12 * scale) };
+                GUILayout.Label(string.Format(Helpers.GetString("ui_pagination_info", "Page {0} / {1} ({2} items)"), currentPage + 1, totalPages, totalItems), pageInfoStyle);
                 GUILayout.FlexibleSpace();
                 
                 GUI.enabled = (currentPage < totalPages - 1);
@@ -655,9 +700,10 @@ namespace CraftingSystem
                     string internalName = bp != null ? bp.name : (data.Name ?? "");
 
                     GUILayout.BeginHorizontal(GUI.skin.box);
-                    GUIStyle toggleStyle = new GUIStyle(GUI.skin.toggle) { richText = true };
+                    GUIStyle toggleStyle = new GUIStyle(GUI.skin.label) { richText = true, alignment = TextAnchor.MiddleLeft };
                     
-                    bool newSelected = CToggleStyled(isQueued, $"<size={(int)(10 * scale)}>{displayName}</size> <color=#888888>({internalName})</color>", toggleStyle, GUILayout.ExpandWidth(true));
+                    string label = $"<size={(int)(14 * scale)}>{displayName}</size> <color=#888888><size={(int)(12 * scale)}>({internalName})</size></color>";
+                    bool newSelected = CToggleStyled(isQueued, label, toggleStyle, GUILayout.ExpandWidth(true));
                     
                     DescriptionSource descSource = DescriptionSource.None;
                     string descForData = GetLocalizedDescription(bp, data, out descSource);
@@ -667,14 +713,14 @@ namespace CraftingSystem
                         if (descSource == DescriptionSource.Generated) color = "#f1c40f"; // Jaune
                         else if (descSource == DescriptionSource.None) color = "#e74c3c"; // Rouge
 
-                        GUIContent infoContent = new GUIContent($"<color={color}>?</color>");
+                        GUIContent infoContent = new GUIContent($"<color={color}>{Helpers.GetString("ui_btn_description", "Description")}</color>");
                         GUIStyle infoStyle = new GUIStyle(GUI.skin.button) { 
                             richText = true, 
                             fontStyle = FontStyle.Bold, 
                             fontSize = (int)(9 * scale),
                             padding = new RectOffset(0, 0, 0, 0)
                         };
-                        if (CButtonStyled(infoContent, infoStyle, GUILayout.Width(15 * scale), GUILayout.Height(15 * scale))) 
+                        if (CButtonStyled(infoContent, infoStyle, GUILayout.Width(100 * scale), GUILayout.Height(15 * scale))) 
                         {
                             activeDescriptionTitle = displayName;
                             activeDescriptionPopup = descForData;
@@ -701,7 +747,7 @@ namespace CraftingSystem
 
                     string currency = Helpers.GetString("ui_currency_gp", "gp");
                     string daysLabel = Helpers.GetString("ui_time_days_short", "d");
-                    GUILayout.Label($"{costToPay} {currency} / {days} {daysLabel}   (+{data.PointCost})", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleRight }, GUILayout.Width(180 * scale));
+                    GUILayout.Label($"{costToPay} {currency} / {days} {daysLabel}   (+{data.PointCost})", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleRight, fontSize = (int)(14 * scale) }, GUILayout.Width(180 * scale));
                     
                     if (newSelected && !isQueued) 
                     {
@@ -767,15 +813,15 @@ namespace CraftingSystem
             int selectedPoints = selectedList.Sum(d => d.PointCost);
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(string.Format(Helpers.GetString("ui_current_level", "Current level: {0}/{1}"), currentLevelPoints, maxLevel), GUILayout.ExpandWidth(false));
+            GUILayout.Label(string.Format(Helpers.GetString("ui_current_level", "Current level: {0}/{1}"), currentLevelPoints, maxLevel), new GUIStyle(GUI.skin.label) { fontSize = (int)(14 * scale) }, GUILayout.ExpandWidth(false));
             GUILayout.FlexibleSpace();
-            GUILayout.Label(string.Format(Helpers.GetString("ui_selection_total", "Selection: +{0} \u2014 Total: {1} gp / ~{2} d"), selectedPoints, totalCost, totalDays), GUILayout.ExpandWidth(false));
+            GUILayout.Label(string.Format(Helpers.GetString("ui_selection_total", "Selection: +{0} \u2014 Total: {1} gp / ~{2} d"), selectedPoints, totalCost, totalDays), new GUIStyle(GUI.skin.label) { fontSize = (int)(14 * scale) }, GUILayout.ExpandWidth(false));
             GUILayout.EndHorizontal();
 
             GUILayout.Space(6);
 
             GUILayout.BeginHorizontal();
-            if (CButton(Helpers.GetString("ui_btn_validate_selection", "Confirm Selection"), GUILayout.Width(200 * scale), GUILayout.Height(32 * scale)))
+            if (CButton(Helpers.GetString("ui_btn_validate_selection", "Confirm Selection"), GUILayout.Width(250 * scale), GUILayout.Height(40 * scale)))
             {
                 string validationError = CraftingCalculator.ValidateSelectionBeforeStart(selectedItem, selectedList, totalCost);
                 if (!string.IsNullOrEmpty(validationError))
@@ -823,7 +869,7 @@ namespace CraftingSystem
                 }
             }
 
-            if (CButton(Helpers.GetString("ui_btn_cancel_selection", "Cancel Selection"), GUILayout.Width(180 * scale), GUILayout.Height(32 * scale)))
+            if (CButton(Helpers.GetString("ui_btn_cancel_selection", "Cancel Selection"), GUILayout.Width(220 * scale), GUILayout.Height(40 * scale)))
             {
                 queuedEnchantGuids.Clear();
             }
@@ -844,13 +890,18 @@ namespace CraftingSystem
             bool prevEnableEpic = CraftingSettings.EnableEpicCosts;
             SourceFilter prevSourceFilter = CraftingSettings.CurrentSourceFilter;
 
+            Color oldBG = GUI.backgroundColor;
+            GUI.backgroundColor = new Color(0.4f, 0.4f, 0.4f, 1.0f); // Sous-menu plus clair
             GUILayout.BeginVertical(GUI.skin.box);
-            GUILayout.Label(Helpers.GetString("ui_settings_title", "Workshop Settings"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+            GUI.backgroundColor = oldBG;
+            GUILayout.Label(Helpers.GetString("ui_settings_title", "Workshop Settings"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(16 * scale) });
             
             GUILayout.Space(10);
             
+            GUIStyle settingsLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(14 * scale) };
+
             GUILayout.BeginHorizontal();
-            GUILayout.Label(Helpers.GetString("ui_settings_cost_mult", " Cost Multiplier: ") + CraftingSettings.CostMultiplier.ToString("F1"), GUILayout.Width(200 * scale));
+            GUILayout.Label(Helpers.GetString("ui_settings_cost_mult", " Cost Multiplier: ") + CraftingSettings.CostMultiplier.ToString("F1"), settingsLabelStyle, GUILayout.Width(200 * scale));
             CraftingSettings.CostMultiplier = (float)Math.Round(GUILayout.HorizontalSlider(CraftingSettings.CostMultiplier, 0f, 5f, GUILayout.Width(150 * scale)), 1);
             GUILayout.EndHorizontal();
 
@@ -878,14 +929,14 @@ namespace CraftingSystem
             if (CraftingSettings.EnforcePointsLimit)
             {
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_enhancement", " Max Enhancement: +{0}"), CraftingSettings.MaxEnhancementBonus), GUILayout.Width(150 * scale));
+                GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_enhancement", " Max Enhancement: +{0}"), CraftingSettings.MaxEnhancementBonus), settingsLabelStyle, GUILayout.Width(150 * scale));
                 if (CButton("-", GUILayout.Width(30 * scale))) CraftingSettings.MaxEnhancementBonus--;
                 CraftingSettings.MaxEnhancementBonus = (int)GUILayout.HorizontalSlider(CraftingSettings.MaxEnhancementBonus, 1, 20, GUILayout.Width(90 * scale));
                 if (CButton("+", GUILayout.Width(30 * scale))) CraftingSettings.MaxEnhancementBonus++;
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_total", " Max Total: +{0}"), CraftingSettings.MaxTotalBonus), GUILayout.Width(150 * scale));
+                GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_total", " Max Total: +{0}"), CraftingSettings.MaxTotalBonus), settingsLabelStyle, GUILayout.Width(150 * scale));
                 if (CButton("-", GUILayout.Width(30 * scale))) CraftingSettings.MaxTotalBonus--;
                 CraftingSettings.MaxTotalBonus = (int)GUILayout.HorizontalSlider(CraftingSettings.MaxTotalBonus, 1, 50, GUILayout.Width(90 * scale));
                 if (CButton("+", GUILayout.Width(30 * scale))) CraftingSettings.MaxTotalBonus++;
@@ -897,7 +948,7 @@ namespace CraftingSystem
             }
 
             GUILayout.Space(10);
-            GUILayout.Label(Helpers.GetString("ui_settings_source_display", "Source display:"));
+            GUILayout.Label(Helpers.GetString("ui_settings_source_display", "Source display:"), settingsLabelStyle);
             GUILayout.BeginHorizontal();
             int sliderVal = (int)CraftingSettings.CurrentSourceFilter;
             if (CButton("<", GUILayout.Width(30 * scale))) sliderVal--;
@@ -916,14 +967,14 @@ namespace CraftingSystem
                 case SourceFilter.Mods: sourceLabel = Helpers.GetString("ui_settings_source_mods", "Mod (All non-base game enchantments)"); break;
                 case SourceFilter.All: sourceLabel = Helpers.GetString("ui_settings_source_all_desc", "Show all"); break;
             }
-            GUILayout.Label(sourceLabel, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic });
+            GUILayout.Label(sourceLabel, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, fontSize = (int)(14 * scale) });
             GUILayout.EndHorizontal();
 
             GUILayout.Space(20);
             
-            GUILayout.Label(Helpers.GetString("ui_settings_diagnostic", "Diagnostic Tools:"));
-            GUILayout.Label(EnchantmentScanner.LastSyncMessage);
-            if (CButton(Helpers.GetString("ui_settings_force_sync", "Force Synchronization (Full Scan)"), GUILayout.Height(30 * scale)))
+            GUILayout.Label(Helpers.GetString("ui_settings_diagnostic", "Diagnostic Tools:"), settingsLabelStyle);
+            GUILayout.Label(EnchantmentScanner.LastSyncMessage, settingsLabelStyle);
+            if (CButton(Helpers.GetString("ui_settings_force_sync", "Force Synchronization (Full Scan)"), GUILayout.Height(35 * scale)))
             {
                 EnchantmentScanner.ForceSync();
             }
@@ -1108,6 +1159,13 @@ namespace CraftingSystem
         private void DrawDescriptionPopup(int windowID)
         {
             float scale = CraftingSettings.ScalePercent / 100f;
+            
+            // Force l'opacité interne
+            Color oldColor = GUI.color;
+            GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
+            GUI.DrawTexture(new Rect(0, 0, 650f * scale, 500f * scale), Texture2D.whiteTexture);
+            GUI.color = oldColor;
+
             GUILayout.BeginVertical();
             
             GUILayout.BeginHorizontal();
@@ -1130,7 +1188,57 @@ namespace CraftingSystem
         }
     
         // ======================= CONTROLLER WRAPPERS =======================
-        private bool CButton(string text, params GUILayoutOption[] options) { return CButtonStyled(new GUIContent(text), GUI.skin.button, options); }
+        private void DrawAbadarWarningGUI(float scale)
+        {
+            Color oldBG = GUI.backgroundColor;
+            GUI.backgroundColor = new Color(0.3f, 0.3f, 0.3f, 1.0f);
+            GUILayout.BeginVertical(GUI.skin.box);
+            GUI.backgroundColor = oldBG;
+
+            GUILayout.Space(20);
+            GUIStyle warningStyle = new GUIStyle(GUI.skin.label) {
+                fontSize = (int)(16 * scale),
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter,
+                wordWrap = true
+            };
+            
+            GUILayout.Label("Abadar, dieu des lois, du commerce et des cités, vous regarde avec sévérité.\n\nÊtes-vous certain de vouloir accéder à ce menu ?", warningStyle);
+            
+            GUILayout.Space(40);
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            
+            if (CButton("Oui", GUILayout.Width(150 * scale), GUILayout.Height(40 * scale)))
+            {
+                CraftingSettings.HasOpenedCheats = true;
+                CraftingSettings.SaveSettings();
+                showAbadarWarning = false;
+                ShowSettings = true;
+            }
+            
+            GUILayout.Space(50);
+            
+            if (CButton("Non", GUILayout.Width(150 * scale), GUILayout.Height(40 * scale)))
+            {
+                showAbadarWarning = false;
+                ShowSettings = false;
+            }
+            
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            
+            GUILayout.Space(20);
+            GUILayout.EndVertical();
+        }
+
+        private bool CButton(string text, params GUILayoutOption[] options) 
+        { 
+            float scale = CraftingSettings.ScalePercent / 100f;
+            GUIStyle style = new GUIStyle(GUI.skin.button) { fontSize = (int)(14 * scale) };
+            return CButtonStyled(new GUIContent(text), style, options); 
+        }
         private bool CButtonStyled(GUIContent content, GUIStyle style, params GUILayoutOption[] options)
         {
             int index = processIndex++;
@@ -1153,26 +1261,61 @@ namespace CraftingSystem
             return clicked;
         }
 
-        private bool CToggle(bool value, string text, params GUILayoutOption[] options) { return CToggleStyled(value, text, GUI.skin.toggle, options); }
+        private bool CToggle(bool value, string text, params GUILayoutOption[] options) 
+        { 
+            float scale = CraftingSettings.ScalePercent / 100f;
+            GUIStyle style = new GUIStyle(GUI.skin.label) { 
+                fontSize = (int)(14 * scale),
+                alignment = TextAnchor.MiddleLeft
+            };
+            return CToggleStyled(value, text, style, options); 
+        }
         private bool CToggleStyled(bool value, string text, GUIStyle style, params GUILayoutOption[] options)
         {
             int index = processIndex++;
             bool isFocused = (index == currentFocusIndex);
+            float scale = CraftingSettings.ScalePercent / 100f;
+            float boxSize = 18f * scale;
+
+            GUILayout.BeginHorizontal(options);
+            
+            // -- CASE À COCHER --
+            GUIStyle boxStyle = new GUIStyle(GUI.skin.button) {
+                fontSize = (int)(16 * scale),
+                padding = new RectOffset(0, 0, 0, 0),
+                alignment = TextAnchor.MiddleCenter
+            };
+            
             Color oldColor = GUI.color;
             if (isFocused) GUI.color = Color.yellow;
+
+            bool newValue = value;
+            if (GUILayout.Button(value ? "✔" : "", boxStyle, GUILayout.Width(boxSize), GUILayout.Height(boxSize)))
+            {
+                newValue = !value;
+            }
             
-            bool newValue;
-            if (style != null) newValue = GUILayout.Toggle(value, text, style, options);
-            else newValue = GUILayout.Toggle(value, text, options);
+            GUILayout.Space(8 * scale);
+            
+            // -- TEXTE --
+            GUIStyle textStyle = new GUIStyle(style ?? GUI.skin.label);
+            if (isFocused) textStyle.normal.textColor = Color.yellow;
+
+            if (GUILayout.Button(text, textStyle, GUILayout.Height(boxSize)))
+            {
+                newValue = !value;
+            }
             
             if (isFocused && Event.current.type == EventType.Repaint) focusedRect = GUILayoutUtility.GetLastRect();
-            
-            GUI.color = oldColor;
             
             if (isFocused && inputSubmitDown) {
                 newValue = !value;
                 inputSubmitDown = false;
             }
+
+            GUI.color = oldColor;
+            GUILayout.EndHorizontal();
+            
             return newValue;
         }
 
@@ -1198,6 +1341,37 @@ namespace CraftingSystem
             
             GUI.color = oldColor;
             return newText;
+        }
+
+        private static void ToggleHUD(bool visible)
+        {
+            try
+            {
+                // On cherche le HUD via la hiérarchie Unity, c'est souvent plus stable que les classes internes
+                var staticCanvas = GameObject.Find("StaticCanvas");
+                if (staticCanvas == null) return;
+
+                var hud = staticCanvas.transform.Find("HUD");
+                if (hud != null)
+                {
+                    hud.gameObject.SetActive(visible);
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"[ATELIER] Failed to toggle HUD: {ex.Message}");
+            }
+        }
+
+        private void DrawBorder(Rect rect, float thickness, Color color)
+        {
+            Color old = GUI.color;
+            GUI.color = color;
+            GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width, thickness), Texture2D.whiteTexture); // Haut
+            GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height - thickness, rect.width, thickness), Texture2D.whiteTexture); // Bas
+            GUI.DrawTexture(new Rect(rect.x, rect.y, thickness, rect.height), Texture2D.whiteTexture); // Gauche
+            GUI.DrawTexture(new Rect(rect.x + rect.width - thickness, rect.y, thickness, rect.height), Texture2D.whiteTexture); // Droite
+            GUI.color = old;
         }
     }
 }

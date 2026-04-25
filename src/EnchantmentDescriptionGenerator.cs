@@ -66,7 +66,7 @@ namespace CraftingSystem
 
                 if (!string.IsNullOrEmpty(resolved))
                 {
-                    lines.Add("- " + resolved);
+                    lines.Add("> " + resolved);
                 }
             }
 
@@ -129,7 +129,7 @@ namespace CraftingSystem
                         if (string.IsNullOrEmpty(localizedName))
                         {
                             // Aliases pour noms techniques ou fautes de frappe dans les blueprints originaux
-                            if (effectiveName == "isTwoHandedEquiped") effectiveName = "OnlyTwoHanded";
+                            if (effectiveName == "isTwoHandedEquiped" || effectiveName == "IsTwoHandedEquipped") effectiveName = "OnlyTwoHanded";
                             if (effectiveName == "isShieldEquipped") effectiveName = "OnlyShieldEquipped";
                             
                             localizedName = Helpers.GetString("field_" + effectiveName, effectiveName);

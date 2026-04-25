@@ -214,7 +214,7 @@
         "ui_label_pet": { "enGB": "Pet", "frFR": "Familier", "ruRU": "Питомец" },
         "ui_label_initiator": { "enGB": "Initiator", "frFR": "Lanceur", "ruRU": "Инициатор" },
         "ui_label_caster": { "enGB": "Caster", "frFR": "Lanceur", "ruRU": "Заклинатель" },
-        "IsTwoHandedEquipped": { "enGB": "a two-handed weapon is equipped", "frFR": "une arme à deux mains est équipée", "ruRU": "экипировано двуручное оружие" },
+        "IsTwoHandedEquipped": { "enGB": "wielded with two hands", "frFR": "maniée à deux mains", "ruRU": "экипировано двуручное оружие" },
         "IsAmuletEquipped": { "enGB": "an amulet is equipped", "frFR": "une amulette est équipée", "ruRU": "экипирован амулет" },
         "IsRing1Equipped": { "enGB": "ring 1 is equipped", "frFR": "l'anneau 1 est équipé", "ruRU": "кольцо 1 экипировано" },
         "IsRing2Equipped": { "enGB": "ring 2 is equipped", "frFR": "l'anneau 2 est équipé", "ruRU": "кольцо 2 экипировано" },
