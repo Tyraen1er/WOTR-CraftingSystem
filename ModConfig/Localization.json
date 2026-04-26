@@ -544,6 +544,11 @@
             "enGB": "Magical Powers:",
             "frFR": "Pouvoirs magiques :",
             "ruRU": "Магические свойства:"
+        },
+        "ui_abadar_warning": {
+            "enGB": "Abadar, god of law, commerce, and cities, watches you with severity.\n\nAre you sure you want to access this menu?",
+            "frFR": "Abadar, dieu des lois, du commerce et des cités, vous regarde avec sévérité.\n\nÊtes-vous certain de vouloir accéder à ce menu ?",
+            "ruRU": "Абадар, бог законов, торговли и городов, сурово взирает на вас.\n\nВы уверены, что хотите войти в это меню?"
         }
     }
 }

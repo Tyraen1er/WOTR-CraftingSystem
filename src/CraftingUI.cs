@@ -1136,7 +1136,7 @@ namespace CraftingSystem
                 wordWrap = true
             };
             
-            GUILayout.Label("Abadar, dieu des lois, du commerce et des cités, vous regarde avec sévérité.\n\nÊtes-vous certain de vouloir accéder à ce menu ?", warningStyle);
+            GUILayout.Label(Helpers.GetString("ui_abadar_warning", "Abadar, dieu des lois, du commerce et des cités, vous regarde avec sévérité.\n\nÊtes-vous certain de vouloir accéder à ce menu ?"), warningStyle);
             
             GUILayout.Space(40);
             
