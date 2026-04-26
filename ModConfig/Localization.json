@@ -8,12 +8,12 @@
         "fa3e1f7d4e3347bdaeb88a1b6c8baab7": {
             "enGB": "« Of course, the Quartermaster's office is here for that. What is it about exactly? »",
             "frFR": "« Bien sûr, l'Intendance est là pour ça. De quoi s'agit-il précisément ? »",
-            "ruRU": "«Конечно, для этого здесь находится квартирмейстерская. А для чего именно?»"
+            "ruRU": "«Разумеется, интендантская служба для того и существует. В чем именно заключается ваш вопрос?»"
         },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab8": {
             "enGB": "« Here is some equipment they should take care of. »",
             "frFR": "« Voici un équipement dont ils doivent s'occuper. »",
-            "ruRU": "«Отлично, давайте осмотрим ваш арсенал. Какие чары вы хотите наложить на эти предметы?»"
+            "ruRU": "«Вот снаряжение, о котором им следует позаботиться.»"
         },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab9": {
             "enGB": "« I would like to modify some equipment I already entrusted to you. »",
@@ -268,12 +268,12 @@
         "ui_settings_max_enhancement": {
             "enGB": " Max Enhancement: +{0}",
             "frFR": " Max Altération : +{0}",
-            "ruRU": " Max Enhancement: +{0}"
+            "ruRU": " Максимальное усиление: +{0}"
         },
         "ui_settings_max_total": {
             "enGB": " Max Total: +{0}",
             "frFR": " Max Total : +{0}",
-            "ruRU": " Max Total: +{0}"
+            "ruRU": " Максимальный лимит: +{0}"
         },
         "ui_settings_require_plus_one": {
             "enGB": " TTRPG Prerequisite: At least +1 Enhancement to apply any enchants",
@@ -328,7 +328,7 @@
         "ui_settings_source_ttrpg": {
             "enGB": "TTRPG (TTRPG enchantments only)",
             "frFR": "TTRPG (Uniquement les enchantements du TTRPG)",
-            "ruRU": "TTRPG (TTRPG только зачарования настольной игры)"
+            "ruRU": "TTRPG (Только зачарования по правилам настольной игры)"
         },
         "ui_settings_source_owlcat": {
             "enGB": "Owlcat (All generic in-game enchantments)",
@@ -493,7 +493,7 @@
         "ui_slot_shoulders": {
             "enGB": "Shoulders",
             "frFR": "Épaules",
-            "ruRU": "Плечи"
+            "ruRU": "Плащ"
         },
         "ui_slot_ring": {
             "enGB": "Ring",
@@ -503,7 +503,7 @@
         "ui_slot_wrist": {
             "enGB": "Wrists",
             "frFR": "Poignets",
-            "ruRU": "Запястья"
+            "ruRU": "Наручи"
         },
         "ui_slot_other": {
             "enGB": "Wondrous",
