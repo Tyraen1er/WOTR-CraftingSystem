@@ -539,6 +539,11 @@
             "enGB": "Shortcut",
             "frFR": "Raccourci",
             "ruRU": "Клавиша"
+        },
+        "ui_tooltip_magical_powers": {
+            "enGB": "Magical Powers:",
+            "frFR": "Pouvoirs magiques :",
+            "ruRU": "Магические свойства:"
         }
     }
 }

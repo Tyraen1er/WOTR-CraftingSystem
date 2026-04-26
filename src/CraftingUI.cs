@@ -473,12 +473,12 @@ namespace CraftingSystem
                     int pointValue = overrideData?.PointCost ?? ench.Blueprint.EnchantmentCost;
                     if (pointValue < 0) pointValue = 0;
                     GUILayout.BeginHorizontal(GUI.skin.box);
-                    string displayName = GetDisplayName(ench.Blueprint, overrideData);
+                    string displayName = DescriptionManager.GetDisplayName(ench.Blueprint, overrideData);
                     GUILayout.Label($"{displayName} (+{pointValue})", new GUIStyle(GUI.skin.label) { fontSize = (int)(14 * scale) }, GUILayout.ExpandWidth(true));
 
                     // POUR LES OBJETS DÉJÀ APPLIQUÉS (RÉSOLU DYNAMIQUEMENT)
                     DescriptionSource genSource = DescriptionSource.None;
-                    string appliedDesc = GetLocalizedDescription(ench.Blueprint, overrideData, out genSource);
+                    string appliedDesc = DescriptionManager.GetLocalizedDescription(ench.Blueprint, overrideData, out genSource);
                     if (!string.IsNullOrEmpty(appliedDesc))
                     {
                         string color = "#3498db"; // Bleu (Official) par défaut
@@ -683,7 +683,7 @@ namespace CraftingSystem
                     bool isQueued = queuedEnchantGuids.Contains(data.Guid);
 
                     var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
-                    string displayName = GetDisplayName(bp, data);
+                    string displayName = DescriptionManager.GetDisplayName(bp, data);
                     
                     long costToPay;
                     if (isQueued)
@@ -707,7 +707,7 @@ namespace CraftingSystem
                     bool newSelected = CToggleStyled(isQueued, label, toggleStyle, GUILayout.ExpandWidth(true));
                     
                     DescriptionSource descSource = DescriptionSource.None;
-                    string descForData = GetLocalizedDescription(bp, data, out descSource);
+                    string descForData = DescriptionManager.GetLocalizedDescription(bp, data, out descSource);
                     if (!string.IsNullOrEmpty(descForData))
                     {
                         string color = "#3498db"; // Bleu (Official)
@@ -1059,7 +1059,7 @@ namespace CraftingSystem
                 }
 
                 // --- FILTRE RECHERCHE ---
-                string displayName = GetDisplayName(bp, data);
+                string displayName = DescriptionManager.GetDisplayName(bp, data);
                 if (!string.IsNullOrEmpty(lastSearch) && !displayName.ToLower().Contains(lastSearch.ToLower())) continue;
 
                 // --- FILTRE SOURCE ---
@@ -1088,74 +1088,6 @@ namespace CraftingSystem
             GUILayout.Space(5 * scale);
         }
 
-        private string GetLocalizedDescription(BlueprintItemEnchantment bp, EnchantmentData data, out DescriptionSource source)
-        {
-            source = DescriptionSource.None;
-
-            // 1. Priorité au Jeu (Description localisée officielle)
-            if (bp != null)
-            {
-                string localized = bp.m_Description?.ToString();
-                if (!string.IsNullOrEmpty(localized) && localized != bp.name) 
-                {
-                    source = DescriptionSource.Official;
-                    return System.Text.RegularExpressions.Regex.Replace(localized, "<.*?>", string.Empty);
-                }
-            }
-
-            // 2. Génération Dynamique via Composants (Fall-back si le jeu est vide)
-            if (bp != null)
-            {
-                string generated = EnchantmentDescriptionGenerator.Generate(bp);
-                if (!string.IsNullOrEmpty(generated)) 
-                {
-                    source = DescriptionSource.Generated;
-                    string prefix = Helpers.GetString("ui_description_autogen_prefix", "[auto-generated] ");
-                    return prefix + generated;
-                }
-            }
-
-            // 3. Fallback sur le Commentaire développeur
-            if (bp != null && !string.IsNullOrEmpty(bp.Comment)) 
-            {
-                source = DescriptionSource.Official;
-                return bp.Comment;
-            }
-
-            source = DescriptionSource.None;
-            return "TODO";
-        }
-
-        private string GetDisplayName(BlueprintItemEnchantment bp, EnchantmentData data)
-        {
-            string finalName = "";
-
-            if (bp != null && bp.m_EnchantName != null)
-            {
-                string localized = bp.m_EnchantName.ToString();
-                if (!string.IsNullOrWhiteSpace(localized) && localized != bp.name) finalName = localized;
-            }
-
-            if (string.IsNullOrEmpty(finalName) && data != null && !string.IsNullOrWhiteSpace(data.Name)) 
-                finalName = data.Name;
-
-            if (string.IsNullOrEmpty(finalName) && bp != null)
-            {
-                finalName = bp.name.Replace("WeaponEnchantment", "")
-                              .Replace("ArmorEnchantment", "")
-                              .Replace("Enchantment", "")
-                              .Replace("Plus", "+");
-            }
-
-            if (string.IsNullOrEmpty(finalName)) 
-                finalName = Helpers.GetString("ui_unknown_enchant_name", "Unknown Enchantment");
-
-            // Troncation à 50 caractères
-            if (finalName.Length > 50) 
-                finalName = finalName.Substring(0, 47) + "...";
-
-            return finalName;
-        }
 
         private void DrawDescriptionPopup(int windowID)
         {
