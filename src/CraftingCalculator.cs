@@ -92,8 +92,8 @@ namespace CraftingSystem
         public static string GetEnchantmentFamily(string blueprintName)
         {
             if (string.IsNullOrEmpty(blueprintName)) return string.Empty;
-            // On retire uniquement les chiffres à la FIN du nom (ex: Dodge3 -> Dodge)
-            return Regex.Replace(blueprintName, @"\d+$", "");
+            // On retire tous les chiffres présents dans le nom (ex: AcidResistance10Enchant -> AcidResistanceEnchant)
+            return Regex.Replace(blueprintName, @"\d+", "");
         }
 
         public static long GetEnchantmentCost(ItemEntity item, EnchantmentData newEnchant = null, float costMultiplier = 1.0f)

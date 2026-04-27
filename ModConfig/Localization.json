@@ -107,7 +107,7 @@
         },
         "ui_info_text": {
             "enGB": "This interface is designed to allow you to enchant your equipment according to the official tabletop roleplaying rules (Pathfinder 1st Edition).\n\n<b>The rules:</b>\n\nGenerally speaking, the more complex and powerful the requested enchantment, the higher its price and crafting time. The number of days required is always 1/1000 of the calculated price (see official rules for detailed formulas).\n\nWeapons and armor can only be enchanted if they already possess a minimum +1 enhancement bonus.\n\nEach enchantment has a certain \"weight.\" Weapons and armor cannot exceed a total weight of 10 by combining their different enchantments. The total weight of the selected enchantments is indicated at the bottom left (enchantment weight). Other items have no limitation.\n\nAn enchantment is designed to be applied to specific pieces of equipment (slot column). However, the rules allow bypassing this limitation by applying a penalty factor of 1.5.\n\nAll these limitations can be bypassed in the \"cheats\" tab if you wish.",
-            "frFR": "Cette interface est conçue pour vous permettre d’enchanter votre équipement selon les règles officielles du jeu de rôle papier (Pathfinder 1ère édition).\n\n<b>Les règles :</b>\n\nDe façon générale, plus l’enchantement demandé est complexe et puissant et plus son prix et son temps de fabrication augmentent. Le nombre de jours nécessaires est toujours 1/1000 du prix calculé (voir les règles officielles pour les formules détaillées).\n\nLes armes et armures ne peuvent être enchantées qu’à la condition de posséder déjà un bonus de +1 d’altération minimum.\n\nChaque enchantement possède un certain « poids ». Les armes et armures ne peuvent pas dépasser un poids total de 10 en cumulant leurs différents enchantements. Le poids total des enchantements sélectionnés est indiqué en bas à gauche (poids des enchantements). Les autres items n’ont pas de limitation.\n\nUn enchantement est conçu pour être appliqué sur des pièces d’équipement spécifiques (colonne emplacement). Les règles permettent toutefois de contourner cette limitation en appliquant alors un facteur de pénalité de 1,5.\n\nToutes ces limitations peuvent être contournées dans l’onglet « triche » si vous le désirez.",
+            "frFR": "Cette interface est conçue pour vous permettre d’enchanter votre équipement selon les règles officielles du jeu de rôle papier (Pathfinder 1ère édition).\n\n<b>Les règles :</b>\n\nDe façon générale, plus l’enchantement demandé est complexe et puissant et plus son prix et son temps de fabrication augmentent. Le nombre de jours nécessaires est toujours 1/1000 du prix calculé (voir les règles officielles pour les formules détaillées).\n\nLes armes et armures ne peuvent être enchantées qu’à la condition de posséder déjà un bonus de +1 d’altération minimum.\n\nChaque enchantement possède un certain « poids ». Les armes et armures ne peuvent pas dépasser un poids total de 10 en cumulant leurs différents enchantements. Le poids total des enchantements sélectionnés est indiqué en bas à gauche (poids des enchantements). Les autres items n’ont pas de limitation.\n\nUn enchantement est conçu pour être appliqué sur des pièces d’équipement spécifiques (colonne emplacement). Les règles permettent toutefois de contourner cette limitation en appliquant alors un facteur de pénalité de 1,5.\n\nToutes ces limitations peuvent être contournées dans l’onglet « Triches » si vous le désirez.",
             "ruRU": "Этот интерфейс разработан, чтобы вы могли зачаровывать свое снаряжение в соответствии с официальными правилами настольной ролевой игры (Pathfinder 1-й редакции).\n\n<b>Правила:</b>\n\nВ целом, чем сложнее и мощнее запрашиваемое зачарование, тем выше его цена и время изготовления. Количество необходимых дней всегда составляет 1/1000 от рассчитанной цены (подробные формулы см. в официальных правилах).\n\nОружие и доспехи могут быть зачарованы только в том случае, если они уже имеют бонус усиления как минимум +1.\n\nКаждое зачарование имеет определенный «вес». Оружие и доспехи не могут превышать общий вес 10 при сочетании их различных зачарований. Общий вес выбранных зачарований указан внизу слева (вес зачарований). У других предметов ограничений нет.\n\nЗачарование предназначено для применения к конкретным предметам экипировки (колонка «слот»). Однако правила позволяют обойти это ограничение, применив штрафной коэффициент 1,5.\n\nВсе эти ограничения можно обойти на вкладке «читы», если вы того пожелаете."
         },
         "ui_no_item_stashed": {
@@ -252,7 +252,7 @@
         },
         "ui_settings_instant_craft": {
             "enGB": "Instant Crafting",
-            "frFR": "Craft Instantané",
+            "frFR": "Fabrication Instantanée",
             "ruRU": "Мгновенное создание"
         },
         "ui_feedback_all_forges_done": {
@@ -305,26 +305,6 @@
             "frFR": "Tout",
             "ruRU": "Все"
         },
-        "ui_settings_diagnostic": {
-            "enGB": "Diagnostic Tools:",
-            "frFR": "Outils de diagnostique :",
-            "ruRU": "Инструменты диагностики:"
-        },
-        "ui_settings_force_sync": {
-            "enGB": "Force Synchronization (Full Scan)",
-            "frFR": "Forcer la synchronisation (Scan intégral)",
-            "ruRU": "Принудительная синхронизация (Полное сканирование)"
-        },
-        "ui_unknown_enchant_name": {
-            "enGB": "Unknown Enchantment",
-            "frFR": "Enchantement inconnu",
-            "ruRU": "Неизвестное зачарование"
-        },
-        "ui_sync_success": {
-            "enGB": "Sync successful ({0} enchantments).",
-            "frFR": "Sync réussie ({0} enchantements).",
-            "ruRU": "Синхронизация успешна ({0} зачарований)."
-        },
         "ui_settings_source_ttrpg": {
             "enGB": "TTRPG (TTRPG enchantments only)",
             "frFR": "TTRPG (Uniquement les enchantements du TTRPG)",
@@ -349,6 +329,26 @@
             "enGB": "Show all",
             "frFR": "Tout afficher",
             "ruRU": "Показать всё"
+        },
+        "ui_settings_diagnostic": {
+            "enGB": "Diagnostic Tools:",
+            "frFR": "Outils de diagnostique :",
+            "ruRU": "Инструменты диагностики:"
+        },
+        "ui_settings_force_sync": {
+            "enGB": "Force Synchronization (Full Scan)",
+            "frFR": "Forcer la synchronisation (Scan intégral)",
+            "ruRU": "Принудительная синхронизация (Полное сканирование)"
+        },
+        "ui_unknown_enchant_name": {
+            "enGB": "Unknown Enchantment",
+            "frFR": "Enchantement inconnu",
+            "ruRU": "Неизвестное зачарование"
+        },
+        "ui_sync_success": {
+            "enGB": "Sync successful ({0} enchantments).",
+            "frFR": "Sync réussie ({0} enchantements).",
+            "ruRU": "Синхронизация успешна ({0} зачарований)."
         },
         "ui_btn_ok": {
             "enGB": "OK",
@@ -549,6 +549,21 @@
             "enGB": "Abadar, god of law, commerce, and cities, watches you with severity.\n\nAre you sure you want to access this menu?",
             "frFR": "Abadar, dieu des lois, du commerce et des cités, vous regarde avec sévérité.\n\nÊtes-vous certain de vouloir accéder à ce menu ?",
             "ruRU": "Абадар, бог законов, торговли и городов, сурово взирает на вас.\n\nВы уверены, что хотите войти в это меню?"
+        },
+        "ui_header_name": {
+            "enGB": "Name",
+            "frFR": "Nom",
+            "ruRU": "Имя"
+        },
+        "ui_header_slot_affinity": {
+            "enGB": "Slot Affinity",
+            "frFR": "Affinité d'emplacement",
+            "ruRU": "Сродство к ячейке"
+        },
+        "ui_header_cost": {
+            "enGB": "Cost / Time",
+            "frFR": "Coût / Temps",
+            "ruRU": "Стоимость / Время"
         }
     }
 }

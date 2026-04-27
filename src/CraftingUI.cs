@@ -671,6 +671,15 @@ namespace CraftingSystem
 
                 GUILayout.Space(5);
 
+                // -- EN-TÊTES DU TABLEAU --
+                GUILayout.BeginHorizontal();
+                GUIStyle headerStyle = new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(12 * scale) };
+                GUILayout.Label(Helpers.GetString("ui_header_name", "Name"), headerStyle, GUILayout.ExpandWidth(true));
+                GUILayout.Space(100 * scale); // Espace pour le bouton description (non titré)
+                GUILayout.Label(Helpers.GetString("ui_header_slot_affinity", "Slot Affinity"), headerStyle, GUILayout.Width(120 * scale));
+                GUILayout.Label(Helpers.GetString("ui_header_cost", "Cost / Time"), headerStyle, GUILayout.Width(180 * scale));
+                GUILayout.EndHorizontal();
+
                 var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
                 
                 // On ne boucle QUE sur les éléments de la page actuelle
@@ -778,6 +787,14 @@ namespace CraftingSystem
                     }
 
                     GUILayout.EndHorizontal();
+                    if (Event.current.type == EventType.Repaint && (i - startIdx) % 2 != 0)
+                    {
+                        Rect lastRect = GUILayoutUtility.GetLastRect();
+                        Color oldC = GUI.color;
+                        GUI.color = new Color(1f, 1f, 1f, 0.06f); // Calque blanc très léger (6% d'opacité)
+                        GUI.DrawTexture(lastRect, Texture2D.whiteTexture);
+                        GUI.color = oldC;
+                    }
                 }
             }
 
@@ -929,6 +946,14 @@ namespace CraftingSystem
             
             if (CraftingSettings.EnforcePointsLimit)
             {
+                GUILayout.Space(5);
+                CraftingSettings.RequirePlusOneFirst = CToggle(CraftingSettings.RequirePlusOneFirst, Helpers.GetString("ui_settings_require_plus_one", " Prerequisite: At least +1 Enhancement"));
+                GUILayout.Space(5);
+                CraftingSettings.ApplySlotPenalty = CToggle(CraftingSettings.ApplySlotPenalty, Helpers.GetString("ui_settings_slot_penalty", " Apply Slot Penalty (x1.5)"));
+                GUILayout.Space(5);
+                CraftingSettings.EnableEpicCosts = CToggle(CraftingSettings.EnableEpicCosts, Helpers.GetString("ui_settings_enable_epic", " Enable Epic Multiplier (x10)"));
+
+                GUILayout.Space(8); // Un peu plus d'espace avant les sliders
                 GUILayout.BeginHorizontal();
                 GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_enhancement", " Max Enhancement: +{0}"), CraftingSettings.MaxEnhancementBonus), settingsLabelStyle, GUILayout.Width(150 * scale));
                 if (CButton("-", GUILayout.Width(30 * scale))) CraftingSettings.MaxEnhancementBonus--;
@@ -936,16 +961,13 @@ namespace CraftingSystem
                 if (CButton("+", GUILayout.Width(30 * scale))) CraftingSettings.MaxEnhancementBonus++;
                 GUILayout.EndHorizontal();
 
+                GUILayout.Space(5);
                 GUILayout.BeginHorizontal();
                 GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_total", " Max Total: +{0}"), CraftingSettings.MaxTotalBonus), settingsLabelStyle, GUILayout.Width(150 * scale));
                 if (CButton("-", GUILayout.Width(30 * scale))) CraftingSettings.MaxTotalBonus--;
                 CraftingSettings.MaxTotalBonus = (int)GUILayout.HorizontalSlider(CraftingSettings.MaxTotalBonus, 1, 50, GUILayout.Width(90 * scale));
                 if (CButton("+", GUILayout.Width(30 * scale))) CraftingSettings.MaxTotalBonus++;
                 GUILayout.EndHorizontal();
-
-                CraftingSettings.RequirePlusOneFirst = CToggle(CraftingSettings.RequirePlusOneFirst, Helpers.GetString("ui_settings_require_plus_one", " Prerequisite: At least +1 Enhancement"));
-                CraftingSettings.ApplySlotPenalty = CToggle(CraftingSettings.ApplySlotPenalty, Helpers.GetString("ui_settings_slot_penalty", " Apply Slot Penalty (x1.5)"));
-                CraftingSettings.EnableEpicCosts = CToggle(CraftingSettings.EnableEpicCosts, Helpers.GetString("ui_settings_enable_epic", " Enable Epic Multiplier (x10)"));
             }
 
             GUILayout.Space(10);
@@ -989,6 +1011,7 @@ namespace CraftingSystem
                 || prevSourceFilter != CraftingSettings.CurrentSourceFilter)
             {
                 CraftingSettings.SaveSettings();
+                filtersDirty = true;
             }
         }
 
