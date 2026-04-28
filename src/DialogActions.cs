@@ -29,6 +29,7 @@ using UnityModManagerNet;
 namespace CraftingSystem
 {
     // --- DEBUG ACTION ---
+    /* 
     public class DebugLogAction : Kingmaker.ElementsSystem.GameAction
     {
         public string Message;
@@ -38,6 +39,7 @@ namespace CraftingSystem
             Main.ModEntry.Logger.Log($"[Debug_storyteller] Action Executed: {Message}");
         }
     }
+    */
 
     public static class DialogInjector
     {
@@ -173,6 +175,7 @@ namespace CraftingSystem
                 var aC = Helpers.CreateAnswer(Helpers.MergeGuid(list.AssetGuid, "ans_cancel"), "CraftingSystem_AnsCancel", "fa3e1f7d4e3347bdaeba8a1b6c8baab1");
                 
                 // --- DEBUG LOGS FOR ANSWERS ---
+                /*
                 var debugRoot = (DebugLogAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(DebugLogAction));
                 debugRoot.Message = $"Selected: {rootKey} (Root)";
                 rA.OnSelect.Actions = new Kingmaker.ElementsSystem.GameAction[] { debugRoot };
@@ -182,6 +185,7 @@ namespace CraftingSystem
                 
                 var debugModify = (DebugLogAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(DebugLogAction));
                 debugModify.Message = $"Selected: {modifyKey} (Modify Item)";
+                */
 
                 
                 // bool isStoryteller already defined above
@@ -189,8 +193,8 @@ namespace CraftingSystem
                 var actG = (Kingmaker.ElementsSystem.GameAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(OpenItemSelectorAction));
                 var actM = (Kingmaker.ElementsSystem.GameAction)Kingmaker.ElementsSystem.Element.CreateInstance(typeof(OpenStoredItemSelectorAction));
 
-                aG.OnSelect.Actions = new Kingmaker.ElementsSystem.GameAction[] { debugGive, actG };
-                aM.OnSelect.Actions = new Kingmaker.ElementsSystem.GameAction[] { debugModify, actM };
+                aG.OnSelect.Actions = new Kingmaker.ElementsSystem.GameAction[] { actG };
+                aM.OnSelect.Actions = new Kingmaker.ElementsSystem.GameAction[] { actM };
                 
                 var cCan = Helpers.CreateCue(Helpers.MergeGuid(list.AssetGuid, "cue_cancel"), "CraftingSystem_CueCancel", "fa3e1f7d4e3347bdaeba8a1b6c8baab3", speaker, parentDialog);
                 var cSel = Helpers.CreateCue(Helpers.MergeGuid(list.AssetGuid, "cue_selection"), "CraftingSystem_CueSelection", "fa3e1f7d4e3347bdaeba8a1b6c8baab2", speaker, parentDialog);
@@ -248,7 +252,7 @@ namespace CraftingSystem
                     else targetIndex++; // On insère APRES
                 }
 
-                Main.ModEntry.Logger.Log($"[Debug_storyteller] Injecting {rA.name} into {list.name} (Guid: {list.AssetGuid}) at index {targetIndex}. NextCue leads to: {iC.name}");
+                // Main.ModEntry.Logger.Log($"[Debug_storyteller] Injecting {rA.name} into {list.name} (Guid: {list.AssetGuid}) at index {targetIndex}. NextCue leads to: {iC.name}");
                 list.Answers.Insert(targetIndex, rA.ToReference<BlueprintAnswerBaseReference>());
                 return true;
             } catch (Exception ex) {

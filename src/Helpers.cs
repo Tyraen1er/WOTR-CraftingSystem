@@ -274,9 +274,11 @@ namespace CraftingSystem
                     addMethod.Invoke(cache, new object[] { bp.AssetGuid, bp });
                 
                 // --- DEBUG LOG ---
+                /*
                 if (bp.name.Contains("CraftingSystem")) {
                     Main.ModEntry.Logger.Log($"[Debug_storyteller] Registered Blueprint: {bp.name} (Guid: {bp.AssetGuid})");
                 }
+                */
             }
             
             init?.Invoke(bp);
