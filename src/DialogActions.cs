@@ -223,37 +223,7 @@ namespace CraftingSystem
                     // No NextCue means dialog ends.
                 }
 
-                // --- Conditional Logic for Storyteller ---
-                // We only want to show our options if the "supplies" answer (48b40db871ff5c849a34589831355129) is present.
-                // This applies to the Act 4 hub and potentially others.
-                BlueprintAnswer suppliesAnswer = null;
-                foreach (var ansRef in list.Answers)
-                {
-                    var ans = ansRef.Get() as BlueprintAnswer;
-                    if (ans != null && ans.AssetGuid.ToString() == "48b40db871ff5c849a34589831355129")
-                    {
-                        suppliesAnswer = ans;
-                        break;
-                    }
-                }
-
-                // If this is the Act 4 hub, we MANDATE the presence of the supplies answer.
-                if (list.AssetGuid.ToString() == "2f5b7e0b76d3c5a42a431e1e33a8db09" && suppliesAnswer == null)
-                {
-                    return false;
-                }
-
-                int targetIndex = 0;
-                if (suppliesAnswer != null)
-                {
-                    rA.ShowConditions = suppliesAnswer.ShowConditions;
-                    targetIndex = list.Answers.IndexOf(suppliesAnswer.ToReference<BlueprintAnswerBaseReference>());
-                    if (targetIndex < 0) targetIndex = 0;
-                    else targetIndex++; // On insère APRES
-                }
-
-                // Main.ModEntry.Logger.Log($"[Debug_storyteller] Injecting {rA.name} into {list.name} (Guid: {list.AssetGuid}) at index {targetIndex}. NextCue leads to: {iC.name}");
-                list.Answers.Insert(targetIndex, rA.ToReference<BlueprintAnswerBaseReference>());
+                list.Answers.Insert(Math.Max(0, list.Answers.Count - 1), rA.ToReference<BlueprintAnswerBaseReference>());
                 return true;
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Error building dialogue: {ex}");
