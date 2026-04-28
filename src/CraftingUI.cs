@@ -53,7 +53,7 @@ namespace CraftingSystem
         private Vector2 descriptionScrollPosition;
         public string feedbackMessage = "";
         private string newNameDraft = "";
-        private string Enchantmentsearch = "";
+        private string enchantmentSearch = "";
         private ItemEntity selectedItem = null;
         private bool lastOpenState = false;
         private string activeDescriptionPopup = "";
@@ -205,7 +205,7 @@ namespace CraftingSystem
             processIndex = 0;
             inputSubmitDown = false;
 
-            Enchantmentscanner.StartSync();
+            EnchantmentScanner.StartSync();
 
             var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
             workshop?.CheckAndFinishProjects();
@@ -306,7 +306,7 @@ namespace CraftingSystem
                     if (showCustomEnchantPage)
                     {
                         // Charger les enchants custom
-                        customEnchantments = Enchantmentscanner.MasterList
+                        customEnchantments = EnchantmentScanner.MasterList
                             .Where(e => CustomEnchantmentsBuilder.InjectedGuids.Contains(BlueprintGuid.Parse(e.Guid)))
                             .ToList();
                     }
@@ -470,13 +470,13 @@ namespace CraftingSystem
             
             // --- GESTION DU REFILTRAGE ---
             bool selectionChanged = filtersDirty;
-            if (selectedItem != lastSelectedItem || Enchantmentsearch != lastSearch || activeCategories.Count != lastCategoryCount || activeTypes.Count != lastTypeCount || selectionChanged)
+            if (selectedItem != lastSelectedItem || enchantmentSearch != lastSearch || activeCategories.Count != lastCategoryCount || activeTypes.Count != lastTypeCount || selectionChanged)
             {
                 // On détecte si c'est UNIQUEMENT la sélection qui a changé
-                bool filtersUnchanged = (selectedItem == lastSelectedItem && Enchantmentsearch == lastSearch && activeCategories.Count == lastCategoryCount && activeTypes.Count == lastTypeCount);
+                bool filtersUnchanged = (selectedItem == lastSelectedItem && enchantmentSearch == lastSearch && activeCategories.Count == lastCategoryCount && activeTypes.Count == lastTypeCount);
                 
                 lastSelectedItem = selectedItem;
-                lastSearch = Enchantmentsearch;
+                lastSearch = enchantmentSearch;
                 lastCategoryCount = activeCategories.Count;
                 lastTypeCount = activeTypes.Count;
                 filtersDirty = false;
@@ -501,7 +501,7 @@ namespace CraftingSystem
                 foreach (var ench in currentEnchants)
                 {
                     string guid = ench.Blueprint.AssetGuid.ToString();
-                    var overrideData = Enchantmentscanner.GetByGuid(guid);
+                    var overrideData = EnchantmentScanner.GetByGuid(guid);
                     int pointValue = overrideData?.PointCost ?? ench.Blueprint.EnchantmentCost;
                     if (pointValue < 0) pointValue = 0;
                     GUILayout.BeginHorizontal(GUI.skin.box);
@@ -566,9 +566,9 @@ namespace CraftingSystem
 
             // On récupère TOUTE la liste directement, pour laisser l'UI gérer les types
             List<EnchantmentData> rawAvailable;
-            lock (Enchantmentscanner.MasterList)
+            lock (EnchantmentScanner.MasterList)
             {
-                rawAvailable = Enchantmentscanner.MasterList.ToList();
+                rawAvailable = EnchantmentScanner.MasterList.ToList();
             }
 
             // On filtre d'abord par Type
@@ -595,7 +595,7 @@ namespace CraftingSystem
             // -- UI RECHERCHE & FILTRES CATÉGORIES --
             GUILayout.BeginHorizontal();
             GUILayout.Label(Helpers.GetString("ui_search_label", "Search: "), GUILayout.Width(100 * scale));
-            Enchantmentsearch = CTextField(Enchantmentsearch, GUILayout.ExpandWidth(true));
+            enchantmentSearch = CTextField(enchantmentSearch, GUILayout.ExpandWidth(true));
             
             string filterBtnText = activeCategories.Count > 0 ? string.Format(Helpers.GetString("ui_filter_active_btn", "Filters ({0}) \u25bc"), activeCategories.Count) : Helpers.GetString("ui_filter_all_btn", "Filters (All) \u25bc");
             if (CButton(filterBtnText, GUILayout.Width(130 * scale))) showCategoryFilter = !showCategoryFilter;
@@ -635,16 +635,16 @@ namespace CraftingSystem
 
             GUILayout.Space(5);
 
-            if (Enchantmentscanner.IsSyncing)
+            if (EnchantmentScanner.IsSyncing)
             {
-                GUILayout.Label($"({Enchantmentscanner.LastSyncMessage})", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label($"({EnchantmentScanner.LastSyncMessage})", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
             }
 
             GUILayout.Space(5);
 
             GUILayout.BeginVertical(GUI.skin.box);
 
-            if (Enchantmentscanner.IsSyncing)
+            if (EnchantmentScanner.IsSyncing)
             {
                 GUILayout.Label(Helpers.GetString("ui_scan_in_progress", "Scan en cours — aucun enchantement disponible pour l'instant."), new GUIStyle(GUI.skin.label) { fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
             }
@@ -712,7 +712,7 @@ namespace CraftingSystem
                 GUILayout.Label(Helpers.GetString("ui_header_cost", "Cost / Time"), headerStyle, GUILayout.Width(180 * scale));
                 GUILayout.EndHorizontal();
 
-                var currentSelectedList = queuedEnchantGuids.Select(g => Enchantmentscanner.GetByGuid(g)).Where(d => d != null).ToList();
+                var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
                 
                 // On ne boucle QUE sur les éléments de la page actuelle
                 int startIdx = currentPage * itemsPerPage;
@@ -736,7 +736,7 @@ namespace CraftingSystem
             var selectedList = new List<EnchantmentData>();
             foreach (var g in queuedEnchantGuids)
             {
-                var d = Enchantmentscanner.GetByGuid(g);
+                var d = EnchantmentScanner.GetByGuid(g);
                 if (d != null)
                 {
                     selectedList.Add(d);
@@ -923,10 +923,10 @@ namespace CraftingSystem
             GUILayout.Space(20);
             
             GUILayout.Label(Helpers.GetString("ui_settings_diagnostic", "Diagnostic Tools:"), settingsLabelStyle);
-            GUILayout.Label(Enchantmentscanner.LastSyncMessage, settingsLabelStyle);
+            GUILayout.Label(EnchantmentScanner.LastSyncMessage, settingsLabelStyle);
             if (CButton(Helpers.GetString("ui_settings_force_sync", "Force Synchronization (Full Scan)"), GUILayout.Height(35 * scale)))
             {
-                Enchantmentscanner.ForceSync();
+                EnchantmentScanner.ForceSync();
             }
             
             GUILayout.FlexibleSpace();
@@ -951,9 +951,9 @@ namespace CraftingSystem
             }
 
             List<EnchantmentData> rawAvailable;
-            lock (Enchantmentscanner.MasterList)
+            lock (EnchantmentScanner.MasterList)
             {
-                rawAvailable = Enchantmentscanner.MasterList.ToList();
+                rawAvailable = EnchantmentScanner.MasterList.ToList();
             }
 
             // 1. Filtrage par Type
@@ -961,7 +961,7 @@ namespace CraftingSystem
 
             // 2. Préparation des helpers de filtrage
             bool isWeaponOrArmor = selectedItem.Blueprint is BlueprintItemWeapon || selectedItem.Blueprint is BlueprintItemArmor;
-            var currentSelectedList = queuedEnchantGuids.Select(g => Enchantmentscanner.GetByGuid(g)).Where(d => d != null).ToList();
+            var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
             bool isReadyForSpecial = CraftingCalculator.IsItemReadyForSpecialEnchants(selectedItem, currentSelectedList);
             var presentGuids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var presentNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -979,6 +979,9 @@ namespace CraftingSystem
                 bool isQueued = queuedEnchantGuids.Contains(data.Guid);
                 var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
                 if (bp == null) continue;
+                
+                // --- FILTRE DES ENCHANTEMENTS CUSTOM (Exclusion de la liste classique) ---
+                if (CustomEnchantmentsBuilder.InjectedGuids.Contains(bp.AssetGuid)) continue;
 
                 // --- FILTRE D'ENCHANTEMENTS DÉJÀ PRÉSENTS ---
                 // On compare le GUID (normalisé via le Blueprint) ET le nom interne
@@ -1293,13 +1296,64 @@ namespace CraftingSystem
             }
 
             GUILayout.EndScrollView();
+            
+            // --- SECTION VALIDATION DES ENCHANTEMENTS CUSTOM ---
+            var selectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
+            if (selectedList.Count > 0)
+            {
+                Div(scale);
+                long totalCost = CraftingCalculator.GetMarginalCost(selectedItem, selectedList, null, CraftingSettings.CostMultiplier);
+                int totalDays = CraftingCalculator.GetCraftingDays(totalCost, CraftingSettings.InstantCrafting);
+                int selectedPoints = selectedList.Sum(d => d.PointCost);
+
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(string.Format(Helpers.GetString("ui_selection_total_custom", "Selection Custom: +{0} \u2014 Total: {1} gp / ~{2} d"), selectedPoints, totalCost, totalDays), new GUIStyle(GUI.skin.label) { fontSize = (int)(14 * scale) });
+                GUILayout.FlexibleSpace();
+                
+                if (CButton(Helpers.GetString("ui_btn_validate_custom", "Confirm Custom Selection"), GUILayout.Width(250 * scale), GUILayout.Height(40 * scale)))
+                {
+                    // Validation basique (on peut être plus souple pour le custom si besoin, mais on garde la logique de coût)
+                    if (Game.Instance.Player.Money >= totalCost)
+                    {
+                        Game.Instance.Player.Money -= (int)totalCost;
+                        foreach (var d in selectedList)
+                        {
+                            long c = CraftingCalculator.GetEnchantmentCost(selectedItem, d, CraftingSettings.CostMultiplier);
+                            if (d.GoldOverride >= 0) c = (long)(d.GoldOverride * CraftingSettings.CostMultiplier);
+                            int days = CraftingCalculator.GetCraftingDays(c, CraftingSettings.InstantCrafting);
+                            CraftingActions.StartCraftingProject(selectedItem, d, (int)c, days);
+                        }
+
+                        // Log & Feedback
+                        string logText = $"<color=#E2C675>[Workshop]</color> Applied {selectedList.Count} custom enchantments to <b>{selectedItem.Name}</b>.";
+                        Kingmaker.PubSubSystem.EventBus.RaiseEvent<Kingmaker.PubSubSystem.ILogMessageUIHandler>(h => h.HandleLogMessage(logText));
+                        
+                        queuedEnchantGuids.Clear();
+                        showCustomEnchantPage = false;
+                        selectedItem = null;
+                        feedbackMessage = string.Format(Helpers.GetString("ui_feedback_projects_started", "Projects started: {0} enchantment(s)."), selectedList.Count);
+                    }
+                    else
+                    {
+                        feedbackMessage = Helpers.GetString("ui_feedback_no_funds", "Insufficient funds!");
+                    }
+                }
+                
+                if (CButton(Helpers.GetString("ui_btn_cancel_selection", "Cancel"), GUILayout.Width(150 * scale), GUILayout.Height(40 * scale)))
+                {
+                    queuedEnchantGuids.Clear();
+                }
+                GUILayout.EndHorizontal();
+                GUILayout.Space(10);
+            }
+            
             GUILayout.EndVertical();
         }
 
         void DrawEnchantmentRow(EnchantmentData data, float scale, int relativeIndex)
         {
             bool isQueued = queuedEnchantGuids.Contains(data.Guid);
-            var currentSelectedList = queuedEnchantGuids.Select(g => Enchantmentscanner.GetByGuid(g)).Where(d => d != null).ToList();
+            var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
 
             var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
             string displayName = DescriptionManager.GetDisplayName(bp, data);
@@ -1376,7 +1430,7 @@ namespace CraftingSystem
                 {
                     queuedEnchantGuids.RemoveAll(guid => 
                     {
-                        var otherData = Enchantmentscanner.GetByGuid(guid);
+                        var otherData = EnchantmentScanner.GetByGuid(guid);
                         if (otherData != null)
                         {
                             var otherBp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(guid));

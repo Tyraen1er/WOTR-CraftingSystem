@@ -87,7 +87,7 @@ namespace CraftingSystem
         public BlueprintItemEnchantment Blueprint => ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(Guid)) as BlueprintItemEnchantment;
     }
 
-    public static class Enchantmentscanner
+    public static class EnchantmentScanner
     {
         public static List<EnchantmentData> MasterList = new List<EnchantmentData>();
         public static Dictionary<string, EnchantmentData> GuidMap = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
@@ -245,10 +245,11 @@ namespace CraftingSystem
                                             // Si déjà officiellement chargé par le jeu (ou injecté manuellement) on l'ajoute directement.
                                             if (entry.Blueprint != null) {
                                                 if (entry.Blueprint is BlueprintItemEnchantment bpEnchChecked) {
-                                                    foundEnchants.Add(bpEnchChecked);
+                                                    // On marque les enchantements injectés par notre CustomEnchantmentsBuilder
                                                     if (CustomEnchantmentsBuilder.InjectedGuids.Contains(guid)) {
                                                         Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Scanner found injected blueprint: {bpEnchChecked.name} ({guid})");
                                                     }
+                                                    foundEnchants.Add(bpEnchChecked);
                                                 }
                                                 continue;
                                             }

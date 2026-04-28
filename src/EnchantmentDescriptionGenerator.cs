@@ -56,7 +56,7 @@ namespace CraftingSystem
                 // 2. Sinon, on utilise le système de template JSON
                 if (string.IsNullOrEmpty(resolved))
                 {
-                    var template = Enchantmentscanner.DescriptionTemplates.FirstOrDefault(t => t.ComponentType == typeName);
+                    var template = EnchantmentScanner.DescriptionTemplates.FirstOrDefault(t => t.ComponentType == typeName);
                     if (template != null)
                     {
                         string templateText = GetLocalizedTemplate(template);

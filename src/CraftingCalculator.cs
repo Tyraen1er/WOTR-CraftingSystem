@@ -175,7 +175,7 @@ namespace CraftingSystem
                     if (replacedOnItem != null)
                     {
                         string replacedGuid = replacedOnItem.Blueprint.AssetGuid.ToString();
-                        var oldData = Enchantmentscanner.GetByGuid(replacedGuid);
+                        var oldData = EnchantmentScanner.GetByGuid(replacedGuid);
                         if (oldData != null) { 
                             existingPointCost = oldData.PointCost; 
                             existingGoldOverride = oldData.GoldOverride; 
@@ -398,7 +398,7 @@ namespace CraftingSystem
                 if (e.IsTemporary) continue;
 
                 string guid = e.Blueprint.AssetGuid.ToString();
-                var overrideData = Enchantmentscanner.GetByGuid(guid);
+                var overrideData = EnchantmentScanner.GetByGuid(guid);
                 
                 // Si l'enchantement est dans le JSON, on prend sa valeur PointCost (qui est 0 pour les prix fixes)
                 // Sinon on prend la valeur native du jeu.

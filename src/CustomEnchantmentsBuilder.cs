@@ -88,6 +88,10 @@ namespace CraftingSystem
             var reference = Activator.CreateInstance(objectType) as BlueprintReferenceBase;
             var guid = BlueprintGuid.Parse(guidString);
 
+            // Important : on doit remplir à la fois le champ 'guid' (string) et 'deserializedGuid' (BlueprintGuid)
+            // car le jeu utilise 'deserializedGuid' pour ses accès internes, mais 'guid' pour la sérialisation.
+            reference.ReadGuidFromGuid(guid);
+
             var field = typeof(BlueprintReferenceBase).GetField("guid", BindingFlags.Instance | BindingFlags.NonPublic);
             if (field != null) field.SetValue(reference, guid.ToString());
 
@@ -184,8 +188,22 @@ namespace CraftingSystem
                     {
                         foreach (var comp in bp.ComponentsArray)
                         {
-                            if (comp == null) continue;
+                            if (comp == null) {
+                                Main.ModEntry.Logger.Warning($"[DEBUG_CUSTOM_ENCHANT] Null component found in {bp.name}!");
+                                continue;
+                            }
                             comp.name = $"${comp.GetType().Name}${Guid.NewGuid()}";
+                            Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Component in {bp.name}: {comp.GetType().Name} (name: {comp.name})");
+
+                            // Log details for some known components
+                            if (comp is Kingmaker.UnitLogic.FactLogic.AddDamageResistanceEnergy dre) {
+                                Main.ModEntry.Logger.Log($"  -> Type: {dre.Type}, Value: {dre.Value?.Value} (Type: {dre.Value?.ValueType})");
+                            }
+                            if (comp is Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment aufe) {
+                                var featRef = (Kingmaker.Blueprints.BlueprintFeatureReference)typeof(Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment)
+                                    .GetField("m_Feature", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(aufe);
+                                Main.ModEntry.Logger.Log($"  -> Feature Ref: {featRef?.deserializedGuid}");
+                            }
                         }
                     }
 
