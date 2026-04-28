@@ -1,44 +1,189 @@
 {
     "strings": {
+        "ui_warning_forge_active": {
+            "enGB": "FORGE: This equipment is currently being modified!",
+            "frFR": "FORGE : Cet équipement est en cours de modification !",
+            "ruRU": "КУЗНИЦА: Это снаряжение в данный момент модифицируется!"
+        },
+        "ui_loot_workshop_title": {
+            "enGB": "Workshop",
+            "frFR": "Atelier",
+            "ruRU": "Мастерская"
+        },
+        "ui_loot_enchantment_subtitle": {
+            "enGB": "Enchantment",
+            "frFR": "Enchantement",
+            "ruRU": "Зачарование"
+        },
+        "ui_btn_prev": {
+            "enGB": "<<",
+            "frFR": "<<",
+            "ruRU": "<<"
+        },
+        "ui_btn_next": {
+            "enGB": ">>",
+            "frFR": ">>",
+            "ruRU": ">>"
+        },
+        "ui_btn_close_x": {
+            "enGB": "X",
+            "frFR": "X",
+            "ruRU": "X"
+        },
+        "ui_btn_yes": {
+            "enGB": "Yes",
+            "frFR": "Oui",
+            "ruRU": "Да"
+        },
+        "ui_btn_no": {
+            "enGB": "No",
+            "frFR": "Non",
+            "ruRU": "Нет"
+        },
+        "ui_type_weapon": {
+            "enGB": "Weapon",
+            "frFR": "Arme",
+            "ruRU": "Оружие"
+        },
+        "ui_type_armor": {
+            "enGB": "Armor",
+            "frFR": "Armure",
+            "ruRU": "Доспех"
+        },
+        "ui_type_other": {
+            "enGB": "Other",
+            "frFR": "Autre",
+            "ruRU": "Другое"
+        },
+        "ui_cost_bp": {
+            "enGB": "Cost: {0} BP",
+            "frFR": "Coût : {0} BP",
+            "ruRU": "Цена: {0} ОС"
+        },
+        "ui_filter_weapons": {
+            "enGB": " Weapons",
+            "frFR": " Armes",
+            "ruRU": " Оружие"
+        },
+        "ui_filter_armors": {
+            "enGB": " Armors",
+            "frFR": " Armures",
+            "ruRU": " Доспехи"
+        },
+        "ui_filter_others": {
+            "enGB": " Others",
+            "frFR": " Autres",
+            "ruRU": " Прочее"
+        },
+        "ui_time_done": {
+            "enGB": "Done",
+            "frFR": "Terminé",
+            "ruRU": "Готово"
+        },
+        "ui_time_days_hours": {
+            "enGB": "{0} day(s) and {1} hour(s)",
+            "frFR": "{0} jour(s) et {1} heure(s)",
+            "ruRU": "{0} дн. и {1} ч."
+        },
+        "ui_time_days": {
+            "enGB": "{0} day(s)",
+            "frFR": "{0} jour(s)",
+            "ruRU": "{0} дн."
+        },
+        "ui_time_hours": {
+            "enGB": "{0} hour(s)",
+            "frFR": "{0} heure(s)",
+            "ruRU": "{0} ч."
+        },
+        "ui_time_less_than_hour": {
+            "enGB": "Less than an hour",
+            "frFR": "Moins d'une heure",
+            "ruRU": "Меньше часа"
+        },
+        "err_no_enchant_selected": {
+            "enGB": "No enchantment selected.",
+            "frFR": "Aucun enchantement sélectionné.",
+            "ruRU": "Зачарование не выбрано."
+        },
+        "err_not_enough_gold": {
+            "enGB": "You don't have enough gold to start the selected projects.",
+            "frFR": "Vous n'avez pas assez d'or pour lancer tous les projets sélectionnés.",
+            "ruRU": "У вас недостаточно золота для запуска выбранных проектов."
+        },
+        "err_require_plus_one": {
+            "enGB": "Equipment must have (or receive simultaneously) an 'Enhancement' (+1) before receiving special enchantments.",
+            "frFR": "Un équipement doit posséder (ou recevoir simultanément) une 'Altération' (+1) avant de recevoir des enchantements spéciaux.",
+            "ruRU": "Снаряжение должно иметь (или получить одновременно) 'Усиление' (+1) перед получением особых зачарований."
+        },
+        "err_limit_total": {
+            "enGB": "Total power limit exceeded (max +{0}).",
+            "frFR": "Limite de puissance totale dépassée (max +{0}).",
+            "ruRU": "Превышен лимит общей силы (макс. +{0})."
+        },
+        "err_limit_enhancement": {
+            "enGB": "Pure enhancement limit exceeded (max +{0}).",
+            "frFR": "Limite d'altération pure dépassée (max +{0}).",
+            "ruRU": "Превышен лимит чистого усиления (макс. +{0})."
+        },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab6": {
-            "enGB": "« I have work to entrust to your craftsmen. »",
-            "frFR": "« J'ai du travail à confier à vos artisans. »",
+            "enGB": "« I have work to entrust to your craftsmen. »",
+            "frFR": "« J'ai du travail à confier à vos artisans. »",
             "ruRU": "«У меня есть работа, которую я хочу доверить вашим мастерам.»"
         },
+        "storyteller_wilcer_contact_key": {
+            "enGB": "« I would like you to contact Quartermaster Wilcer Garms for me. »",
+            "frFR": "« Je souhaiterais que vous contactiez le quartier-maître Wilcer Garms pour moi. »",
+            "ruRU": "«Я бы хотел, чтобы вы связались с интендантом Уилцером Гармсом для меня.»"
+        },
+        "storyteller_wilcer_reply_key": {
+            "enGB": "« Yes, I think I know who that is. What would you like me to tell him? »",
+            "frFR": "« Oui, je pense savoir de qui il s'agit. Que voulez-vous que je lui transmette ? »",
+            "ruRU": "«Да, я кажется знаю, кто это. Что вы хотите, чтобы я ему передал?»"
+        },
+        "storyteller_wilcer_workshop_key": {
+            "enGB": "« It's about an item from his workshop. »",
+            "frFR": "« C'est à propos d'un objet de son atelier. »",
+            "ruRU": "«Это насчет предмета из его мастерской.»"
+        },
+        "storyteller_wilcer_enchant_key": {
+            "enGB": "« I would like him to have a piece of equipment enchanted. »",
+            "frFR": "« Je voudrais qu'il fasse enchanter une pièce d'équipement »",
+            "ruRU": "«Я бы хотел, чтобы он зачаровал часть снаряжения.»"
+        },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab7": {
-            "enGB": "« Of course, the Quartermaster's office is here for that. What is it about exactly? »",
-            "frFR": "« Bien sûr, l'Intendance est là pour ça. De quoi s'agit-il précisément ? »",
+            "enGB": "« Of course, the Quartermaster's office is here for that. What is it about exactly? »",
+            "frFR": "« Bien sûr, l'Intendance est là pour ça. De quoi s'agit-il précisément ? »",
             "ruRU": "«Разумеется, интендантская служба для того и существует. В чем именно заключается ваш вопрос?»"
         },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab8": {
-            "enGB": "« Here is some equipment they should take care of. »",
-            "frFR": "« Voici un équipement dont ils doivent s'occuper. »",
+            "enGB": "« Here is some equipment they should take care of. »",
+            "frFR": "« Voici un équipement dont ils doivent s'occuper. »",
             "ruRU": "«Вот снаряжение, о котором им следует позаботиться.»"
         },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab9": {
-            "enGB": "« I would like to modify some equipment I already entrusted to you. »",
-            "frFR": "« J'aimerais modifier un équipement que je vous ai confié. »",
+            "enGB": "« I would like to modify some equipment I already entrusted to you. »",
+            "frFR": "« J'aimerais modifier un équipement que je vous ai confié. »",
             "ruRU": "«Я бы хотел улучшить вещи, которое уже передал вам.»"
         },
         "fa3e1f7d4e3347bdaeba8a1b6c8baab1": {
-            "enGB": "« Forget about it. »",
-            "frFR": "« Oubliez ça. »",
-            "ruRU": "«Забудьте об этом. »"
+            "enGB": "« Forget about it. »",
+            "frFR": "« Oubliez ça. »",
+            "ruRU": "«Забудьте об этом. »"
         },
         "fa3e1f7d4e3347bdaeba8a1b6c8baab2": {
-            "enGB": "« I'm listening. Show me the equipment in question, I'll see that it's sent to the best specialists in Mendev. »",
-            "frFR": "« Je vous écoute. Montrez-moi l'équipement en question, je m'occuperai de le transmettre aux meilleurs spécialistes du Mendev. »",
+            "enGB": "« I'm listening. Show me the equipment in question, I'll see that it's sent to the best specialists in Mendev. »",
+            "frFR": "« Je vous écoute. Montrez-moi l'équipement en question, je m'occuperai de le transmettre aux meilleurs spécialistes du Mendev. »",
             "ruRU": "«Я слушаю. Покажите мне это вещи, я прослежу, чтобы его отправили к лучшим специалистам в Мендев.»"
         },
         "dialog_cue_stored_item": {
-            "enGB": "« Very well, let's take a look at your stash. What enchants do you want on those items? »",
-            "frFR": "« Très bien, inspectons votre réserve. Quels enchantements souhaitez-vous appliquer à ces objets ? »",
+            "enGB": "« Very well, let's take a look at your stash. What enchants do you want on those items? »",
+            "frFR": "« Très bien, inspectons votre réserve. Quels enchantements souhaitez-vous appliquer à ces objets ? »",
             "ruRU": "«Что ж, давайте взглянем на ваши запасы. Какие чары вы хотите наложить на эти предметы?.»"
         },
         "fa3e1f7d4e3347bdaeba8a1b6c8baab3": {
-            "enGB": "« As you wish. Anything else? »",
-            "frFR": "« Entendu. Je reste à votre disposition si vous changez d'avis. Autre chose ? »",
-            "ruRU": "«Как пожелаете. Что-нибудь еще? »"
+            "enGB": "« As you wish. Anything else? »",
+            "frFR": "« Entendu. Je reste à votre disposition si vous changez d'avis. Autre chose ? »",
+            "ruRU": "«Как пожелаете. Что-нибудь еще? »"
         },
         "ui_title_workshop": {
             "enGB": "Workshop",
@@ -107,7 +252,7 @@
         },
         "ui_info_text": {
             "enGB": "This interface is designed to allow you to enchant your equipment according to the official tabletop roleplaying rules (Pathfinder 1st Edition).\n\n<b>The rules:</b>\n\nGenerally speaking, the more complex and powerful the requested enchantment, the higher its price and crafting time. The number of days required is always 1/1000 of the calculated price (see official rules for detailed formulas).\n\nWeapons and armor can only be enchanted if they already possess a minimum +1 enhancement bonus.\n\nEach enchantment has a certain \"weight.\" Weapons and armor cannot exceed a total weight of 10 by combining their different enchantments. The total weight of the selected enchantments is indicated at the bottom left (enchantment weight). Other items have no limitation.\n\nAn enchantment is designed to be applied to specific pieces of equipment (slot column). However, the rules allow bypassing this limitation by applying a penalty factor of 1.5.\n\nAll these limitations can be bypassed in the \"cheats\" tab if you wish.",
-            "frFR": "Cette interface est conçue pour vous permettre d’enchanter votre équipement selon les règles officielles du jeu de rôle papier (Pathfinder 1ère édition).\n\n<b>Les règles :</b>\n\nDe façon générale, plus l’enchantement demandé est complexe et puissant et plus son prix et son temps de fabrication augmentent. Le nombre de jours nécessaires est toujours 1/1000 du prix calculé (voir les règles officielles pour les formules détaillées).\n\nLes armes et armures ne peuvent être enchantées qu’à la condition de posséder déjà un bonus de +1 d’altération minimum.\n\nChaque enchantement possède un certain « poids ». Les armes et armures ne peuvent pas dépasser un poids total de 10 en cumulant leurs différents enchantements. Le poids total des enchantements sélectionnés est indiqué en bas à gauche (poids des enchantements). Les autres items n’ont pas de limitation.\n\nUn enchantement est conçu pour être appliqué sur des pièces d’équipement spécifiques (colonne emplacement). Les règles permettent toutefois de contourner cette limitation en appliquant alors un facteur de pénalité de 1,5.\n\nToutes ces limitations peuvent être contournées dans l’onglet « Triches » si vous le désirez.",
+            "frFR": "Cette interface est conçue pour vous permettre d’enchanter votre équipement selon les règles officielles du jeu de rôle papier (Pathfinder 1ère édition).\n\n<b>Les règles :</b>\n\nDe façon générale, plus l’enchantement demandé est complexe et puissant et plus son prix et son temps de fabrication augmentent. Le nombre de jours nécessaires est toujours 1/1000 du prix calculé (voir les règles officielles pour les formules détaillées).\n\nLes armes et armures ne peuvent être enchantées qu’à la condition de posséder déjà un bonus de +1 d’altération minimum.\n\nChaque enchantement possède un certain « poids ». Les armes et armures ne peuvent pas dépasser un poids total de 10 en cumulant leurs différents enchantements. Le poids total des enchantements sélectionnés est indiqué en bas à gauche (poids des enchantements). Les autres items n’ont pas de limitation.\n\nUn enchantement est conçu pour être appliqué sur des pièces d’équipement spécifiques (colonne emplacement). Les règles permettent toutefois de contourner cette limitation en appliquant alors un facteur de pénalité de 1,5.\n\nToutes ces limitations peuvent être contournées dans l’onglet « Triches » si vous le désirez.",
             "ruRU": "Этот интерфейс разработан, чтобы вы могли зачаровывать свое снаряжение в соответствии с официальными правилами настольной ролевой игры (Pathfinder 1-й редакции).\n\n<b>Правила:</b>\n\nВ целом, чем сложнее и мощнее запрашиваемое зачарование, тем выше его цена и время изготовления. Количество необходимых дней всегда составляет 1/1000 от рассчитанной цены (подробные формулы см. в официальных правилах).\n\nОружие и доспехи могут быть зачарованы только в том случае, если они уже имеют бонус усиления как минимум +1.\n\nКаждое зачарование имеет определенный «вес». Оружие и доспехи не могут превышать общий вес 10 при сочетании их различных зачарований. Общий вес выбранных зачарований указан внизу слева (вес зачарований). У других предметов ограничений нет.\n\nЗачарование предназначено для применения к конкретным предметам экипировки (колонка «слот»). Однако правила позволяют обойти это ограничение, применив штрафной коэффициент 1,5.\n\nВсе эти ограничения можно обойти на вкладке «читы», если вы того пожелаете."
         },
         "ui_no_item_stashed": {

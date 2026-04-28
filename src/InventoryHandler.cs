@@ -272,7 +272,7 @@ namespace CraftingSystem
                 if (workshop != null && workshop.ActiveProjects.Any(p => p.Item == item))
                 {
                     Kingmaker.PubSubSystem.EventBus.RaiseEvent<Kingmaker.PubSubSystem.IWarningNotificationUIHandler>(
-                        h => h.HandleWarning("FORGE : Cet équipement est en cours de modification !")
+                        h => h.HandleWarning(Helpers.GetString("ui_warning_forge_active", "FORGE : Cet équipement est en cours de modification !"))
                     );
 
                     // Main.ModEntry.Logger.Log($"[SÉCURITÉ] Retrait bloqué pour {item.Name} car un projet est actif.");
@@ -292,7 +292,7 @@ namespace CraftingSystem
             if (DeferredInventoryOpener.IsCraftingWindowOpen)
             {
                 Main.ModEntry.Logger.Log("[ATELIER-DEBUG] LootVM intercepté avec succès, injection de l'Atelier...");
-                var mockLoot = new Kingmaker.UI.MVVM._VM.Loot.LootObjectVM("Atelier", "Enchantement", DeferredInventoryOpener.CraftingBox, Kingmaker.UI.MVVM._VM.Loot.LootContextVM.LootWindowMode.PlayerChest, 1);
+                var mockLoot = new Kingmaker.UI.MVVM._VM.Loot.LootObjectVM(Helpers.GetString("ui_loot_workshop_title", "Atelier"), Helpers.GetString("ui_loot_enchantment_subtitle", "Enchantement"), DeferredInventoryOpener.CraftingBox, Kingmaker.UI.MVVM._VM.Loot.LootContextVM.LootWindowMode.PlayerChest, 1);
                 var prop = typeof(Kingmaker.UI.MVVM._VM.Loot.LootVM).GetProperty("LootObjects") ?? typeof(Kingmaker.UI.MVVM._VM.Loot.LootVM).GetProperty("ContextLoot");
                 if (prop != null)
                 {

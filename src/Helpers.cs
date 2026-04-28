@@ -184,7 +184,7 @@ namespace CraftingSystem
             }
         }
 
-        public static BlueprintCue CreateCue(string guid, string name, string textKey, Kingmaker.DialogSystem.DialogSpeaker speaker = null)
+        public static BlueprintCue CreateCue(string guid, string name, string textKey, Kingmaker.DialogSystem.DialogSpeaker speaker = null, BlueprintDialog parent = null)
         {
             var cue = CreateBlueprint<BlueprintCue>(guid, name);
             string fallbackText = CustomStrings.ContainsKey(textKey) ? CustomStrings[textKey] : "Missing Translation";
@@ -199,7 +199,26 @@ namespace CraftingSystem
             cue.Continue = new Kingmaker.DialogSystem.CueSelection() { Cues = new List<BlueprintCueBaseReference>() };
             
             if (speaker != null) cue.Speaker = speaker;
+            cue.Continue = new Kingmaker.DialogSystem.CueSelection() { Cues = new List<BlueprintCueBaseReference>(), Strategy = Kingmaker.DialogSystem.Strategy.First };
+            cue.AlignmentShift = new Kingmaker.UnitLogic.Alignments.AlignmentShift();
             
+            if (parent != null) {
+                var dialogRef = parent.ToReference<BlueprintDialogReference>();
+                // Try both possible names for the field across different game versions
+                var field = typeof(BlueprintCue).GetField("m_Dialog", BindingFlags.NonPublic | BindingFlags.Instance) 
+                         ?? typeof(BlueprintCue).GetField("m_ParentDialog", BindingFlags.NonPublic | BindingFlags.Instance);
+                
+                if (field != null) {
+                    field.SetValue(cue, dialogRef);
+                } else {
+                    Main.ModEntry.Logger.Warning($"[Debug_storyteller] Could not find m_Dialog field on BlueprintCue via reflection.");
+                }
+            }
+
+            if (cue.Speaker == null) {
+                cue.Speaker = new Kingmaker.DialogSystem.DialogSpeaker();
+            }
+
             return cue;
         }
 
@@ -253,6 +272,11 @@ namespace CraftingSystem
                     addMethod.Invoke(cache, new object[] { bp });
                 else
                     addMethod.Invoke(cache, new object[] { bp.AssetGuid, bp });
+                
+                // --- DEBUG LOG ---
+                if (bp.name.Contains("CraftingSystem")) {
+                    Main.ModEntry.Logger.Log($"[Debug_storyteller] Registered Blueprint: {bp.name} (Guid: {bp.AssetGuid})");
+                }
             }
             
             init?.Invoke(bp);

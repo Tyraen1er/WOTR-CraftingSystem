@@ -1,4 +1,2 @@
-- Ajouter le nom de la colonne "Emplacement"
-- intern25name à  gérer. A cause des AcidResistance30Enchant et autre
-- Liste d'enchantement alterner couleur pour mieux voir les lignes
 - Wands, scroll et potions ?
+- creer ses propres enchantements

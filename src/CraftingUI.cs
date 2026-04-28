@@ -311,7 +311,7 @@ namespace CraftingSystem
                 }
             }
             
-            if (CButton("X", GUILayout.Width(closeWidth), GUILayout.Height(35 * scale))) IsOpen = false;
+            if (CButton(Helpers.GetString("ui_btn_close_x", "X"), GUILayout.Width(closeWidth), GUILayout.Height(35 * scale))) IsOpen = false;
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
@@ -639,7 +639,7 @@ namespace CraftingSystem
 
                 GUILayout.BeginHorizontal();
                 GUI.enabled = (currentPage > 0);
-                if (CButton("<<", GUILayout.Width(50 * scale))) currentPage--;
+                if (CButton(Helpers.GetString("ui_btn_prev", "<<"), GUILayout.Width(50 * scale))) currentPage--;
                 GUI.enabled = true;
                 
                 GUILayout.FlexibleSpace();
@@ -665,7 +665,7 @@ namespace CraftingSystem
                 GUILayout.FlexibleSpace();
                 
                 GUI.enabled = (currentPage < totalPages - 1);
-                if (CButton(">>", GUILayout.Width(50 * scale))) currentPage++;
+                if (CButton(Helpers.GetString("ui_btn_next", ">>"), GUILayout.Width(50 * scale))) currentPage++;
                 GUI.enabled = true;
                 GUILayout.EndHorizontal();
 
@@ -1127,7 +1127,7 @@ namespace CraftingSystem
             GUILayout.BeginHorizontal();
             GUILayout.Label(activeDescriptionTitle, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(16 * scale) });
             GUILayout.FlexibleSpace();
-            if (CButton("X", GUILayout.Width(30 * scale))) activeDescriptionPopup = "";
+            if (CButton(Helpers.GetString("ui_btn_close_x", "X"), GUILayout.Width(30 * scale))) activeDescriptionPopup = "";
             GUILayout.EndHorizontal();
             
             GUILayout.Space(10);
@@ -1166,7 +1166,7 @@ namespace CraftingSystem
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
-            if (CButton("Oui", GUILayout.Width(150 * scale), GUILayout.Height(40 * scale)))
+            if (CButton(Helpers.GetString("ui_btn_yes", "Oui"), GUILayout.Width(150 * scale), GUILayout.Height(40 * scale)))
             {
                 CraftingSettings.HasOpenedCheats = true;
                 CraftingSettings.SaveSettings();
@@ -1176,7 +1176,7 @@ namespace CraftingSystem
             
             GUILayout.Space(50);
             
-            if (CButton("Non", GUILayout.Width(150 * scale), GUILayout.Height(40 * scale)))
+            if (CButton(Helpers.GetString("ui_btn_no", "Non"), GUILayout.Width(150 * scale), GUILayout.Height(40 * scale)))
             {
                 showAbadarWarning = false;
                 ShowSettings = false;

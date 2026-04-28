@@ -20,6 +20,7 @@ namespace CraftingSystem
     {
         public static UnityModManager.ModEntry ModEntry;
         public static Harmony HarmonyInstance;
+        public static UnityModManager.ModEntry.ModLogger log => ModEntry.Logger;
 
         static bool Load(UnityModManager.ModEntry modEntry)
         {
@@ -130,8 +131,12 @@ namespace CraftingSystem
                 EnchantmentScanner.Load();
 
                 // --- DUMP DES ENCHANTEMENTS ---
-                // À commenter ou supprimer une fois que tu as récupéré ton fichier Enchantments_Dump.json
+                // À commenter
                 //EnchantmentDumper.DumpAll();
+                
+                // --- DUMP STORYTELLER ---
+                // À commenter
+                //StorytellerDumper.Initialize();
                 
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Error in BlueprintsCache.Init: {ex}");

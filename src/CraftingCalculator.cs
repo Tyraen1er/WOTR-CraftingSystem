@@ -319,18 +319,18 @@ namespace CraftingSystem
 
         public static string FormatRemainingTime(long remainingTicks)
         {
-            if (remainingTicks <= 0) return "Terminé";
+            if (remainingTicks <= 0) return Helpers.GetString("ui_time_done", "Terminé");
             TimeSpan ts = TimeSpan.FromTicks(remainingTicks);
-            if (ts.Days > 0 && ts.Hours > 0) return $"{ts.Days} jour(s) et {ts.Hours} heure(s)";
-            if (ts.Days > 0) return $"{ts.Days} jour(s)";
-            if (ts.Hours > 0) return $"{ts.Hours} heure(s)";
-            return "Moins d'une heure";
+            if (ts.Days > 0 && ts.Hours > 0) return string.Format(Helpers.GetString("ui_time_days_hours", "{0} jour(s) et {1} heure(s)"), ts.Days, ts.Hours);
+            if (ts.Days > 0) return string.Format(Helpers.GetString("ui_time_days", "{0} jour(s)"), ts.Days);
+            if (ts.Hours > 0) return string.Format(Helpers.GetString("ui_time_hours", "{0} heure(s)"), ts.Hours);
+            return Helpers.GetString("ui_time_less_than_hour", "Moins d'une heure");
         }
 
         public static string ValidateSelectionBeforeStart(ItemEntity item, List<EnchantmentData> selectedList, long totalCost)
         {
-            if (item == null || selectedList == null || selectedList.Count == 0) return "Aucun enchantement sélectionné.";
-            if (Game.Instance.Player.Money < totalCost) return "Vous n'avez pas assez d'or pour lancer tous les projets sélectionnés.";
+            if (item == null || selectedList == null || selectedList.Count == 0) return Helpers.GetString("err_no_enchant_selected", "Aucun enchantement sélectionné.");
+            if (Game.Instance.Player.Money < totalCost) return Helpers.GetString("err_not_enough_gold", "Vous n'avez pas assez d'or pour lancer tous les projets sélectionnés.");
 
             int currentPoints = CalculateDisplayedEnchantmentPoints(item);
             int currentEnhancement = 0;
