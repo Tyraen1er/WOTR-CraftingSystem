@@ -99,9 +99,9 @@ namespace CraftingSystem
                 if (bpCache == null) return;
 
                 List<string> keysSnapshot;
-                lock (EnchantmentScanner.MasterList)
+                lock (Enchantmentscanner.MasterList)
                 {
-                    keysSnapshot = EnchantmentScanner.MasterList.Select(e => e.Guid).ToList();
+                    keysSnapshot = Enchantmentscanner.MasterList.Select(e => e.Guid).ToList();
                 }
 
                 foreach (var guidStr in keysSnapshot)

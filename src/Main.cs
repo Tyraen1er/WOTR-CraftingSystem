@@ -128,7 +128,10 @@ namespace CraftingSystem
                 DialogInjector.RegisterDialogChanges();
                 
                 // --- CHARGEMENT SIMPLE JSON AU DÉMARRAGE ---
-                EnchantmentScanner.Load();
+                Enchantmentscanner.Load();
+                
+                // --- INJECTION DES ENCHANTEMENTS CUSTOM (JSON COMPLEXE) ---
+                CustomEnchantmentsBuilder.BuildAndInjectAll();
 
                 // --- DUMP DES ENCHANTEMENTS ---
                 // À commenter

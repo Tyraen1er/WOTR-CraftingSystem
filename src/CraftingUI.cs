@@ -53,12 +53,14 @@ namespace CraftingSystem
         private Vector2 descriptionScrollPosition;
         public string feedbackMessage = "";
         private string newNameDraft = "";
-        private string enchantmentSearch = "";
+        private string Enchantmentsearch = "";
         private ItemEntity selectedItem = null;
         private bool lastOpenState = false;
         private string activeDescriptionPopup = "";
         private string activeDescriptionTitle = "";
         private bool showAbadarWarning = false;
+        private bool showCustomEnchantPage = false;
+        private List<EnchantmentData> customEnchantments = new List<EnchantmentData>();
         
         // Paging & Optimization
         private List<EnchantmentData> cachedFilteredEnchantments = new List<EnchantmentData>();
@@ -203,7 +205,7 @@ namespace CraftingSystem
             processIndex = 0;
             inputSubmitDown = false;
 
-            EnchantmentScanner.StartSync();
+            Enchantmentscanner.StartSync();
 
             var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
             workshop?.CheckAndFinishProjects();
@@ -298,9 +300,22 @@ namespace CraftingSystem
             
             if (selectedItem != null && !ShowSettings)
             {
+                if (CButtonStyled(new GUIContent(Helpers.GetString("ui_btn_custom_enchants", "Custom Enchantments")), navStyle, GUILayout.Width(180 * scale), GUILayout.Height(35 * scale)))
+                {
+                    showCustomEnchantPage = !showCustomEnchantPage;
+                    if (showCustomEnchantPage)
+                    {
+                        // Charger les enchants custom
+                        customEnchantments = Enchantmentscanner.MasterList
+                            .Where(e => CustomEnchantmentsBuilder.InjectedGuids.Contains(BlueprintGuid.Parse(e.Guid)))
+                            .ToList();
+                    }
+                }
+
                 if (CButtonStyled(new GUIContent(Helpers.GetString("ui_btn_back", "<< BACK")), navStyle, GUILayout.Width(130 * scale), GUILayout.Height(35 * scale))) 
                 {
                     selectedItem = null;
+                    showCustomEnchantPage = false;
                     newNameDraft = "";
                     queuedEnchantGuids.Clear();
                     activeCategories.Clear();
@@ -334,6 +349,7 @@ namespace CraftingSystem
             
             if (showAbadarWarning) DrawAbadarWarningGUI(scale);
             else if (ShowSettings) DrawSettingsGUI(scale);
+            else if (showCustomEnchantPage) DrawCustomEnchantmentGUI(scale);
             else if (selectedItem != null) DrawItemModificationGUI(scale);
             else DrawInventoryGUI(scale);
         }
@@ -454,13 +470,13 @@ namespace CraftingSystem
             
             // --- GESTION DU REFILTRAGE ---
             bool selectionChanged = filtersDirty;
-            if (selectedItem != lastSelectedItem || enchantmentSearch != lastSearch || activeCategories.Count != lastCategoryCount || activeTypes.Count != lastTypeCount || selectionChanged)
+            if (selectedItem != lastSelectedItem || Enchantmentsearch != lastSearch || activeCategories.Count != lastCategoryCount || activeTypes.Count != lastTypeCount || selectionChanged)
             {
                 // On détecte si c'est UNIQUEMENT la sélection qui a changé
-                bool filtersUnchanged = (selectedItem == lastSelectedItem && enchantmentSearch == lastSearch && activeCategories.Count == lastCategoryCount && activeTypes.Count == lastTypeCount);
+                bool filtersUnchanged = (selectedItem == lastSelectedItem && Enchantmentsearch == lastSearch && activeCategories.Count == lastCategoryCount && activeTypes.Count == lastTypeCount);
                 
                 lastSelectedItem = selectedItem;
-                lastSearch = enchantmentSearch;
+                lastSearch = Enchantmentsearch;
                 lastCategoryCount = activeCategories.Count;
                 lastTypeCount = activeTypes.Count;
                 filtersDirty = false;
@@ -485,7 +501,7 @@ namespace CraftingSystem
                 foreach (var ench in currentEnchants)
                 {
                     string guid = ench.Blueprint.AssetGuid.ToString();
-                    var overrideData = EnchantmentScanner.GetByGuid(guid);
+                    var overrideData = Enchantmentscanner.GetByGuid(guid);
                     int pointValue = overrideData?.PointCost ?? ench.Blueprint.EnchantmentCost;
                     if (pointValue < 0) pointValue = 0;
                     GUILayout.BeginHorizontal(GUI.skin.box);
@@ -550,9 +566,9 @@ namespace CraftingSystem
 
             // On récupère TOUTE la liste directement, pour laisser l'UI gérer les types
             List<EnchantmentData> rawAvailable;
-            lock (EnchantmentScanner.MasterList)
+            lock (Enchantmentscanner.MasterList)
             {
-                rawAvailable = EnchantmentScanner.MasterList.ToList();
+                rawAvailable = Enchantmentscanner.MasterList.ToList();
             }
 
             // On filtre d'abord par Type
@@ -579,7 +595,7 @@ namespace CraftingSystem
             // -- UI RECHERCHE & FILTRES CATÉGORIES --
             GUILayout.BeginHorizontal();
             GUILayout.Label(Helpers.GetString("ui_search_label", "Search: "), GUILayout.Width(100 * scale));
-            enchantmentSearch = CTextField(enchantmentSearch, GUILayout.ExpandWidth(true));
+            Enchantmentsearch = CTextField(Enchantmentsearch, GUILayout.ExpandWidth(true));
             
             string filterBtnText = activeCategories.Count > 0 ? string.Format(Helpers.GetString("ui_filter_active_btn", "Filters ({0}) \u25bc"), activeCategories.Count) : Helpers.GetString("ui_filter_all_btn", "Filters (All) \u25bc");
             if (CButton(filterBtnText, GUILayout.Width(130 * scale))) showCategoryFilter = !showCategoryFilter;
@@ -619,16 +635,16 @@ namespace CraftingSystem
 
             GUILayout.Space(5);
 
-            if (EnchantmentScanner.IsSyncing)
+            if (Enchantmentscanner.IsSyncing)
             {
-                GUILayout.Label($"({EnchantmentScanner.LastSyncMessage})", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label($"({Enchantmentscanner.LastSyncMessage})", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
             }
 
             GUILayout.Space(5);
 
             GUILayout.BeginVertical(GUI.skin.box);
 
-            if (EnchantmentScanner.IsSyncing)
+            if (Enchantmentscanner.IsSyncing)
             {
                 GUILayout.Label(Helpers.GetString("ui_scan_in_progress", "Scan en cours — aucun enchantement disponible pour l'instant."), new GUIStyle(GUI.skin.label) { fontSize = (int)(12 * scale), alignment = TextAnchor.MiddleCenter });
             }
@@ -696,7 +712,7 @@ namespace CraftingSystem
                 GUILayout.Label(Helpers.GetString("ui_header_cost", "Cost / Time"), headerStyle, GUILayout.Width(180 * scale));
                 GUILayout.EndHorizontal();
 
-                var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
+                var currentSelectedList = queuedEnchantGuids.Select(g => Enchantmentscanner.GetByGuid(g)).Where(d => d != null).ToList();
                 
                 // On ne boucle QUE sur les éléments de la page actuelle
                 int startIdx = currentPage * itemsPerPage;
@@ -705,112 +721,7 @@ namespace CraftingSystem
                 for (int i = startIdx; i < endIdx; i++)
                 {
                     var data = cachedFilteredEnchantments[i];
-                    bool isQueued = queuedEnchantGuids.Contains(data.Guid);
-
-                    var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
-                    string displayName = DescriptionManager.GetDisplayName(bp, data);
-                    
-                    long costToPay;
-                    if (isQueued)
-                    {
-                        int idx = currentSelectedList.FindIndex(e => e.Guid == data.Guid);
-                        var preceding = currentSelectedList.Take(idx);
-                        costToPay = CraftingCalculator.GetMarginalCost(selectedItem, preceding, data, CraftingSettings.CostMultiplier);
-                    }
-                    else
-                    {
-                        costToPay = CraftingCalculator.GetMarginalCost(selectedItem, currentSelectedList, data, CraftingSettings.CostMultiplier);
-                    }
-                    int days = CraftingCalculator.GetCraftingDays(costToPay, CraftingSettings.InstantCrafting);
-
-                    string internalName = bp != null ? bp.name : (data.Name ?? "");
-
-                    GUILayout.BeginHorizontal(GUI.skin.box);
-                    GUIStyle toggleStyle = new GUIStyle(GUI.skin.label) { richText = true, alignment = TextAnchor.MiddleLeft };
-                    
-                    string label = $"<size={(int)(14 * scale)}>{displayName}</size> <color=#888888><size={(int)(12 * scale)}>({internalName})</size></color>";
-                    bool newSelected = CToggleStyled(isQueued, label, toggleStyle, GUILayout.ExpandWidth(true));
-                    
-                    DescriptionSource descSource = DescriptionSource.None;
-                    string descForData = DescriptionManager.GetLocalizedDescription(bp, data, out descSource);
-                    if (!string.IsNullOrEmpty(descForData))
-                    {
-                        string color = "#3498db"; // Bleu (Official)
-                        if (descSource == DescriptionSource.Generated) color = "#f1c40f"; // Jaune
-                        else if (descSource == DescriptionSource.None) color = "#e74c3c"; // Rouge
-
-                        GUIContent infoContent = new GUIContent($"<color={color}>{Helpers.GetString("ui_btn_description", "Description")}</color>");
-                        GUIStyle infoStyle = new GUIStyle(GUI.skin.button) { 
-                            richText = true, 
-                            fontStyle = FontStyle.Bold, 
-                            fontSize = (int)(9 * scale),
-                            padding = new RectOffset(0, 0, 0, 0)
-                        };
-                        if (CButtonStyled(infoContent, infoStyle, GUILayout.Width(100 * scale), GUILayout.Height(15 * scale))) 
-                        {
-                            activeDescriptionTitle = displayName;
-                            activeDescriptionPopup = descForData;
-                        }
-                    }
-                    else GUILayout.Space(25 * scale);
-
-                    // -- AFFICHAGE DU SLOT ATTENDU (LOCALISÉ) --
-                    bool isWrong = CraftingCalculator.IsWrongSlot(selectedItem, data);
-                    string slotColor = isWrong ? "#f1c40f" : "#2ecc71"; // Jaune (Avertissement) / Vert (Correct)
-                    
-                    string expectedSlotsText = "";
-                    if (data.Slots != null && data.Slots.Count > 0)
-                    {
-                        var localizedSlots = data.Slots.Select(s => Helpers.GetString("ui_slot_" + s.ToLower(), s));
-                        expectedSlotsText = string.Join(", ", localizedSlots);
-                    }
-                    else
-                    {
-                        expectedSlotsText = Helpers.GetString("ui_slot_" + (data.Type?.ToLower() ?? "other"), data.Type ?? "Other");
-                    }
-
-                    GUILayout.Label($"<color={slotColor}>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(10 * scale), alignment = TextAnchor.MiddleRight }, GUILayout.Width(120 * scale));
-
-                    string currency = Helpers.GetString("ui_currency_gp", "gp");
-                    string daysLabel = Helpers.GetString("ui_time_days_short", "d");
-                    GUILayout.Label($"{costToPay} {currency} / {days} {daysLabel}   (+{data.PointCost})", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleRight, fontSize = (int)(14 * scale) }, GUILayout.Width(180 * scale));
-                    
-                    if (newSelected && !isQueued) 
-                    {
-                        string baseName = CraftingCalculator.GetEnchantmentFamily(internalName);
-                        if (!string.IsNullOrEmpty(baseName))
-                        {
-                            queuedEnchantGuids.RemoveAll(guid => 
-                            {
-                                var otherData = EnchantmentScanner.GetByGuid(guid);
-                                if (otherData != null)
-                                {
-                                    var otherBp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(guid));
-                                    string otherInternal = otherBp != null ? otherBp.name : (otherData.Name ?? "");
-                                    string otherBase = CraftingCalculator.GetEnchantmentFamily(otherInternal);
-                                    return otherBase == baseName;
-                                }
-                                return false;
-                            });
-                        }
-                        queuedEnchantGuids.Add(data.Guid);
-                        filtersDirty = true;
-                    }
-                    if (!newSelected && isQueued) 
-                    {
-                        queuedEnchantGuids.Remove(data.Guid);
-                        filtersDirty = true;
-                    }
-
-                    GUILayout.EndHorizontal();
-                    if (Event.current.type == EventType.Repaint && (i - startIdx) % 2 != 0)
-                    {
-                        Rect lastRect = GUILayoutUtility.GetLastRect();
-                        Color oldC = GUI.color;
-                        GUI.color = new Color(1f, 1f, 1f, 0.06f); // Calque blanc très léger (6% d'opacité)
-                        GUI.DrawTexture(lastRect, Texture2D.whiteTexture);
-                        GUI.color = oldC;
-                    }
+                    DrawEnchantmentRow(data, scale, i - startIdx);
                 }
             }
 
@@ -825,7 +736,7 @@ namespace CraftingSystem
             var selectedList = new List<EnchantmentData>();
             foreach (var g in queuedEnchantGuids)
             {
-                var d = EnchantmentScanner.GetByGuid(g);
+                var d = Enchantmentscanner.GetByGuid(g);
                 if (d != null)
                 {
                     selectedList.Add(d);
@@ -1000,10 +911,10 @@ namespace CraftingSystem
             string sourceLabel = "";
             switch (CraftingSettings.CurrentSourceFilter)
             {
-                case SourceFilter.TTRPG: sourceLabel = Helpers.GetString("ui_settings_source_ttrpg", "TTRPG (TTRPG enchantments only)"); break;
+                case SourceFilter.TTRPG: sourceLabel = Helpers.GetString("ui_settings_source_ttrpg", "TTRPG (TTRPG Enchantments only)"); break;
                 case SourceFilter.Owlcat: sourceLabel = Helpers.GetString("ui_settings_source_owlcat", "Owlcat (TTRPG + Owlcat)"); break;
                 case SourceFilter.OwlcatPlus: sourceLabel = Helpers.GetString("ui_settings_source_owlcatplus", "Owlcat+ (TTRPG + Owlcat + Owlcat+)"); break;
-                case SourceFilter.Mods: sourceLabel = Helpers.GetString("ui_settings_source_mods", "Mod (All non-base game enchantments)"); break;
+                case SourceFilter.Mods: sourceLabel = Helpers.GetString("ui_settings_source_mods", "Mod (All non-base game Enchantments)"); break;
                 case SourceFilter.All: sourceLabel = Helpers.GetString("ui_settings_source_all_desc", "Show all"); break;
             }
             GUILayout.Label(sourceLabel, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, fontSize = (int)(14 * scale) });
@@ -1012,10 +923,10 @@ namespace CraftingSystem
             GUILayout.Space(20);
             
             GUILayout.Label(Helpers.GetString("ui_settings_diagnostic", "Diagnostic Tools:"), settingsLabelStyle);
-            GUILayout.Label(EnchantmentScanner.LastSyncMessage, settingsLabelStyle);
+            GUILayout.Label(Enchantmentscanner.LastSyncMessage, settingsLabelStyle);
             if (CButton(Helpers.GetString("ui_settings_force_sync", "Force Synchronization (Full Scan)"), GUILayout.Height(35 * scale)))
             {
-                EnchantmentScanner.ForceSync();
+                Enchantmentscanner.ForceSync();
             }
             
             GUILayout.FlexibleSpace();
@@ -1040,9 +951,9 @@ namespace CraftingSystem
             }
 
             List<EnchantmentData> rawAvailable;
-            lock (EnchantmentScanner.MasterList)
+            lock (Enchantmentscanner.MasterList)
             {
-                rawAvailable = EnchantmentScanner.MasterList.ToList();
+                rawAvailable = Enchantmentscanner.MasterList.ToList();
             }
 
             // 1. Filtrage par Type
@@ -1050,7 +961,7 @@ namespace CraftingSystem
 
             // 2. Préparation des helpers de filtrage
             bool isWeaponOrArmor = selectedItem.Blueprint is BlueprintItemWeapon || selectedItem.Blueprint is BlueprintItemArmor;
-            var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
+            var currentSelectedList = queuedEnchantGuids.Select(g => Enchantmentscanner.GetByGuid(g)).Where(d => d != null).ToList();
             bool isReadyForSpecial = CraftingCalculator.IsItemReadyForSpecialEnchants(selectedItem, currentSelectedList);
             var presentGuids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var presentNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -1359,6 +1270,141 @@ namespace CraftingSystem
             GUI.DrawTexture(new Rect(rect.x, rect.y, thickness, rect.height), Texture2D.whiteTexture); // Gauche
             GUI.DrawTexture(new Rect(rect.x + rect.width - thickness, rect.y, thickness, rect.height), Texture2D.whiteTexture); // Droite
             GUI.color = old;
+        }
+
+        void DrawCustomEnchantmentGUI(float scale)
+        {
+            GUILayout.BeginVertical(GUI.skin.box);
+            GUILayout.Label(Helpers.GetString("ui_custom_enchants_title", "<b>CUSTOM Enchantments</b>"), new GUIStyle(GUI.skin.label) { richText = true, alignment = TextAnchor.MiddleCenter, fontSize = (int)(16 * scale) });
+            GUILayout.Space(10);
+
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true, GUILayout.ExpandHeight(true));
+
+            if (customEnchantments.Count == 0)
+            {
+                GUILayout.Label(Helpers.GetString("ui_no_custom_enchants", "No custom Enchantments found."), new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+            }
+            else
+            {
+                for (int i = 0; i < customEnchantments.Count; i++)
+                {
+                    DrawEnchantmentRow(customEnchantments[i], scale, i);
+                }
+            }
+
+            GUILayout.EndScrollView();
+            GUILayout.EndVertical();
+        }
+
+        void DrawEnchantmentRow(EnchantmentData data, float scale, int relativeIndex)
+        {
+            bool isQueued = queuedEnchantGuids.Contains(data.Guid);
+            var currentSelectedList = queuedEnchantGuids.Select(g => Enchantmentscanner.GetByGuid(g)).Where(d => d != null).ToList();
+
+            var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
+            string displayName = DescriptionManager.GetDisplayName(bp, data);
+            
+            long costToPay;
+            if (isQueued)
+            {
+                int idx = currentSelectedList.FindIndex(e => e.Guid == data.Guid);
+                var preceding = currentSelectedList.Take(idx);
+                costToPay = CraftingCalculator.GetMarginalCost(selectedItem, preceding, data, CraftingSettings.CostMultiplier);
+            }
+            else
+            {
+                costToPay = CraftingCalculator.GetMarginalCost(selectedItem, currentSelectedList, data, CraftingSettings.CostMultiplier);
+            }
+            int days = CraftingCalculator.GetCraftingDays(costToPay, CraftingSettings.InstantCrafting);
+
+            string internalName = bp != null ? bp.name : (data.Name ?? "");
+
+            GUILayout.BeginHorizontal(GUI.skin.box);
+            GUIStyle toggleStyle = new GUIStyle(GUI.skin.label) { richText = true, alignment = TextAnchor.MiddleLeft };
+            
+            string label = $"<size={(int)(14 * scale)}>{displayName}</size> <color=#888888><size={(int)(12 * scale)}>({internalName})</size></color>";
+            bool newSelected = CToggleStyled(isQueued, label, toggleStyle, GUILayout.ExpandWidth(true));
+            
+            DescriptionSource descSource = DescriptionSource.None;
+            string descForData = DescriptionManager.GetLocalizedDescription(bp, data, out descSource);
+            if (!string.IsNullOrEmpty(descForData))
+            {
+                string color = "#3498db"; // Bleu (Official)
+                if (descSource == DescriptionSource.Generated) color = "#f1c40f"; // Jaune
+                else if (descSource == DescriptionSource.None) color = "#e74c3c"; // Rouge
+
+                GUIContent infoContent = new GUIContent($"<color={color}>{Helpers.GetString("ui_btn_description", "Description")}</color>");
+                GUIStyle infoStyle = new GUIStyle(GUI.skin.button) { 
+                    richText = true, 
+                    fontStyle = FontStyle.Bold, 
+                    fontSize = (int)(9 * scale),
+                    padding = new RectOffset(0, 0, 0, 0)
+                };
+                if (CButtonStyled(infoContent, infoStyle, GUILayout.Width(100 * scale), GUILayout.Height(15 * scale))) 
+                {
+                    activeDescriptionTitle = displayName;
+                    activeDescriptionPopup = descForData;
+                }
+            }
+            else GUILayout.Space(25 * scale);
+
+            // -- AFFICHAGE DU SLOT ATTENDU (LOCALISÉ) --
+            bool isWrong = CraftingCalculator.IsWrongSlot(selectedItem, data);
+            string slotColor = isWrong ? "#f1c40f" : "#2ecc71"; // Jaune (Avertissement) / Vert (Correct)
+            
+            string expectedSlotsText = "";
+            if (data.Slots != null && data.Slots.Count > 0)
+            {
+                var localizedSlots = data.Slots.Select(s => Helpers.GetString("ui_slot_" + s.ToLower(), s));
+                expectedSlotsText = string.Join(", ", localizedSlots);
+            }
+            else
+            {
+                expectedSlotsText = Helpers.GetString("ui_slot_" + (data.Type?.ToLower() ?? "other"), data.Type ?? "Other");
+            }
+
+            GUILayout.Label($"<color={slotColor}>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(10 * scale), alignment = TextAnchor.MiddleRight }, GUILayout.Width(120 * scale));
+
+            string currency = Helpers.GetString("ui_currency_gp", "gp");
+            string daysLabel = Helpers.GetString("ui_time_days_short", "d");
+            GUILayout.Label($"{costToPay} {currency} / {days} {daysLabel}   (+{data.PointCost})", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleRight, fontSize = (int)(14 * scale) }, GUILayout.Width(180 * scale));
+            
+            if (newSelected && !isQueued) 
+            {
+                string baseName = CraftingCalculator.GetEnchantmentFamily(internalName);
+                if (!string.IsNullOrEmpty(baseName))
+                {
+                    queuedEnchantGuids.RemoveAll(guid => 
+                    {
+                        var otherData = Enchantmentscanner.GetByGuid(guid);
+                        if (otherData != null)
+                        {
+                            var otherBp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(guid));
+                            string otherInternal = otherBp != null ? otherBp.name : (otherData.Name ?? "");
+                            string otherBase = CraftingCalculator.GetEnchantmentFamily(otherInternal);
+                            return otherBase == baseName;
+                        }
+                        return false;
+                    });
+                }
+                queuedEnchantGuids.Add(data.Guid);
+                filtersDirty = true;
+            }
+            if (!newSelected && isQueued) 
+            {
+                queuedEnchantGuids.Remove(data.Guid);
+                filtersDirty = true;
+            }
+
+            GUILayout.EndHorizontal();
+            if (Event.current.type == EventType.Repaint && relativeIndex % 2 != 0)
+            {
+                Rect lastRect = GUILayoutUtility.GetLastRect();
+                Color oldC = GUI.color;
+                GUI.color = new Color(1f, 1f, 1f, 0.06f); // Calque blanc très léger (6% d'opacité)
+                GUI.DrawTexture(lastRect, Texture2D.whiteTexture);
+                GUI.color = oldC;
+            }
         }
     }
 }

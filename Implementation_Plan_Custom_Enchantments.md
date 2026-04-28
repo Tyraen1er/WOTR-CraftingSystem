@@ -77,7 +77,7 @@ Si vous injectez la structure du Dumper, le constructeur va crasher car il atten
 Vous devez indiquer le type de la classe et utiliser la syntaxe de référence de blueprint (`!bp_GUID`) que notre convertisseur gérera.
 ```json
 {
-  "$type": "Kingmaker.Blueprints.Items.Ecnchantments.AddUnitFeatureEquipment, Assembly-CSharp",
+  "$type": "Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment, Assembly-CSharp",
   "m_Feature": "!bp_4087b1da59fbd884caa213a554fe6c03"
 }
 ```
@@ -111,7 +111,7 @@ Heureusement, notre système JSON vous permet de le faire. Il suffit d'ajouter u
     "Type": "ArmorEnchantment", 
     "Components": [
       {
-        "$type": "Kingmaker.Blueprints.Items.Ecnchantments.AddUnitFeatureEquipment, Assembly-CSharp",
+        "$type": "Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment, Assembly-CSharp",
         "m_Feature": "!bp_Votre-GUID-Pour-La-Nouvelle-Compétence-Resist-50"
       }
     ]

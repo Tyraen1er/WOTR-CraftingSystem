@@ -61,7 +61,7 @@ namespace CraftingSystem
                 .GetEnchantmentPrefixes();
         }
 
-        public static string GetEnchantmentSuffixes(this IEnumerable<ItemEnchantment> enchants)
+        public static string GetEnchantmentsuffixes(this IEnumerable<ItemEnchantment> enchants)
         {
             if (enchants == null || !enchants.Any()) return "";
 
@@ -75,12 +75,12 @@ namespace CraftingSystem
             return suffixes.Count > 0 ? " " + string.Join(" ", suffixes) : "";
         }
 
-        public static string GetEnchantmentSuffixes(this ItemEntity item)
+        public static string GetEnchantmentsuffixes(this ItemEntity item)
         {
             // On ignore les enchantements qui donnent directement des bonus d'altération (CS0246 corrigé ici)
             string text = item.Enchantments
                 .Where(e => e.GetComponent<WeaponEnhancementBonus>() == null && e.GetComponent<ArmorEnhancementBonus>() == null)
-                .GetEnchantmentSuffixes();
+                .GetEnchantmentsuffixes();
 
             int totalEnhancement = GameHelper.GetItemEnhancementBonus(item);
             if (totalEnhancement > 0)
@@ -90,12 +90,12 @@ namespace CraftingSystem
             return text;
         }
 
-        public static string GetCustomEnchantmentSuffixes(this ItemEntity item)
+        public static string GetCustomEnchantmentsuffixes(this ItemEntity item)
         {
             string text = item.Enchantments
                 .Where(e => e.GetComponent<WeaponEnhancementBonus>() == null && e.GetComponent<ArmorEnhancementBonus>() == null)
                 .Where(e => !item.Blueprint.Enchantments.Contains(e.Blueprint))
-                .GetEnchantmentSuffixes();
+                .GetEnchantmentsuffixes();
 
             int totalEnhancement = GameHelper.GetItemEnhancementBonus(item);
             
@@ -163,11 +163,11 @@ namespace CraftingSystem
             string name = "";
             if (string.IsNullOrEmpty(uniqueName)) 
             {
-                name = item.GetEnchantmentPrefixes() + defaultName + item.GetEnchantmentSuffixes();
+                name = item.GetEnchantmentPrefixes() + defaultName + item.GetEnchantmentsuffixes();
             } 
             else 
             {
-                var suffixes = item.GetCustomEnchantmentSuffixes();
+                var suffixes = item.GetCustomEnchantmentsuffixes();
                 if (System.Text.RegularExpressions.Regex.Match(suffixes, @"\+\d").Success) 
                 {
                     name = item.GetCustomEnchantmentPrefixes() + System.Text.RegularExpressions.Regex.Replace(uniqueName, @"\+\d", "") + suffixes;

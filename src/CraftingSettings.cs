@@ -146,4 +146,4 @@ namespace CraftingSystem
             catch (Exception ex) { Main.ModEntry.Logger.Error($"[ATELIER] Failed to save UI settings: {ex}"); }
         }
     }
-}
+}

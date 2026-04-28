@@ -18,7 +18,7 @@ using Kingmaker.Blueprints.JsonSystem.BinaryFormat;
 using Kingmaker.Blueprints.JsonSystem.Converters;
 
 //
-// EnchantmentScanner.cs
+// Enchantmentscanner.cs
 //
 
 namespace CraftingSystem
@@ -87,7 +87,7 @@ namespace CraftingSystem
         public BlueprintItemEnchantment Blueprint => ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(Guid)) as BlueprintItemEnchantment;
     }
 
-    public static class EnchantmentScanner
+    public static class Enchantmentscanner
     {
         public static List<EnchantmentData> MasterList = new List<EnchantmentData>();
         public static Dictionary<string, EnchantmentData> GuidMap = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
@@ -242,15 +242,18 @@ namespace CraftingSystem
                                     try {
                                         var mLoaded = bpCache.m_LoadedBlueprints;
                                         if (mLoaded.TryGetValue(guid, out var entry)) {
-                                            if (entry.Offset == 0U) continue;
-                                            
-                                            // Si déjà officiellement chargé par le jeu on vérifie vite.
+                                            // Si déjà officiellement chargé par le jeu (ou injecté manuellement) on l'ajoute directement.
                                             if (entry.Blueprint != null) {
                                                 if (entry.Blueprint is BlueprintItemEnchantment bpEnchChecked) {
                                                     foundEnchants.Add(bpEnchChecked);
+                                                    if (CustomEnchantmentsBuilder.InjectedGuids.Contains(guid)) {
+                                                        Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Scanner found injected blueprint: {bpEnchChecked.name} ({guid})");
+                                                    }
                                                 }
                                                 continue;
                                             }
+                                            
+                                            if (entry.Offset == 0U) continue;
                                             
                                             // Lecture binaire brute du blueprint (sans l'injecter de force pour éviter la corruption du jeu)
                                             stream.Seek(entry.Offset, SeekOrigin.Begin);
@@ -313,7 +316,7 @@ namespace CraftingSystem
 
                     // --- RÉUSSITE TOTALE ---
                     _hasSyncedThisSession = true;
-                    LastSyncMessage = string.Format(Helpers.GetString("ui_sync_success", "Sync successful ({0} enchantments)."), MasterList.Count);
+                    LastSyncMessage = string.Format(Helpers.GetString("ui_sync_success", "Sync successful ({0} Enchantments)."), MasterList.Count);
                     // Main.ModEntry.Logger.Log($"[SYNC] Synchronisation terminée avec succès. {MasterList.Count} enchantements répertoriés.");
                 }
                 catch (Exception ex)

@@ -16,7 +16,7 @@
     
     <Nullable>disable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefaultItemExcludes>WOTR_WoljifRomanceMod\**;ToyBox-Wrath\**;WOTR-code\**;$(DefaultItemExcludes)</DefaultItemExcludes>
+    <DefaultItemExcludes>WOTR_WoljifRomanceMod\**;ToyBox-Wrath\**;CraftMaster\**;WOTR-code\**;$(DefaultItemExcludes)</DefaultItemExcludes>
 
     <!-- 2. CHEMINS PAR DÉFAUT (Si non définis dans UserConfig.props) -->
     <WrathPath Condition="'$(WrathPath)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed</WrathPath>
@@ -110,12 +110,14 @@
     <None Include="ModConfig\Info.json" />
     <None Include="ModConfig\Localization.json" />
     <None Include="ModConfig\EnchantmentTemplates.json" />
+    <None Include="ModConfig\EnchantmentDescriptionGlossary.json" />
+    <None Include="ModConfig\CustomEnchants.json" />
     <None Include="Enchantments.csv" />
   </ItemGroup>
 
 <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
-      <ModFiles Include="$(TargetDir)$(TargetName).dll;ModConfig\Info.json;ModConfig\Localization.json;ModConfig\Enchantments.json;ModConfig\EnchantmentTemplates.json;ModConfig\EnchantmentDescriptionGlossary.json" />
+      <ModFiles Include="$(TargetDir)$(TargetName).dll;ModConfig\Info.json;ModConfig\Localization.json;ModConfig\Enchantments.json;ModConfig\EnchantmentTemplates.json;ModConfig\EnchantmentDescriptionGlossary.json;ModConfig\CustomEnchants.json" />
     </ItemGroup>
     
     <Exec Command="python &quot;$(ProjectDir)convert_csv_to_json.py&quot; &quot;$(ProjectDir)Enchantments.csv&quot;" 

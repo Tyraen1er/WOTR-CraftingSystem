@@ -51,7 +51,7 @@ namespace CraftingSystem
             // 2. CAS PARTICULIER : INSTANTANÉ (0 JOURS)
             if (days <= 0)
             {
-                UnitPartWilcerWorkshop.ApplyEnchantmentSafely(item, bp);
+                UnitPartWilcerWorkshop.ApplyEnchantmentsafely(item, bp);
                 Main.ModEntry.Logger.Log($"[ATELIER] Application immédiate de {data.Name} sur {item.Name}.");
                 return;
             }
@@ -127,7 +127,7 @@ namespace CraftingSystem
                             continue;
                         }
 
-                        ApplyEnchantmentSafely(project.Item, bp);
+                        ApplyEnchantmentsafely(project.Item, bp);
                         completedProjects.Add(project);
                         // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Application réussie sur {itemName}");
                     }
@@ -145,7 +145,7 @@ namespace CraftingSystem
             // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Fin CheckAndFinishProjects. Projets restants : {ActiveProjects.Count}");
         }
 
-        public static void ApplyEnchantmentSafely(ItemEntity item, BlueprintItemEnchantment bp)
+        public static void ApplyEnchantmentsafely(ItemEntity item, BlueprintItemEnchantment bp)
         {
             if (item == null || bp == null) return;
 

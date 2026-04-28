@@ -1,0 +1,30 @@
+[
+  {
+    "Guid": "f087b1da59fbd884caa213a554fe6c03",
+    "Name": "MyCustomAcidResist50Feature",
+    "Type": "Feature", 
+    "Components": [
+      {
+        "$type": "Kingmaker.UnitLogic.FactLogic.AddDamageResistanceEnergy, Assembly-CSharp",
+        "Type": "Acid",
+        "Value": { "ValueType": "Simple", "Value": 50 }
+      }
+    ]
+  },
+  {
+    "Guid": "f087b1da59fbd884caa213a554fe6c04",
+    "Name": "MyCustomAcidResist50Enchantment",
+    "Type": "ArmorEnchantment", 
+    "EnchantNameKey": "ui_custom_acid_resist_50_name",
+    "EnchantDescKey": "ui_custom_acid_resist_50_desc",
+    "Prefix": "Acid Resistant",
+    "Suffix": "of Great Ooze",
+    "EnchantmentCost": 3,
+    "Components": [
+      {
+        "$type": "Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment, Assembly-CSharp",
+        "m_Feature": "!bp_f087b1da59fbd884caa213a554fe6c03"
+      }
+    ]
+  }
+]

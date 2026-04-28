@@ -24,9 +24,9 @@ namespace CraftingSystem
                 if (__instance.m_Item == null) return;
 
                 var item = __instance.m_Item;
-                var enchantments = item.Enchantments.Where(e => !e.IsTemporary && e.Blueprint != null).ToList();
+                var Enchantments = item.Enchantments.Where(e => !e.IsTemporary && e.Blueprint != null).ToList();
 
-                if (enchantments.Count == 0) return;
+                if (Enchantments.Count == 0) return;
 
                 // Création d'un bloc de texte pour nos descriptions d'enchantements
                 StringBuilder sb = new StringBuilder();
@@ -36,7 +36,7 @@ namespace CraftingSystem
                 sb.AppendLine($"<size=115%><b><color=black>{title}</color></b></size>");
 
                 bool addedAny = false;
-                foreach (var ench in enchantments)
+                foreach (var ench in Enchantments)
                 {
                     DescriptionSource source;
                     string desc = DescriptionManager.GetLocalizedDescription(ench.Blueprint, null, out source);
