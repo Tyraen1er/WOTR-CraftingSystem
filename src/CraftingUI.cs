@@ -23,9 +23,27 @@ namespace CraftingSystem
             {
                 if (_isOpen == value) return;
                 _isOpen = value;
+                
+                // Reset de la navigation quand on ferme ou on ouvre
+                if (!_isOpen || _isOpen) 
+                {
+                    selectedItem = null;
+                    ShowSettings = false;
+                    newNameDraft = "";
+                    enchantmentSearch = "";
+                    queuedEnchantGuids.Clear();
+                    activeCategories.Clear();
+                    activeTypes.Clear();
+                    showCategoryFilter = false;
+                    scrollPosition = Vector2.zero;
+                    titleScrollPosition = Vector2.zero;
+                    descriptionScrollPosition = Vector2.zero;
+                    activeDescriptionPopup = "";
+                    currentPage = 0;
+                    filtersDirty = true;
+                }
+
                 ToggleHUD(!_isOpen);
-                // Nous utilisons des Harmony Patchs externes pour la manette et la caméra
-                // (Les patchs se font dans InventoryHandler.cs)
             }
         }
         public bool ShowSettings = false;
@@ -178,8 +196,6 @@ namespace CraftingSystem
 
             if (!lastOpenState)
             {
-                selectedItem = null;
-                ShowSettings = false;
                 lastOpenState = true;
             }
 
