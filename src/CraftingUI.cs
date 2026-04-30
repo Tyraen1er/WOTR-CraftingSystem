@@ -284,7 +284,7 @@ namespace CraftingSystem
 
             if (!string.IsNullOrEmpty(feedbackMessage))
             {
-                GUILayout.Label(feedbackMessage, new GUIStyle(GUI.skin.label) { wordWrap = true, fontSize = (int)(18 * scale) });
+                GUILayout.Label(feedbackMessage, new GUIStyle(GUI.skin.label) { wordWrap = true, fontSize = (int)(FONT_LARGE * scale) });
                 if (CButton(Helpers.GetString("ui_btn_ok", "OK"), GUILayout.Height(40 * scale))) feedbackMessage = "";
                 return;
             }
@@ -298,12 +298,12 @@ namespace CraftingSystem
             else title = Helpers.GetString("ui_title_select", "Item Selection");
             
             titleScrollPosition = GUILayout.BeginScrollView(titleScrollPosition, GUIStyle.none, GUIStyle.none, GUILayout.ExpandWidth(true), GUILayout.Height(45 * scale));
-            GUILayout.Label(title, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(16 * scale), wordWrap = false });
+            GUILayout.Label(title, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(FONT_LARGE * scale), wordWrap = false });
             GUILayout.EndScrollView();
             
             GUILayout.Space(10);
 
-            GUIStyle navStyle = new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold, fontSize = (int)(14 * scale) };
+            GUIStyle navStyle = new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold, fontSize = (int)(FONT_NORMAL * scale) };
 
             if (CButtonStyled(new GUIContent(Helpers.GetString("ui_btn_info", "Information")), navStyle, GUILayout.Width(130 * scale), GUILayout.Height(35 * scale)))
             {
@@ -527,7 +527,7 @@ namespace CraftingSystem
                     else 
                     {
                         color = "#e74c3c"; // Rouge (Fallback / TODO)
-                        if (string.IsNullOrEmpty(appliedDesc)) appliedDesc = "TODO: Description needed for this enchantment.";
+                        if (string.IsNullOrEmpty(appliedDesc)) appliedDesc = Helpers.GetString("ui_desc_needed", "TODO: Description needed for this enchantment.");
                     }
 
                     GUIContent infoContent = new GUIContent($"<color={color}>{Helpers.GetString("ui_btn_description", "Description")}</color>");
@@ -548,7 +548,8 @@ namespace CraftingSystem
                     if (CButton(Helpers.GetString("ui_btn_remove", "Remove"), GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
                     {
                         selectedItem.RemoveEnchantment(ench);
-                        selectedItem.Identify(); 
+                        selectedItem.Identify();
+                        filtersDirty = true;
                     }
                     GUILayout.EndHorizontal();
                 }
@@ -692,37 +693,59 @@ namespace CraftingSystem
                 int totalPages = Mathf.Max(1, Mathf.CeilToInt((float)totalItems / CraftingSettings.ItemsPerPage));
                 if (currentPage >= totalPages) currentPage = totalPages - 1;
 
+
                 GUILayout.BeginHorizontal();
-                GUI.enabled = (currentPage > 0);
-                if (CButton(Helpers.GetString("ui_btn_prev", "<<"), GUILayout.Width(50 * scale))) currentPage--;
-                GUI.enabled = true;
-                
-                GUILayout.FlexibleSpace();
-                
-                // -- ALLER À LA PAGE --
                 GUIStyle paginationStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_SMALL * scale), alignment = TextAnchor.MiddleLeft };
-                GUILayout.Label(Helpers.GetString("ui_pagination_goto", "Aller à : "), paginationStyle, GUILayout.Width(70 * scale));
-                
                 GUIStyle pageInputStyle = new GUIStyle(GUI.skin.textField) { fontSize = (int)(FONT_SMALL * scale), alignment = TextAnchor.MiddleCenter };
-                pageInput = CTextFieldStyled(pageInput, pageInputStyle, GUILayout.Width(50 * scale), GUILayout.Height(25 * scale));
-                if (CButton(Helpers.GetString("ui_btn_go", "Go"), GUILayout.Width(40 * scale)))
+                GUIStyle pageInfoStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_SMALL * scale) };
+
+                // --- GAUCHE : NAVIGATION ---
+                if (string.IsNullOrEmpty(pageInput)) pageInput = (currentPage + 1).ToString();
+                GUI.enabled = (currentPage > 0);
+                if (CButton("<<", GUILayout.Width(40 * scale))) { currentPage = 0; pageInput = "1"; }
+                if (CButton("<", GUILayout.Width(30 * scale))) { currentPage--; pageInput = (currentPage + 1).ToString(); }
+                GUI.enabled = true;
+
+                GUILayout.Space(10 * scale);
+
+                // --- CENTRE : PAGE INTERACTIVE ---
+                GUILayout.BeginHorizontal(GUILayout.Width(180 * scale));
+                GUILayout.Label(Helpers.GetString("ui_pagination_page", "Page "), paginationStyle);
+                pageInput = CTextFieldStyled(pageInput, pageInputStyle, GUILayout.Width(40 * scale), GUILayout.Height(22 * scale));
+                
+                // Détection Entrée pour la page
+                if (Event.current.isKey && Event.current.keyCode == KeyCode.Return)
                 {
-                    if (int.TryParse(pageInput, out int p))
-                    {
+                    if (int.TryParse(pageInput, out int p)) {
                         currentPage = Mathf.Clamp(p - 1, 0, totalPages - 1);
                         pageInput = (currentPage + 1).ToString();
                     }
                 }
-                
+
+                GUILayout.Label(" / " + totalPages, paginationStyle);
+                GUILayout.EndHorizontal();
+
+                GUILayout.Space(10 * scale);
+
+                // --- CENTRE-DROITE : INFO TOTAL ---
+                GUILayout.Label($"({totalItems} {Helpers.GetString("ui_pagination_items", "items")})", pageInfoStyle);
+
+                GUILayout.Space(10 * scale);
+
+                GUI.enabled = (currentPage < totalPages - 1);
+                if (CButton(">", GUILayout.Width(30 * scale))) { currentPage++; pageInput = (currentPage + 1).ToString(); }
+                if (CButton(">>", GUILayout.Width(40 * scale))) { currentPage = totalPages - 1; pageInput = (currentPage + 1).ToString(); }
+                GUI.enabled = true;
+
                 GUILayout.FlexibleSpace();
-                GUIStyle pageInfoStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_SMALL * scale) };
-                GUILayout.Label(string.Format(Helpers.GetString("ui_pagination_info", "Page {0} / {1} ({2} items)"), currentPage + 1, totalPages, totalItems), pageInfoStyle);
-                
-                GUILayout.Space(20 * scale);
+
+                // --- DROITE : RÉGLAGES AFFICHAGE ---
                 GUILayout.Label(Helpers.GetString("ui_pagination_items_per_page", "Items: "), paginationStyle, GUILayout.Width(100 * scale));
                 if (string.IsNullOrEmpty(itemsPerPageInput)) itemsPerPageInput = CraftingSettings.ItemsPerPage.ToString();
-                itemsPerPageInput = CTextFieldStyled(itemsPerPageInput, pageInputStyle, GUILayout.Width(40 * scale), GUILayout.Height(25 * scale));
-                if (CButton("Ok", GUILayout.Width(40 * scale)))
+                itemsPerPageInput = CTextFieldStyled(itemsPerPageInput, pageInputStyle, GUILayout.Width(40 * scale), GUILayout.Height(22 * scale));
+                
+                // Détection Entrée pour ItemsPerPage
+                if (Event.current.isKey && (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter))
                 {
                     if (int.TryParse(itemsPerPageInput, out int val) && val > 0)
                     {
@@ -732,11 +755,6 @@ namespace CraftingSystem
                     }
                 }
                 
-                GUILayout.FlexibleSpace();
-                
-                GUI.enabled = (currentPage < totalPages - 1);
-                if (CButton(Helpers.GetString("ui_btn_next", ">>"), GUILayout.Width(50 * scale))) currentPage++;
-                GUI.enabled = true;
                 GUILayout.EndHorizontal();
 
                 GUILayout.Space(5);
@@ -919,31 +937,43 @@ namespace CraftingSystem
             
             GUILayout.Space(10);
             
+            bool oldEnforce = CraftingSettings.EnforcePointsLimit;
             CraftingSettings.EnforcePointsLimit = CToggle(CraftingSettings.EnforcePointsLimit, Helpers.GetString("ui_settings_enforce_limit", " Enforce Bonus Limits (Pathfinder)"));
+            if (oldEnforce != CraftingSettings.EnforcePointsLimit) filtersDirty = true;
             
             if (CraftingSettings.EnforcePointsLimit)
             {
                 GUILayout.Space(5);
+                bool oldReq = CraftingSettings.RequirePlusOneFirst;
                 CraftingSettings.RequirePlusOneFirst = CToggle(CraftingSettings.RequirePlusOneFirst, Helpers.GetString("ui_settings_require_plus_one", " Prerequisite: At least +1 Enhancement"));
+                if (oldReq != CraftingSettings.RequirePlusOneFirst) filtersDirty = true;
+
                 GUILayout.Space(5);
                 CraftingSettings.ApplySlotPenalty = CToggle(CraftingSettings.ApplySlotPenalty, Helpers.GetString("ui_settings_slot_penalty", " Apply Slot Penalty (x1.5)"));
+                
                 GUILayout.Space(5);
+                bool oldEpic = CraftingSettings.EnableEpicCosts;
                 CraftingSettings.EnableEpicCosts = CToggle(CraftingSettings.EnableEpicCosts, Helpers.GetString("ui_settings_enable_epic", " Enable Epic Multiplier (x10)"));
+                if (oldEpic != CraftingSettings.EnableEpicCosts) filtersDirty = true;
 
                 GUILayout.Space(8); // Un peu plus d'espace avant les sliders
                 GUILayout.BeginHorizontal();
+                int oldMaxEnh = CraftingSettings.MaxEnhancementBonus;
                 GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_enhancement", " Max Enhancement: +{0}"), CraftingSettings.MaxEnhancementBonus), settingsLabelStyle, GUILayout.Width(150 * scale));
                 if (CButton("-", GUILayout.Width(30 * scale))) CraftingSettings.MaxEnhancementBonus--;
                 CraftingSettings.MaxEnhancementBonus = (int)GUILayout.HorizontalSlider(CraftingSettings.MaxEnhancementBonus, 1, 20, GUILayout.Width(90 * scale));
                 if (CButton("+", GUILayout.Width(30 * scale))) CraftingSettings.MaxEnhancementBonus++;
+                if (oldMaxEnh != CraftingSettings.MaxEnhancementBonus) filtersDirty = true;
                 GUILayout.EndHorizontal();
 
                 GUILayout.Space(5);
                 GUILayout.BeginHorizontal();
+                int oldMaxTotal = CraftingSettings.MaxTotalBonus;
                 GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_total", " Max Total: +{0}"), CraftingSettings.MaxTotalBonus), settingsLabelStyle, GUILayout.Width(150 * scale));
                 if (CButton("-", GUILayout.Width(30 * scale))) CraftingSettings.MaxTotalBonus--;
                 CraftingSettings.MaxTotalBonus = (int)GUILayout.HorizontalSlider(CraftingSettings.MaxTotalBonus, 1, 50, GUILayout.Width(90 * scale));
                 if (CButton("+", GUILayout.Width(30 * scale))) CraftingSettings.MaxTotalBonus++;
+                if (oldMaxTotal != CraftingSettings.MaxTotalBonus) filtersDirty = true;
                 GUILayout.EndHorizontal();
             }
 
@@ -1357,7 +1387,7 @@ namespace CraftingSystem
                 var models = CustomEnchantmentsBuilder.AllModels.Where(m => m.Type != "Feature").ToList();
                 if (models.Count == 0)
                 {
-                    GUILayout.Label(Helpers.GetString("ui_no_custom_models", "No custom models found."), new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+                    GUILayout.Label(Helpers.GetString("ui_no_custom_models", "No custom models found."), new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_NORMAL * scale) });
                 }
                 else
                 {
@@ -1366,7 +1396,7 @@ namespace CraftingSystem
                         GUILayout.BeginHorizontal(GUI.skin.box);
                         GUILayout.Label(model.Name, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.ExpandWidth(true));
                         
-                        if (CButton(Helpers.GetString("ui_btn_configure", "Configure"), GUILayout.Width(150 * scale), GUILayout.Height(30 * scale)))
+                        if (CButton(Helpers.GetString("ui_btn_configure", "Configure"), GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
                         {
                             selectedModel = model;
                             dynamicParamValues.Clear();
@@ -1377,6 +1407,11 @@ namespace CraftingSystem
                         }
                         GUILayout.EndHorizontal();
                     }
+                    
+                    GUILayout.Space(10);
+                    GUILayout.BeginHorizontal(GUI.skin.box);
+                    GUILayout.Label("<i>" + Helpers.GetString("ui_custom_todo_more", "TODO: there are more custom enchants to come in next releases") + "</i>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_SMALL * scale), alignment = TextAnchor.MiddleCenter }, GUILayout.ExpandWidth(true));
+                    GUILayout.EndHorizontal();
                 }
             }
             else
@@ -1393,15 +1428,16 @@ namespace CraftingSystem
                     GUILayout.Label(string.Format(Helpers.GetString("ui_configuring_model", "Configuring: <b>{0}</b>"), selectedModel.Name), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
                     GUILayout.Space(15);
 
+                    GUIStyle paramLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) };
                     foreach (var p in selectedModel.DynamicParams)
                     {
                         GUILayout.BeginHorizontal();
-                        GUILayout.Label(p.Name + ": ", GUILayout.Width(150 * scale));
+                        GUILayout.Label(p.Name + ": ", paramLabelStyle, GUILayout.Width(150 * scale));
                         
                         if (p.Type == "Slider")
                         {
                             int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
-                            GUILayout.Label(val.ToString(), GUILayout.Width(50 * scale));
+                            GUILayout.Label(val.ToString(), paramLabelStyle, GUILayout.Width(50 * scale));
                             int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max);
                             
                             // Snap to Step
@@ -1411,7 +1447,7 @@ namespace CraftingSystem
                         else if (p.Type == "Enum")
                         {
                             int currentVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
-                            string enumName = "Enum Value " + currentVal;
+                            string enumName = Helpers.GetString("ui_enum_value", "Value ") + currentVal;
                             
                             // Essayer de résoudre le nom de l'enum via réflexion
                             try {
@@ -1528,7 +1564,7 @@ namespace CraftingSystem
             else
             {
                 color = "#e74c3c"; // Rouge
-                if (string.IsNullOrEmpty(descForData)) descForData = "TODO: Description needed for this enchantment.";
+                if (string.IsNullOrEmpty(descForData)) descForData = Helpers.GetString("ui_desc_needed", "TODO: Description needed for this enchantment.");
             }
 
             GUIContent infoContent = new GUIContent($"<color={color}>{Helpers.GetString("ui_btn_description", "Description")}</color>");
@@ -1561,7 +1597,7 @@ namespace CraftingSystem
                 expectedSlotsText = Helpers.GetString("ui_slot_" + (data.Type?.ToLower() ?? "other"), data.Type ?? "Other");
             }
 
-            GUILayout.Label($"<color={slotColor}>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleRight }, GUILayout.Width(120 * scale));
+            GUILayout.Label($"<color={slotColor}>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter }, GUILayout.Width(120 * scale));
 
             string currency = Helpers.GetString("ui_currency_gp", "gp");
             string daysLabel = Helpers.GetString("ui_time_days_short", "d");

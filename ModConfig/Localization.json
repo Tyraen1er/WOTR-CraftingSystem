@@ -32,7 +32,68 @@
         },
         "ui_pagination_items_per_page": {
             "enGB": "Items/Page: ",
-            "frFR": "Items/Page : "
+            "frFR": "Items/Page : ",
+            "ruRU": "Предм./стр.: "
+        },
+        "ui_pagination_page": {
+            "enGB": "Page ",
+            "frFR": "Page ",
+            "ruRU": "Страница "
+        },
+        "ui_pagination_items": {
+            "enGB": "items",
+            "frFR": "objets",
+            "ruRU": "предм."
+        },
+        "ui_btn_back_to_list": {
+            "enGB": "<< Back to list",
+            "frFR": "<< Retour à la liste",
+            "ruRU": "<< К списку"
+        },
+        "ui_custom_queued_title": {
+            "enGB": "Custom Selection in queue:",
+            "frFR": "Sélection personnalisée en attente :",
+            "ruRU": "Пользовательский выбор в очереди:"
+        },
+        "ui_no_custom_models": {
+            "enGB": "No custom models found.",
+            "frFR": "Aucun modèle personnalisé trouvé.",
+            "ruRU": "Пользовательские модели не найдены."
+        },
+        "ui_btn_configure": {
+            "enGB": "Configure",
+            "frFR": "Configurer",
+            "ruRU": "Настроить"
+        },
+        "ui_configuring_model": {
+            "enGB": "Configuring: <b>{0}</b>",
+            "frFR": "Configuration : <b>{0}</b>",
+            "ruRU": "Настройка: <b>{0}</b>"
+        },
+        "ui_selection_total_custom": {
+            "enGB": "Selection Custom: +{0} \u2014 Total: {1} gp / ~{2} d",
+            "frFR": "Sélection Perso : +{0} \u2014 Total : {1} po / ~{2} j",
+            "ruRU": "Свой выбор: +{0} \u2014 Итого: {1} gp / ~{2} дн."
+        },
+        "ui_btn_add_to_selection": {
+            "enGB": "Add to selection",
+            "frFR": "Ajouter à la sélection",
+            "ruRU": "Добавить в выбор"
+        },
+        "ui_custom_todo_more": {
+            "enGB": "TODO: there are more custom enchants to come in next releases",
+            "frFR": "TODO : d'autres enchantements personnalisés arriveront dans les prochaines versions",
+            "ruRU": "TODO: в следующих выпусках появится больше пользовательских чар"
+        },
+        "ui_desc_needed": {
+            "enGB": "TODO: Description needed for this enchantment.",
+            "frFR": "TODO : Description manquante pour cet enchantement.",
+            "ruRU": "TODO: требуется описание для этого зачарования."
+        },
+        "ui_enum_value": {
+            "enGB": "Value ",
+            "frFR": "Valeur ",
+            "ruRU": "Значение "
         },
         "ui_btn_yes": {
             "enGB": "Yes",
