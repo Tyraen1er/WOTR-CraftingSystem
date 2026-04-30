@@ -120,7 +120,9 @@ namespace CraftingSystem
                     {
                         // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Tentative de finition pour : {itemName} avec l'enchantement {project.EnchantmentGuid}");
                         
-                        var bp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(project.EnchantmentGuid)) as BlueprintItemEnchantment;
+                        var bp = (project.EnchantmentGuid.Replace("-", "").ToLower().StartsWith("c2af") 
+                            ? CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(project.EnchantmentGuid) 
+                            : ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(project.EnchantmentGuid))) as BlueprintItemEnchantment;
                         if (bp == null) 
                         {
                             Main.ModEntry.Logger.Error($"[ATELIER-DEBUG] ERREUR: Blueprint introuvable pour le GUID {project.EnchantmentGuid} !");

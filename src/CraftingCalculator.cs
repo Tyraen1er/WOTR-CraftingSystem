@@ -78,7 +78,7 @@ namespace CraftingSystem
             if (data.IsEnhancement) return true;
 
             if (string.IsNullOrEmpty(data.Guid)) return false;
-            var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
+            var bp = data.Blueprint;
             return IsPureEnhancement(bp);
         }
 
@@ -89,7 +89,25 @@ namespace CraftingSystem
         public static string GetEnchantmentFamily(string blueprintName)
         {
             if (string.IsNullOrEmpty(blueprintName)) return string.Empty;
-            // On retire tous les chiffres présents dans le nom (ex: AcidResistance10Enchant -> AcidResistanceEnchant)
+            
+            // Si c'est un enchantement dynamique (nom_guid), on ne doit pas supprimer le guid 
+            // car cela créerait des collisions entre familles (ex: toutes les résistances deviendraient identiques).
+            if (blueprintName.Contains("_c2af"))
+            {
+                // On garde le nom et le début du GUID (l'ID du modèle + flag feature)
+                // Résistance feu 35_c2af0013... -> Résistance feu 35_c2af001
+                var parts = blueprintName.Split('_');
+                if (parts.Length > 1) {
+                    string guidPart = parts.Last();
+                    // On prend les 7 premiers caractères du GUID (c2af + 3 hex d'ID)
+                    string familyPrefix = guidPart.Length >= 7 ? guidPart.Substring(0, 7) : guidPart;
+                    // On garde le nom localisé mais on retire les chiffres pour permettre l'upgrade (10 -> 30)
+                    string cleanName = Regex.Replace(parts[0], @"\d+", "").Trim();
+                    return cleanName + "_" + familyPrefix;
+                }
+            }
+
+            // Fallback pour les enchantements vanilla : on retire tous les chiffres
             return Regex.Replace(blueprintName, @"\d+", "");
         }
 
@@ -146,7 +164,7 @@ namespace CraftingSystem
             int existingPointCost = 0;
             long existingGoldOverride = 0;
 
-            var nextBp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(nextEnchant.Guid));
+            var nextBp = nextEnchant.Blueprint;
             string nextFamily = nextBp != null ? GetEnchantmentFamily(nextBp.name) : string.Empty;
 
             if (!string.IsNullOrEmpty(nextFamily))
@@ -154,7 +172,7 @@ namespace CraftingSystem
                 // A. Chercher dans la file d'attente (panier)
                 var replacedInQueue = queuedEnchants?.FirstOrDefault(e => 
                 {
-                    var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(e.Guid));
+                    var bp = e.Blueprint;
                     return bp != null && GetEnchantmentFamily(bp.name) == nextFamily;
                 });
 
@@ -427,7 +445,7 @@ namespace CraftingSystem
         {
             if (data == null || string.IsNullOrEmpty(data.Guid)) return false;
             
-            var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
+            var bp = data.Blueprint;
             if (bp == null) return false;
 
             // 1. Matériaux (via catégories du JSON)

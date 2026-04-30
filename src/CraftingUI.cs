@@ -837,7 +837,8 @@ namespace CraftingSystem
                 {
                     if (Game.Instance.Player.Money >= totalCost)
                     {
-                        Game.Instance.Player.Money -= totalCost;
+                        // On ne prélève plus l'or ici, car StartCraftingProject le fait pour chaque enchantement.
+                        // Game.Instance.Player.Money -= totalCost; 
 
                         foreach (var d in selectedList)
                         {
@@ -1057,7 +1058,7 @@ namespace CraftingSystem
             foreach (var data in typeFiltered)
             {
                 bool isQueued = queuedEnchantGuids.Contains(data.Guid);
-                var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
+                var bp = data.Blueprint;
                 if (bp == null) continue;
 
                 // --- FILTRE DES ENCHANTEMENTS CUSTOM (Exclusion de la liste classique) ---
@@ -1629,7 +1630,7 @@ namespace CraftingSystem
             bool isQueued = queuedEnchantGuids.Contains(data.Guid);
             var currentSelectedList = queuedEnchantGuids.Select(g => EnchantmentScanner.GetByGuid(g)).Where(d => d != null).ToList();
 
-            var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
+            var bp = data.Blueprint;
             string displayName = DescriptionManager.GetDisplayName(bp, data);
 
             long costToPay;
@@ -1717,7 +1718,7 @@ namespace CraftingSystem
                         var otherData = EnchantmentScanner.GetByGuid(guid);
                         if (otherData != null)
                         {
-                            var otherBp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(guid));
+                            var otherBp = otherData.Blueprint;
                             string otherInternal = otherBp != null ? otherBp.name : (otherData.Name ?? "");
                             string otherBase = CraftingCalculator.GetEnchantmentFamily(otherInternal);
                             return otherBase == baseName;

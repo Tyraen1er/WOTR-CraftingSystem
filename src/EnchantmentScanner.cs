@@ -86,7 +86,18 @@ namespace CraftingSystem
         }
 
         [JsonIgnore]
-        public BlueprintItemEnchantment Blueprint => ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(Guid)) as BlueprintItemEnchantment;
+        public BlueprintItemEnchantment Blueprint
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Guid)) return null;
+                if (Guid.Replace("-", "").ToLower().StartsWith("c2af"))
+                {
+                    return CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(Guid) as BlueprintItemEnchantment;
+                }
+                return ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(Guid)) as BlueprintItemEnchantment;
+            }
+        }
     }
 
     public static class EnchantmentScanner

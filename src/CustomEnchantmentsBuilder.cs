@@ -319,7 +319,7 @@ namespace CraftingSystem
                     }
 
                     // Trouver le modèle
-                    var model = GetModelById(enchantId, vals[0] == 1);
+                    var model = GetModelById(enchantId, vals.Count > 0 && vals[0] == 1);
                     if (model == null)
                     {
                         Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] No model found for EnchantId {enchantId}");
@@ -340,27 +340,22 @@ namespace CraftingSystem
             Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Starting creation of {Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted)} for GUID {guid}");
             BlueprintScriptableObject bp = null;
             try {
-                // On essaie de récupérer les types depuis l'assembly de BlueprintScriptableObject pour être sûr d'avoir les types du JEU
-                var gameAssembly = typeof(BlueprintScriptableObject).Assembly;
-                Type t = null;
-                if (model.Type == "WeaponEnchantment" || model.Type == "Weapon") t = gameAssembly.GetType("Kingmaker.Blueprints.Items.Ecnchantments.BlueprintWeaponEnchantment");
-                else if (model.Type == "ArmorEnchantment" || model.Type == "Armor") t = gameAssembly.GetType("Kingmaker.Blueprints.Items.Ecnchantments.BlueprintArmorEnchantment");
-                else if (model.Type == "Other" || model.Type == "Equipment") t = gameAssembly.GetType("Kingmaker.Blueprints.Items.Ecnchantments.BlueprintEquipmentEnchantment");
-                else if (model.Type == "Feature") t = gameAssembly.GetType("Kingmaker.Blueprints.Classes.BlueprintFeature");
-
-                if (t != null) {
-                    Main.ModEntry.Logger.Log($"[DEBUG] Resolved type {t.FullName} from {t.Assembly.GetName().Name}. BaseType: {t.BaseType?.Name}");
-                    bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(t);
+                if (model.Type == "WeaponEnchantment" || model.Type == "Weapon") bp = new BlueprintWeaponEnchantment();
+                else if (model.Type == "ArmorEnchantment" || model.Type == "Armor") bp = new BlueprintArmorEnchantment();
+                else if (model.Type == "Other" || model.Type == "Equipment") bp = new BlueprintEquipmentEnchantment();
+                else if (model.Type == "Feature") bp = new BlueprintFeature();
+                
+                if (bp != null) {
+                    Main.ModEntry.Logger.Log($"[DEBUG] Created instance of {bp.GetType().FullName} using 'new'");
+                    // On appelle OnEnable manuellement car on n'utilise pas CreateInstance
+                    try { bp.OnEnable(); } catch {}
                 } else {
-                    Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Could not resolve type Kingmaker.Blueprints.Items.Ecnchantments.Blueprint{model.Type}");
-                    // Fallback sur le type compilé
-                    if (model.Type == "WeaponEnchantment" || model.Type == "Weapon") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintWeaponEnchantment));
-                    else if (model.Type == "ArmorEnchantment" || model.Type == "Armor") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintArmorEnchantment));
-                    else if (model.Type == "Other" || model.Type == "Equipment") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintEquipmentEnchantment));
-                    else if (model.Type == "Feature") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintFeature));
+                    Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] FATAL: Could not create instance for type {model.Type}");
+                    return null;
                 }
+                
             } catch (Exception ex) {
-                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] ScriptableObject.CreateInstance failed: {ex}");
+                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Blueprint instantiation failed: {ex}");
             }
 
             if (bp == null) {
@@ -534,23 +529,30 @@ namespace CraftingSystem
             object current = target;
             for (int i = 0; i < parts.Length - 1; i++)
             {
-                var field = current.GetType().GetField(parts[i], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                var fieldName = parts[i];
+                var field = current.GetType().GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                         ?? current.GetType().GetField("m_" + fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                
                 if (field == null)
                 {
-                    Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Field path not found: {parts[i]} in {current.GetType().Name}");
+                    Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Field path not found: {fieldName} in {current.GetType().Name}");
                     return;
                 }
                 current = field.GetValue(current);
             }
-            var lastField = current.GetType().GetField(parts.Last(), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var lastFieldName = parts.Last();
+            var lastField = current.GetType().GetField(lastFieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                         ?? current.GetType().GetField("m_" + lastFieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            
             if (lastField != null)
             {
                 if (lastField.FieldType.IsEnum) lastField.SetValue(current, Enum.ToObject(lastField.FieldType, value));
                 else lastField.SetValue(current, Convert.ChangeType(value, lastField.FieldType));
+                Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Successfully set {lastField.Name} to {value}");
             }
             else
             {
-                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Final field not found: {parts.Last()} in {current.GetType().Name}");
+                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Final field not found: {lastFieldName} (also tried m_{lastFieldName}) in {current.GetType().Name}");
             }
         }
     }

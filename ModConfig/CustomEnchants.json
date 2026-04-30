@@ -1,7 +1,7 @@
 [
   {
     "EnchantId": "001",
-    "Name": "Model_Resist_Feature",
+    "BaseName": "Model_Resist_Feature",
     "Type": "Feature",
     "Components": [
       {

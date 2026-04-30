@@ -183,7 +183,8 @@ namespace CraftingSystem
             // 3. Recherche de la signature
             int signatureIdx = guidStr.IndexOf("c2af", StringComparison.OrdinalIgnoreCase);
             
-            if (signatureIdx >= 0)
+            // On ne traite que si la signature est au début (0) ou juste après le préfixe "!bp_" (4)
+            if (signatureIdx == 0 || (signatureIdx == 4 && guidStr.StartsWith("!bp_", StringComparison.OrdinalIgnoreCase)))
             {
                 string finalGuid;
                 int remainingLength = guidStr.Length - signatureIdx;
