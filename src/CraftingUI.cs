@@ -1391,7 +1391,7 @@ namespace CraftingSystem
                 var models = CustomEnchantmentsBuilder.AllModels.Where(m => m.Type != "Feature").ToList();
                 if (models.Count == 0)
                 {
-                    GUILayout.Label(Helpers.GetString("ui_no_custom_models", "No custom models found."), new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_NORMAL * scale) });
+                    GUILayout.Label(Helpers.GetString("ui_no_custom_models", "No enchantment models found."), new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_NORMAL * scale) });
                 }
                 else
                 {

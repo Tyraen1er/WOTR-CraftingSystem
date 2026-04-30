@@ -56,9 +56,9 @@
             "ruRU": "Пользовательский выбор в очереди:"
         },
         "ui_no_custom_models": {
-            "enGB": "No custom models found.",
-            "frFR": "Aucun modèle personnalisé trouvé.",
-            "ruRU": "Пользовательские модели не найдены."
+            "enGB": "No enchantment models found.",
+            "frFR": "Aucun modèle d'enchantement trouvé.",
+            "ruRU": "Модели зачарований не найдены."
         },
         "ui_btn_configure": {
             "enGB": "Configure",
@@ -99,6 +99,26 @@
             "enGB": "TODO: Description needed for this enchantment.",
             "frFR": "TODO : Description manquante pour cet enchantement.",
             "ruRU": "TODO: требуется описание для этого зачарования."
+        },
+        "ui_desc_weapon_enhancement": {
+            "enGB": "Enhancement bonus: +{0}",
+            "frFR": "Bonus d'altération : +{0}",
+            "ruRU": "Бонус усиления: +{0}"
+        },
+        "ui_desc_armor_enhancement": {
+            "enGB": "Enhancement bonus: +{0}",
+            "frFR": "Bonus d'altération : +{0}",
+            "ruRU": "Бонус усиления: +{0}"
+        },
+        "ui_desc_generic_enhancement": {
+            "enGB": "Enhancement bonus: +{0}",
+            "frFR": "Bonus d'altération : +{0}",
+            "ruRU": "Бонус усиления: +{0}"
+        },
+        "ui_desc_resistance": {
+            "enGB": "{0} resistance: {1}",
+            "frFR": "Résistance à {0} : {1}",
+            "ruRU": "Сопротивление {0}: {1}"
         },
         "ui_enum_value": {
             "enGB": "Value ",

@@ -66,5 +66,34 @@
         "FieldName": "Value.Value"
       }
     ]
+  },
+  {
+    "EnchantId": "002",
+    "Name": "Custom Sharpness",
+    "Type": "Weapon",
+    "DynamicParams": [
+      {
+        "Name": "Bonus",
+        "Label": "ui_param_value",
+        "Type": "Slider",
+        "Min": 1,
+        "Max": 10,
+        "Step": 1,
+        "ComponentIndex": 0,
+        "FieldName": "EnhancementBonus"
+      }
+    ],
+    "EnchantmentCost": 0,
+    "PointCostFormula": "Bonus",
+    "MaxNotEpic": 5,
+    "Components": [
+      {
+        "$type": "Kingmaker.Designers.Mechanics.WeaponEnchants.WeaponEnhancementBonus, Assembly-CSharp",
+        "EnhancementBonus": 1
+      }
+    ],
+    "Slots": [
+      "Weapon"
+    ]
   }
 ]

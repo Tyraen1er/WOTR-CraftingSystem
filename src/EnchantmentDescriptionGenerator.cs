@@ -52,6 +52,46 @@ namespace CraftingSystem
                 {
                     resolved = SummarizeAddStatBonus(comp, bp);
                 }
+                else if (typeName == "AddDamageResistanceEnergy")
+                {
+                    try {
+                        var typeField = GetFieldRecursive(comp.GetType(), "Type") ?? GetFieldRecursive(comp.GetType(), "m_Type");
+                        var valueField = GetFieldRecursive(comp.GetType(), "Value") ?? GetFieldRecursive(comp.GetType(), "m_Value");
+                        
+                        if (typeField != null && valueField != null) {
+                            string energyType = typeField.GetValue(comp).ToString();
+                            string localizedEnergy = Helpers.GetString("energy_" + energyType, energyType);
+                            
+                            string valStr = "0";
+                            var valObj = valueField.GetValue(comp);
+                            if (valObj is ContextValue cv) valStr = SummarizeContextValue(cv, bp);
+                            else valStr = valObj?.ToString() ?? "0";
+
+                            resolved = string.Format(Helpers.GetString("ui_desc_resistance", "{0} resistance: {1}"), localizedEnergy, valStr);
+                        }
+                    } catch { }
+                }
+                else if (typeName == "AddUnitFeatureEquipment")
+                {
+                    try {
+                        var featureField = GetFieldRecursive(comp.GetType(), "m_Feature");
+                        var featureRef = featureField?.GetValue(comp) as BlueprintReferenceBase;
+                        var feature = featureRef != null ? ResourcesLibrary.TryGetBlueprint(featureRef.deserializedGuid) as BlueprintScriptableObject : null;
+                        
+                        Main.ModEntry.Logger.Log($"[DEBUG] AddUnitFeatureEquipment: Feature found: {feature != null} ({feature?.name})");
+
+                        if (feature != null && feature.ComponentsArray != null) {
+                            var subDescriptions = new List<string>();
+                            foreach (var subComp in feature.ComponentsArray) {
+                                string subDesc = SummarizeComponent(subComp, feature);
+                                if (!string.IsNullOrEmpty(subDesc)) subDescriptions.Add(subDesc);
+                            }
+                            if (subDescriptions.Count > 0) resolved = string.Join(", ", subDescriptions);
+                        }
+                    } catch (Exception ex) {
+                        Main.ModEntry.Logger.Log($"[DEBUG] AddUnitFeatureEquipment Error: {ex}");
+                    }
+                }
                 
                 // 2. Sinon, on utilise le système de template JSON
                 if (string.IsNullOrEmpty(resolved))
@@ -94,7 +134,7 @@ namespace CraftingSystem
             return template.enGB; // Fallback to English
         }
 
-        private static string ResolveTemplate(string template, object comp, BlueprintItemEnchantment parentBp)
+        private static string ResolveTemplate(string template, object comp, BlueprintScriptableObject parentBp)
         {
             if (string.IsNullOrEmpty(template)) return "";
             
@@ -113,7 +153,7 @@ namespace CraftingSystem
             }).Replace("+-", "-").Trim();
         }
 
-        private static string ResolveFlagCondition(string tag, object comp, BlueprintItemEnchantment parentBp)
+        private static string ResolveFlagCondition(string tag, object comp, BlueprintScriptableObject parentBp)
         {
             // Format: FlagCondition: Field1, Field2, ...
             string fieldsPart = tag.Substring("FlagCondition:".Length);
@@ -159,7 +199,7 @@ namespace CraftingSystem
             return activeFlags.Count > 0 ? $"({string.Join(", ", activeFlags)})" : "";
         }
 
-        private static string GetFieldValue(string tag, object comp, BlueprintItemEnchantment parentBp)
+        private static string GetFieldValue(string tag, object comp, BlueprintScriptableObject parentBp)
         {
             // Support rudimentaire pour m_Spell.GUID ou m_Spell.name
             string[] parts = tag.Split('.');
@@ -172,13 +212,13 @@ namespace CraftingSystem
             return FormatValue(val, parentBp);
         }
 
-        private static string FormatValue(object val, BlueprintItemEnchantment parentBp)
+        private static string FormatValue(object val, BlueprintScriptableObject parentBp)
         {
             string result = InternalFormatValue(val, parentBp);
             return SanitizeLocalString(result);
         }
 
-        private static string InternalFormatValue(object val, BlueprintItemEnchantment parentBp)
+        private static string InternalFormatValue(object val, BlueprintScriptableObject parentBp)
         {
             if (val == null) return "None";
 
@@ -325,7 +365,7 @@ namespace CraftingSystem
             return raw;
         }
 
-        private static string SummarizeContextValue(ContextValue cv, BlueprintItemEnchantment parentBp)
+        private static string SummarizeContextValue(ContextValue cv, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -355,7 +395,7 @@ namespace CraftingSystem
             catch { return cv.Value.ToString(); }
         }
 
-        private static string SummarizeRankConfig(object config, BlueprintItemEnchantment parentBp)
+        private static string SummarizeRankConfig(object config, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -394,7 +434,7 @@ namespace CraftingSystem
             catch { return "(rank)"; }
         }
 
-        private static string SummarizeElementsList(object listObj, BlueprintItemEnchantment parentBp)
+        private static string SummarizeElementsList(object listObj, BlueprintScriptableObject parentBp)
         {
             if (listObj == null) return "";
             try
@@ -429,7 +469,7 @@ namespace CraftingSystem
             }
         }
 
-        private static string SummarizeConditional(object condAction, BlueprintItemEnchantment parentBp)
+        private static string SummarizeConditional(object condAction, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -470,7 +510,7 @@ namespace CraftingSystem
             catch { return "Conditional"; }
         }
 
-        private static string SummarizeSavingThrow(object saveAction, BlueprintItemEnchantment parentBp)
+        private static string SummarizeSavingThrow(object saveAction, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -498,7 +538,7 @@ namespace CraftingSystem
             catch { return "SavingThrow"; }
         }
 
-        private static string SummarizeApplyBuff(object applyBuff, BlueprintItemEnchantment parentBp)
+        private static string SummarizeApplyBuff(object applyBuff, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -513,7 +553,7 @@ namespace CraftingSystem
             catch { return "ApplyBuff"; }
         }
 
-        private static string SummarizeCastSpell(object castSpell, BlueprintItemEnchantment parentBp)
+        private static string SummarizeCastSpell(object castSpell, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -538,7 +578,7 @@ namespace CraftingSystem
             return typeName;
         }
 
-        private static string SummarizeActionOnSelf(object action, string label, BlueprintItemEnchantment parentBp)
+        private static string SummarizeActionOnSelf(object action, string label, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -554,7 +594,7 @@ namespace CraftingSystem
             catch { return $"[{label}]"; }
         }
 
-        private static string SummarizeActionsOnPet(object action, BlueprintItemEnchantment parentBp)
+        private static string SummarizeActionsOnPet(object action, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -572,7 +612,7 @@ namespace CraftingSystem
             catch { return "[Familier]"; }
         }
 
-        private static string SummarizeConditionalSaved(object action, BlueprintItemEnchantment parentBp)
+        private static string SummarizeConditionalSaved(object action, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -605,7 +645,7 @@ namespace CraftingSystem
             catch { return "ConditionalSaved"; }
         }
 
-        private static string SummarizeDamageAction(object damageAction, BlueprintItemEnchantment parentBp)
+        private static string SummarizeDamageAction(object damageAction, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -638,7 +678,7 @@ namespace CraftingSystem
             catch { return "DealDamage"; }
         }
 
-        private static string SummarizeDiceValue(object diceValue, BlueprintItemEnchantment parentBp)
+        private static string SummarizeDiceValue(object diceValue, BlueprintScriptableObject parentBp)
         {
             if (diceValue == null) return "";
             try
@@ -683,7 +723,7 @@ namespace CraftingSystem
             catch { return "Dice"; }
         }
 
-        private static string SummarizeAdditionalDiceOnAttack(object comp, BlueprintItemEnchantment parentBp)
+        private static string SummarizeAdditionalDiceOnAttack(object comp, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -739,7 +779,7 @@ namespace CraftingSystem
             catch { return "AdditionalDice"; }
         }
 
-        private static string SummarizeConditionHasBuffWithDescriptor(object cond, BlueprintItemEnchantment parentBp)
+        private static string SummarizeConditionHasBuffWithDescriptor(object cond, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -802,7 +842,7 @@ namespace CraftingSystem
             catch { return "Damage"; }
         }
 
-        private static string SummarizeConditionCharacterClass(object cond, BlueprintItemEnchantment parentBp)
+        private static string SummarizeConditionCharacterClass(object cond, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -815,7 +855,7 @@ namespace CraftingSystem
             catch { return "CharacterClass"; }
         }
 
-        private static string SummarizeConditionAlignment(object cond, BlueprintItemEnchantment parentBp)
+        private static string SummarizeConditionAlignment(object cond, BlueprintScriptableObject parentBp)
         {
             var alignmentField = cond.GetType().GetField("Alignment", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             if (alignmentField == null) return Helpers.GetString("cond_Alignment", "alignment check");
@@ -826,7 +866,7 @@ namespace CraftingSystem
             return string.Format(Helpers.GetString("cond_Alignment", "alignment is {0}"), localizedAlign);
         }
 
-        private static string SummarizeConditionHasFact(object cond, BlueprintItemEnchantment parentBp)
+        private static string SummarizeConditionHasFact(object cond, BlueprintScriptableObject parentBp)
         {
             var type = cond.GetType();
             var factField = GetFieldRecursive(type, "m_Fact") 
@@ -839,7 +879,7 @@ namespace CraftingSystem
             return string.Format(Helpers.GetString("cond_HasFact", "has {0}"), factName);
         }
 
-        private static string SummarizeConditionIsEnemy(object cond, BlueprintItemEnchantment parentBp)
+        private static string SummarizeConditionIsEnemy(object cond, BlueprintScriptableObject parentBp)
         {
             var notField = cond.GetType().GetField("Not", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             bool isNot = (notField != null && (bool)notField.GetValue(cond));
@@ -848,7 +888,7 @@ namespace CraftingSystem
             return Helpers.GetString("cond_ContextConditionIsEnemy", "target is an enemy");
         }
 
-        private static string SummarizeConditionDistanceToTarget(object cond, BlueprintItemEnchantment parentBp)
+        private static string SummarizeConditionDistanceToTarget(object cond, BlueprintScriptableObject parentBp)
         {
             var distField = cond.GetType().GetField("DistanceGreater", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             if (distField == null) distField = cond.GetType().GetField("Distance", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -861,7 +901,7 @@ namespace CraftingSystem
             return Helpers.GetString("cond_ContextConditionDistanceToTarget", "distance check");
         }
 
-        private static string SummarizeConditionHasBuff(object cond, BlueprintItemEnchantment parentBp)
+        private static string SummarizeConditionHasBuff(object cond, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -874,7 +914,7 @@ namespace CraftingSystem
             catch { return "HasBuff"; }
         }
 
-        private static string SummarizeConditionCompareStat(object cond, BlueprintItemEnchantment parentBp)
+        private static string SummarizeConditionCompareStat(object cond, BlueprintScriptableObject parentBp)
         {
             try
             {
@@ -888,14 +928,31 @@ namespace CraftingSystem
             catch { return "CompareStat"; }
         }
 
-        private static string SummarizeComponent(object comp, BlueprintItemEnchantment parentBp)
+        private static string SummarizeComponent(object comp, BlueprintScriptableObject parentBp)
         {
             if (comp == null) return null;
             var type = comp.GetType();
 
             // 1. Priorité aux handlers spécifiques si on est appelé directement
-            if (type.Name == "AdditionalDiceOnAttack") return SummarizeAdditionalDiceOnAttack(comp, parentBp);
-            if (type.Name == "AddStatBonusEquipment") return SummarizeAddStatBonus(comp, parentBp);
+            if (type.Name == "AdditionalDiceOnAttack") return SummarizeAdditionalDiceOnAttack(comp, parentBp as BlueprintItemEnchantment);
+            if (type.Name == "AddStatBonusEquipment") return SummarizeAddStatBonus(comp, parentBp as BlueprintItemEnchantment);
+            
+            if (type.Name == "AddDamageResistanceEnergy")
+            {
+                try {
+                    var typeField = GetFieldRecursive(type, "Type") ?? GetFieldRecursive(type, "m_Type");
+                    var valueField = GetFieldRecursive(type, "Value") ?? GetFieldRecursive(type, "m_Value");
+                    if (typeField != null && valueField != null) {
+                        string energyType = typeField.GetValue(comp).ToString();
+                        string localizedEnergy = Helpers.GetString("energy_" + energyType, energyType);
+                        string valStr = "0";
+                        var valObj = valueField.GetValue(comp);
+                        if (valObj is ContextValue cv) valStr = SummarizeContextValue(cv, parentBp);
+                        else valStr = valObj?.ToString() ?? "0";
+                        return string.Format(Helpers.GetString("ui_desc_resistance", "{0} resistance: {1}"), localizedEnergy, valStr);
+                    }
+                } catch { }
+            }
 
             // 2. Essaye l'extraction de champs (Stats/Values) - Très efficace pour les composants simples
             var commonStat = GetFieldRecursive(type, "Stat") ?? GetFieldRecursive(type, "m_Stat");
@@ -905,6 +962,19 @@ namespace CraftingSystem
             {
                 string summary = SummarizeAddStatBonus(comp, parentBp);
                 if (!string.IsNullOrEmpty(summary)) return summary;
+            }
+
+            // 2b. Détection générique des bonus d'altération
+            var enhancementField = GetFieldRecursive(type, "EnhancementBonus") ?? GetFieldRecursive(type, "m_EnhancementBonus");
+            if (enhancementField != null)
+            {
+                try
+                {
+                    int bonus = (int)enhancementField.GetValue(comp);
+                    if (bonus != 0)
+                        return string.Format(Helpers.GetString("ui_desc_generic_enhancement", "Enhancement bonus: +{0}"), bonus);
+                }
+                catch { }
             }
 
             // 3. Essaye la traduction directe via le glossaire (Localization.json)
@@ -951,7 +1021,7 @@ namespace CraftingSystem
             return "";
         }
 
-        private static string SummarizeConditions(object checker, BlueprintItemEnchantment parentBp)
+        private static string SummarizeConditions(object checker, BlueprintScriptableObject parentBp)
         {
             if (checker == null) return "";
             try
@@ -994,7 +1064,7 @@ namespace CraftingSystem
             return null;
         }
 
-        private static string SummarizeAddStatBonus(object comp, BlueprintItemEnchantment parentBp)
+        private static string SummarizeAddStatBonus(object comp, BlueprintScriptableObject parentBp)
         {
             try
             {
