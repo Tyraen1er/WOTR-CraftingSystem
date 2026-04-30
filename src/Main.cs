@@ -38,7 +38,11 @@ namespace CraftingSystem
                 Helpers.LoadLocalization(modEntry.Path);
                 DeferredInventoryOpener.Initialize();
 
-                ModEntry.Logger.Log("Crafting System: Mod loaded and Harmony patched.");
+                ModEntry.Logger.Log("Crafting System: Mod loaded with Dynamic Persistence Patch.");
+                
+                modEntry.OnGUI = OnGUI;
+                modEntry.OnSaveGUI = OnSaveGUI;
+                modEntry.OnUpdate = OnUpdate;
                 return true;
             } catch (Exception e) {
                 modEntry.Logger.Error($"Crafting System: Failed to load: {e}");
@@ -150,6 +154,26 @@ namespace CraftingSystem
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Error in BlueprintsCache.Init: {ex}");
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(Kingmaker.EntitySystem.Persistence.JsonUtility.BlueprintConverter), "ReadJson")]
+    public static class BlueprintConverter_ReadJson_Patch
+    {
+        [HarmonyPrefix]
+        public static bool Prefix(Newtonsoft.Json.JsonReader reader, ref object __result)
+        {
+            if (reader.TokenType == Newtonsoft.Json.JsonToken.String)
+            {
+                string guidStr = (string)reader.Value;
+                if (guidStr != null && guidStr.ToUpper().StartsWith(DynamicGuidHelper.Signature))
+                {
+                    // C'est un de nos GUIDs
+                    __result = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(guidStr);
+                    if (__result != null) return false;
+                }
+            }
+            return true;
         }
     }
 

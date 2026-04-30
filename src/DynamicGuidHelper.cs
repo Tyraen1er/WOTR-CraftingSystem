@@ -59,7 +59,22 @@ namespace CraftingSystem
         {
             enchantId = null;
             parameters = new List<int>();
+
+            // Optimisation : On vérifie les premiers octets avant de faire un ToString coûteux
+            // Le GUID est stocké en Little Endian ou Big Endian selon les plateformes,
+            // mais BlueprintGuid.ToByteArray() nous donne une base stable.
+            // "C2AF" en hexa (Big Endian) correspondrait aux 2 premiers octets.
+            // En chaîne "C2AF...", C2 est l'octet 0, AF l'octet 1.
             
+            byte[] bytes = guid.ToByteArray();
+            // On vérifie si la chaîne commencerait par "C2AF"
+            // Dans un GUID .NET, les 4 premiers octets sont inversés (int), les 2 suivants (short), etc.
+            // "C2AF0012-..." -> Data1 = 0xC2AF0012
+            // Sur architecture Little Endian, les octets de Data1 sont [12, 00, AF, C2]
+            
+            if (bytes[3] != 0xC2 || bytes[2] != 0xAF)
+                return false;
+
             string s = guid.ToString().Replace("-", "").ToUpper();
             
             if (s.Length != 32 || !s.StartsWith(Signature))

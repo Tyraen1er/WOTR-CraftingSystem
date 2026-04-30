@@ -141,6 +141,7 @@ namespace CraftingSystem
     {
         public static HashSet<BlueprintGuid> InjectedGuids = new HashSet<BlueprintGuid>();
         public static List<CustomEnchantmentData> AllModels = new List<CustomEnchantmentData>();
+        private static bool _isBuilding = false;
 
         public static void BuildAndInjectAll()
         {
@@ -254,34 +255,39 @@ namespace CraftingSystem
 
         public static BlueprintScriptableObject GetOrBuildDynamicBlueprint(string guidStr)
         {
-            Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Requesting blueprint for GUID: {guidStr}");
-            var guid = BlueprintGuid.Parse(guidStr);
-            var existing = (BlueprintScriptableObject)ResourcesLibrary.TryGetBlueprint(guid);
-            if (existing != null) 
+            if (_isBuilding) return null;
+            _isBuilding = true;
+            try 
             {
-                Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Found existing blueprint in cache: {existing.name}");
-                return existing;
-            }
+                Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Requesting blueprint for GUID: {guidStr}");
+                var guid = BlueprintGuid.Parse(guidStr);
+                
+                // On vérifie si par hasard il n'a pas été injecté entre temps
+                var existing = (BlueprintScriptableObject)ResourcesLibrary.TryGetBlueprint(guid);
+                if (existing != null) 
+                {
+                    return existing;
+                }
 
-            // Décodage du GUID
-            if (!DynamicGuidHelper.TryDecodeGuid(guid, out string enchantId, out List<int> vals))
+                // Décodage du GUID
+                if (!DynamicGuidHelper.TryDecodeGuid(guid, out string enchantId, out List<int> vals))
+                {
+                    return null;
+                }
+
+                // Trouver le modèle
+                var model = AllModels.FirstOrDefault(m => m.EnchantId == enchantId && (vals[0] == 1 ? m.Type == "Feature" : m.Type != "Feature"));
+                if (model == null)
+                {
+                    return null;
+                }
+
+                return CreateDynamicBlueprint(model, guid, vals.Skip(1).ToList());
+            }
+            finally
             {
-                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Failed to decode GUID format: {guidStr}");
-                return null;
+                _isBuilding = false;
             }
-
-            Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Decoded: ID={enchantId}, Type={(vals[0] == 1 ? "Feature" : "Enchantment")}, Params=[{string.Join(", ", vals.Skip(1))}]");
-
-            // Trouver le modèle
-            var model = AllModels.FirstOrDefault(m => m.EnchantId == enchantId && (vals[0] == 1 ? m.Type == "Feature" : m.Type != "Feature"));
-            if (model == null)
-            {
-                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] No model found for ID {enchantId} and Type {(vals[0] == 1 ? "Feature" : "Enchantment")}");
-                return null;
-            }
-
-            Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Using model: {model.Name}");
-            return CreateDynamicBlueprint(model, guid, vals.Skip(1).ToList());
         }
 
         private static BlueprintScriptableObject CreateDynamicBlueprint(CustomEnchantmentData model, BlueprintGuid guid, List<int> paramValues)

@@ -37,7 +37,7 @@
     "Type": "ArmorEnchantment", 
     "EnchantNameKey": "ui_custom_acid_resist_name",
     "EnchantDescKey": "ui_custom_acid_resist_desc",
-    "Prefix": "Resistant",
+    "Prefix": "",
     "Suffix": "of Protection",
     "EnchantmentCost": 3,
     "Components": [
