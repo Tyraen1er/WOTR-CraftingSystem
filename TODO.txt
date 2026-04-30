@@ -1,2 +1,3 @@
 - Wands, scroll et potions ?
 - creer ses propres enchantements
+- - Pathc harmony loading optimization

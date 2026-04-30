@@ -13,7 +13,7 @@ namespace CraftingSystem
         /// Génère un GUID déterministe encodant l'ID de l'enchantement et ses paramètres.
         /// Format : [C2AF (4)] [EnchantId (3)] [Params (variable)] [00...00 (remplissage)]
         /// </summary>
-        public static BlueprintGuid GenerateGuid(string enchantId, params int[] parameters)
+        public static BlueprintGuid GenerateGuid(string enchantId, int[] parameters, bool isFeature = false)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(Signature);
@@ -25,19 +25,21 @@ namespace CraftingSystem
             
             sb.Append(id);
 
+            // On prépare la liste finale (le flag isFeature est le PREMIER paramètre)
+            List<int> finalParams = new List<int>();
+            finalParams.Add(isFeature ? 1 : 0);
+            if (parameters != null) finalParams.AddRange(parameters);
+
             // Nombre de paramètres (1 caractère hexa : 0-F)
-            int count = parameters?.Length ?? 0;
+            int count = finalParams.Count;
             sb.Append(count.ToString("X1"));
 
             // Encodage des paramètres (2 chars hexa par paramètre)
-            if (parameters != null)
+            foreach (int p in finalParams)
             {
-                foreach (int p in parameters)
-                {
-                    // On clamp à 0-255 pour tenir sur 2 caractères
-                    int clamped = Math.Max(0, Math.Min(255, p));
-                    sb.Append(clamped.ToString("X2"));
-                }
+                // On clamp à 0-255 pour tenir sur 2 caractères
+                int clamped = Math.Max(0, Math.Min(255, p));
+                sb.Append(clamped.ToString("X2"));
             }
 
             // Remplissage avec des zéros pour atteindre 32 caractères

@@ -48,17 +48,35 @@ namespace CraftingSystem
         protected override JsonObjectContract CreateObjectContract(Type objectType)
         {
             var contract = base.CreateObjectContract(objectType);
-            
-            // Plus besoin de CreateInstance pour les blueprints dans les versions récentes de WOTR (ce ne sont plus des ScriptableObjects)
-            /*
-            if (typeof(ScriptableObject).IsAssignableFrom(objectType))
-            {
-                contract.DefaultCreator = () => ScriptableObject.CreateInstance(objectType);
-            }
-            */
 
-            // Supprimer les appels OnDeserialized qui causent des crashs (NRE sur OwnerBlueprint)
-            if (typeof(BlueprintComponent).IsAssignableFrom(objectType) || typeof(BlueprintScriptableObject).IsAssignableFrom(objectType))
+            // Gestion de l'instanciation pour les classes sans constructeur public par défaut
+            if (contract.DefaultCreator == null && !objectType.IsAbstract && !objectType.IsInterface)
+            {
+                if (typeof(ScriptableObject).IsAssignableFrom(objectType))
+                {
+                    contract.DefaultCreator = () => ScriptableObject.CreateInstance(objectType);
+                }
+                else
+                {
+                    contract.DefaultCreator = () =>
+                    {
+                        try
+                        {
+                            // On tente d'abord un constructeur non-public
+                            return Activator.CreateInstance(objectType, true);
+                        }
+                        catch
+                        {
+                            // En dernier recours, on crée l'objet sans appeler de constructeur
+                            return System.Runtime.Serialization.FormatterServices.GetUninitializedObject(objectType);
+                        }
+                    };
+                }
+            }
+
+            // SÉCURITÉ : Désactiver les callbacks de désérialisation d'Owlcat qui plantent
+            // car ils accèdent à des systèmes non encore initialisés (comme le LocalizationManager).
+            if (typeof(BlueprintComponent).IsAssignableFrom(objectType))
             {
                 contract.OnDeserializedCallbacks.Clear();
             }
@@ -77,25 +95,38 @@ namespace CraftingSystem
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (reader.TokenType == JsonToken.Null) return null;
+            try
+            {
+                if (reader.TokenType == JsonToken.Null) return null;
 
-            string guidString = reader.Value as string;
-            if (string.IsNullOrEmpty(guidString)) return null;
+                string guidString = reader.Value as string;
+                if (string.IsNullOrEmpty(guidString)) return null;
 
-            if (guidString.StartsWith("!bp_"))
-                guidString = guidString.Substring(4);
+                if (guidString.StartsWith("!bp_"))
+                    guidString = guidString.Substring(4);
 
-            var reference = Activator.CreateInstance(objectType) as BlueprintReferenceBase;
-            var guid = BlueprintGuid.Parse(guidString);
+                var reference = Activator.CreateInstance(objectType) as BlueprintReferenceBase;
+                if (reference == null)
+                {
+                    Main.ModEntry.Logger.Warning($"[DEBUG_REF] Activator.CreateInstance returned null for {objectType.Name}");
+                    return null;
+                }
 
-            // Important : on doit remplir à la fois le champ 'guid' (string) et 'deserializedGuid' (BlueprintGuid)
-            // car le jeu utilise 'deserializedGuid' pour ses accès internes, mais 'guid' pour la sérialisation.
-            reference.ReadGuidFromGuid(guid);
+                var guid = BlueprintGuid.Parse(guidString);
 
-            var field = typeof(BlueprintReferenceBase).GetField("guid", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (field != null) field.SetValue(reference, guid.ToString());
+                // Important : on doit remplir à la fois le champ 'guid' (string) et 'deserializedGuid' (BlueprintGuid)
+                reference.ReadGuidFromGuid(guid);
 
-            return reference;
+                var field = typeof(BlueprintReferenceBase).GetField("guid", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (field != null) field.SetValue(reference, guid.ToString());
+
+                return reference;
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"[DEBUG_REF] Error reading reference {objectType.Name}: {ex}");
+                return null;
+            }
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -115,7 +146,7 @@ namespace CraftingSystem
         public int Min = 0; // Pour Type == Slider
         public int Max = 100; // Pour Type == Slider
         public int Step = 1;
-        
+
         // Cible pour l'injection
         public int ComponentIndex;
         public string FieldName; // ex: "Type", "Value.Value"
@@ -141,7 +172,7 @@ namespace CraftingSystem
     {
         public static HashSet<BlueprintGuid> InjectedGuids = new HashSet<BlueprintGuid>();
         public static List<CustomEnchantmentData> AllModels = new List<CustomEnchantmentData>();
-        private static bool _isBuilding = false;
+        private static HashSet<string> _currentlyBuilding = new HashSet<string>();
         private static readonly object _lock = new object();
 
         public static void BuildAndInjectAll()
@@ -164,20 +195,35 @@ namespace CraftingSystem
                 settings.Converters.Add(new BlueprintReferenceConverter());
 
                 var jsonContent = File.ReadAllText(configPath);
-                var customDataList = JsonConvert.DeserializeObject<List<CustomEnchantmentData>>(jsonContent, settings);
+                Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Read {jsonContent.Length} characters from CustomEnchants.json");
+
+                List<CustomEnchantmentData> customDataList = null;
+                try
+                {
+                    customDataList = JsonConvert.DeserializeObject<List<CustomEnchantmentData>>(jsonContent, settings);
+                }
+                catch (Exception ex)
+                {
+                    Main.ModEntry.Logger.Error($"[DEBUG_CUSTOM_ENCHANT] JSON Deserialization failed: {ex}");
+                    return;
+                }
+
                 AllModels = customDataList ?? new List<CustomEnchantmentData>();
+                Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Loaded {AllModels.Count} models from JSON.");
 
                 if (customDataList == null) return;
 
                 foreach (var data in customDataList)
                 {
+                    Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Processing model: {data.Name} (ID: {data.EnchantId})");
                     if (string.IsNullOrEmpty(data.Guid) || string.IsNullOrEmpty(data.Name)) continue;
 
                     BlueprintScriptableObject bp;
                     if (data.Type == "WeaponEnchantment") bp = new BlueprintWeaponEnchantment();
                     else if (data.Type == "ArmorEnchantment") bp = new BlueprintArmorEnchantment();
                     else if (data.Type == "Feature") bp = new BlueprintFeature();
-                    else {
+                    else
+                    {
                         Main.ModEntry.Logger.Error($"Unknown Custom Type: {data.Type} for {data.Name}");
                         continue;
                     }
@@ -208,7 +254,8 @@ namespace CraftingSystem
                     {
                         foreach (var comp in bp.ComponentsArray)
                         {
-                            if (comp == null) {
+                            if (comp == null)
+                            {
                                 Main.ModEntry.Logger.Warning($"[DEBUG_CUSTOM_ENCHANT] Null component found in {bp.name}!");
                                 continue;
                             }
@@ -216,10 +263,12 @@ namespace CraftingSystem
                             Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Component in {bp.name}: {comp.GetType().Name} (name: {comp.name})");
 
                             // Log details for some known components
-                            if (comp is Kingmaker.UnitLogic.FactLogic.AddDamageResistanceEnergy dre) {
+                            if (comp is Kingmaker.UnitLogic.FactLogic.AddDamageResistanceEnergy dre)
+                            {
                                 Main.ModEntry.Logger.Log($"  -> Type: {dre.Type}, Value: {dre.Value?.Value} (Type: {dre.Value?.ValueType})");
                             }
-                            if (comp is Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment aufe) {
+                            if (comp is Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment aufe)
+                            {
                                 var featRef = (Kingmaker.Blueprints.BlueprintFeatureReference)typeof(Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment)
                                     .GetField("m_Feature", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(aufe);
                                 Main.ModEntry.Logger.Log($"  -> Feature Ref: {featRef?.deserializedGuid}");
@@ -230,12 +279,13 @@ namespace CraftingSystem
                     // Initialiser le blueprint comme le ferait le jeu (OnEnable gère les OwnerBlueprint des composants)
                     Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Initializing {bp.name}...");
                     bp.OnEnable();
-                    
+
                     // Informer le système de modding d'Owlcat (permet le patchage dynamique)
                     object dummy;
                     OwlcatModificationsManager.Instance.OnResourceLoaded(bp, bp.AssetGuid.ToString(), out dummy);
 
-                    // Injection dans le cache avec vérification de collision
+                    // --- SÉCURITÉ CRITIQUE : NE PAS SUPPRIMER ---
+                    // Vérification de collision avant injection pour éviter de corrompre le cache du jeu
                     var existing = ResourcesLibrary.TryGetBlueprint(bp.AssetGuid);
                     if (existing != null)
                     {
@@ -258,19 +308,16 @@ namespace CraftingSystem
         {
             lock (_lock)
             {
-                if (_isBuilding) return null;
-                _isBuilding = true;
-                try 
+                if (_currentlyBuilding.Contains(guidStr)) return null;
+                _currentlyBuilding.Add(guidStr);
+                try
                 {
-                    // Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Requesting blueprint for GUID: {guidStr}");
+                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Requesting blueprint for GUID: {guidStr}");
                     var guid = BlueprintGuid.Parse(guidStr);
-                    
+
                     // On vérifie si par hasard il n'a pas été injecté entre temps
                     var existing = (BlueprintScriptableObject)ResourcesLibrary.TryGetBlueprint(guid);
-                    if (existing != null) 
-                    {
-                        return existing;
-                    }
+                    if (existing != null) return existing;
 
                     // Décodage du GUID
                     if (!DynamicGuidHelper.TryDecodeGuid(guid, out string enchantId, out List<int> vals))
@@ -280,16 +327,13 @@ namespace CraftingSystem
 
                     // Trouver le modèle
                     var model = AllModels.FirstOrDefault(m => m.EnchantId == enchantId && (vals[0] == 1 ? m.Type == "Feature" : m.Type != "Feature"));
-                    if (model == null)
-                    {
-                        return null;
-                    }
+                    if (model == null) return null;
 
                     return CreateDynamicBlueprint(model, guid, vals.Skip(1).ToList());
                 }
                 finally
                 {
-                    _isBuilding = false;
+                    _currentlyBuilding.Remove(guidStr);
                 }
             }
         }
@@ -313,14 +357,38 @@ namespace CraftingSystem
                 Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Cloning component: {comp.GetType().Name}");
                 var json = JsonConvert.SerializeObject(comp, new JsonSerializerSettings { ContractResolver = new OwlcatContractResolver() });
                 var clone = JsonConvert.DeserializeObject(json, comp.GetType(), new JsonSerializerSettings { ContractResolver = new OwlcatContractResolver() }) as BlueprintComponent;
-                if (clone != null) {
+                if (clone != null)
+                {
                     clone.name = $"${clone.GetType().Name}${Guid.NewGuid()}";
+                    clone.OwnerBlueprint = bp;
+                    
+                    // --- RÉACTIVATION MANUELLE DU COMPOSANT ---
+                    // On appelle OnDeserialized manuellement car on l'a désactivé dans le resolver
+                    // pour éviter les crashs, mais ici on a un OwnerBlueprint donc c'est safe.
+                    try {
+                        var onDes = typeof(BlueprintComponent).GetMethod("OnDeserialized", BindingFlags.Instance | BindingFlags.NonPublic);
+                        onDes?.Invoke(clone, new object[] { new System.Runtime.Serialization.StreamingContext() });
+                    } catch (Exception ex) {
+                        Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] Failed to invoke OnDeserialized on {clone.GetType().Name}: {ex.Message}");
+                    }
+
                     components.Add(clone);
                 }
             }
             bp.ComponentsArray = components.ToArray();
+            Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] BP {bp.name} has {bp.ComponentsArray.Length} components.");
 
-            // Initialisation des textes (Réflexion car champs privés/protégés)
+            // Appel de l'initialisation globale sur le blueprint (cela réveille les composants)
+            try
+            {
+                bp.OnEnable();
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Warning($"OnEnable failed for {bp.name}: {ex.Message}");
+            }
+
+            // Initialisation des textes
             if (bp is BlueprintItemEnchantment ench)
             {
                 var t = typeof(BlueprintItemEnchantment);
@@ -342,14 +410,14 @@ namespace CraftingSystem
             {
                 var p = model.DynamicParams[i];
                 var val = paramValues[i];
-                
+
                 if (p.ComponentIndex < 0)
                 {
                     Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Parameter '{p.Name}' is UI-only for this model (Index -1), skipping local injection.");
                     continue;
                 }
 
-                if (p.ComponentIndex < bp.ComponentsArray.Length)
+                if (p.ComponentIndex >= 0 && p.ComponentIndex < bp.ComponentsArray.Length)
                 {
                     var comp = bp.ComponentsArray[p.ComponentIndex];
                     Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Injecting parameter '{p.Name}': Value={val} into {p.FieldName} of {comp.GetType().Name}");
@@ -367,10 +435,8 @@ namespace CraftingSystem
                 var featureComp = itemEnch.ComponentsArray.OfType<Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment>().FirstOrDefault();
                 if (featureComp != null)
                 {
-                    List<int> featVals = new List<int> { 1 }; // 1 = Feature
-                    featVals.AddRange(paramValues);
-                    var featGuid = DynamicGuidHelper.GenerateGuid(model.EnchantId, featVals.ToArray());
-                    
+                    var featGuid = DynamicGuidHelper.GenerateGuid(model.EnchantId, paramValues.ToArray(), true);
+
                     Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Linking to Feature GUID: {featGuid}");
                     GetOrBuildDynamicBlueprint(featGuid.ToString());
 
@@ -381,9 +447,6 @@ namespace CraftingSystem
                 }
             }
 
-            // Initialisation et Injection
-            bp.OnEnable();
-            
             object dummy;
             OwlcatModificationsManager.Instance.OnResourceLoaded(bp, bp.AssetGuid.ToString(), out dummy);
 
@@ -398,11 +461,12 @@ namespace CraftingSystem
         {
             var parts = fieldPath.Split('.');
             object current = target;
-            
+
             for (int i = 0; i < parts.Length - 1; i++)
             {
                 var field = current.GetType().GetField(parts[i], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                if (field == null) {
+                if (field == null)
+                {
                     Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Field path not found: {parts[i]} in {current.GetType().Name}");
                     return;
                 }
@@ -412,16 +476,19 @@ namespace CraftingSystem
             var lastField = current.GetType().GetField(parts.Last(), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             if (lastField != null)
             {
-                if (lastField.FieldType.IsEnum) {
-                    var enumVal = Enum.ToObject(lastField.FieldType, value);
-                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Setting Enum field {lastField.Name} to {enumVal} ({value})");
-                    lastField.SetValue(current, enumVal);
-                } else {
+                if (lastField.FieldType.IsEnum)
+                {
+                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Setting Enum field {lastField.Name} to {value}");
+                    lastField.SetValue(current, Enum.ToObject(lastField.FieldType, value));
+                }
+                else
+                {
                     Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Setting field {lastField.Name} to {value}");
                     lastField.SetValue(current, Convert.ChangeType(value, lastField.FieldType));
                 }
             }
-            else {
+            else
+            {
                 Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Final field not found: {parts.Last()} in {current.GetType().Name}");
             }
         }

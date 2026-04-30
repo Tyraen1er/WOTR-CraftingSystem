@@ -38,6 +38,7 @@ namespace CraftingSystem
                 Helpers.LoadLocalization(modEntry.Path);
                 DeferredInventoryOpener.Initialize();
 
+                ModEntry.Logger.Log("!!! CRAFTING SYSTEM - DYNAMIC VERSION 1.7.2 - CHECKPOINT !!!");
                 ModEntry.Logger.Log("Crafting System: Mod loaded with Dynamic Persistence Patch.");
                 
                 modEntry.OnGUI = OnGUI;
@@ -64,7 +65,7 @@ namespace CraftingSystem
             UnityEngine.GUILayout.Space(20);
             UnityEngine.KeyCode oldInv = CraftingSettings.ShortcutInventory.keyCode;
             byte oldInvMod = CraftingSettings.ShortcutInventory.modifiers;
-            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutInventory, Helpers.GetString("ui_umm_shortcut") + " ", null, UnityEngine.GUILayout.Width(150));
+            UnityModManager.UI.DrawKeybindingSmart(CraftingSettings.ShortcutInventory, Helpers.GetString("ui_umm_shortcut") + " ", null, UnityEngine.GUILayout.Width(150));
             if (CraftingSettings.ShortcutInventory.keyCode != oldInv || CraftingSettings.ShortcutInventory.modifiers != oldInvMod) CraftingSettings.SaveSettings();
             UnityEngine.GUILayout.EndHorizontal();
 
@@ -78,7 +79,7 @@ namespace CraftingSystem
             UnityEngine.GUILayout.Space(20);
             UnityEngine.KeyCode oldImgui = CraftingSettings.ShortcutIMGUI.keyCode;
             byte oldImguiMod = CraftingSettings.ShortcutIMGUI.modifiers;
-            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutIMGUI, Helpers.GetString("ui_umm_shortcut") + "  ", null, UnityEngine.GUILayout.Width(150));
+            UnityModManager.UI.DrawKeybindingSmart(CraftingSettings.ShortcutIMGUI, Helpers.GetString("ui_umm_shortcut") + "  ", null, UnityEngine.GUILayout.Width(150));
             if (CraftingSettings.ShortcutIMGUI.keyCode != oldImgui || CraftingSettings.ShortcutIMGUI.modifiers != oldImguiMod) CraftingSettings.SaveSettings();
             UnityEngine.GUILayout.EndHorizontal();
         }
@@ -165,23 +166,28 @@ namespace CraftingSystem
         {
             if (reader.TokenType == Newtonsoft.Json.JsonToken.String)
             {
-                // 'as' est légèrement plus sûr/rapide que le cast explicite (string)
-                string guidStr = reader.Value as string; 
+                string guidStr = reader.Value as string;
+                if (string.IsNullOrEmpty(guidStr) || guidStr.Length < 8) return true;
+
+                // On cherche notre signature "C2AF" ou "c2af" dans la chaîne (peut être précédée de !bp_)
+                int signatureIdx = guidStr.IndexOf("c2af", StringComparison.OrdinalIgnoreCase);
                 
-                if (guidStr != null && guidStr.Length == 32)
+                if (signatureIdx >= 0)
                 {
-                    // Optimisation : Opération bit à bit ( | 0x20 ) pour ignorer la casse
-                    // Cela transforme 'C' (67) en 'c' (99) sans utiliser de condition "ou" (||)
-                    // On teste guidStr[1] == '2' en premier car c'est une égalité stricte (échoue plus vite)
-                    if (guidStr[1] == '2' && 
-                       (guidStr[0] | 0x20) == 'c' && 
-                       (guidStr[2] | 0x20) == 'a' && 
-                       (guidStr[3] | 0x20) == 'f')
+                    // On nettoie la chaîne pour ne garder que le GUID
+                    string cleanGuid = guidStr.Substring(signatureIdx);
+                    if (cleanGuid.Length > 32) cleanGuid = cleanGuid.Substring(0, 32);
+
+                    // --- RÉPARATION DES GUIDS TRONQUÉS ---
+                    if (cleanGuid.Length < 32)
                     {
-                        // C'est un de nos GUIDs
-                        __result = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(guidStr);
-                        if (__result != null) return false;
+                        Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Repairing truncated GUID: {cleanGuid}");
+                        cleanGuid = cleanGuid.PadRight(32, '0');
                     }
+
+                    // On tente la résolution dynamique
+                    __result = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(cleanGuid);
+                    if (__result != null) return false;
                 }
             }
             return true;
