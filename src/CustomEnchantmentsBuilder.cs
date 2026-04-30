@@ -153,16 +153,18 @@ namespace CraftingSystem
     {
         public string Guid;
         public string EnchantId; // ID à 3 chiffres (ex: 001) pour le générateur dynamique
-        public string Name;
+        public object BaseName;
+        public object NameCompleted;
         public string Type; // WeaponEnchantment, ArmorEnchantment, Feature
         public string EnchantNameKey;
         public string EnchantDescKey;
-        public string Prefix;
-        public string Suffix;
+        public object Prefix;
+        public object Suffix;
         public int EnchantmentCost; // Utilisé si pas de formule
         public string PointCostFormula;
         public string GoldOverrideFormula;
         public int MaxNotEpic; // Seuil au-delà duquel l'enchantement devient épique
+        public int PriceFactor = 2000; // Multiplicateur de prix (2000 par défaut pour les armes)
         public List<string> Slots = new List<string>(); // Liste des types d'items autorisés (Armor, Weapon, Shield...)
         public List<BlueprintComponent> Components = new List<BlueprintComponent>();
         public List<DynamicParam> DynamicParams = new List<DynamicParam>();
@@ -210,6 +212,12 @@ namespace CraftingSystem
         private static HashSet<string> _currentlyBuilding = new HashSet<string>();
         private static readonly object _lock = new object();
 
+        public static CustomEnchantmentData GetModelById(string id, bool isFeature = false)
+        {
+            // Filtrage par ID et type pour éviter les collisions (ex: Feature vs Enchantment partageant le même ID 001)
+            return AllModels.FirstOrDefault(m => m.EnchantId == id && (isFeature ? m.Type == "Feature" : m.Type != "Feature"));
+        }
+
         public static void BuildAndInjectAll()
         {
             // Le fichier semble être à la racine d'après les logs
@@ -229,7 +237,7 @@ namespace CraftingSystem
             {
                 Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] File read success. Content length: {File.ReadAllText(path).Length} chars.");
                 
-                string json = File.ReadAllText(path);
+                string json = File.ReadAllText(path, System.Text.Encoding.UTF8);
                 var settings = new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.Auto,
@@ -254,8 +262,9 @@ namespace CraftingSystem
 
                 foreach (var model in AllModels)
                 {
-                    _customModels[model.Name] = model;
-                    Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Registered model: {model.Name} (ID: {model.EnchantId})");
+                    string internalKey = Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted); // Utilise la locale actuelle, mais au moins c'est une string
+                    _customModels[internalKey] = model;
+                    Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Registered model: {internalKey} (ID: {model.EnchantId})");
 
                     // On pré-injecte le modèle de base si c'est une Feature (utile pour les résistances)
                     if (model.Type == "Feature")
@@ -271,12 +280,12 @@ namespace CraftingSystem
                             if (bp != null)
                             {
                                 ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(guid, bp);
-                                Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Successfully pre-injected feature: {model.Name} with GUID {guid}");
+                                Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Successfully pre-injected feature: {model.BaseName} with GUID {guid}");
                             }
                         }
                         catch (Exception ex)
                         {
-                            Main.ModEntry.Logger.Error($"[CUSTOM_ENCHANTS] Error pre-injecting feature {model.Name}: {ex}");
+                            Main.ModEntry.Logger.Error($"[CUSTOM_ENCHANTS] Error pre-injecting feature {model.BaseName}: {ex}");
                         }
                     }
                 }
@@ -310,7 +319,7 @@ namespace CraftingSystem
                     }
 
                     // Trouver le modèle
-                    var model = AllModels.FirstOrDefault(m => m.EnchantId == enchantId && (vals[0] == 1 ? m.Type == "Feature" : m.Type != "Feature"));
+                    var model = GetModelById(enchantId, vals[0] == 1);
                     if (model == null)
                     {
                         Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] No model found for EnchantId {enchantId}");
@@ -328,44 +337,77 @@ namespace CraftingSystem
 
         private static BlueprintScriptableObject CreateDynamicBlueprint(CustomEnchantmentData model, BlueprintGuid guid, List<int> paramValues)
         {
-            Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Starting creation of {model.Name} for GUID {guid}");
-            BlueprintScriptableObject bp;
-            // Utilisation de CreateInstance et double-cast (object) pour contourner les problèmes de hiérarchie à la compilation
-            if (model.Type == "WeaponEnchantment" || model.Type == "Weapon") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintWeaponEnchantment));
-            else if (model.Type == "ArmorEnchantment" || model.Type == "Armor") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintArmorEnchantment));
-            else if (model.Type == "Other" || model.Type == "Equipment") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintEquipmentEnchantment));
-            else if (model.Type == "Feature") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintFeature));
-            else return null;
+            Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Starting creation of {Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted)} for GUID {guid}");
+            BlueprintScriptableObject bp = null;
+            try {
+                // On essaie de récupérer les types depuis l'assembly de BlueprintScriptableObject pour être sûr d'avoir les types du JEU
+                var gameAssembly = typeof(BlueprintScriptableObject).Assembly;
+                Type t = null;
+                if (model.Type == "WeaponEnchantment" || model.Type == "Weapon") t = gameAssembly.GetType("Kingmaker.Blueprints.Items.Ecnchantments.BlueprintWeaponEnchantment");
+                else if (model.Type == "ArmorEnchantment" || model.Type == "Armor") t = gameAssembly.GetType("Kingmaker.Blueprints.Items.Ecnchantments.BlueprintArmorEnchantment");
+                else if (model.Type == "Other" || model.Type == "Equipment") t = gameAssembly.GetType("Kingmaker.Blueprints.Items.Ecnchantments.BlueprintEquipmentEnchantment");
+                else if (model.Type == "Feature") t = gameAssembly.GetType("Kingmaker.Blueprints.Classes.BlueprintFeature");
 
-            bp.name = $"{model.Name}_{guid}";
+                if (t != null) {
+                    Main.ModEntry.Logger.Log($"[DEBUG] Resolved type {t.FullName} from {t.Assembly.GetName().Name}. BaseType: {t.BaseType?.Name}");
+                    bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(t);
+                } else {
+                    Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Could not resolve type Kingmaker.Blueprints.Items.Ecnchantments.Blueprint{model.Type}");
+                    // Fallback sur le type compilé
+                    if (model.Type == "WeaponEnchantment" || model.Type == "Weapon") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintWeaponEnchantment));
+                    else if (model.Type == "ArmorEnchantment" || model.Type == "Armor") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintArmorEnchantment));
+                    else if (model.Type == "Other" || model.Type == "Equipment") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintEquipmentEnchantment));
+                    else if (model.Type == "Feature") bp = (BlueprintScriptableObject)(object)ScriptableObject.CreateInstance(typeof(BlueprintFeature));
+                }
+            } catch (Exception ex) {
+                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] ScriptableObject.CreateInstance failed: {ex}");
+            }
+
+            if (bp == null) {
+                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] FATAL: Could not create instance for type {model.Type}");
+                return null;
+            }
+
+            bp.name = $"Dynamic_{model.EnchantId}_{guid}";
             bp.AssetGuid = guid;
 
             // Injection des composants
             var components = new List<BlueprintComponent>();
             foreach (var comp in model.Components)
             {
-                Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Cloning component: {comp.GetType().Name}");
-                var json = JsonConvert.SerializeObject(comp, new JsonSerializerSettings { ContractResolver = new OwlcatContractResolver() });
-                var clone = JsonConvert.DeserializeObject(json, comp.GetType(), new JsonSerializerSettings { ContractResolver = new OwlcatContractResolver() }) as BlueprintComponent;
-                if (clone != null)
+                try
                 {
-                    clone.name = $"${clone.GetType().Name}${Guid.NewGuid()}";
-                    clone.OwnerBlueprint = bp;
+                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Cloning component: {comp.GetType().Name}");
+                    var settings = new JsonSerializerSettings { 
+                        ContractResolver = new OwlcatContractResolver(),
+                        TypeNameHandling = TypeNameHandling.All
+                    };
+                    settings.Converters.Add(new BlueprintReferenceConverter());
 
-                    // --- RÉACTIVATION MANUELLE DU COMPOSANT ---
-                    // On appelle OnDeserialized manuellement car on l'a désactivé dans le resolver
-                    // pour éviter les crashs, mais ici on a un OwnerBlueprint donc c'est safe.
-                    try
+                    var json = JsonConvert.SerializeObject(comp, settings);
+                    var clone = JsonConvert.DeserializeObject(json, comp.GetType(), settings) as BlueprintComponent;
+                    if (clone != null)
                     {
-                        var onDes = typeof(BlueprintComponent).GetMethod("OnDeserialized", BindingFlags.Instance | BindingFlags.NonPublic);
-                        onDes?.Invoke(clone, new object[] { new System.Runtime.Serialization.StreamingContext() });
-                    }
-                    catch (Exception ex)
-                    {
-                        Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] Failed to invoke OnDeserialized on {clone.GetType().Name}: {ex.Message}");
-                    }
+                        clone.name = $"${clone.GetType().Name}${Guid.NewGuid()}";
+                        clone.OwnerBlueprint = bp;
 
-                    components.Add(clone);
+                        // --- RÉACTIVATION MANUELLE DU COMPOSANT ---
+                        try
+                        {
+                            var onDes = typeof(BlueprintComponent).GetMethod("OnDeserialized", BindingFlags.Instance | BindingFlags.NonPublic);
+                            onDes?.Invoke(clone, new object[] { new System.Runtime.Serialization.StreamingContext() });
+                        }
+                        catch (Exception ex)
+                        {
+                            Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] Failed to invoke OnDeserialized on {clone.GetType().Name}: {ex.Message}");
+                        }
+
+                        components.Add(clone);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Failed to clone component of type {comp.GetType().Name}: {ex}");
                 }
             }
             bp.ComponentsArray = components.ToArray();
@@ -375,23 +417,61 @@ namespace CraftingSystem
             try { bp.OnEnable(); } catch (Exception ex) { Main.ModEntry.Logger.Warning($"OnEnable failed for {bp.name}: {ex.Message}"); }
 
             // Initialisation des textes
+            // --- RÉSOLUTION DES PARAMÈTRES POUR LE NOMMAGE ---
+            var replacements = new Dictionary<string, string>();
+            for (int i = 0; i < model.DynamicParams.Count && i < paramValues.Count; i++)
+            {
+                var p = model.DynamicParams[i];
+                var val = paramValues[i];
+                string resolvedVal = val.ToString();
+
+                // Si c'est un Enum, on essaie de récupérer le nom localisé
+                if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
+                {
+                    try {
+                        var enumType = Type.GetType(p.EnumTypeName);
+                        if (enumType != null) {
+                            string enumName = Enum.GetName(enumType, val);
+                            if (!string.IsNullOrEmpty(enumName))
+                                resolvedVal = Helpers.GetString("energy_" + enumName, enumName); 
+                        }
+                    } catch { }
+                }
+
+                replacements[p.Name] = resolvedVal;
+            }
+
+            // Application des noms, préfixes et suffixes avec remplacements
+            string prefix = model.Prefix != null ? Helpers.GetLocalizedString(model.Prefix, replacements) : "";
+            string suffix = model.Suffix != null ? Helpers.GetLocalizedString(model.Suffix, replacements) : "";
+            string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
+
+            if (!string.IsNullOrEmpty(prefix) && !finalName.StartsWith(prefix)) 
+                finalName = prefix + " " + finalName;
+            
+            if (!string.IsNullOrEmpty(suffix) && !finalName.Contains(suffix)) 
+                finalName = finalName + " " + suffix;
+
+            finalName = finalName.Replace("  ", " ").Trim();
+            string staticDesc = !string.IsNullOrEmpty(model.EnchantDescKey) ? Helpers.GetString(model.EnchantDescKey, "") : "";
+
             if (bp is BlueprintItemEnchantment ench)
             {
                 var t = typeof(BlueprintItemEnchantment);
-                t.GetField("m_EnchantName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Name", model.Name));
-                t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Desc", ""));
-                t.GetField("m_Prefix", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Prefix", model.Prefix ?? ""));
-                t.GetField("m_Suffix", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Suffix", model.Suffix ?? ""));
+                t.GetField("m_EnchantName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Name", finalName));
+                t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
+                t.GetField("m_Prefix", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Prefix", Helpers.GetLocalizedString(model.Prefix, replacements) ?? ""));
+                t.GetField("m_Suffix", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Suffix", Helpers.GetLocalizedString(model.Suffix, replacements) ?? ""));
                 t.GetField("m_EnchantmentCost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, model.EnchantmentCost);
             }
             else if (bp is BlueprintFeature feature)
             {
                 var t = typeof(BlueprintUnitFact);
-                t.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(feature, Helpers.CreateString($"{bp.name}.Name", model.Name));
-                t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(feature, Helpers.CreateString($"{bp.name}.Desc", ""));
+                t.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(feature, Helpers.CreateString($"{bp.name}.Name", finalName));
+                t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(feature, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
             }
 
-            // Application des paramètres dynamiques
+            // Application des paramètres dynamiques aux composants
             for (int i = 0; i < model.DynamicParams.Count && i < paramValues.Count; i++)
             {
                 var p = model.DynamicParams[i];
@@ -402,6 +482,23 @@ namespace CraftingSystem
                     var c = bp.ComponentsArray[p.ComponentIndex];
                     Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Injecting parameter '{p.Name}': Value={val} into {p.FieldName} of {c.GetType().Name}");
                     ApplyValueToField(c, p.FieldName, val);
+                }
+            }
+
+            // --- AUTO-GÉNÉRATION DE LA DESCRIPTION (si aucune description statique n'est fournie) ---
+            if (string.IsNullOrEmpty(staticDesc))
+            {
+                string generated = EnchantmentDescriptionGenerator.Generate(bp);
+                if (!string.IsNullOrEmpty(generated))
+                {
+                    var field = bp.GetType().GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic) 
+                                ?? bp.GetType().GetField("m_Description", BindingFlags.Instance | BindingFlags.Public);
+                    
+                    if (field != null)
+                    {
+                        field.SetValue(bp, Helpers.CreateString($"{bp.name}.Desc", generated));
+                        Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Auto-generated description for {bp.name}");
+                    }
                 }
             }
 
@@ -430,6 +527,7 @@ namespace CraftingSystem
             return bp;
         }
 
+        // Suppression de la méthode déplacée dans Helpers
         private static void ApplyValueToField(object target, string fieldPath, int value)
         {
             var parts = fieldPath.Split('.');

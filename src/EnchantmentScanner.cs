@@ -57,6 +57,8 @@ namespace CraftingSystem
         [JsonProperty("IsEpic", NullValueHandling = NullValueHandling.Ignore)]
         public bool IsEpic = false;
 
+        public bool IsEnhancement = false;
+
         [JsonProperty("PriceFactor", NullValueHandling = NullValueHandling.Ignore)]
         public int PriceFactor = -1;
 
@@ -315,6 +317,7 @@ namespace CraftingSystem
                                 Source = "Mod",
                                 PointString = bp.EnchantmentCost > 0 ? $"+{bp.EnchantmentCost}" : "+1",
                                 Description = "", // Sera résolu dynamiquement par l'UI
+                                IsEnhancement = CraftingCalculator.IsPureEnhancement(bp),
                                 Categories = new List<string> { "Discovered" }
                             });
                         }
@@ -388,28 +391,60 @@ namespace CraftingSystem
 
                         if (model != null)
                         {
-                            Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Found Model: {model.Name} for ID {modelId}");
+                            Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Found Model: {model.BaseName} for ID {modelId}");
 
-                            // Préparation des variables pour les formules
-                            // vals[0] est le flag isFeature, on le saute
+                            // Préparation des variables pour les formules et remplacements de texte
                             var formulaVars = new Dictionary<string, double>();
+                            var replacements = new Dictionary<string, string>();
+                            
                             for (int i = 0; i < model.DynamicParams.Count; i++)
                             {
                                 if (i + 1 < values.Count)
                                 {
-                                    formulaVars[model.DynamicParams[i].Name] = values[i + 1];
+                                    var p = model.DynamicParams[i];
+                                    int val = values[i + 1];
+                                    string resolvedVal = val.ToString();
+
+                                    // Résolution des noms d'Enums pour l'affichage (ex: DamageEnergyType.Fire -> Feu)
+                                    if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
+                                    {
+                                        try {
+                                            var enumType = Type.GetType(p.EnumTypeName);
+                                            if (enumType != null) {
+                                                string enumName = Enum.GetName(enumType, val);
+                                                if (!string.IsNullOrEmpty(enumName))
+                                                    resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
+                                            }
+                                        } catch { }
+                                    }
+
+                                    replacements[p.Name] = resolvedVal;
+                                    formulaVars[p.Name] = val;
                                 }
                             }
 
-                            // Création de l'objet de données résolu
+                            // Création du nom complet avec gestion intelligente des espaces et doublons
+                            string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
+                            string prefix = model.Prefix != null ? Helpers.GetLocalizedString(model.Prefix, replacements) : "";
+                            string suffix = model.Suffix != null ? Helpers.GetLocalizedString(model.Suffix, replacements) : "";
+
+                            string fullDisplayName = finalName;
+                            if (!string.IsNullOrEmpty(prefix) && !fullDisplayName.StartsWith(prefix)) 
+                                fullDisplayName = prefix + " " + fullDisplayName;
+                            
+                            if (!string.IsNullOrEmpty(suffix) && !fullDisplayName.Contains(suffix)) 
+                                fullDisplayName = fullDisplayName + " " + suffix;
+
                             var dynamicData = new EnchantmentData
                             {
                                 Guid = guid,
-                                Name = model.Name,
+                                Name = fullDisplayName.Replace("  ", " ").Trim(),
                                 Type = model.Type,
                                 Source = "Custom",
                                 PointString = model.EnchantmentCost.ToString(),
-                                Slots = new List<string>(model.Slots) // On copie les slots autorisés
+                                IsEnhancement = model.Components.Any(c => c.GetType().Name == "WeaponEnhancementBonus" || c.GetType().Name == "ArmorEnhancementBonus"),
+                                PriceFactor = model.PriceFactor,
+                                Slots = new List<string>(model.Slots)
                             };
 
                                 // Évaluation des formules si présentes

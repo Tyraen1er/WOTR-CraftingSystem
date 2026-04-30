@@ -23,7 +23,7 @@ namespace CraftingSystem
     {
         private static readonly Regex VariableRegex = new Regex(@"<([^>]+)>", RegexOptions.Compiled);
 
-        public static string Generate(BlueprintItemEnchantment bp)
+        public static string Generate(BlueprintScriptableObject bp)
         {
             if (bp == null) return null;
 

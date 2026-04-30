@@ -195,6 +195,31 @@
             "frFR": "Moins d'une heure",
             "ruRU": "Меньше часа"
         },
+        "ui_tab_standard": {
+            "enGB": "Available Enchantments",
+            "frFR": "Enchantements disponibles",
+            "ruRU": "Доступные зачарования"
+        },
+        "ui_tab_custom": {
+            "enGB": "Custom Enchantments",
+            "frFR": "Enchantements personnalisés",
+            "ruRU": "Особые зачарования"
+        },
+        "ui_custom_todo_more": {
+            "enGB": "More custom enchantments are planned. Suggest yours on the Nexus page or via a GitHub issue!",
+            "frFR": "D'autres enchantements personnalisés sont prévus. Proposez les vôtres sur la page Nexus ou via une issue GitHub !",
+            "ruRU": "Планируется больше пользовательских чар. Предлагайте свои на странице Nexus или через GitHub issue!"
+        },
+        "ui_no_custom_models": {
+            "enGB": "No custom enchantment models found.",
+            "frFR": "Aucun modèle d'enchantement personnalisé trouvé.",
+            "ruRU": "Модели особых зачарований не найдены."
+        },
+        "ui_custom_enchantment_placeholder": {
+            "enGB": "Custom Enchantment",
+            "frFR": "Enchantement personnalisé",
+            "ruRU": "Особое зачарование"
+        },
         "err_no_enchant_selected": {
             "enGB": "No enchantment selected.",
             "frFR": "Aucun enchantement sélectionné.",

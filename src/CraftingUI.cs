@@ -5,6 +5,7 @@ using UnityEngine;
 using Kingmaker;
 using Kingmaker.Items;
 using Kingmaker.Blueprints;
+using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Ecnchantments;
@@ -600,15 +601,7 @@ namespace CraftingSystem
             {
                 // --- RECHERCHE + LISTE STANDART ---
                 // -- UI FILTRE DES TYPES --
-                GUILayout.BeginHorizontal();
-                bool isWep = CToggle(activeTypes.Contains("Weapon"), Helpers.GetString("ui_filter_weapons", " Weapons"), GUILayout.Width(150 * scale));
-                bool isArm = CToggle(activeTypes.Contains("Armor"), Helpers.GetString("ui_filter_armors", " Armors"), GUILayout.Width(150 * scale));
-                bool isOth = CToggle(activeTypes.Contains("Other"), Helpers.GetString("ui_filter_others", " Others"), GUILayout.Width(150 * scale));
-
-                if (isWep) activeTypes.Add("Weapon"); else activeTypes.Remove("Weapon");
-                if (isArm) activeTypes.Add("Armor"); else activeTypes.Remove("Armor");
-                if (isOth) activeTypes.Add("Other"); else activeTypes.Remove("Other");
-                GUILayout.EndHorizontal();
+                DrawTypeFilters(scale);
 
                 GUILayout.Space(10);
 
@@ -937,7 +930,16 @@ namespace CraftingSystem
 
             bool oldEnforce = CraftingSettings.EnforcePointsLimit;
             CraftingSettings.EnforcePointsLimit = CToggle(CraftingSettings.EnforcePointsLimit, Helpers.GetString("ui_settings_enforce_limit", " Enforce Bonus Limits (Pathfinder)"));
-            if (oldEnforce != CraftingSettings.EnforcePointsLimit) filtersDirty = true;
+            if (oldEnforce != CraftingSettings.EnforcePointsLimit) 
+            {
+                filtersDirty = true;
+                if (!CraftingSettings.EnforcePointsLimit)
+                {
+                    CraftingSettings.RequirePlusOneFirst = false;
+                    CraftingSettings.ApplySlotPenalty = false;
+                    CraftingSettings.EnableEpicCosts = false;
+                }
+            }
 
             if (CraftingSettings.EnforcePointsLimit)
             {
@@ -1348,6 +1350,19 @@ namespace CraftingSystem
             }
         }
 
+        private void DrawTypeFilters(float scale)
+        {
+            GUILayout.BeginHorizontal();
+            bool isWep = CToggle(activeTypes.Contains("Weapon"), Helpers.GetString("ui_filter_weapons", " Weapons"), GUILayout.Width(150 * scale));
+            bool isArm = CToggle(activeTypes.Contains("Armor"), Helpers.GetString("ui_filter_armors", " Armors"), GUILayout.Width(150 * scale));
+            bool isOth = CToggle(activeTypes.Contains("Other"), Helpers.GetString("ui_filter_others", " Others"), GUILayout.Width(150 * scale));
+
+            if (isWep) activeTypes.Add("Weapon"); else activeTypes.Remove("Weapon");
+            if (isArm) activeTypes.Add("Armor"); else activeTypes.Remove("Armor");
+            if (isOth) activeTypes.Add("Other"); else activeTypes.Remove("Other");
+            GUILayout.EndHorizontal();
+        }
+
         private void DrawBorder(Rect rect, float thickness, Color color)
         {
             Color old = GUI.color;
@@ -1369,11 +1384,51 @@ namespace CraftingSystem
                 GUILayout.Label(Helpers.GetString("ui_custom_queued_title", "Custom Selection in queue:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(FONT_NORMAL * scale) });
                 foreach (var g in queuedCustoms)
                 {
-                    var bp = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(g) as BlueprintItemEnchantment;
-                    string displayName = bp != null ? bp.Name : "Custom Enchantment";
+                    string displayName = Helpers.GetString("ui_custom_enchantment_placeholder", "Custom Enchantment");
+                    EnchantmentData data = EnchantmentScanner.GetByGuid(g);
+                    BlueprintItemEnchantment bp = null;
+                    
+                    if (data != null)
+                    {
+                        displayName = data.Name;
+                        bp = data.Blueprint;
+                    }
+                    else
+                    {
+                        bp = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(g) as BlueprintItemEnchantment;
+                        if (bp != null) displayName = bp.Name ?? bp.name;
+                    }
 
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label(" • " + displayName, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.ExpandWidth(true));
+                    GUILayout.BeginHorizontal(GUI.skin.box);
+                    
+                    // Nom et métadonnées
+                    string metadata = "";
+                    if (data != null)
+                    {
+                        metadata = $" <color=#E2C675>[+{data.PointString}]</color>";
+                        if (data.IsEpic) metadata += " <color=#FF4500>(Epic)</color>";
+                    }
+                    
+                    GUILayout.Label(" • " + displayName + metadata, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), richText = true }, GUILayout.ExpandWidth(true));
+                    
+                    // Bouton Description
+                    if (bp != null)
+                    {
+                        DescriptionSource descSource = DescriptionSource.None;
+                        string desc = DescriptionManager.GetLocalizedDescription(bp, data, out descSource);
+                        
+                        GUIStyle infoStyle = new GUIStyle(GUI.skin.button);
+                        infoStyle.fontSize = (int)(12 * scale);
+                        string color = descSource == DescriptionSource.Generated ? "#88BBFF" : "#E2C675";
+                        GUIContent infoContent = new GUIContent($"<color={color}>{Helpers.GetString("ui_btn_description", "Description")}</color>");
+
+                        if (CButtonStyled(infoContent, infoStyle, GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
+                        {
+                            activeDescriptionTitle = displayName;
+                            activeDescriptionPopup = desc;
+                        }
+                    }
+
                     if (CButton(Helpers.GetString("ui_btn_remove", "Remove"), GUILayout.Width(80 * scale), GUILayout.Height(25 * scale)))
                     {
                         queuedEnchantGuids.Remove(g);
@@ -1388,7 +1443,22 @@ namespace CraftingSystem
             if (selectedModel == null)
             {
                 // --- MODE LISTE DES MODÈLES ---
+                DrawTypeFilters(scale);
+                GUILayout.Space(5);
+
                 var models = CustomEnchantmentsBuilder.AllModels.Where(m => m.Type != "Feature").ToList();
+                
+                // Filtrage par type
+                if (activeTypes.Count > 0)
+                {
+                    models = models.Where(m => {
+                        if (activeTypes.Contains("Weapon") && (m.Type == "Weapon" || m.Type == "WeaponEnchantment")) return true;
+                        if (activeTypes.Contains("Armor") && (m.Type == "Armor" || m.Type == "ArmorEnchantment")) return true;
+                        if (activeTypes.Contains("Other") && m.Type != "Weapon" && m.Type != "WeaponEnchantment" && m.Type != "Armor" && m.Type != "ArmorEnchantment") return true;
+                        return false;
+                    }).ToList();
+                }
+
                 if (models.Count == 0)
                 {
                     GUILayout.Label(Helpers.GetString("ui_no_custom_models", "No enchantment models found."), new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_NORMAL * scale) });
@@ -1398,7 +1468,7 @@ namespace CraftingSystem
                     foreach (var model in models)
                     {
                         GUILayout.BeginHorizontal(GUI.skin.box);
-                        GUILayout.Label(model.Name, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.ExpandWidth(true));
+                        GUILayout.Label(Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.ExpandWidth(true));
 
                         if (CButton(Helpers.GetString("ui_btn_configure", "Configure"), GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
                         {
@@ -1429,7 +1499,7 @@ namespace CraftingSystem
                 else
                 {
                     GUILayout.Space(10);
-                    GUILayout.Label(string.Format(Helpers.GetString("ui_configuring_model", "Configuring: <b>{0}</b>"), selectedModel.Name), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
+                    GUILayout.Label(string.Format(Helpers.GetString("ui_configuring_model", "Configuring: <b>{0}</b>"), Helpers.GetLocalizedString(selectedModel.BaseName ?? selectedModel.NameCompleted)), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
                     GUILayout.Space(15);
 
                     GUIStyle paramLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) };
@@ -1460,6 +1530,10 @@ namespace CraftingSystem
                                 if (enumType != null)
                                 {
                                     enumName = Enum.GetName(enumType, currentVal) ?? enumName;
+                                    if (p.EnumTypeName.Contains("DamageEnergyType"))
+                                        enumName = Helpers.GetString("energy_" + enumName, enumName);
+                                    else
+                                        enumName = Helpers.GetString("ui_enum_" + enumName, enumName);
                                 }
                             }
                             catch { }
@@ -1481,7 +1555,13 @@ namespace CraftingSystem
                                     GUILayout.BeginVertical(GUI.skin.box);
                                     for (int i = 0; i < names.Length; i++)
                                     {
-                                        if (CButton(names[i]))
+                                        string displayName = names[i];
+                                        if (p.EnumTypeName.Contains("DamageEnergyType"))
+                                            displayName = Helpers.GetString("energy_" + displayName, displayName);
+                                        else
+                                            displayName = Helpers.GetString("ui_enum_" + displayName, displayName);
+
+                                        if (CButton(displayName))
                                         {
                                             dynamicParamValues[p.Name] = (int)values.GetValue(i);
                                             openDropdownParam = null;
@@ -1503,7 +1583,7 @@ namespace CraftingSystem
                         .Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0)
                         .ToArray();
 
-                    var tempGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues);
+                    var tempGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues, selectedModel.Type == "Feature");
                     var tempEnch = EnchantmentScanner.GetByGuid(tempGuid.ToString());
                     
                     long totalCost = 0;
@@ -1521,15 +1601,22 @@ namespace CraftingSystem
 
                     if (CButton(Helpers.GetString("ui_btn_add_to_selection", "Add to selection"), GUILayout.Width(250 * scale), GUILayout.Height(40 * scale)))
                     {
-                        var finalGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, dynamicParamValues.Values.ToArray()).ToString();
-                        if (!queuedEnchantGuids.Contains(finalGuid))
+                        try
                         {
-                            queuedEnchantGuids.Add(finalGuid);
-                            // On s'assure que le blueprint est généré pour l'affichage
-                            CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(finalGuid);
+                            var finalGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues, selectedModel.Type == "Feature").ToString();
+                            if (!queuedEnchantGuids.Contains(finalGuid))
+                            {
+                                queuedEnchantGuids.Add(finalGuid);
+                                // On s'assure que le blueprint est généré pour l'affichage
+                                CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(finalGuid);
+                            }
+                            selectedModel = null;
+                            filtersDirty = true;
                         }
-                        selectedModel = null;
-                        filtersDirty = true;
+                        catch (Exception ex)
+                        {
+                            Main.ModEntry.Logger.Error($"Error adding custom enchantment: {ex}");
+                        }
                     }
                     GUILayout.EndHorizontal();
                 }

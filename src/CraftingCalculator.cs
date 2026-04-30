@@ -72,16 +72,13 @@ namespace CraftingSystem
 
         public static bool IsPureEnhancement(EnchantmentData data)
         {
-            if (data == null || string.IsNullOrEmpty(data.Guid)) return false;
-            var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
+            if (data == null) return false;
             
-            /*
-            if (bp == null) {
-                Main.ModEntry.Logger.Warning($"[DEBUG] IsPureEnhancement: Blueprint INTROUVABLE pour le GUID {data.Guid}");
-                return false;
-            }
-            */
+            // Priorité au flag explicite (calculé lors du scan ou de la résolution dynamique)
+            if (data.IsEnhancement) return true;
 
+            if (string.IsNullOrEmpty(data.Guid)) return false;
+            var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEnchantment>(BlueprintGuid.Parse(data.Guid));
             return IsPureEnhancement(bp);
         }
 

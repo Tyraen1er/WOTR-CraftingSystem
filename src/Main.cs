@@ -170,32 +170,49 @@ namespace CraftingSystem
         [HarmonyPrefix]
         public static bool Prefix(Newtonsoft.Json.JsonReader reader, ref object __result)
         {
-            if (reader.TokenType == Newtonsoft.Json.JsonToken.String)
+            // 1. Inversion de la condition (Early Exit) pour éviter l'indentation profonde
+            if (reader.TokenType != Newtonsoft.Json.JsonToken.String) 
+                return true;
+
+            // 2. Cast direct : puisqu'on a vérifié le TokenType, le cast explicite est plus rapide que 'as'
+            string guidStr = (string)reader.Value;
+            
+            if (string.IsNullOrEmpty(guidStr) || guidStr.Length < 8) 
+                return true;
+
+            // 3. Recherche de la signature
+            int signatureIdx = guidStr.IndexOf("c2af", StringComparison.OrdinalIgnoreCase);
+            
+            if (signatureIdx >= 0)
             {
-                string guidStr = reader.Value as string;
-                if (string.IsNullOrEmpty(guidStr) || guidStr.Length < 8) return true;
+                string finalGuid;
+                int remainingLength = guidStr.Length - signatureIdx;
 
-                // On cherche notre signature "C2AF" ou "c2af" dans la chaîne (peut être précédée de !bp_)
-                int signatureIdx = guidStr.IndexOf("c2af", StringComparison.OrdinalIgnoreCase);
-                
-                if (signatureIdx >= 0)
+                // 4. Réduction drastique des allocations (Zéro Substring inutile)
+                if (remainingLength >= 32)
                 {
-                    // On nettoie la chaîne pour ne garder que le GUID
-                    string cleanGuid = guidStr.Substring(signatureIdx);
-                    if (cleanGuid.Length > 32) cleanGuid = cleanGuid.Substring(0, 32);
-
-                    // --- RÉPARATION DES GUIDS TRONQUÉS ---
-                    if (cleanGuid.Length < 32)
-                    {
-                        Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Repairing truncated GUID: {cleanGuid}");
-                        cleanGuid = cleanGuid.PadRight(32, '0');
-                    }
-
-                    // On tente la résolution dynamique
-                    __result = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(cleanGuid);
-                    if (__result != null) return false;
+                    // Cas idéal : on extrait directement les 32 caractères (1 seule allocation)
+                    finalGuid = guidStr.Substring(signatureIdx, 32);
                 }
+                else
+                {
+                    // --- RÉPARATION DES GUIDS TRONQUÉS ---
+                    // Cas de secours : on extrait le reste et on pad directement
+                    finalGuid = guidStr.Substring(signatureIdx).PadRight(32, '0');
+
+#if DEBUG
+                    // Ne JAMAIS logger dans ReadJson en production (génère des strings et ralentit le jeu)
+                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Repairing truncated GUID: {finalGuid}");
+#endif
+                }
+
+                // On tente la résolution dynamique
+                __result = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(finalGuid);
+                
+                if (__result != null) 
+                    return false; // Blueprint trouvé, on court-circuite la méthode originale
             }
+
             return true;
         }
     }

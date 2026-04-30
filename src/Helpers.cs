@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.JsonSystem;
@@ -283,6 +284,30 @@ namespace CraftingSystem
             
             init?.Invoke(bp);
             return bp;
+        }
+        public static string GetLocalizedString(object field, Dictionary<string, string> replacements = null)
+        {
+            if (field == null) return null;
+            string raw = "";
+            if (field is string s) raw = s;
+            else if (field is JObject jobj)
+            {
+                string locale = "enGB";
+                try { locale = LocalizationManager.CurrentLocale.ToString(); } catch { }
+                raw = jobj[locale]?.ToString() ?? jobj["enGB"]?.ToString() ?? jobj.Properties().FirstOrDefault()?.Value?.ToString() ?? "";
+            }
+            else if (field is Newtonsoft.Json.Linq.JToken token) raw = token.ToString();
+            else raw = field.ToString();
+
+            if (replacements != null)
+            {
+                foreach (var kvp in replacements)
+                {
+                    if (kvp.Value != null)
+                        raw = raw.Replace("{" + kvp.Key + "}", kvp.Value);
+                }
+            }
+            return raw;
         }
     }
 }

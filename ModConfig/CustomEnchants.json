@@ -2,12 +2,15 @@
   {
     "EnchantId": "001",
     "Name": "Model_Resist_Feature",
-    "Type": "Feature", 
+    "Type": "Feature",
     "Components": [
       {
         "$type": "Kingmaker.UnitLogic.FactLogic.AddDamageResistanceEnergy, Assembly-CSharp",
         "Type": "Acid",
-        "Value": { "ValueType": "Simple", "Value": 5 }
+        "Value": {
+          "ValueType": "Simple",
+          "Value": 5
+        }
       }
     ],
     "DynamicParams": [
@@ -31,15 +34,27 @@
   },
   {
     "EnchantId": "001",
-    "Name": "Model_Resist_Enchantment",
-    "Type": "ArmorEnchantment", 
+    "BaseName": {
+      "enGB": "Energy Resistance",
+      "frFR": "Résistance aux énergies",
+      "ruRU": "Сопротивление энергии"
+    },
+    "NameCompleted": {
+      "enGB": "{Element} Resistance {Value}",
+      "frFR": "Résistance {Element} {Value}",
+      "ruRU": "Сопротивление {Element} {Value}"
+    },
+    "Type": "ArmorEnchantment",
     "EnchantNameKey": "ui_custom_acid_resist_name",
     "EnchantDescKey": "ui_custom_acid_resist_desc",
     "Prefix": "",
-    "Suffix": "of Protection",
+    "Suffix": "",
     "EnchantmentCost": 0,
     "MaxNotEpic": 30,
-    "Slots": [ "Armor", "Shield" ],
+    "Slots": [
+      "Armor",
+      "Shield"
+    ],
     "GoldOverrideFormula": "18000 + ((Value - 10) / 10) * 24000",
     "PointCostFormula": "0",
     "Components": [
@@ -69,15 +84,26 @@
   },
   {
     "EnchantId": "002",
-    "Name": "Custom Sharpness",
+    "BaseName": {
+      "enGB": "Enhancement",
+      "frFR": "Altération",
+      "ruRU": "Усиление"
+    },
+    "NameCompleted": {
+      "enGB": "+{Bonus} Enhancement",
+      "frFR": "Altération +{Bonus}",
+      "ruRU": "+{Bonus} Усиление"
+    },
     "Type": "Weapon",
+    "Prefix": "",
+    "Suffix": "",
     "DynamicParams": [
       {
         "Name": "Bonus",
         "Label": "ui_param_value",
         "Type": "Slider",
         "Min": 1,
-        "Max": 10,
+        "Max": 100,
         "Step": 1,
         "ComponentIndex": 0,
         "FieldName": "EnhancementBonus"
@@ -85,6 +111,7 @@
     ],
     "EnchantmentCost": 0,
     "PointCostFormula": "Bonus",
+    "PriceFactor": 2000,
     "MaxNotEpic": 5,
     "Components": [
       {
