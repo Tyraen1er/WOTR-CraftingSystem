@@ -165,12 +165,23 @@ namespace CraftingSystem
         {
             if (reader.TokenType == Newtonsoft.Json.JsonToken.String)
             {
-                string guidStr = (string)reader.Value;
-                if (guidStr != null && guidStr.ToUpper().StartsWith(DynamicGuidHelper.Signature))
+                // 'as' est légèrement plus sûr/rapide que le cast explicite (string)
+                string guidStr = reader.Value as string; 
+                
+                if (guidStr != null && guidStr.Length == 32)
                 {
-                    // C'est un de nos GUIDs
-                    __result = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(guidStr);
-                    if (__result != null) return false;
+                    // Optimisation : Opération bit à bit ( | 0x20 ) pour ignorer la casse
+                    // Cela transforme 'C' (67) en 'c' (99) sans utiliser de condition "ou" (||)
+                    // On teste guidStr[1] == '2' en premier car c'est une égalité stricte (échoue plus vite)
+                    if (guidStr[1] == '2' && 
+                       (guidStr[0] | 0x20) == 'c' && 
+                       (guidStr[2] | 0x20) == 'a' && 
+                       (guidStr[3] | 0x20) == 'f')
+                    {
+                        // C'est un de nos GUIDs
+                        __result = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(guidStr);
+                        if (__result != null) return false;
+                    }
                 }
             }
             return true;

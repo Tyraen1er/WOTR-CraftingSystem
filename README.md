@@ -29,7 +29,7 @@ The mod calculates costs dynamically based on the item type and existing propert
 
 ### Installation and Usage
 - Install the mod via **Unity Mod Manager**.
-- Speak to **Wilcer Garms** (Camp or Drezen) to access the workshop.
+- Speak to **Wilcer Garms** (Camp or Drezen) to access the workshop, or The NPC of the mage tower in Act4, or through the UMM menu.
 - Use the interface to browse your inventory and queue enchantments.
 - **Warning:** This mod cannot be safely uninstalled from a save file once it has been used.
 
