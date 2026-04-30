@@ -30,6 +30,10 @@
             "frFR": "X",
             "ruRU": "X"
         },
+        "ui_pagination_items_per_page": {
+            "enGB": "Items/Page: ",
+            "frFR": "Items/Page : "
+        },
         "ui_btn_yes": {
             "enGB": "Yes",
             "frFR": "Oui",

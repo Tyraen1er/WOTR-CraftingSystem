@@ -1,29 +1,67 @@
 [
   {
-    "Guid": "f087b1da59fbd884caa213a554fe6c03",
-    "Name": "MyCustomAcidResist50Feature",
+    "EnchantId": "001",
+    "Guid": "C2AF0010100000000000000000000000",
+    "Name": "Model_Resist_Feature",
     "Type": "Feature", 
     "Components": [
       {
         "$type": "Kingmaker.UnitLogic.FactLogic.AddDamageResistanceEnergy, Assembly-CSharp",
         "Type": "Acid",
-        "Value": { "ValueType": "Simple", "Value": 50 }
+        "Value": { "ValueType": "Simple", "Value": 5 }
+      }
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Element",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Type"
+      },
+      {
+        "Name": "Resistance Value",
+        "Type": "Slider",
+        "Min": 5,
+        "Max": 100,
+        "Step": 5,
+        "ComponentIndex": 0,
+        "FieldName": "Value.Value"
       }
     ]
   },
   {
-    "Guid": "f087b1da59fbd884caa213a554fe6c04",
-    "Name": "MyCustomAcidResist50Enchantment",
+    "EnchantId": "001",
+    "Guid": "C2AF0010200000000000000000000000",
+    "Name": "Model_Resist_Enchantment",
     "Type": "ArmorEnchantment", 
-    "EnchantNameKey": "ui_custom_acid_resist_50_name",
-    "EnchantDescKey": "ui_custom_acid_resist_50_desc",
-    "Prefix": "Acid Resistant",
-    "Suffix": "of Great Ooze",
+    "EnchantNameKey": "ui_custom_acid_resist_name",
+    "EnchantDescKey": "ui_custom_acid_resist_desc",
+    "Prefix": "Resistant",
+    "Suffix": "of Protection",
     "EnchantmentCost": 3,
     "Components": [
       {
         "$type": "Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment, Assembly-CSharp",
-        "m_Feature": "!bp_f087b1da59fbd884caa213a554fe6c03"
+        "m_Feature": "!bp_C2AF0010100000000000000000000000"
+      }
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Element",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Type"
+      },
+      {
+        "Name": "Resistance Value",
+        "Type": "Slider",
+        "Min": 5,
+        "Max": 100,
+        "Step": 5,
+        "ComponentIndex": -1,
+        "FieldName": "Value.Value"
       }
     ]
   }

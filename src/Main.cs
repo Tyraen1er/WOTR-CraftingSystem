@@ -58,7 +58,10 @@ namespace CraftingSystem
                 DeferredInventoryOpener.RequestUI(CraftingWindowMode.LootUI, 0.2f);
             }
             UnityEngine.GUILayout.Space(20);
-            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutInventory, Helpers.GetString("ui_umm_shortcut"), null, UnityEngine.GUILayout.Width(150));
+            UnityEngine.KeyCode oldInv = CraftingSettings.ShortcutInventory.keyCode;
+            byte oldInvMod = CraftingSettings.ShortcutInventory.modifiers;
+            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutInventory, Helpers.GetString("ui_umm_shortcut") + " ", null, UnityEngine.GUILayout.Width(150));
+            if (CraftingSettings.ShortcutInventory.keyCode != oldInv || CraftingSettings.ShortcutInventory.modifiers != oldInvMod) CraftingSettings.SaveSettings();
             UnityEngine.GUILayout.EndHorizontal();
 
             UnityEngine.GUILayout.BeginHorizontal();
@@ -69,7 +72,10 @@ namespace CraftingSystem
                 DeferredInventoryOpener.RequestUI(CraftingWindowMode.StoredItemIMGUI, 0.2f);
             }
             UnityEngine.GUILayout.Space(20);
-            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutIMGUI, Helpers.GetString("ui_umm_shortcut"), null, UnityEngine.GUILayout.Width(150));
+            UnityEngine.KeyCode oldImgui = CraftingSettings.ShortcutIMGUI.keyCode;
+            byte oldImguiMod = CraftingSettings.ShortcutIMGUI.modifiers;
+            UnityModManager.UI.DrawKeybinding(ref CraftingSettings.ShortcutIMGUI, Helpers.GetString("ui_umm_shortcut") + "  ", null, UnityEngine.GUILayout.Width(150));
+            if (CraftingSettings.ShortcutIMGUI.keyCode != oldImgui || CraftingSettings.ShortcutIMGUI.modifiers != oldImguiMod) CraftingSettings.SaveSettings();
             UnityEngine.GUILayout.EndHorizontal();
         }
 

@@ -64,6 +64,13 @@ namespace CraftingSystem
                     }
                 }
 
+                // 3. Fallback ultime : on essaye de résumer le composant s'il a des champs connus (Stats/Values)
+                // On n'accepte le fallback que s'il produit un résultat "propre" (pas juste le nom technique)
+                if (string.IsNullOrEmpty(resolved))
+                {
+                    resolved = SummarizeComponent(comp, bp);
+                }
+
                 if (!string.IsNullOrEmpty(resolved))
                 {
                     lines.Add("> " + resolved);
@@ -274,6 +281,17 @@ namespace CraftingSystem
             // Pour éviter les noms de types techniques comme Kingmaker.ActionList
             if (type.FullName.StartsWith("Kingmaker") && !type.IsPrimitive && type != typeof(string))
             {
+                // -- Tentative d'extraction de champs communs pour les composants non gérés explicitement --
+                // Si on trouve des champs de type Stat ou Value, on essaye de les résumer
+                var commonStat = GetFieldRecursive(type, "Stat") ?? GetFieldRecursive(type, "m_Stat");
+                var commonValue = GetFieldRecursive(type, "Value") ?? GetFieldRecursive(type, "m_Value") ?? GetFieldRecursive(type, "Bonus") ?? GetFieldRecursive(type, "m_Bonus");
+                
+                if (commonStat != null || commonValue != null)
+                {
+                    string summary = SummarizeAddStatBonus(val, parentBp);
+                    if (!string.IsNullOrEmpty(summary)) return summary;
+                }
+
                 // On essaye de mapper le type si possible (Action, Condition, ou Champ)
                 string typeKey = "action_" + type.Name;
                 if (type.Name.StartsWith("ContextCondition")) typeKey = "cond_" + type.Name;
@@ -870,6 +888,34 @@ namespace CraftingSystem
             catch { return "CompareStat"; }
         }
 
+        private static string SummarizeComponent(object comp, BlueprintItemEnchantment parentBp)
+        {
+            if (comp == null) return null;
+            var type = comp.GetType();
+
+            // 1. Priorité aux handlers spécifiques si on est appelé directement
+            if (type.Name == "AdditionalDiceOnAttack") return SummarizeAdditionalDiceOnAttack(comp, parentBp);
+            if (type.Name == "AddStatBonusEquipment") return SummarizeAddStatBonus(comp, parentBp);
+
+            // 2. Essaye l'extraction de champs (Stats/Values) - Très efficace pour les composants simples
+            var commonStat = GetFieldRecursive(type, "Stat") ?? GetFieldRecursive(type, "m_Stat");
+            var commonValue = GetFieldRecursive(type, "Value") ?? GetFieldRecursive(type, "m_Value") ?? GetFieldRecursive(type, "Bonus") ?? GetFieldRecursive(type, "m_Bonus");
+            
+            if (commonStat != null || commonValue != null)
+            {
+                string summary = SummarizeAddStatBonus(comp, parentBp);
+                if (!string.IsNullOrEmpty(summary)) return summary;
+            }
+
+            // 3. Essaye la traduction directe via le glossaire (Localization.json)
+            string typeKey = "action_" + type.Name;
+            if (type.Name.StartsWith("ContextCondition")) typeKey = "cond_" + type.Name;
+            string localizedType = Helpers.GetString(typeKey, "");
+            if (!string.IsNullOrEmpty(localizedType)) return localizedType;
+
+            return null; // On ne renvoie pas le nom technique ici pour garder le bouton ROUGE dans l'UI
+        }
+
         public static string GetBlueprintDisplayName(SimpleBlueprint bp)
         {
             if (bp == null) return "";
@@ -953,23 +999,27 @@ namespace CraftingSystem
             try
             {
                 var type = comp.GetType();
-                var statField = GetFieldRecursive(type, "Stat");
-                var valueField = GetFieldRecursive(type, "Value");
-                var descriptorField = GetFieldRecursive(type, "Descriptor");
+                var statField = GetFieldRecursive(type, "Stat") ?? GetFieldRecursive(type, "m_Stat");
+                var valueField = GetFieldRecursive(type, "Value") ?? GetFieldRecursive(type, "m_Value") ?? GetFieldRecursive(type, "Bonus");
+                var descriptorField = GetFieldRecursive(type, "Descriptor") ?? GetFieldRecursive(type, "m_Descriptor");
 
                 string statName = statField != null ? FormatValue(statField.GetValue(comp), parentBp) : "Stat";
-                int value = valueField != null ? (int)valueField.GetValue(comp) : 0;
+                string valueStr = valueField != null ? FormatValue(valueField.GetValue(comp), parentBp) : "0";
                 string descriptor = descriptorField != null ? FormatValue(descriptorField.GetValue(comp), parentBp) : "";
 
-                string sign = value >= 0 ? "+" : "";
-                string result = $"{sign}{value} {statName}";
+                if (valueStr == "0" || string.IsNullOrEmpty(valueStr) || valueStr == "None") return ""; 
+
+                // On ajoute le "+" si il n'y a pas déjà un signe
+                string sign = (valueStr.StartsWith("-") || valueStr.StartsWith("+")) ? "" : "+";
+                string result = $"{sign}{valueStr} {statName}";
+                
                 if (!string.IsNullOrEmpty(descriptor) && descriptor != "Untyped" && descriptor != "None")
                 {
                     result += $" ({descriptor})";
                 }
                 return result;
             }
-            catch { return "StatBonus"; }
+            catch { return ""; }
         }
 
         private static string SanitizeLocalString(string s)

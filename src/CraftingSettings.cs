@@ -7,13 +7,13 @@ using UnityModManagerNet;
 
 namespace CraftingSystem
 {
-    // L'Enumération des filtres (déplacée depuis CraftingUI)
+    // L'Enumération des filtres
     public enum SourceFilter { TTRPG = 0, Owlcat = 1, OwlcatPlus = 2, Mods = 3, All = 4 }
 
     public static class CraftingSettings
     {
         // =========================================================================
-        // VARIABLES GLOBALES (Accessibles de partout via CraftingSettings.Variable)
+        // VARIABLES GLOBALES
         // =========================================================================
         public static float CostMultiplier = 1.0f;
         public static bool InstantCrafting = false;
@@ -27,8 +27,9 @@ namespace CraftingSystem
         public static int ScalePercent = 100;
         public static SourceFilter CurrentSourceFilter = SourceFilter.TTRPG;
         public static bool HasOpenedCheats = false;
+        public static int ItemsPerPage = 15;
 
-        // Raccourcis clavier (Synchronisés avec settings.json)
+        // Raccourcis clavier
         public static KeyBinding ShortcutInventory = new KeyBinding();
         public static KeyBinding ShortcutIMGUI = new KeyBinding();
 
@@ -38,7 +39,7 @@ namespace CraftingSystem
         private const string SETTINGS_FILENAME = "settings.json";
 
         // =========================================================================
-        // CLASSE PRIVÉE POUR LA SÉRIALISATION (Ce qui est écrit dans le fichier)
+        // CLASSE PRIVÉE POUR LA SÉRIALISATION
         // =========================================================================
         [DataContract]
         private class UiSettingsData
@@ -60,6 +61,7 @@ namespace CraftingSystem
             [DataMember] public int ShortcutIMGUIKey = 0;
             [DataMember] public int ShortcutIMGUIMod = 0;
             [DataMember] public bool HasOpenedCheats = false;
+            [DataMember] public int ItemsPerPage = 15;
         }
 
         // =========================================================================
@@ -73,7 +75,7 @@ namespace CraftingSystem
                 var path = Path.Combine(Main.ModEntry.Path, SETTINGS_FILENAME);
                 if (!File.Exists(path))
                 {
-                    SaveSettings(); // Créer le fichier par défaut s'il n'existe pas
+                    SaveSettings();
                     return;
                 }
 
@@ -94,8 +96,8 @@ namespace CraftingSystem
                     if (obj.ScalePercent > 0) ScalePercent = obj.ScalePercent;
                     CurrentSourceFilter = obj.SourceFilterValue;
                     HasOpenedCheats = obj.HasOpenedCheats;
+                    if (obj.ItemsPerPage > 0) ItemsPerPage = obj.ItemsPerPage;
 
-                    // Reconstitution des KeyBindings
                     ShortcutInventory = new KeyBinding { keyCode = (UnityEngine.KeyCode)obj.ShortcutInventoryKey, modifiers = (byte)obj.ShortcutInventoryMod };
                     ShortcutIMGUI = new KeyBinding { keyCode = (UnityEngine.KeyCode)obj.ShortcutIMGUIKey, modifiers = (byte)obj.ShortcutIMGUIMod };
                 }
@@ -128,7 +130,8 @@ namespace CraftingSystem
                     ShortcutInventoryMod = ShortcutInventory.modifiers,
                     ShortcutIMGUIKey = (int)ShortcutIMGUI.keyCode,
                     ShortcutIMGUIMod = ShortcutIMGUI.modifiers,
-                    HasOpenedCheats = HasOpenedCheats
+                    HasOpenedCheats = HasOpenedCheats,
+                    ItemsPerPage = ItemsPerPage
                 };
 
                 using (var ms = new MemoryStream())
