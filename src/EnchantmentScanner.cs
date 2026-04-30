@@ -5,7 +5,7 @@ using System.Linq;
 using Kingmaker;
 using Kingmaker.Blueprints;
 using Kingmaker.Items;
-using Kingmaker.Blueprints.Items.Ecnchantments; 
+using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
 using System.Text;
@@ -41,7 +41,7 @@ namespace CraftingSystem
         public string Type; // "Weapon" or "Armor" or "Other"
 
         public string Source = "Mod"; // "TTRPG", "Owlcat", "Ownlcat+", "Mod"
-        
+
         [JsonProperty("GUID")]
         public string Guid;
 
@@ -50,10 +50,10 @@ namespace CraftingSystem
 
         [JsonProperty("PointCost", NullValueHandling = NullValueHandling.Ignore)]
         public string PointString; // Accepte "+1", "+2", ou même juste "1", "2"
-        
+
         public List<string> Categories = new List<string>();
         public string Description;
-        
+
         [JsonProperty("IsEpic", NullValueHandling = NullValueHandling.Ignore)]
         public bool IsEpic = false;
 
@@ -70,11 +70,11 @@ namespace CraftingSystem
             get
             {
                 if (string.IsNullOrEmpty(PointString)) return 0;
-                
+
                 // On nettoie la chaîne (on enlève les "+" et les espaces)
                 // Comme ça, que tu écrives "+2" ou "2" dans ton CSV, ça marchera.
                 string cleanString = PointString.Replace("+", "").Trim();
-                
+
                 if (int.TryParse(cleanString, out int val))
                 {
                     return val;
@@ -161,16 +161,18 @@ namespace CraftingSystem
         public static void StartSync()
         {
             if (_hasSyncedThisSession || IsSyncing) return;
-            
+
             IsSyncing = true;
             LastSyncMessage = Helpers.GetString("ui_sync_in_progress", "Synchronization in progress...");
             Main.ModEntry.Logger.Log("[SYNC] Lancement de la tâche de synchronisation en arrière-plan...");
-            
-            Task.Run(() => {
+
+            Task.Run(() =>
+            {
                 try
                 {
                     var bpCache = ResourcesLibrary.BlueprintsCache;
-                    if (bpCache == null) {
+                    if (bpCache == null)
+                    {
                         LastSyncMessage = Helpers.GetString("ui_sync_error_index", "Failed: Game index inaccessible.");
                         Main.ModEntry.Logger.Error("[SYNC] Impossible d'accéder au BlueprintsCache du jeu.");
                         return;
@@ -201,81 +203,94 @@ namespace CraftingSystem
 
                     // 2. Scan Multithreadé avec lecture binaire brute de ToyBox (Ultra-Rapide & Read-Only)
                     var syncedList = new List<EnchantmentData>();
-                    
+
                     var allKeys = bpCache.m_LoadedBlueprints.OrderBy(e => e.Value.Offset).Select(e => e.Key).ToList();
                     TotalCount = allKeys.Count;
                     ProcessedCount = 0;
-                    
+
                     Main.ModEntry.Logger.Log($"[SYNC] Préparation du scan multithread binaire ({TotalCount} blueprints)...");
-                    
+
                     var memStream = new MemoryStream();
-                    lock (bpCache.m_Lock) {
+                    lock (bpCache.m_Lock)
+                    {
                         bpCache.m_PackFile.Position = 0;
                         bpCache.m_PackFile.CopyTo(memStream);
                     }
                     var bytes = memStream.GetBuffer();
-                    
+
                     var chunks = allKeys.Select((k, i) => new { Index = i, Value = k })
                                         .GroupBy(x => x.Index / 1000)
                                         .Select(x => x.Select(v => v.Value).ToList())
                                         .ToList();
-                    
+
                     var chunkQueue = new ConcurrentQueue<List<BlueprintGuid>>(chunks);
                     var foundEnchants = new ConcurrentBag<BlueprintItemEnchantment>();
-                    
+
                     int numThreads = 4;
                     var tasks = new List<Task>();
-                    
-                    for (int i = 0; i < numThreads; i++) {
-                        tasks.Add(Task.Run(() => {
+
+                    for (int i = 0; i < numThreads; i++)
+                    {
+                        tasks.Add(Task.Run(() =>
+                        {
                             Stream stream = new MemoryStream(bytes);
                             stream.Position = 0;
                             var serializer = new ReflectionBasedSerializer(new PrimitiveSerializer(new BinaryReader(stream), UnityObjectConverter.AssetList));
-                            
-                            while (chunkQueue.TryDequeue(out var chunkGuids)) {
-                                foreach(var guid in chunkGuids) {
+
+                            while (chunkQueue.TryDequeue(out var chunkGuids))
+                            {
+                                foreach (var guid in chunkGuids)
+                                {
                                     int currentCount = Interlocked.Increment(ref ProcessedCount);
-                                    if (currentCount % 1000 == 0) {
+                                    if (currentCount % 1000 == 0)
+                                    {
                                         LastSyncMessage = string.Format(Helpers.GetString("ui_sync_scanner_progress", "Multithreaded binary scanner: {0} / {1} processed..."), currentCount, TotalCount);
                                     }
-                                    
-                                    try {
+
+                                    try
+                                    {
                                         var mLoaded = bpCache.m_LoadedBlueprints;
-                                        if (mLoaded.TryGetValue(guid, out var entry)) {
+                                        if (mLoaded.TryGetValue(guid, out var entry))
+                                        {
                                             // Si déjà officiellement chargé par le jeu (ou injecté manuellement) on l'ajoute directement.
-                                            if (entry.Blueprint != null) {
-                                                if (entry.Blueprint is BlueprintItemEnchantment bpEnchChecked) {
+                                            if (entry.Blueprint != null)
+                                            {
+                                                if (entry.Blueprint is BlueprintItemEnchantment bpEnchChecked)
+                                                {
                                                     // On marque les enchantements injectés par notre CustomEnchantmentsBuilder
-                                                    if (CustomEnchantmentsBuilder.InjectedGuids.Contains(guid)) {
+                                                    if (CustomEnchantmentsBuilder.InjectedGuids.Contains(guid))
+                                                    {
                                                         Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Scanner found injected blueprint: {bpEnchChecked.name} ({guid})");
                                                     }
                                                     foundEnchants.Add(bpEnchChecked);
                                                 }
                                                 continue;
                                             }
-                                            
+
                                             if (entry.Offset == 0U) continue;
-                                            
+
                                             // Lecture binaire brute du blueprint (sans l'injecter de force pour éviter la corruption du jeu)
                                             stream.Seek(entry.Offset, SeekOrigin.Begin);
                                             SimpleBlueprint simpleBlueprint = null;
                                             serializer.Blueprint(ref simpleBlueprint);
-                                            
-                                            if (simpleBlueprint is BlueprintItemEnchantment ench) {
+
+                                            if (simpleBlueprint is BlueprintItemEnchantment ench)
+                                            {
                                                 ench.AssetGuid = guid;
                                                 foundEnchants.Add(ench);
                                             }
                                         }
-                                    } catch { } // on ignore les erreurs isolées de parsing (ToyBox fait pareil)
+                                    }
+                                    catch { } // on ignore les erreurs isolées de parsing (ToyBox fait pareil)
                                 }
                             }
                         }));
                     }
-                    
+
                     // Attend que tous les workers aient fini la lecture brute
                     Task.WaitAll(tasks.ToArray());
                     // Main.ModEntry.Logger.Log($"[SYNC] Scan binaire terminé : {foundEnchants.Count} enchantements extraits parmis {TotalCount} blueprints !");
-                    
+
                     LastSyncMessage = Helpers.GetString("ui_sync_integration", "Integration and filtering of overrides (JSON)...");
 
                     foreach (var bp in foundEnchants)
@@ -340,9 +355,10 @@ namespace CraftingSystem
 
             lock (MasterList)
             {
-                return MasterList.Where(e => 
-                    (isWeapon && e.Type == "Weapon") || 
-                    (isArmor && e.Type == "Armor")
+                return MasterList.Where(e =>
+                    (isWeapon && e.Type == "Weapon") ||
+                    (isArmor && e.Type == "Armor") ||
+                    (!isWeapon && !isArmor && e.Type == "Other") // Support pour les objets merveilleux
                 ).ToList();
             }
         }
@@ -353,15 +369,87 @@ namespace CraftingSystem
             lock (MasterList)
             {
                 if (GuidMap.TryGetValue(guid, out var result)) return result;
-                
-                /*
-                if (guid.Length > 10)
+
+                string cleanGuid = guid.Replace("-", "").ToLower();
+                Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] GetByGuid: {guid} (clean: {cleanGuid})");
+
+                // --- RÉSOLUTION DYNAMIQUE DES GUIDS C2AF ---
+                if (cleanGuid.StartsWith(DynamicGuidHelper.Signature.ToLower()))
                 {
-                    Main.ModEntry.Logger.Warning($"[DEBUG] GetByGuid FAILED to find: {guid}. MasterList count: {MasterList.Count}");
+                    Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Dynamic Signature detected for {cleanGuid}");
+                    if (DynamicGuidHelper.TryDecodeGuid(BlueprintGuid.Parse(guid), out string modelId, out List<int> values))
+                    {
+                        Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Decoded ModelId: {modelId}, Values: {string.Join(",", values)}");
+
+                        // On cherche le modèle (vals[0] == 1 signifie Feature)
+                        bool isFeature = values.Count > 0 && values[0] == 1;
+                        var model = CustomEnchantmentsBuilder.AllModels.FirstOrDefault(m =>
+                            m.EnchantId == modelId && (isFeature ? m.Type == "Feature" : m.Type != "Feature"));
+
+                        if (model != null)
+                        {
+                            Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Found Model: {model.Name} for ID {modelId}");
+
+                            // Préparation des variables pour les formules
+                            // vals[0] est le flag isFeature, on le saute
+                            var formulaVars = new Dictionary<string, double>();
+                            for (int i = 0; i < model.DynamicParams.Count; i++)
+                            {
+                                if (i + 1 < values.Count)
+                                {
+                                    formulaVars[model.DynamicParams[i].Name] = values[i + 1];
+                                }
+                            }
+
+                            // Création de l'objet de données résolu
+                            var dynamicData = new EnchantmentData
+                            {
+                                Guid = guid,
+                                Name = model.Name,
+                                Type = model.Type,
+                                Source = "Custom",
+                                PointString = model.EnchantmentCost.ToString(),
+                                Slots = new List<string>(model.Slots) // On copie les slots autorisés
+                            };
+
+                                // Évaluation des formules si présentes
+                                if (!string.IsNullOrEmpty(model.PointCostFormula))
+                                {
+                                    dynamicData.PointString = FormulaEvaluator.EvaluateInt(model.PointCostFormula, formulaVars).ToString();
+                                }
+
+                                if (!string.IsNullOrEmpty(model.GoldOverrideFormula))
+                                {
+                                    dynamicData.GoldOverride = (int)FormulaEvaluator.EvaluateLong(model.GoldOverrideFormula, formulaVars);
+                                    Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Calculated Price: {dynamicData.GoldOverride} for {guid}");
+                                }
+
+                                // --- GESTION DU SEUIL ÉPIQUE ---
+                                if (model.MaxNotEpic > 0)
+                                {
+                                    // On vérifie si un des paramètres (numériques) dépasse le seuil
+                                    foreach (var val in formulaVars.Values)
+                                    {
+                                        if (val > model.MaxNotEpic)
+                                        {
+                                            dynamicData.IsEpic = true;
+                                            Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Epic threshold exceeded ({val} > {model.MaxNotEpic}). Setting IsEpic = true.");
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                return dynamicData;
+                        }
+                        else
+                        {
+                            Main.ModEntry.Logger.Warning($"[DYNAMIC] Model {modelId} not found for GUID {guid} (isFeature: {isFeature})");
+                        }
+                    }
                 }
-                */
-                return null;
             }
+
+            return null;
         }
     }
 }

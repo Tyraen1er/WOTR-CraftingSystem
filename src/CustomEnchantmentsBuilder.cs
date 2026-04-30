@@ -162,7 +162,11 @@ namespace CraftingSystem
         public string EnchantDescKey;
         public string Prefix;
         public string Suffix;
-        public int EnchantmentCost;
+        public int EnchantmentCost; // Utilisé si pas de formule
+        public string PointCostFormula;
+        public string GoldOverrideFormula;
+        public int MaxNotEpic; // Seuil au-delà duquel l'enchantement devient épique
+        public List<string> Slots = new List<string>(); // Liste des types d'items autorisés (Armor, Weapon, Shield...)
         public List<BlueprintComponent> Components = new List<BlueprintComponent>();
         public List<DynamicParam> DynamicParams = new List<DynamicParam>();
     }
@@ -216,11 +220,24 @@ namespace CraftingSystem
                 foreach (var data in customDataList)
                 {
                     Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Processing model: {data.Name} (ID: {data.EnchantId})");
-                    if (string.IsNullOrEmpty(data.Guid) || string.IsNullOrEmpty(data.Name)) continue;
+                    if (string.IsNullOrEmpty(data.Name)) continue;
+
+                    // Génération automatique du GUID si absent
+                    if (string.IsNullOrEmpty(data.Guid))
+                    {
+                        if (string.IsNullOrEmpty(data.EnchantId))
+                        {
+                            Main.ModEntry.Logger.Error($"Model {data.Name} must have either a Guid or an EnchantId.");
+                            continue;
+                        }
+                        data.Guid = DynamicGuidHelper.GenerateModelGuid(data.EnchantId, data.Type == "Feature").ToString();
+                        Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Auto-generated GUID for model {data.Name}: {data.Guid}");
+                    }
 
                     BlueprintScriptableObject bp;
                     if (data.Type == "WeaponEnchantment") bp = new BlueprintWeaponEnchantment();
                     else if (data.Type == "ArmorEnchantment") bp = new BlueprintArmorEnchantment();
+                    else if (data.Type == "Other") bp = new BlueprintEquipmentEnchantment();
                     else if (data.Type == "Feature") bp = new BlueprintFeature();
                     else
                     {
@@ -344,6 +361,7 @@ namespace CraftingSystem
             BlueprintScriptableObject bp;
             if (model.Type == "WeaponEnchantment") bp = new BlueprintWeaponEnchantment();
             else if (model.Type == "ArmorEnchantment") bp = new BlueprintArmorEnchantment();
+            else if (model.Type == "Other") bp = new BlueprintEquipmentEnchantment();
             else if (model.Type == "Feature") bp = new BlueprintFeature();
             else return null;
 

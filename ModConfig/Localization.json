@@ -75,6 +75,16 @@
             "frFR": "Sélection Perso : +{0} \u2014 Total : {1} po / ~{2} j",
             "ruRU": "Свой выбор: +{0} \u2014 Итого: {1} gp / ~{2} дн."
         },
+        "ui_param_element": {
+            "enGB": "Element",
+            "frFR": "Élément",
+            "ruRU": "Стихия"
+        },
+        "ui_param_value": {
+            "enGB": "Value",
+            "frFR": "Valeur",
+            "ruRU": "Значение"
+        },
         "ui_btn_add_to_selection": {
             "enGB": "Add to selection",
             "frFR": "Ajouter à la sélection",
@@ -437,8 +447,8 @@
         },
         "ui_selection_total": {
             "enGB": "Selection: +{0} \u2014 Total: {1} gp / ~{2} d",
-            "frFR": "S\u00e9lection : +{0} \u2014 Total : {1} po / ~{2} j",
-            "ruRU": "Выбор: +{0} \u2014 Total: {1} gp / ~{2} d"
+            "frFR": "Sélection : +{0} \u2014 Total : {1} po / ~{2} j",
+            "ruRU": "Выбор: +{0} \u2014 Итого: {1} gp / ~{2} дн."
         },
         "ui_btn_validate_selection": {
             "enGB": "Confirm Selection",

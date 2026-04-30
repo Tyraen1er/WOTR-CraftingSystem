@@ -814,22 +814,6 @@ namespace CraftingSystem
                 {
                     selectedList.Add(d);
                 }
-                else if (g.Replace("-", "").ToUpper().StartsWith(DynamicGuidHelper.Signature))
-                {
-                    // C'est un custom dynamique
-                    var bp = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(g) as BlueprintItemEnchantment;
-                    if (bp != null)
-                    {
-                        var customData = new EnchantmentData
-                        {
-                            Guid = g,
-                            PointString = bp.EnchantmentCost.ToString(),
-                            Name = bp.Name
-                        };
-                        selectedList.Add(customData);
-                        // Main.ModEntry.Logger.Log($"[UI-DEBUG] Added custom to basket: {bp.Name} (+{bp.EnchantmentCost})");
-                    }
-                }
             }
 
             // Calcul du coût total (Marginal Pricing prend en charge la liste complète)
@@ -860,12 +844,11 @@ namespace CraftingSystem
                 {
                     if (Game.Instance.Player.Money >= totalCost)
                     {
-                        Game.Instance.Player.Money -= (int)totalCost;
+                        Game.Instance.Player.Money -= totalCost;
 
                         foreach (var d in selectedList)
                         {
                             long c = CraftingCalculator.GetEnchantmentCost(selectedItem, d, CraftingSettings.CostMultiplier);
-                            if (d.GoldOverride >= 0) c = (long)(d.GoldOverride * CraftingSettings.CostMultiplier);
                             int days = CraftingCalculator.GetCraftingDays(c, CraftingSettings.InstantCrafting);
                             CraftingActions.StartCraftingProject(selectedItem, d, (int)c, days);
                         }
@@ -1453,7 +1436,7 @@ namespace CraftingSystem
                     foreach (var p in selectedModel.DynamicParams)
                     {
                         GUILayout.BeginHorizontal();
-                        GUILayout.Label(p.Name + ": ", paramLabelStyle, GUILayout.Width(150 * scale));
+                        GUILayout.Label(Helpers.GetString("ui_param_" + p.Name.ToLower().Replace(" ", "_"), p.Name) + ": ", paramLabelStyle, GUILayout.Width(150 * scale));
 
                         if (p.Type == "Slider")
                         {
@@ -1468,7 +1451,7 @@ namespace CraftingSystem
                         else if (p.Type == "Enum")
                         {
                             int currentVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
-                            string enumName = Helpers.GetString("ui_enum_value", "Value ") + currentVal;
+                            string enumName = Helpers.GetString("ui_enum_value", "Value: ") + currentVal;
 
                             // Essayer de résoudre le nom de l'enum via réflexion
                             try
@@ -1515,13 +1498,21 @@ namespace CraftingSystem
 
                     GUILayout.Space(20);
 
-                    // Calcul du coût
-                    int totalPoints = selectedModel.EnchantmentCost;
+                    // On extrait les valeurs dans l'ordre EXACT des paramètres du modèle
+                    int[] orderedValues = selectedModel.DynamicParams
+                        .Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0)
+                        .ToArray();
 
-                    // Simulation rapide pour affichage
-                    var tempGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, dynamicParamValues.Values.ToArray());
-                    var tempEnch = new EnchantmentData { Guid = tempGuid.ToString(), PointString = totalPoints.ToString() };
-                    long totalCost = CraftingCalculator.GetEnchantmentCost(selectedItem, tempEnch, CraftingSettings.CostMultiplier);
+                    var tempGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues);
+                    var tempEnch = EnchantmentScanner.GetByGuid(tempGuid.ToString());
+                    
+                    long totalCost = 0;
+                    int totalPoints = 0;
+                    if (tempEnch != null)
+                    {
+                        totalCost = CraftingCalculator.GetEnchantmentCost(selectedItem, tempEnch, CraftingSettings.CostMultiplier);
+                        totalPoints = tempEnch.PointCost;
+                    }
                     int totalDays = CraftingCalculator.GetCraftingDays(totalCost, CraftingSettings.InstantCrafting);
 
                     GUILayout.BeginHorizontal();

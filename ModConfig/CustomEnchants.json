@@ -1,7 +1,6 @@
 [
   {
     "EnchantId": "001",
-    "Guid": "C2AF0010100000000000000000000000",
     "Name": "Model_Resist_Feature",
     "Type": "Feature", 
     "Components": [
@@ -20,7 +19,7 @@
         "FieldName": "Type"
       },
       {
-        "Name": "Resistance Value",
+        "Name": "Value",
         "Type": "Slider",
         "Min": 5,
         "Max": 100,
@@ -32,18 +31,21 @@
   },
   {
     "EnchantId": "001",
-    "Guid": "C2AF0010200000000000000000000000",
     "Name": "Model_Resist_Enchantment",
     "Type": "ArmorEnchantment", 
     "EnchantNameKey": "ui_custom_acid_resist_name",
     "EnchantDescKey": "ui_custom_acid_resist_desc",
     "Prefix": "",
     "Suffix": "of Protection",
-    "EnchantmentCost": 3,
+    "EnchantmentCost": 0,
+    "MaxNotEpic": 30,
+    "Slots": [ "Armor", "Shield" ],
+    "GoldOverrideFormula": "18000 + ((Value - 10) / 10) * 24000",
+    "PointCostFormula": "0",
     "Components": [
       {
         "$type": "Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment, Assembly-CSharp",
-        "m_Feature": "!bp_C2AF0010100000000000000000000000"
+        "m_Feature": "!bp_c2af0010100000000000000000000000"
       }
     ],
     "DynamicParams": [
@@ -55,7 +57,7 @@
         "FieldName": "Type"
       },
       {
-        "Name": "Resistance Value",
+        "Name": "Value",
         "Type": "Slider",
         "Min": 5,
         "Max": 100,

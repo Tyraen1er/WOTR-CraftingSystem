@@ -55,6 +55,14 @@ namespace CraftingSystem
         }
 
         /// <summary>
+        /// Génère le GUID par défaut d'un modèle (tous paramètres à 0).
+        /// </summary>
+        public static BlueprintGuid GenerateModelGuid(string enchantId, bool isFeature = false)
+        {
+            return GenerateGuid(enchantId, new int[0], isFeature);
+        }
+
+        /// <summary>
         /// Décode un GUID pour retrouver l'ID de l'enchantement et ses paramètres.
         /// </summary>
         public static bool TryDecodeGuid(BlueprintGuid guid, out string enchantId, out List<int> parameters)
