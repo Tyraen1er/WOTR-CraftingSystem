@@ -424,7 +424,17 @@ namespace CraftingSystem
                                             if (enumType != null) {
                                                 string enumName = Enum.GetName(enumType, val);
                                                 if (!string.IsNullOrEmpty(enumName))
-                                                    resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
+                                                {
+                                                    // On vérifie s'il y a une surcharge de nom dans le JSON
+                                                    if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(enumName, out object overrideObj))
+                                                    {
+                                                        resolvedVal = Helpers.GetLocalizedString(overrideObj);
+                                                    }
+                                                    else
+                                                    {
+                                                        resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
+                                                    }
+                                                }
                                             }
                                         } catch { }
                                     }
@@ -466,8 +476,40 @@ namespace CraftingSystem
 
                                 if (!string.IsNullOrEmpty(model.GoldOverrideFormula))
                                 {
+                                    // Injection des variables de PriceTables
+                                    if (model.PriceTables != null)
+                                    {
+                                        foreach (var table in model.PriceTables)
+                                        {
+                                            string paramName = table.Key;
+                                            if (formulaVars.TryGetValue(paramName, out double selectedValueDouble))
+                                            {
+                                                int selectedValue = (int)selectedValueDouble;
+                                                string key = selectedValue.ToString();
+
+                                                // Pour les Enums, on essaie de trouver le nom de l'entrée pour une table plus lisible
+                                                var paramDef = model.DynamicParams.FirstOrDefault(p => p.Name == paramName);
+                                                if (paramDef != null && paramDef.Type == "Enum")
+                                                {
+                                                    try
+                                                    {
+                                                        var enumType = Type.GetType(paramDef.EnumTypeName);
+                                                        if (enumType != null) key = Enum.GetName(enumType, selectedValue) ?? key;
+                                                    }
+                                                    catch { }
+                                                }
+
+                                                double multiplier = 1.0;
+                                                if (table.Value.TryGetValue(key, out double m)) multiplier = m;
+                                                else if (table.Value.TryGetValue("DEFAULT", out double dm)) multiplier = dm;
+
+                                                formulaVars[paramName + "_Mult"] = multiplier;
+                                            }
+                                        }
+                                    }
+
                                     dynamicData.GoldOverride = (int)FormulaEvaluator.EvaluateLong(model.GoldOverrideFormula, formulaVars);
-                                    Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Calculated Price: {dynamicData.GoldOverride} for {guid}");
+                                    Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Calculated Price: {dynamicData.GoldOverride} for {guid} (Variables: {string.Join(", ", formulaVars.Select(kvp => kvp.Key + "=" + kvp.Value))})");
                                 }
 
                                 // --- GESTION DU SEUIL ÉPIQUE ---

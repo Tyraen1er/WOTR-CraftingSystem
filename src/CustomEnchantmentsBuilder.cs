@@ -143,6 +143,10 @@ namespace CraftingSystem
         public int Min = 0; // Pour Type == Slider
         public int Max = 100; // Pour Type == Slider
         public int Step = 1;
+        public List<string> EnumOnly = null; // Optionnel : ne garder que ces valeurs d'enum
+        public List<string> EnumExclude = null; // Optionnel : exclure ces valeurs d'enum
+        public Dictionary<string, object> EnumOverrides = null; // Optionnel : surcharger le texte affiché (localisable)
+        public int? DefaultValue = null; // Optionnel : valeur pré-sélectionnée par défaut
 
         // Cible pour l'injection
         public int ComponentIndex;
@@ -163,11 +167,13 @@ namespace CraftingSystem
         public int EnchantmentCost; // Utilisé si pas de formule
         public string PointCostFormula;
         public string GoldOverrideFormula;
+        public string FeatureModelId; // Optionnel : ID du modèle de feature à utiliser (si différent de EnchantId)
         public int MaxNotEpic; // Seuil au-delà duquel l'enchantement devient épique
         public int PriceFactor = 2000; // Multiplicateur de prix (2000 par défaut pour les armes)
         public List<string> Slots = new List<string>(); // Liste des types d'items autorisés (Armor, Weapon, Shield...)
         public List<BlueprintComponent> Components = new List<BlueprintComponent>();
         public List<DynamicParam> DynamicParams = new List<DynamicParam>();
+        public Dictionary<string, Dictionary<string, double>> PriceTables = new Dictionary<string, Dictionary<string, double>>();
     }
 
     // --- Phase 2.B : The Builder Engine ---
@@ -503,7 +509,8 @@ namespace CraftingSystem
                 var featureComp = itemEnch.ComponentsArray.OfType<AddUnitFeatureEquipment>().FirstOrDefault();
                 if (featureComp != null)
                 {
-                    var featGuid = DynamicGuidHelper.GenerateGuid(model.EnchantId, paramValues.ToArray(), true);
+                    string targetId = model.FeatureModelId ?? model.EnchantId;
+                    var featGuid = DynamicGuidHelper.GenerateGuid(targetId, paramValues.ToArray(), true);
                     Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Linking to Feature GUID: {featGuid}");
                     GetOrBuildDynamicBlueprint(featGuid.ToString());
 

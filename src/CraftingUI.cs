@@ -931,7 +931,7 @@ namespace CraftingSystem
 
             bool oldEnforce = CraftingSettings.EnforcePointsLimit;
             CraftingSettings.EnforcePointsLimit = CToggle(CraftingSettings.EnforcePointsLimit, Helpers.GetString("ui_settings_enforce_limit", " Enforce Bonus Limits (Pathfinder)"));
-            if (oldEnforce != CraftingSettings.EnforcePointsLimit) 
+            if (oldEnforce != CraftingSettings.EnforcePointsLimit)
             {
                 filtersDirty = true;
                 if (!CraftingSettings.EnforcePointsLimit)
@@ -1388,7 +1388,7 @@ namespace CraftingSystem
                     string displayName = Helpers.GetString("ui_custom_enchantment_placeholder", "Custom Enchantment");
                     EnchantmentData data = EnchantmentScanner.GetByGuid(g);
                     BlueprintItemEnchantment bp = null;
-                    
+
                     if (data != null)
                     {
                         displayName = data.Name;
@@ -1401,7 +1401,7 @@ namespace CraftingSystem
                     }
 
                     GUILayout.BeginHorizontal(GUI.skin.box);
-                    
+
                     // Nom et métadonnées
                     string metadata = "";
                     if (data != null)
@@ -1409,15 +1409,15 @@ namespace CraftingSystem
                         metadata = $" <color=#E2C675>[+{data.PointString}]</color>";
                         if (data.IsEpic) metadata += " <color=#FF4500>(Epic)</color>";
                     }
-                    
+
                     GUILayout.Label(" • " + displayName + metadata, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), richText = true }, GUILayout.ExpandWidth(true));
-                    
+
                     // Bouton Description
                     if (bp != null)
                     {
                         DescriptionSource descSource = DescriptionSource.None;
                         string desc = DescriptionManager.GetLocalizedDescription(bp, data, out descSource);
-                        
+
                         GUIStyle infoStyle = new GUIStyle(GUI.skin.button);
                         infoStyle.fontSize = (int)(12 * scale);
                         string color = descSource == DescriptionSource.Generated ? "#88BBFF" : "#E2C675";
@@ -1448,11 +1448,12 @@ namespace CraftingSystem
                 GUILayout.Space(5);
 
                 var models = CustomEnchantmentsBuilder.AllModels.Where(m => m.Type != "Feature").ToList();
-                
+
                 // Filtrage par type
                 if (activeTypes.Count > 0)
                 {
-                    models = models.Where(m => {
+                    models = models.Where(m =>
+                    {
                         if (activeTypes.Contains("Weapon") && (m.Type == "Weapon" || m.Type == "WeaponEnchantment")) return true;
                         if (activeTypes.Contains("Armor") && (m.Type == "Armor" || m.Type == "ArmorEnchantment")) return true;
                         if (activeTypes.Contains("Other") && m.Type != "Weapon" && m.Type != "WeaponEnchantment" && m.Type != "Armor" && m.Type != "ArmorEnchantment") return true;
@@ -1477,7 +1478,31 @@ namespace CraftingSystem
                             dynamicParamValues.Clear();
                             foreach (var p in model.DynamicParams)
                             {
-                                dynamicParamValues[p.Name] = p.Min;
+                                int defVal = p.Min;
+                                if (p.DefaultValue.HasValue) 
+                                {
+                                    defVal = p.DefaultValue.Value;
+                                }
+                                else if (p.Type == "Enum")
+                                {
+                                    // Sélection intelligente du défaut : première valeur valide après filtrage
+                                    try {
+                                        var enumType = Type.GetType(p.EnumTypeName);
+                                        if (enumType != null) {
+                                            var allNames = Enum.GetNames(enumType);
+                                            var allValues = Enum.GetValues(enumType);
+                                            for (int i = 0; i < allNames.Length; i++) {
+                                                string n = allNames[i];
+                                                if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Contains(n)) continue;
+                                                if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Contains(n)) continue;
+                                                
+                                                defVal = (int)allValues.GetValue(i);
+                                                break;
+                                            }
+                                        }
+                                    } catch {}
+                                }
+                                dynamicParamValues[p.Name] = defVal;
                             }
                         }
                         GUILayout.EndHorizontal();
@@ -1521,56 +1546,95 @@ namespace CraftingSystem
                         }
                         else if (p.Type == "Enum")
                         {
-                            int currentVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
-                            string enumName = Helpers.GetString("ui_enum_value", "Value: ") + currentVal;
-
-                            // Essayer de résoudre le nom de l'enum via réflexion
-                            try
+                            var enumType = Type.GetType(p.EnumTypeName);
+                            if (enumType != null)
                             {
-                                var enumType = Type.GetType(p.EnumTypeName);
-                                if (enumType != null)
+                                var allNames = Enum.GetNames(enumType);
+                                var allValues = Enum.GetValues(enumType);
+
+                                var filteredNames = new List<string>();
+                                var filteredValues = new List<int>();
+
+                                for (int i = 0; i < allNames.Length; i++)
                                 {
-                                    enumName = Enum.GetName(enumType, currentVal) ?? enumName;
-                                    if (p.EnumTypeName.Contains("DamageEnergyType"))
-                                        enumName = Helpers.GetString("energy_" + enumName, enumName);
-                                    else
-                                        enumName = Helpers.GetString("ui_enum_" + enumName, enumName);
+                                    string name = allNames[i];
+                                    if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Contains(name)) continue;
+                                    if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Contains(name)) continue;
+
+                                    filteredNames.Add(name);
+                                    filteredValues.Add((int)allValues.GetValue(i));
                                 }
-                            }
-                            catch { }
 
-                            if (CButton(enumName, GUILayout.Width(200 * scale)))
-                            {
-                                openDropdownParam = (openDropdownParam == p.Name) ? null : p.Name;
-                            }
+                                var names = filteredNames.ToArray();
+                                var values = filteredValues.ToArray();
 
-                            if (openDropdownParam == p.Name)
-                            {
-                                // Afficher les options (on ferme le horizontal pour la liste)
-                                GUILayout.EndHorizontal();
-                                var enumType = Type.GetType(p.EnumTypeName);
-                                if (enumType != null)
+                                // Si un seul choix possible, on l'affiche simplement et on le sélectionne d'office
+                                if (names.Length == 1)
                                 {
-                                    var names = Enum.GetNames(enumType);
-                                    var values = Enum.GetValues(enumType);
-                                    GUILayout.BeginVertical(GUI.skin.box);
-                                    for (int i = 0; i < names.Length; i++)
+                                    string displayName = names[0];
+                                    // Application de la surcharge de nom pour le label aussi
+                                    if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[0], out object ovrObj))
                                     {
-                                        string displayName = names[i];
-                                        if (p.EnumTypeName.Contains("DamageEnergyType"))
-                                            displayName = Helpers.GetString("energy_" + displayName, displayName);
-                                        else
-                                            displayName = Helpers.GetString("ui_enum_" + displayName, displayName);
-
-                                        if (CButton(displayName))
-                                        {
-                                            dynamicParamValues[p.Name] = (int)values.GetValue(i);
-                                            openDropdownParam = null;
-                                        }
+                                        displayName = Helpers.GetLocalizedString(ovrObj);
                                     }
-                                    GUILayout.EndVertical();
+                                    else
+                                    {
+                                        if (p.EnumTypeName.Contains("DamageEnergyType"))
+                                            displayName = Helpers.GetString("energy_" + names[0], names[0]);
+                                        else
+                                            displayName = Helpers.GetString("ui_enum_" + names[0], names[0]);
+                                    }
+
+                                    GUILayout.Label(displayName, paramLabelStyle);
+                                    dynamicParamValues[p.Name] = values[0];
                                 }
-                                GUILayout.BeginHorizontal(); // On réouvre pour la suite
+                                else
+                                {
+                                    int currentVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
+                                    string currentName = Enum.GetName(enumType, currentVal) ?? "";
+                                    string displayName = currentName;
+                                    if (p.EnumTypeName.Contains("DamageEnergyType"))
+                                        displayName = Helpers.GetString("energy_" + displayName, displayName);
+                                    else
+                                        displayName = Helpers.GetString("ui_enum_" + displayName, displayName);
+
+                                    if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(currentName, out object overrideObj))
+                                        displayName = Helpers.GetLocalizedString(overrideObj);
+
+                                    if (CButton(displayName, GUILayout.Width(200 * scale)))
+                                    {
+                                        openDropdownParam = (openDropdownParam == p.Name) ? null : p.Name;
+                                    }
+
+                                    if (openDropdownParam == p.Name)
+                                    {
+                                        // Afficher les options (on ferme le horizontal pour la liste)
+                                        GUILayout.EndHorizontal();
+                                        GUILayout.BeginVertical(GUI.skin.box);
+                                        for (int i = 0; i < names.Length; i++)
+                                        {
+                                            string optName = names[i];
+                                            if (p.EnumTypeName.Contains("DamageEnergyType"))
+                                                optName = Helpers.GetString("energy_" + optName, optName);
+                                            else
+                                                optName = Helpers.GetString("ui_enum_" + optName, optName);
+
+                                            // Application de la surcharge de nom (EnumOverrides)
+                                            if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[i], out object optOverrideObj))
+                                            {
+                                                optName = Helpers.GetLocalizedString(optOverrideObj);
+                                            }
+
+                                            if (CButton(optName))
+                                            {
+                                                dynamicParamValues[p.Name] = (int)values[i];
+                                                openDropdownParam = null;
+                                            }
+                                        }
+                                        GUILayout.EndVertical();
+                                        GUILayout.BeginHorizontal(); // On réouvre pour la suite
+                                    }
+                                }
                             }
                         }
                         GUILayout.EndHorizontal();
@@ -1586,7 +1650,7 @@ namespace CraftingSystem
 
                     var tempGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues, selectedModel.Type == "Feature");
                     var tempEnch = EnchantmentScanner.GetByGuid(tempGuid.ToString());
-                    
+
                     long totalCost = 0;
                     int totalPoints = 0;
                     if (tempEnch != null)
