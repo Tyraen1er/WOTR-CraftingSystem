@@ -104,6 +104,10 @@
       <HintPath>$(WrathPath)\UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Owlcat.Runtime.Validation">
+      <HintPath>$(WrathPath)\Owlcat.Runtime.Validation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,3 +1,12 @@
-- Wands, scroll et potions ?
-- creer ses propres enchantements
-- - Pathc harmony loading optimization
+- Créer items
+
+- Sceptre métamagique
+    Ajustement de niveau ; Mineur (Lesser) ; Normal ; Supérieur (Greater)
+    +1 ; 3 000 po ; 11 000 po ; 24 500 po
+    +2 ; 9 000 po ; 32 500 po ; 73 000 po
+    +3 ; 14 000 po ; 54 000 po ; 121 500 po
+    +4 ; 35 000 po ; 75 500 po ; 170 000 po
+
+- Baguettes, parchemins et potions
+
+- Patch harmony loading optimization

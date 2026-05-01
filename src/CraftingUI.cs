@@ -48,6 +48,7 @@ namespace CraftingSystem
                     descriptionScrollPosition = Vector2.zero;
                     activeDescriptionPopup = "";
                     currentPage = 0;
+                    currentPageType = CraftingPage.MainMenu;
                     itemsPerPageInput = CraftingSettings.ItemsPerPage.ToString();
                     filtersDirty = true;
                 }
@@ -87,6 +88,19 @@ namespace CraftingSystem
         private const float REFERENCE_HEIGHT = 1440f;
 
         // Controller Navigation Variables
+        public enum CraftingPage
+        {
+            MainMenu,
+            WorkshopInventory,
+            CreateWeapon,
+            CreateArmor,
+            CreateAccessory,
+            CreateMetamagicRod,
+            CreateWand,
+            CreateScroll
+        }
+        private CraftingPage currentPageType = CraftingPage.MainMenu;
+
         private int currentFocusIndex = 0;
         private int processIndex = 0;
         private int maxFocusIndex = 0;
@@ -305,7 +319,18 @@ namespace CraftingSystem
             string title = Helpers.GetString("ui_title_workshop", "Workshop");
             if (ShowSettings) title = Helpers.GetString("ui_title_config", "Configuration");
             else if (selectedItem != null) title = Helpers.GetString("ui_title_details", "Details: ") + selectedItem.Name;
-            else title = Helpers.GetString("ui_title_select", "Item Selection");
+            else {
+                switch(currentPageType) {
+                    case CraftingPage.MainMenu: title = Helpers.GetString("ui_title_main_menu", "Main Menu"); break;
+                    case CraftingPage.WorkshopInventory: title = Helpers.GetString("ui_title_select", "Item Selection"); break;
+                    case CraftingPage.CreateWeapon: title = Helpers.GetString("ui_menu_create_weapon", "Create Weapon"); break;
+                    case CraftingPage.CreateArmor: title = Helpers.GetString("ui_menu_create_armor", "Create Armor"); break;
+                    case CraftingPage.CreateAccessory: title = Helpers.GetString("ui_menu_create_accessory", "Create Accessory"); break;
+                    case CraftingPage.CreateMetamagicRod: title = Helpers.GetString("ui_menu_create_rod", "Create Metamagic Rod"); break;
+                    case CraftingPage.CreateWand: title = Helpers.GetString("ui_menu_create_wand", "Create Wand"); break;
+                    case CraftingPage.CreateScroll: title = Helpers.GetString("ui_menu_create_scroll", "Create Scroll"); break;
+                }
+            }
 
             titleScrollPosition = GUILayout.BeginScrollView(titleScrollPosition, GUIStyle.none, GUIStyle.none, GUILayout.ExpandWidth(true), GUILayout.Height(45 * scale));
             GUILayout.Label(title, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(FONT_LARGE * scale), wordWrap = false });
@@ -321,17 +346,21 @@ namespace CraftingSystem
                 activeDescriptionPopup = Helpers.GetString("ui_info_text");
             }
 
-            if (selectedItem != null && !ShowSettings)
+            if ((selectedItem != null || currentPageType != CraftingPage.MainMenu) && !ShowSettings)
             {
                 if (CButtonStyled(new GUIContent(Helpers.GetString("ui_btn_back", "<< BACK")), navStyle, GUILayout.Width(130 * scale), GUILayout.Height(35 * scale)))
                 {
-                    selectedItem = null;
-                    showCustomEnchantPage = false;
-                    newNameDraft = "";
-                    queuedEnchantGuids.Clear();
-                    activeCategories.Clear();
-                    activeTypes.Clear();
-                    showCategoryFilter = false;
+                    if (selectedItem != null) {
+                        selectedItem = null;
+                        showCustomEnchantPage = false;
+                        newNameDraft = "";
+                        queuedEnchantGuids.Clear();
+                        activeCategories.Clear();
+                        activeTypes.Clear();
+                        showCategoryFilter = false;
+                    } else {
+                        currentPageType = CraftingPage.MainMenu;
+                    }
                 }
             }
 
@@ -361,8 +390,122 @@ namespace CraftingSystem
             if (showAbadarWarning) DrawAbadarWarningGUI(scale);
             else if (ShowSettings) DrawSettingsGUI(scale);
             else if (selectedItem != null) DrawItemModificationGUI(scale);
-            else DrawInventoryGUI(scale);
+            else {
+                switch(currentPageType) {
+                    case CraftingPage.MainMenu: DrawMainMenuGUI(scale); break;
+                    case CraftingPage.WorkshopInventory: DrawInventoryGUI(scale); break;
+                    case CraftingPage.CreateWeapon: DrawCreateWeaponGUI(scale); break;
+                    case CraftingPage.CreateArmor: DrawCreateArmorGUI(scale); break;
+                    case CraftingPage.CreateAccessory: DrawCreateAccessoryGUI(scale); break;
+                    case CraftingPage.CreateMetamagicRod: DrawCreateMetamagicRodGUI(scale); break;
+                    case CraftingPage.CreateWand: DrawCreateWandGUI(scale); break;
+                    case CraftingPage.CreateScroll: DrawCreateScrollGUI(scale); break;
+                }
+            }
         }
+
+        void DrawMainMenuGUI(float scale)
+        {
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
+            
+            float windowWidth = 1000f * scale;
+            float contentWidth = windowWidth - (120f * scale); 
+
+            GUIStyle sectionHeaderStyle = new GUIStyle(GUI.skin.label) {
+                fontSize = (int)(FONT_LARGE * scale),
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter, // Centré
+                normal = { textColor = new Color(0.9f, 0.8f, 0.4f) }
+            };
+
+            GUIStyle btnStyle = new GUIStyle(GUI.skin.button) { 
+                fontSize = (int)(FONT_NORMAL * scale), 
+                fixedHeight = 75 * scale,
+                wordWrap = true,
+                padding = new RectOffset(20, 20, 10, 10),
+                alignment = TextAnchor.MiddleCenter, // Centré
+                richText = true
+            };
+
+            // Conteneur centré pour toute la page
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.BeginVertical(GUILayout.Width(contentWidth));
+            GUILayout.Space(25 * scale);
+
+            // --- SECTION 1 : GESTION (BLEU) ---
+            GUILayout.Label("⛭  " + Helpers.GetString("ui_section_management", "GESTION DE L'ATELIER") + "  ⛭", sectionHeaderStyle);
+            DrawSeparator(contentWidth, new Color(0.3f, 0.5f, 0.7f, 0.8f));
+            GUILayout.Space(12 * scale);
+
+            DrawMenuButton(new GUIContent("<b><size=" + (int)(FONT_LARGE * scale) + ">📦 " + Helpers.GetString("ui_menu_inventory", "Workshop Inventory") + "</size></b>\n" + 
+                                        "<color=#aaaaaa>" + Helpers.GetString("ui_desc_inventory", "Modify and upgrade your existing items") + "</color>"), 
+                           btnStyle, CraftingPage.WorkshopInventory, new Color(0.2f, 0.3f, 0.5f), GUILayout.Height(85 * scale));
+
+            GUILayout.Space(40 * scale);
+
+            // --- SECTION 2 : FORGE D'ÉQUIPEMENT (ROUGE/BRUN) ---
+            GUILayout.Label("⚒  " + Helpers.GetString("ui_section_forge", "FORGE : CRÉATION D'ÉQUIPEMENT") + "  ⚒", sectionHeaderStyle);
+            DrawSeparator(contentWidth, new Color(0.7f, 0.3f, 0.2f, 0.8f));
+            GUILayout.Space(15 * scale);
+
+            float colWidth3 = (contentWidth / 3f) - (10 * scale);
+            Color forgeTint = new Color(0.5f, 0.25f, 0.2f);
+
+            GUILayout.BeginHorizontal();
+            DrawMenuButton(new GUIContent("<b>⚔ " + Helpers.GetString("ui_menu_create_weapon", "Create Weapon") + "</b>"), btnStyle, CraftingPage.CreateWeapon, forgeTint, GUILayout.Width(colWidth3));
+            GUILayout.Space(10 * scale);
+            DrawMenuButton(new GUIContent("<b>🛡 " + Helpers.GetString("ui_menu_create_armor", "Create Armor") + "</b>"), btnStyle, CraftingPage.CreateArmor, forgeTint, GUILayout.Width(colWidth3));
+            GUILayout.Space(10 * scale);
+            DrawMenuButton(new GUIContent("<b>💍 " + Helpers.GetString("ui_menu_create_accessory", "Create Accessory") + "</b>"), btnStyle, CraftingPage.CreateAccessory, forgeTint, GUILayout.Width(colWidth3));
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(40 * scale);
+
+            // --- SECTION 3 : ARTISANAT MAGIQUE (VIOLET) ---
+            GUILayout.Label("✨  " + Helpers.GetString("ui_section_magic", "ARTS ARCANES : OBJETS MAGIQUES") + "  ✨", sectionHeaderStyle);
+            DrawSeparator(contentWidth, new Color(0.6f, 0.3f, 0.8f, 0.8f));
+            GUILayout.Space(15 * scale);
+
+            Color magicTint = new Color(0.4f, 0.2f, 0.6f);
+
+            GUILayout.BeginHorizontal();
+            DrawMenuButton(new GUIContent("<b>🪄 " + Helpers.GetString("ui_menu_create_rod", "Create Metamagic Rod") + "</b>"), btnStyle, CraftingPage.CreateMetamagicRod, magicTint, GUILayout.Width(colWidth3));
+            GUILayout.Space(10 * scale);
+            DrawMenuButton(new GUIContent("<b>⚡ " + Helpers.GetString("ui_menu_create_wand", "Create Wand") + "</b>"), btnStyle, CraftingPage.CreateWand, magicTint, GUILayout.Width(colWidth3));
+            GUILayout.Space(10 * scale);
+            DrawMenuButton(new GUIContent("<b>📜 " + Helpers.GetString("ui_menu_create_scroll", "Create Scroll") + "</b>"), btnStyle, CraftingPage.CreateScroll, magicTint, GUILayout.Width(colWidth3));
+            GUILayout.EndHorizontal();
+
+            GUILayout.EndVertical();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+
+            GUILayout.EndScrollView();
+        }
+
+        private void DrawMenuButton(GUIContent content, GUIStyle style, CraftingPage targetPage, Color tint, params GUILayoutOption[] options)
+        {
+            Color oldBG = GUI.backgroundColor;
+            GUI.backgroundColor = tint;
+            if (CButtonStyled(content, style, options)) currentPageType = targetPage;
+            GUI.backgroundColor = oldBG;
+        }
+
+        private void DrawSeparator(float width, Color color)
+        {
+            Rect rect = GUILayoutUtility.GetRect(width, 2f);
+            GUI.color = color;
+            GUI.DrawTexture(rect, Texture2D.whiteTexture);
+            GUI.color = Color.white;
+        }
+
+        void DrawCreateWeaponGUI(float scale) { GUILayout.Label("Coming Soon: Weapon Creation"); }
+        void DrawCreateArmorGUI(float scale) { GUILayout.Label("Coming Soon: Armor Creation"); }
+        void DrawCreateAccessoryGUI(float scale) { GUILayout.Label("Coming Soon: Accessory Creation"); }
+        void DrawCreateMetamagicRodGUI(float scale) { GUILayout.Label("Coming Soon: Metamagic Rod Creation"); }
+        void DrawCreateWandGUI(float scale) { GUILayout.Label("Coming Soon: Wand Creation"); }
+        void DrawCreateScrollGUI(float scale) { GUILayout.Label("Coming Soon: Scroll Creation"); }
 
         void DrawInventoryGUI(float scale)
         {

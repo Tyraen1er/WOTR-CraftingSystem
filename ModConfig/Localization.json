@@ -1,5 +1,65 @@
 {
     "strings": {
+        "ui_section_management": {
+            "enGB": "WORKSHOP MANAGEMENT",
+            "frFR": "GESTION DE L'ATELIER",
+            "ruRU": "УПРАВЛЕНИЕ МАСТЕРСКОЙ"
+        },
+        "ui_section_forge": {
+            "enGB": "FORGE: EQUIPMENT CREATION",
+            "frFR": "FORGE : CRÉATION D'ÉQUIPEMENT",
+            "ruRU": "КУЗНИЦА: СОЗДАНИЕ СНАРЯЖЕНИЯ"
+        },
+        "ui_section_magic": {
+            "enGB": "ARCANE ARTS: MAGIC ITEMS",
+            "frFR": "ARTS ARCANES : OBJETS MAGIQUES",
+            "ruRU": "АРКАННЫЕ ИСКУССТВА: МАГИЧЕСКИЕ ПРЕДМЕТЫ"
+        },
+        "ui_desc_inventory": {
+            "enGB": "Modify and upgrade your existing items",
+            "frFR": "Modifier et améliorer vos objets existants",
+            "ruRU": "Изменяйте и улучшайте существующие предметы"
+        },
+        "ui_title_main_menu": {
+            "enGB": "Crafting System - Main Menu",
+            "frFR": "Système de Craft - Menu Principal",
+            "ruRU": "Система ремесла - Главное меню"
+        },
+        "ui_menu_inventory": {
+            "enGB": "Workshop Inventory (Modify existing items)",
+            "frFR": "Inventaire de l'Atelier (Modifier objets existants)",
+            "ruRU": "Инвентарь мастерской (Изменить предметы)"
+        },
+        "ui_menu_create_weapon": {
+            "enGB": "Create Weapon",
+            "frFR": "Créer une Arme",
+            "ruRU": "Создать оружие"
+        },
+        "ui_menu_create_armor": {
+            "enGB": "Create Armor",
+            "frFR": "Créer une Armure",
+            "ruRU": "Создать доспех"
+        },
+        "ui_menu_create_accessory": {
+            "enGB": "Create Accessory",
+            "frFR": "Créer un Accessoire",
+            "ruRU": "Создать аксессуар"
+        },
+        "ui_menu_create_rod": {
+            "enGB": "Create Metamagic Rod",
+            "frFR": "Créer un Sceptre Métamagique",
+            "ruRU": "Создать метамагический жезл"
+        },
+        "ui_menu_create_wand": {
+            "enGB": "Create Wand",
+            "frFR": "Créer une Baguette",
+            "ruRU": "Создать магическую палочку"
+        },
+        "ui_menu_create_scroll": {
+            "enGB": "Create Scroll",
+            "frFR": "Créer un Parchemin",
+            "ruRU": "Создать свиток"
+        },
         "ui_warning_forge_active": {
             "enGB": "FORGE: This equipment is currently being modified!",
             "frFR": "FORGE : Cet équipement est en cours de modification !",

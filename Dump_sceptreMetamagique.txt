@@ -1,0 +1,162 @@
+=== OBJECT: MetamagicRodNormalPiercing (BlueprintItemEquipmentUsable) ===
+UI NAME: Sceptre métamagique de perforation
+UI DESC: Ce sceptre confère la capacité de lancer jusqu'à trois <b><color=#703565><link="Encyclopedia:Spell">sorts</link></color></b> par jour, comme s'ils étaient affectés par le <b><color=#703565><link="Encyclopedia:Feat">don</link></color></b> <b><color=#703565><link="FeaturePiercingSpell">Sort perforant</link></color></b>. Les sceptres normaux s'utilisent avec des sorts de niveau 6 ou inférieur.
+GUID: b50be8b008be40199903dd0c28c6312e
+  Type: Other (UsableItemType)
+  m_IsCostZero: False (Boolean)
+  m_IdentifyDC: 0 (Int32)
+  m_InventoryEquipSound: WandPut (String)
+  m_BeltItemPrefab: Kingmaker.ResourceLinks.PrefabLink (PrefabLink)
+  m_Enchantments (Collection):
+  CR: 0 (Int32)
+  m_Ability (BlueprintRef): Unresolved [GUID: ]
+  m_ActivatableAbility (BlueprintRef): MetamagicRodNormalPiercingToggleAbility [GUID: 8911333355f9425dbbb5119f79eb58d2]
+  SpendCharges: True (Boolean)
+  Charges: 3 (Int32)
+  RestoreChargesOnRest: True (Boolean)
+  CasterLevel: 0 (Int32)
+  SpellLevel: 0 (Int32)
+  DC: 0 (Int32)
+  HideAbilityInfo: False (Boolean)
+  IsNonRemovable: False (Boolean)
+  m_EquipmentEntity (BlueprintRef): Unresolved [GUID: ]
+  m_EquipmentEntityAlternatives (Collection):
+  m_ForcedRampColorPresetIndex: 0 (Int32)
+  m_CachedUseWhileCanComponents: null
+  m_DisplayNameText (LocalizedString): "Sceptre métamagique de perforation" [Key: d241adc5-d5b2-4b79-ab8e-182411a94dc8]
+  m_DescriptionText (LocalizedString): "Ce sceptre confère la capacité de lancer jusqu'à trois <b><color=#703565><link="Encyclopedia:Spel..." [Key: 318f4a05-73ba-40c3-b0ad-8baeef43428e]
+  m_FlavorText (LocalizedString): "" [Key: ]
+  m_NonIdentifiedNameText (LocalizedString): "Sceptre" [Key: b281224c-fede-414d-80ab-5acba5288829]
+  m_NonIdentifiedDescriptionText (LocalizedString): "" [Key: ]
+  m_Icon: MetamagicRodGreaterSelective (UnityEngine.Sprite) (Sprite)
+  m_Cost: 16750 (Int32)
+  m_Weight: 1 (Single)
+  m_IsNotable: False (Boolean)
+  m_IsJunk: False (Boolean)
+  m_ForceStackable: False (Boolean)
+  m_Destructible: True (Boolean)
+  m_ShardItem (BlueprintRef): MetalShardItem [GUID: e6820e62423d4c81a2ba20d236251b67]
+  m_MiscellaneousType: None (MiscellaneousItemType)
+  m_InventoryPutSound: WandPut (String)
+  m_InventoryTakeSound: WandTake (String)
+  NeedSkinningForCollect: False (Boolean)
+  TrashLootTypes (Collection):
+  m_CachedEnchantments: null
+  m_PrototypeId:  (String)
+  m_Overrides (Collection):
+  Components (Collection):
+  Comment:  (String)
+  name: MetamagicRodNormalPiercing (String)
+  AssetGuid: b50be8b008be40199903dd0c28c6312e (BlueprintGuid)
+  m_AllElements (Collection):
+  m_ValidationStatus (Collection):
+
+[CraftingSystem] 
+[STRUCTURAL DUMP] Lancement pour : MetamagicRodMasterpieceExtraCharges (3b22e3b884e8470db3b031d71efa6d24)
+=== OBJECT: MetamagicRodMasterpieceExtraCharges (BlueprintItemEquipmentUsable) ===
+UI NAME: Sceptre de grand maître
+UI DESC: Ce sceptre permet d'imprégner jusqu'à six <b><color=#703565><link="Encyclopedia:Spell">sorts</link></color></b> par jour d'essence magique primordiale. Ces sorts sont lancés comme s'ils étaient affectés par les <b><color=#703565><link="Encyclopedia:Feat">dons</link></color></b> <b><color=#703565><link="FeatureMaximizeSpell">Quintessence des sorts</link></color></b> et <b><color=#703565><link="FeatureEmpoweredSpell">Extension d'effet</link></color></b>. Ils ne tiennent compte ni de la <b><color=#703565><link="Encyclopedia:Spell_Resistance">résistance</link></color></b> ni de l'immunité à la magie de la cible.
+GUID: 3b22e3b884e8470db3b031d71efa6d24
+  Type: Other (UsableItemType)
+  m_IsCostZero: False (Boolean)
+  m_IdentifyDC: 0 (Int32)
+  m_InventoryEquipSound: WandPut (String)
+  m_BeltItemPrefab: Kingmaker.ResourceLinks.PrefabLink (PrefabLink)
+  m_Enchantments (Collection):
+  CR: 0 (Int32)
+  m_Ability (BlueprintRef): Unresolved [GUID: ]
+  m_ActivatableAbility (BlueprintRef): MetamagicRodMasterpieceExtraChargesToggleAbility [GUID: 32deec61b85a4a39921c94e94cc2554d]
+  SpendCharges: True (Boolean)
+  Charges: 6 (Int32)
+  RestoreChargesOnRest: True (Boolean)
+  CasterLevel: 0 (Int32)
+  SpellLevel: 0 (Int32)
+  DC: 0 (Int32)
+  HideAbilityInfo: False (Boolean)
+  IsNonRemovable: False (Boolean)
+  m_EquipmentEntity (BlueprintRef): Unresolved [GUID: ]
+  m_EquipmentEntityAlternatives (Collection):
+  m_ForcedRampColorPresetIndex: 0 (Int32)
+  m_CachedUseWhileCanComponents: null
+  m_DisplayNameText (LocalizedString): "Sceptre de grand maître" [Key: cc0c54bc-b7e1-4540-aee2-9df18d58180e]
+  m_DescriptionText (LocalizedString): "Ce sceptre permet d'imprégner jusqu'à six <b><color=#703565><link="Encyclopedia:Spell">sorts</lin..." [Key: 7afac82e-0924-4272-9224-68487387fa26]
+  m_FlavorText (LocalizedString): "" [Key: ]
+  m_NonIdentifiedNameText (LocalizedString): "Sceptre" [Key: b281224c-fede-414d-80ab-5acba5288829]
+  m_NonIdentifiedDescriptionText (LocalizedString): "" [Key: ]
+  m_Icon: MetamagicRodEmpowerGreater (UnityEngine.Sprite) (Sprite)
+  m_Cost: 121500 (Int32)
+  m_Weight: 1 (Single)
+  m_IsNotable: False (Boolean)
+  m_IsJunk: False (Boolean)
+  m_ForceStackable: False (Boolean)
+  m_Destructible: True (Boolean)
+  m_ShardItem (BlueprintRef): MetalShardItem [GUID: e6820e62423d4c81a2ba20d236251b67]
+  m_MiscellaneousType: None (MiscellaneousItemType)
+  m_InventoryPutSound: WandPut (String)
+  m_InventoryTakeSound: WandTake (String)
+  NeedSkinningForCollect: False (Boolean)
+  TrashLootTypes (Collection):
+  m_CachedEnchantments: null
+  m_PrototypeId:  (String)
+  m_Overrides (Collection):
+  Components (Collection):
+  Comment:  (String)
+  name: MetamagicRodMasterpieceExtraCharges (String)
+  AssetGuid: 3b22e3b884e8470db3b031d71efa6d24 (BlueprintGuid)
+  m_AllElements (Collection):
+  m_ValidationStatus (Collection):
+
+[CraftingSystem] 
+[STRUCTURAL DUMP] Lancement pour : ChannelersRod (2c87e12216cb04d4aa87966af9fb6118)
+=== OBJECT: ChannelersRod (BlueprintItemEquipmentUsable) ===
+UI NAME: Sceptre de canalisation
+UI DESC: Ce sceptre confère la capacité de lancer rapidement trois explosions cinétiques par jour comme si elles bénéficiaient des effets du <b><color=#703565><link="Encyclopedia:Feat">don</link></color></b> <b><color=#703565><link="FeatureQuickenSpell">Incantation rapide</link></color></b>.
+GUID: 2c87e12216cb04d4aa87966af9fb6118
+  Type: Other (UsableItemType)
+  m_IsCostZero: False (Boolean)
+  m_IdentifyDC: 0 (Int32)
+  m_InventoryEquipSound: WandPut (String)
+  m_BeltItemPrefab: Kingmaker.ResourceLinks.PrefabLink (PrefabLink)
+  m_Enchantments (Collection):
+  CR: 0 (Int32)
+  m_Ability (BlueprintRef): Unresolved [GUID: ]
+  m_ActivatableAbility (BlueprintRef): ChannelersRodToggleAbility [GUID: aa409dbbbd7dfc24bb95dabebdebedfb]
+  SpendCharges: True (Boolean)
+  Charges: 3 (Int32)
+  RestoreChargesOnRest: True (Boolean)
+  CasterLevel: 0 (Int32)
+  SpellLevel: 0 (Int32)
+  DC: 0 (Int32)
+  HideAbilityInfo: False (Boolean)
+  IsNonRemovable: False (Boolean)
+  m_EquipmentEntity (BlueprintRef): Unresolved [GUID: ]
+  m_EquipmentEntityAlternatives (Collection):
+  m_ForcedRampColorPresetIndex: 0 (Int32)
+  m_CachedUseWhileCanComponents: null
+  m_DisplayNameText (LocalizedString): "Sceptre de canalisation" [Key: 55ad1cb0-a7ba-4c61-b25b-faca7156f82e]
+  m_DescriptionText (LocalizedString): "Ce sceptre confère la capacité de lancer rapidement trois explosions cinétiques par jour comme si..." [Key: a94e3147-5e4f-4fa8-b4e0-4498754a3842]
+  m_FlavorText (LocalizedString): "" [Key: ]
+  m_NonIdentifiedNameText (LocalizedString): "Sceptre" [Key: b281224c-fede-414d-80ab-5acba5288829]
+  m_NonIdentifiedDescriptionText (LocalizedString): "" [Key: ]
+  m_Icon: MetamagicRodNormalQuicken (UnityEngine.Sprite) (Sprite)
+  m_Cost: 75500 (Int32)
+  m_Weight: 1 (Single)
+  m_IsNotable: False (Boolean)
+  m_IsJunk: False (Boolean)
+  m_ForceStackable: False (Boolean)
+  m_Destructible: True (Boolean)
+  m_ShardItem (BlueprintRef): MetalShardItem [GUID: e6820e62423d4c81a2ba20d236251b67]
+  m_MiscellaneousType: None (MiscellaneousItemType)
+  m_InventoryPutSound: WandPut (String)
+  m_InventoryTakeSound: WandTake (String)
+  NeedSkinningForCollect: False (Boolean)
+  TrashLootTypes (Collection):
+  m_CachedEnchantments: null
+  m_PrototypeId:  (String)
+  m_Overrides (Collection):
+  Components (Collection):
+  Comment:  (String)
+  name: ChannelersRod (String)
+  AssetGuid: 2c87e12216cb04d4aa87966af9fb6118 (BlueprintGuid)
+  m_AllElements (Collection):
+  m_ValidationStatus (Collection):

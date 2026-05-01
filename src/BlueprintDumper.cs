@@ -4,7 +4,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Kingmaker.Blueprints;
+using Kingmaker.Blueprints.Items;
 using Kingmaker.Blueprints.Items.Ecnchantments;
+using Kingmaker.Blueprints.Facts;
+using Kingmaker.Designers.Mechanics.EquipmentEnchants;
+using Kingmaker.Localization;
+using Kingmaker.UI;
 using UnityEngine;
 
 namespace CraftingSystem
@@ -44,8 +49,18 @@ namespace CraftingSystem
             string indent = new string(' ', depth * 4);
             
             sb.AppendLine($"{indent}=== OBJECT: {bp.name} ({bp.GetType().Name}) ===");
-            sb.AppendLine($"{indent}GUID: {guid}");
+            
+            // --- AJOUT: Extraction des données UI (Nom/Description) ---
+            if (bp is Kingmaker.UI.IUIDataProvider uiData)
+            {
+                try {
+                    sb.AppendLine($"{indent}UI NAME: {uiData.Name}");
+                    sb.AppendLine($"{indent}UI DESC: {uiData.Description?.Replace("\n", " ").Replace("\r", "")}");
+                } catch { }
+            }
 
+            sb.AppendLine($"{indent}GUID: {guid}");
+            
             if (_dumpedGuids.Contains(guid))
             {
                 sb.AppendLine($"{indent}(Déjà dumpé, arrêt de la recursion)");
@@ -54,7 +69,7 @@ namespace CraftingSystem
             _dumpedGuids.Add(guid);
 
             // Dump fields across the hierarchy
-            DumpFields(bp, sb, indent + "  ");
+            DumpFields(bp, sb, indent + "  ", depth, maxDepth);
 
             // --- RECHERCHE ROBUSTE DES COMPOSANTS VIA HIÉRARCHIE ---
             object components = null;
@@ -97,9 +112,16 @@ namespace CraftingSystem
             }
         }
 
-        private static void DumpFields(object obj, StringBuilder sb, string indent, int depth = 0, int maxDepth = 0)
+        private static void DumpFields(object obj, StringBuilder sb, string indent, int depth, int maxDepth)
         {
             if (obj == null) return;
+
+            // --- TRAITEMENT SPÉCIAL COMPOSANTS ---
+            if (obj is AddUnitFeatureEquipment addFeature)
+            {
+                var f = addFeature.Feature;
+                if (f != null) sb.AppendLine($"{indent}[LINKED FEATURE] {f.name} ({f.AssetGuid})");
+            }
 
             Type type = obj.GetType();
             HashSet<string> seenFields = new HashSet<string>();
@@ -149,8 +171,15 @@ namespace CraftingSystem
                 if (shouldFollow)
                 {
                     sb.AppendLine($"{indent}  --> Diving into enchantment reference...");
-                    DumpStructure(referred, sb, depth + 1, maxDepth + 1);
+                    DumpStructure(referred, sb, depth + 1, maxDepth);
                 }
+            }
+            // Cas spécial : LocalizedString
+            else if (val is Kingmaker.Localization.LocalizedString ls)
+            {
+                string text = ls.ToString();
+                if (text.Length > 100) text = text.Substring(0, 97) + "...";
+                sb.AppendLine($"{indent}{name} (LocalizedString): \"{text}\" [Key: {ls.m_Key}]");
             }
             // Cas spécial : Collections
             else if (val is IEnumerable enumerable && !(val is string))
@@ -174,3 +203,4 @@ namespace CraftingSystem
         }
     }
 }
+
