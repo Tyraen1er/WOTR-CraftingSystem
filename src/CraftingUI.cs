@@ -507,49 +507,118 @@ namespace CraftingSystem
         void DrawCreateWandGUI(float scale) { GUILayout.Label("Coming Soon: Wand Creation"); }
         void DrawCreateScrollGUI(float scale) { GUILayout.Label("Coming Soon: Scroll Creation"); }
 
+        private string inventorySearch = "";
         void DrawInventoryGUI(float scale)
         {
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
             var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
-            var items = workshop?.StashedItems ?? new List<ItemEntity>();
+            var allItems = workshop?.StashedItems ?? new List<ItemEntity>();
 
-            if (!items.Any())
+            float windowWidth = 1000f * scale;
+            float contentWidth = windowWidth - (120f * scale);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.BeginVertical(GUILayout.Width(contentWidth));
+
+            // --- BARRE DE RECHERCHE ET FILTRES ---
+            GUILayout.BeginHorizontal();
+            GUIStyle searchLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), alignment = TextAnchor.MiddleLeft };
+            GUIStyle searchFieldStyle = new GUIStyle(GUI.skin.textField) { fontSize = (int)(FONT_NORMAL * scale), alignment = TextAnchor.MiddleLeft };
+            GUILayout.Label("🔍 " + Helpers.GetString("ui_search", "Search:"), searchLabelStyle, GUILayout.Width(110 * scale), GUILayout.Height(35 * scale));
+            inventorySearch = CTextFieldStyled(inventorySearch, searchFieldStyle, GUILayout.ExpandWidth(true), GUILayout.Height(35 * scale));
+            if (CButton("X", GUILayout.Width(35 * scale), GUILayout.Height(35 * scale))) inventorySearch = "";
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(10 * scale);
+
+            GUILayout.BeginHorizontal();
+            GUIStyle filterBtnStyle = new GUIStyle(GUI.skin.button) { fontSize = (int)(FONT_SMALL * scale), fixedHeight = 30 * scale };
+            
+            bool filterAll = activeTypes.Count == 0 || activeTypes.Count == 3;
+            if (CButtonStyled(new GUIContent(Helpers.GetString("ui_filter_all", "Show All")), filterAll ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale))) 
+                activeTypes.Clear();
+            
+            GUILayout.Space(5 * scale);
+            bool filterWep = activeTypes.Contains("Weapon") && activeTypes.Count == 1;
+            if (CButtonStyled(new GUIContent("⚔ " + Helpers.GetString("ui_type_weapon", "Weapon")), filterWep ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale))) 
+                { activeTypes.Clear(); activeTypes.Add("Weapon"); }
+
+            GUILayout.Space(5 * scale);
+            bool filterArm = activeTypes.Contains("Armor") && activeTypes.Count == 1;
+            if (CButtonStyled(new GUIContent("🛡 " + Helpers.GetString("ui_type_armor", "Armor")), filterArm ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale))) 
+                { activeTypes.Clear(); activeTypes.Add("Armor"); }
+
+            GUILayout.Space(5 * scale);
+            bool filterAcc = activeTypes.Contains("Other") && activeTypes.Count == 1;
+            if (CButtonStyled(new GUIContent("💍 " + Helpers.GetString("ui_type_other", "Accessory")), filterAcc ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale))) 
+                { activeTypes.Clear(); activeTypes.Add("Other"); }
+            
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(15 * scale);
+            DrawSeparator(contentWidth, new Color(0.4f, 0.4f, 0.4f));
+            GUILayout.Space(15 * scale);
+
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
+
+            // Filtrage des items
+            var filteredItems = allItems.Where(it => {
+                if (!string.IsNullOrEmpty(inventorySearch) && !it.Name.ToLower().Contains(inventorySearch.ToLower())) return false;
+                if (activeTypes.Count > 0 && activeTypes.Count < 3) {
+                    if (activeTypes.Contains("Weapon") && it.Blueprint is BlueprintItemWeapon) return true;
+                    if (activeTypes.Contains("Armor") && it.Blueprint is BlueprintItemArmor) return true;
+                    if (activeTypes.Contains("Other") && !(it.Blueprint is BlueprintItemWeapon) && !(it.Blueprint is BlueprintItemArmor)) return true;
+                    return false;
+                }
+                return true;
+            }).ToList();
+
+            if (!filteredItems.Any())
             {
-                GUIStyle emptyStyle = new GUIStyle(GUI.skin.label)
-                {
-                    fontSize = (int)(FONT_NORMAL * scale),
-                    alignment = TextAnchor.MiddleCenter,
-                    richText = true
-                };
-                GUILayout.Label(Helpers.GetString("ui_no_item_stashed", "\n   (No item is stored in the workshop)"), emptyStyle);
+                GUIStyle emptyStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), alignment = TextAnchor.MiddleCenter, richText = true };
+                GUILayout.Label("\n\n" + Helpers.GetString("ui_no_item_match", "(No items match the current filters)"), emptyStyle);
             }
             else
             {
-                GUIStyle entryStyle = new GUIStyle(GUI.skin.button)
-                {
+                GUIStyle entryStyle = new GUIStyle(GUI.skin.button) {
                     wordWrap = true,
-                    alignment = TextAnchor.UpperCenter,
-                    fontSize = (int)(FONT_NORMAL * scale)
+                    alignment = TextAnchor.MiddleCenter,
+                    fontSize = (int)(FONT_NORMAL * scale),
+                    richText = true,
+                    padding = new RectOffset(10, 10, 10, 10)
                 };
+
                 int cols = 2;
-                for (int i = 0; i < items.Count; i += cols)
+                float itemWidth = (contentWidth / (float)cols) - (15 * scale);
+
+                for (int i = 0; i < filteredItems.Count; i += cols)
                 {
                     GUILayout.BeginHorizontal();
-                    for (int j = 0; j < cols && (i + j) < items.Count; j++)
+                    for (int j = 0; j < cols && (i + j) < filteredItems.Count; j++)
                     {
-                        var it = items[i + j];
+                        var it = filteredItems[i + j];
                         var project = workshop?.ActiveProjects.FirstOrDefault(p => p.Item == it);
-                        string label = it.Name;
-                        if (project != null) label += Helpers.GetString("ui_in_forge", " (In forge...)");
+                        
+                        string typePrefix = "";
+                        Color typeColor = new Color(0.4f, 0.4f, 0.4f); // Gris par défaut
 
-                        if (CButtonStyled(new GUIContent(label), entryStyle, GUILayout.Width(350 * scale), GUILayout.Height(50 * scale)))
+                        if (it.Blueprint is BlueprintItemWeapon) { typePrefix = "⚔ "; typeColor = new Color(0.5f, 0.25f, 0.2f); }
+                        else if (it.Blueprint is BlueprintItemArmor) { typePrefix = "🛡 "; typeColor = new Color(0.3f, 0.4f, 0.5f); }
+                        else { typePrefix = "💍 "; typeColor = new Color(0.4f, 0.3f, 0.5f); }
+
+                        string label = $"<b>{typePrefix}{it.Name}</b>";
+                        if (project != null) label += "\n<color=#ffcc00>" + Helpers.GetString("ui_in_forge", "(In forge...)") + "</color>";
+
+                        Color oldBG = GUI.backgroundColor;
+                        GUI.backgroundColor = typeColor;
+                        if (CButtonStyled(new GUIContent(label), entryStyle, GUILayout.Width(itemWidth), GUILayout.Height(70 * scale)))
                         {
                             selectedItem = it;
                             newNameDraft = it.Name;
                             queuedEnchantGuids.Clear();
                             activeCategories.Clear();
                             showCategoryFilter = false;
-
+                            
                             activeTypes.Clear();
                             if (it.Blueprint is BlueprintItemWeapon) activeTypes.Add("Weapon");
                             else if (it.Blueprint is BlueprintItemArmor) activeTypes.Add("Armor");
@@ -558,11 +627,17 @@ namespace CraftingSystem
                             filtersDirty = true;
                             currentPage = 0;
                         }
+                        GUI.backgroundColor = oldBG;
+                        if (j < cols - 1) GUILayout.Space(10 * scale);
                     }
                     GUILayout.EndHorizontal();
+                    GUILayout.Space(10 * scale);
                 }
             }
             GUILayout.EndScrollView();
+            GUILayout.EndVertical();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
         }
 
         void DrawItemModificationGUI(float scale)

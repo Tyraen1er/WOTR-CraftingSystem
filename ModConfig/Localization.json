@@ -1,5 +1,20 @@
 {
     "strings": {
+        "ui_search": {
+            "enGB": "Search",
+            "frFR": "Rechercher",
+            "ruRU": "Поиск"
+        },
+        "ui_filter_all": {
+            "enGB": "Show All",
+            "frFR": "Tout afficher",
+            "ruRU": "Показать все"
+        },
+        "ui_no_item_match": {
+            "enGB": "(No items match the current filters)",
+            "frFR": "(Aucun objet ne correspond aux filtres)",
+            "ruRU": "(Нет предметов, соответствующих фильтрам)"
+        },
         "ui_section_management": {
             "enGB": "WORKSHOP MANAGEMENT",
             "frFR": "GESTION DE L'ATELIER",
