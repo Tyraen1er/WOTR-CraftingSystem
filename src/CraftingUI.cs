@@ -8,6 +8,7 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
+using Kingmaker.Blueprints.Items.Shields;
 using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.UI;
 
@@ -566,8 +567,8 @@ namespace CraftingSystem
                 if (!string.IsNullOrEmpty(inventorySearch) && !it.Name.ToLower().Contains(inventorySearch.ToLower())) return false;
                 if (activeTypes.Count > 0 && activeTypes.Count < 3) {
                     if (activeTypes.Contains("Weapon") && it.Blueprint is BlueprintItemWeapon) return true;
-                    if (activeTypes.Contains("Armor") && it.Blueprint is BlueprintItemArmor) return true;
-                    if (activeTypes.Contains("Other") && !(it.Blueprint is BlueprintItemWeapon) && !(it.Blueprint is BlueprintItemArmor)) return true;
+                    if (activeTypes.Contains("Armor") && (it.Blueprint is BlueprintItemArmor || it.Blueprint is BlueprintItemShield)) return true;
+                    if (activeTypes.Contains("Other") && !(it.Blueprint is BlueprintItemWeapon) && !(it.Blueprint is BlueprintItemArmor) && !(it.Blueprint is BlueprintItemShield)) return true;
                     return false;
                 }
                 return true;
@@ -603,7 +604,7 @@ namespace CraftingSystem
                         Color typeColor = new Color(0.4f, 0.4f, 0.4f); // Gris par défaut
 
                         if (it.Blueprint is BlueprintItemWeapon) { typePrefix = "⚔ "; typeColor = new Color(0.5f, 0.25f, 0.2f); }
-                        else if (it.Blueprint is BlueprintItemArmor) { typePrefix = "🛡 "; typeColor = new Color(0.3f, 0.4f, 0.5f); }
+                        else if (it.Blueprint is BlueprintItemArmor || it.Blueprint is BlueprintItemShield) { typePrefix = "🛡 "; typeColor = new Color(0.3f, 0.4f, 0.5f); }
                         else { typePrefix = "💍 "; typeColor = new Color(0.4f, 0.3f, 0.5f); }
 
                         string label = $"<b>{typePrefix}{it.Name}</b>";
@@ -621,7 +622,7 @@ namespace CraftingSystem
                             
                             activeTypes.Clear();
                             if (it.Blueprint is BlueprintItemWeapon) activeTypes.Add("Weapon");
-                            else if (it.Blueprint is BlueprintItemArmor) activeTypes.Add("Armor");
+                            else if (it.Blueprint is BlueprintItemArmor || it.Blueprint is BlueprintItemShield) activeTypes.Add("Armor");
                             else activeTypes.Add("Other");
 
                             filtersDirty = true;
@@ -1648,6 +1649,19 @@ namespace CraftingSystem
                         }
                     }
 
+                    // -- AFFICHAGE DES SLOTS (AFFINITY) --
+                    string expectedSlotsText = "";
+                    if (data != null && data.Slots != null && data.Slots.Count > 0)
+                    {
+                        var localizedSlots = data.Slots.Select(s => Helpers.GetString("ui_slot_" + s.ToLower(), s));
+                        expectedSlotsText = string.Join(", ", localizedSlots);
+                    }
+                    else if (data != null)
+                    {
+                        expectedSlotsText = Helpers.GetString("ui_slot_" + (data.Type?.ToLower() ?? "other"), data.Type ?? "Other");
+                    }
+                    GUILayout.Label($"<color=#2ecc71>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter }, GUILayout.Width(120 * scale));
+
                     if (CButton(Helpers.GetString("ui_btn_remove", "Remove"), GUILayout.Width(80 * scale), GUILayout.Height(25 * scale)))
                     {
                         queuedEnchantGuids.Remove(g);
@@ -1690,6 +1704,19 @@ namespace CraftingSystem
                         GUILayout.BeginHorizontal(GUI.skin.box);
                         GUILayout.Label(Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.ExpandWidth(true));
 
+                        // -- AFFICHAGE DES SLOTS (AFFINITY) --
+                        string modelSlotsText = "";
+                        if (model.Slots != null && model.Slots.Count > 0)
+                        {
+                            var localizedSlots = model.Slots.Select(s => Helpers.GetString("ui_slot_" + s.ToLower(), s));
+                            modelSlotsText = string.Join(", ", localizedSlots);
+                        }
+                        else
+                        {
+                            modelSlotsText = Helpers.GetString("ui_slot_" + (model.Type?.ToLower() ?? "other"), model.Type ?? "Other");
+                        }
+                        GUILayout.Label($"<color=#2ecc71>[{modelSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter }, GUILayout.Width(120 * scale));
+
                         if (CButton(Helpers.GetString("ui_btn_configure", "Configure"), GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
                         {
                             selectedModel = model;
@@ -1697,9 +1724,23 @@ namespace CraftingSystem
                             foreach (var p in model.DynamicParams)
                             {
                                 int defVal = p.Min;
-                                if (p.DefaultValue.HasValue) 
+                                if (p.DefaultValue != null) 
                                 {
-                                    defVal = p.DefaultValue.Value;
+                                    if (p.DefaultValue is long || p.DefaultValue is int)
+                                    {
+                                        defVal = Convert.ToInt32(p.DefaultValue);
+                                    }
+                                    else if (p.DefaultValue is string defStr && p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
+                                    {
+                                        try {
+                                            var enumType = Type.GetType(p.EnumTypeName);
+                                            if (enumType != null) {
+                                                defVal = (int)Enum.Parse(enumType, defStr, true);
+                                            }
+                                        } catch {
+                                            Main.ModEntry.Logger.Error($"[ATELIER] Failed to parse DefaultValue '{defStr}' as enum '{p.EnumTypeName}'");
+                                        }
+                                    }
                                 }
                                 else if (p.Type == "Enum")
                                 {
@@ -1709,14 +1750,14 @@ namespace CraftingSystem
                                         if (enumType != null) {
                                             var allNames = Enum.GetNames(enumType);
                                             var allValues = Enum.GetValues(enumType);
-                                            for (int i = 0; i < allNames.Length; i++) {
-                                                string n = allNames[i];
-                                                if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Contains(n)) continue;
-                                                if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Contains(n)) continue;
-                                                
-                                                defVal = (int)allValues.GetValue(i);
-                                                break;
-                                            }
+                                                for (int i = 0; i < allNames.Length; i++) {
+                                                    string n = allNames[i];
+                                                    if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(n, StringComparison.OrdinalIgnoreCase))) continue;
+                                                    if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Any(ee => ee.Equals(n, StringComparison.OrdinalIgnoreCase))) continue;
+                                                    
+                                                    defVal = (int)allValues.GetValue(i);
+                                                    break;
+                                                }
                                         }
                                     } catch {}
                                 }
@@ -1773,15 +1814,15 @@ namespace CraftingSystem
                                 var filteredNames = new List<string>();
                                 var filteredValues = new List<int>();
 
-                                for (int i = 0; i < allNames.Length; i++)
-                                {
-                                    string name = allNames[i];
-                                    if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Contains(name)) continue;
-                                    if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Contains(name)) continue;
+                                 for (int i = 0; i < allNames.Length; i++)
+                                 {
+                                     string name = allNames[i];
+                                     if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(name, StringComparison.OrdinalIgnoreCase))) continue;
+                                     if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Any(ee => ee.Equals(name, StringComparison.OrdinalIgnoreCase))) continue;
 
-                                    filteredNames.Add(name);
-                                    filteredValues.Add((int)allValues.GetValue(i));
-                                }
+                                     filteredNames.Add(name);
+                                     filteredValues.Add((int)allValues.GetValue(i));
+                                 }
 
                                 var names = filteredNames.ToArray();
                                 var values = filteredValues.ToArray();

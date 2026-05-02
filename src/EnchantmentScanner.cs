@@ -503,7 +503,8 @@ namespace CraftingSystem
                                                 if (table.Value.TryGetValue(key, out double m)) multiplier = m;
                                                 else if (table.Value.TryGetValue("DEFAULT", out double dm)) multiplier = dm;
 
-                                                formulaVars[paramName + "_Mult"] = multiplier;
+                                                formulaVars[paramName + "_Mult"] = multiplier; // Legacy support
+                                                formulaVars["PriceTable." + paramName] = multiplier; // New format (readable)
                                             }
                                         }
                                     }

@@ -23,7 +23,9 @@ namespace CraftingSystem
             foreach (var varName in sortedVars)
             {
                 // On utilise Regex pour s'assurer qu'on remplace le mot entier (\b)
-                expression = Regex.Replace(expression, @"\b" + varName + @"\b", variables[varName].ToString(System.Globalization.CultureInfo.InvariantCulture));
+                // On échappe le nom de la variable car il peut contenir des points (ex: PriceTable.Stat)
+                string escapedVarName = Regex.Escape(varName);
+                expression = Regex.Replace(expression, @"\b" + escapedVarName + @"\b", variables[varName].ToString(System.Globalization.CultureInfo.InvariantCulture));
             }
 
             try

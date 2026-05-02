@@ -146,7 +146,7 @@ namespace CraftingSystem
         public List<string> EnumOnly = null; // Optionnel : ne garder que ces valeurs d'enum
         public List<string> EnumExclude = null; // Optionnel : exclure ces valeurs d'enum
         public Dictionary<string, object> EnumOverrides = null; // Optionnel : surcharger le texte affiché (localisable)
-        public int? DefaultValue = null; // Optionnel : valeur pré-sélectionnée par défaut
+        public object DefaultValue = null; // Optionnel : valeur pré-sélectionnée par défaut (int ou string)
 
         // Cible pour l'injection
         public int ComponentIndex;
@@ -264,6 +264,30 @@ namespace CraftingSystem
                 Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Successfully deserialized {models.Count} models.");
                 AllModels = models;
                 _customModels.Clear();
+
+                // Validation des modèles chargés
+                for (int i = AllModels.Count - 1; i >= 0; i--)
+                {
+                    var m = AllModels[i];
+                    bool isValid = true;
+                    if (string.IsNullOrEmpty(m.EnchantId)) {
+                        Main.ModEntry.Logger.Error($"[CUSTOM_ENCHANTS] VALIDATION FAILED: Model at index {i} has no EnchantId!");
+                        isValid = false;
+                    }
+                    if (m.BaseName == null && m.NameCompleted == null) {
+                        Main.ModEntry.Logger.Error($"[CUSTOM_ENCHANTS] VALIDATION FAILED: Model '{m.EnchantId}' has no name (BaseName/NameCompleted)!");
+                        isValid = false;
+                    }
+                    if (m.Type != "Feature" && (m.Slots == null || m.Slots.Count == 0)) {
+                        Main.ModEntry.Logger.Warning($"[CUSTOM_ENCHANTS] VALIDATION WARNING: Model '{m.EnchantId}' has no slots defined. It will not appear in affinity displays.");
+                    }
+                    
+                    if (!isValid) {
+                        Main.ModEntry.Logger.Error($"[CUSTOM_ENCHANTS] Removing invalid model from list.");
+                        AllModels.RemoveAt(i);
+                    }
+                }
+
                 Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Deserialization SUCCESS: Loaded {AllModels.Count} models.");
 
                 foreach (var model in AllModels)
