@@ -13,7 +13,7 @@ namespace CraftingSystem
         /// Génère un GUID déterministe encodant l'ID de l'enchantement et ses paramètres.
         /// Format : [C2AF (4)] [EnchantId (3)] [Params (variable)] [00...00 (remplissage)]
         /// </summary>
-        public static BlueprintGuid GenerateGuid(string enchantId, int[] parameters, bool isFeature = false)
+        public static BlueprintGuid GenerateGuid(string enchantId, int[] parameters, bool isFeature = false, int mask = 0xFFF)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(Signature);
@@ -42,11 +42,15 @@ namespace CraftingSystem
                 sb.Append(clamped.ToString("X2"));
             }
 
-            // Remplissage avec des zéros pour atteindre 32 caractères
-            while (sb.Length < 32)
+            // Remplissage avec des zéros pour atteindre 29 caractères (32 - 3 pour le masque)
+            while (sb.Length < 29)
             {
                 sb.Append("0");
             }
+
+            // Ajout du masque sur les 3 derniers caractères (12 bits : 0x000 à 0xFFF)
+            int clampedMask = Math.Max(0, Math.Min(0xFFF, mask));
+            sb.Append(clampedMask.ToString("X3"));
 
             string finalString = sb.ToString();
             if (finalString.Length > 32) finalString = finalString.Substring(0, 32);
@@ -55,40 +59,31 @@ namespace CraftingSystem
         }
 
         /// <summary>
-        /// Génère le GUID par défaut d'un modèle (tous paramètres à 0).
+        /// Génère le GUID par défaut d'un modèle (tous paramètres à 0, masque complet).
         /// </summary>
         public static BlueprintGuid GenerateModelGuid(string enchantId, bool isFeature = false)
         {
-            return GenerateGuid(enchantId, new int[0], isFeature);
+            return GenerateGuid(enchantId, new int[0], isFeature, 0xFFF);
         }
 
         /// <summary>
-        /// Décode un GUID pour retrouver l'ID de l'enchantement et ses paramètres.
+        /// Décode un GUID pour retrouver l'ID de l'enchantement, ses paramètres et son masque.
         /// </summary>
-        public static bool TryDecodeGuid(BlueprintGuid guid, out string enchantId, out List<int> parameters)
+        public static bool TryDecodeGuid(BlueprintGuid guid, out string enchantId, out List<int> parameters, out int mask)
         {
             enchantId = null;
             parameters = new List<int>();
+            mask = 0xFFF; // Valeur par défaut si décodage impossible
 
-            // Optimisation : On vérifie les premiers octets avant de faire un ToString coûteux
-            // Le GUID est stocké en Little Endian ou Big Endian selon les plateformes,
-            // mais BlueprintGuid.ToByteArray() nous donne une base stable.
-            // "C2AF" en hexa (Big Endian) correspondrait aux 2 premiers octets.
-            // En chaîne "C2AF...", C2 est l'octet 0, AF l'octet 1.
-            
-            byte[] bytes = guid.ToByteArray();
-            // On vérifie si la chaîne commencerait par "C2AF"
-            // Dans un GUID .NET, les 4 premiers octets sont inversés (int), les 2 suivants (short), etc.
-            // "C2AF0012-..." -> Data1 = 0xC2AF0012
-            // Sur architecture Little Endian, les octets de Data1 sont [12, 00, AF, C2]
-            
-            if (bytes[3] != 0xC2 || bytes[2] != 0xAF)
-                return false;
-
+            // On se base sur la version string pour plus de fiabilité vis-à-vis de l'endianness
             string s = guid.ToString().Replace("-", "").ToUpper();
+            Main.ModEntry.Logger.Log($"[DEBUG_GUID] Deciphering: {s}"); 
             
             if (s.Length != 32 || !s.StartsWith(Signature))
+            {
+                Main.ModEntry.Logger.Warning($"[DEBUG_GUID] Signature mismatch or length error: {s}");
                 return false;
+            }
 
             enchantId = s.Substring(Signature.Length, 3);
             
@@ -101,7 +96,7 @@ namespace CraftingSystem
             for (int i = 0; i < count; i++)
             {
                 int pos = startIdx + (i * 2);
-                if (pos + 1 >= 32) break;
+                if (pos + 1 >= 29) break; // Ne pas empiéter sur le masque
 
                 string hex = s.Substring(pos, 2);
                 try {
@@ -111,7 +106,21 @@ namespace CraftingSystem
                 }
             }
 
+            // Lecture du masque (3 derniers caractères)
+            try {
+                string maskHex = s.Substring(29, 3);
+                mask = Convert.ToInt32(maskHex, 16);
+            } catch {
+                mask = 0xFFF;
+            }
+
             return true;
+        }
+
+        // Compatibilité pour l'ancien code ne demandant pas le masque
+        public static bool TryDecodeGuid(BlueprintGuid guid, out string enchantId, out List<int> parameters)
+        {
+            return TryDecodeGuid(guid, out enchantId, out parameters, out _);
         }
     }
 }

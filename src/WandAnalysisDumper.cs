@@ -33,7 +33,7 @@ namespace CraftingSystem
                 {
                     // Le BlueprintDumper.DumpByGuid gère déjà la récursion et les composants
                     // On augmente la profondeur à 3 pour être sûr de voir les features et enchants liés
-                    BlueprintDumper.DumpByGuid(guid, 3);
+                    // BlueprintDumper.DumpByGuid(guid, 3);
                 }
                 catch (Exception ex)
                 {

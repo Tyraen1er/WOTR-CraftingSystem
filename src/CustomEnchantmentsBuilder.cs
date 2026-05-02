@@ -171,7 +171,7 @@ namespace CraftingSystem
         public int MaxNotEpic; // Seuil au-delà duquel l'enchantement devient épique
         public int PriceFactor = 2000; // Multiplicateur de prix (2000 par défaut pour les armes)
         public List<string> Slots = new List<string>(); // Liste des types d'items autorisés (Armor, Weapon, Shield...)
-        public List<BlueprintComponent> Components = new List<BlueprintComponent>();
+        public List<object> Components = new List<object>();
         public List<DynamicParam> DynamicParams = new List<DynamicParam>();
         public Dictionary<string, Dictionary<string, double>> PriceTables = new Dictionary<string, Dictionary<string, double>>();
     }
@@ -210,18 +210,28 @@ namespace CraftingSystem
         }
     }
 
+    public class CustomEnchantsFile
+    {
+        public Dictionary<string, object> ComponentDefinitions = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        public List<CustomEnchantmentData> Models = new List<CustomEnchantmentData>();
+    }
+
     public class CustomEnchantmentsBuilder
     {
         public static HashSet<BlueprintGuid> InjectedGuids = new HashSet<BlueprintGuid>();
         public static List<CustomEnchantmentData> AllModels = new List<CustomEnchantmentData>();
+        
+        // Bibliothèque globale des composants
+        public static Dictionary<string, object> ComponentLibrary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        
         private static Dictionary<string, CustomEnchantmentData> _customModels = new Dictionary<string, CustomEnchantmentData>();
         private static HashSet<string> _currentlyBuilding = new HashSet<string>();
         private static readonly object _lock = new object();
 
         public static CustomEnchantmentData GetModelById(string id, bool isFeature = false)
         {
-            // Filtrage par ID et type pour éviter les collisions (ex: Feature vs Enchantment partageant le même ID 001)
-            return AllModels.FirstOrDefault(m => m.EnchantId == id && (isFeature ? m.Type == "Feature" : m.Type != "Feature"));
+            if (AllModels == null) return null;
+            return AllModels.FirstOrDefault(m => string.Equals(m.EnchantId, id, StringComparison.OrdinalIgnoreCase) && (isFeature ? m.Type == "Feature" : m.Type != "Feature"));
         }
 
         public static void BuildAndInjectAll()
@@ -254,15 +264,26 @@ namespace CraftingSystem
                 };
                 settings.Converters.Add(new BlueprintReferenceConverter());
 
-                var models = JsonConvert.DeserializeObject<List<CustomEnchantmentData>>(json, settings);
+                var token = Newtonsoft.Json.Linq.JToken.Parse(json);
+                if (token is Newtonsoft.Json.Linq.JArray)
+                {
+                    AllModels = token.ToObject<List<CustomEnchantmentData>>(JsonSerializer.Create(settings));
+                    ComponentLibrary.Clear();
+                }
+                else
+                {
+                    var file = token.ToObject<CustomEnchantsFile>(JsonSerializer.Create(settings));
+                    AllModels = file.Models;
+                    ComponentLibrary = file.ComponentDefinitions ?? new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+                    Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Loaded {ComponentLibrary.Count} component definitions from library.");
+                }
                 
-                if (models == null) {
+                if (AllModels == null) {
                     Main.ModEntry.Logger.Error("[CUSTOM_ENCHANTS] Deserialization returned NULL.");
                     return;
                 }
                 
-                Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Successfully deserialized {models.Count} models.");
-                AllModels = models;
+                Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Successfully deserialized {AllModels.Count} models.");
                 _customModels.Clear();
 
                 // Validation des modèles chargés
@@ -306,7 +327,7 @@ namespace CraftingSystem
                                 model.Guid = DynamicGuidHelper.GenerateModelGuid(model.EnchantId, true).ToString();
                             }
                             var guid = BlueprintGuid.Parse(model.Guid);
-                            var bp = CreateDynamicBlueprint(model, guid, new List<int>());
+                            var bp = CreateDynamicBlueprint(model, guid, new List<int>(), 0xFFF);
                             if (bp != null)
                             {
                                 ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(guid, bp);
@@ -327,6 +348,11 @@ namespace CraftingSystem
             }
         }
 
+        public static BlueprintScriptableObject GetOrBuildDynamicBlueprint(BlueprintGuid guid)
+        {
+            return GetOrBuildDynamicBlueprint(guid.ToString());
+        }
+
         public static BlueprintScriptableObject GetOrBuildDynamicBlueprint(string guidStr)
         {
             lock (_lock)
@@ -343,20 +369,30 @@ namespace CraftingSystem
                     if (existing != null) return existing;
 
                     // Décodage du GUID
-                    if (!DynamicGuidHelper.TryDecodeGuid(guid, out string enchantId, out List<int> vals))
+                    if (!DynamicGuidHelper.TryDecodeGuid(guid, out string enchantId, out List<int> vals, out int mask))
                     {
+                        Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] Failed to decode GUID: {guidStr}");
                         return null;
                     }
 
                     // Trouver le modèle
-                    var model = GetModelById(enchantId, vals.Count > 0 && vals[0] == 1);
+                    bool isFeature = vals.Count > 0 && vals[0] == 1;
+                    var model = GetModelById(enchantId, isFeature);
+                    
+                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Decoded: ID={enchantId}, isFeature={isFeature}, Mask=0x{mask:X3}, Params={string.Join(",", vals)}");
+
                     if (model == null)
                     {
-                        Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] No model found for EnchantId {enchantId}");
+                        Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] No model found for EnchantId {enchantId} (isFeature: {isFeature}). AllModels count: {AllModels?.Count ?? 0}");
                         return null;
                     }
 
-                    return CreateDynamicBlueprint(model, guid, vals.Skip(1).ToList());
+                    return CreateDynamicBlueprint(model, guid, vals.Skip(1).ToList(), mask);
+                }
+                catch (Exception ex)
+                {
+                    Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] EXCEPTION in GetOrBuildDynamicBlueprint for {guidStr}: {ex}");
+                    return null;
                 }
                 finally
                 {
@@ -365,9 +401,9 @@ namespace CraftingSystem
             }
         }
 
-        private static BlueprintScriptableObject CreateDynamicBlueprint(CustomEnchantmentData model, BlueprintGuid guid, List<int> paramValues)
+        private static BlueprintScriptableObject CreateDynamicBlueprint(CustomEnchantmentData model, BlueprintGuid guid, List<int> paramValues, int mask)
         {
-            Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Starting creation of {Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted)} for GUID {guid}");
+            Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Starting creation of {Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted)} for GUID {guid} (Mask: 0x{mask:X3})");
             BlueprintScriptableObject bp = null;
             try {
                 if (model.Type == "WeaponEnchantment" || model.Type == "Weapon") bp = new BlueprintWeaponEnchantment();
@@ -376,8 +412,6 @@ namespace CraftingSystem
                 else if (model.Type == "Feature") bp = new BlueprintFeature();
                 
                 if (bp != null) {
-                    Main.ModEntry.Logger.Log($"[DEBUG] Created instance of {bp.GetType().FullName} using 'new'");
-                    // On appelle OnEnable manuellement car on n'utilise pas CreateInstance
                     try { bp.OnEnable(); } catch {}
                 } else {
                     Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] FATAL: Could not create instance for type {model.Type}");
@@ -388,54 +422,73 @@ namespace CraftingSystem
                 Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Blueprint instantiation failed: {ex}");
             }
 
-            if (bp == null) {
-                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] FATAL: Could not create instance for type {model.Type}");
-                return null;
-            }
+            if (bp == null) return null;
 
             bp.name = $"Dynamic_{model.EnchantId}_{guid}";
             bp.AssetGuid = guid;
 
-            // Injection des composants
+            // Injection des composants avec filtrage par masque
             var components = new List<BlueprintComponent>();
-            foreach (var comp in model.Components)
+            var indexMap = new Dictionary<int, int>(); // Map entre l'index JSON et l'index réel dans le blueprint
+
+            for (int i = 0; i < model.Components.Count; i++)
             {
+                // Vérification du masque (bit i)
+                if ((mask & (1 << i)) == 0) continue;
+
+                object compObj = model.Components[i];
+                object actualComp = compObj;
+
+                // Résolution par ID si c'est une string (Bibliothèque)
+                if (compObj is string compId)
+                {
+                    if (ComponentLibrary.TryGetValue(compId, out object libComp)) {
+                        actualComp = libComp;
+                    } else {
+                        Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Component ID '{compId}' not found in library!");
+                        continue;
+                    }
+                }
+
+                if (actualComp == null) continue;
+
                 try
                 {
-                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Cloning component: {comp.GetType().Name}");
                     var settings = new JsonSerializerSettings { 
                         ContractResolver = new OwlcatContractResolver(),
                         TypeNameHandling = TypeNameHandling.All
                     };
                     settings.Converters.Add(new BlueprintReferenceConverter());
 
-                    var json = JsonConvert.SerializeObject(comp, settings);
-                    var clone = JsonConvert.DeserializeObject(json, comp.GetType(), settings) as BlueprintComponent;
+                    // Clonage profond du composant pour éviter de modifier la source
+                    var json = JsonConvert.SerializeObject(actualComp, settings);
+                    var clone = JsonConvert.DeserializeObject(json, actualComp.GetType(), settings) as BlueprintComponent;
+                    
                     if (clone != null)
                     {
                         clone.name = $"${clone.GetType().Name}${Guid.NewGuid()}";
                         clone.OwnerBlueprint = bp;
 
-                        // --- RÉACTIVATION MANUELLE DU COMPOSANT ---
                         try
                         {
                             var onDes = typeof(BlueprintComponent).GetMethod("OnDeserialized", BindingFlags.Instance | BindingFlags.NonPublic);
                             onDes?.Invoke(clone, new object[] { new System.Runtime.Serialization.StreamingContext() });
                         }
-                        catch (Exception ex)
-                        {
-                            Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] Failed to invoke OnDeserialized on {clone.GetType().Name}: {ex.Message}");
-                        }
+                        catch {}
 
+                        indexMap[i] = components.Count;
                         components.Add(clone);
+                        Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Added component {i} ({clone.GetType().Name}) to blueprint.");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Failed to clone component of type {comp.GetType().Name}: {ex}");
+                    Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Error cloning component {i}: {ex}");
                 }
             }
+
             bp.ComponentsArray = components.ToArray();
+
             Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] BP {bp.name} has {bp.ComponentsArray.Length} components.");
 
             // Appel de l'initialisation globale sur le blueprint (cela réveille les composants)
@@ -457,12 +510,32 @@ namespace CraftingSystem
                         var enumType = Type.GetType(p.EnumTypeName);
                         if (enumType != null) {
                             string enumName = Enum.GetName(enumType, val);
-                            if (!string.IsNullOrEmpty(enumName))
-                                resolvedVal = Helpers.GetString("energy_" + enumName, enumName); 
+                            
+                            // Support des noms virtuels (SaveAll...)
+                            if (string.IsNullOrEmpty(enumName) && p.EnumOverrides != null) {
+                                foreach (var ovr in p.EnumOverrides) {
+                                    if (ovr.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null) {
+                                        try {
+                                            if (Convert.ToInt32(jo["Value"]) == val) {
+                                                enumName = ovr.Key;
+                                                break;
+                                            }
+                                        } catch {}
+                                    }
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(enumName)) {
+                                if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(enumName, out object ovrObj))
+                                    resolvedVal = Helpers.GetLocalizedString(ovrObj);
+                                else
+                                    resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
+                            }
                         }
                     } catch { }
                 }
-
+                
+                Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Resolved parameter '{p.Name}': {val} -> '{resolvedVal}'");
                 replacements[p.Name] = resolvedVal;
             }
 
@@ -496,17 +569,33 @@ namespace CraftingSystem
                 t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(feature, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
             }
 
-            // Application des paramètres dynamiques aux composants
+            // Application des paramètres dynamiques aux composants via indexMap
             for (int i = 0; i < model.DynamicParams.Count && i < paramValues.Count; i++)
             {
                 var p = model.DynamicParams[i];
                 var val = paramValues[i];
 
-                if (p.ComponentIndex >= 0 && p.ComponentIndex < bp.ComponentsArray.Length)
+                if (p.ComponentIndex == -1)
                 {
-                    var c = bp.ComponentsArray[p.ComponentIndex];
-                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Injecting parameter '{p.Name}': Value={val} into {p.FieldName} of {c.GetType().Name}");
-                    ApplyValueToField(c, p.FieldName, val);
+                    // Injection dans TOUS les composants actifs
+                    foreach (var c in bp.ComponentsArray)
+                    {
+                        ApplyValueToField(c, p.FieldName, val);
+                    }
+                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Injected parameter '{p.Name}' (Value={val}) into ALL {bp.ComponentsArray.Length} components.");
+                }
+                else if (p.ComponentIndex >= 0)
+                {
+                    if (indexMap.TryGetValue(p.ComponentIndex, out int actualIdx))
+                    {
+                        var c = bp.ComponentsArray[actualIdx];
+                        Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Injecting parameter '{p.Name}': Value={val} into {p.FieldName} of {c.GetType().Name}");
+                        ApplyValueToField(c, p.FieldName, val);
+                    }
+                    else
+                    {
+                        Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Parameter '{p.Name}' skipped: component {p.ComponentIndex} is inactive.");
+                    }
                 }
             }
 
@@ -534,13 +623,21 @@ namespace CraftingSystem
                 if (featureComp != null)
                 {
                     string targetId = model.FeatureModelId ?? model.EnchantId;
-                    var featGuid = DynamicGuidHelper.GenerateGuid(targetId, paramValues.ToArray(), true);
+                    var featGuid = DynamicGuidHelper.GenerateGuid(targetId, paramValues.ToArray(), true, mask);
                     Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Linking to Feature GUID: {featGuid}");
-                    GetOrBuildDynamicBlueprint(featGuid.ToString());
+                    
+                    // On s'assure que la feature est construite
+                    GetOrBuildDynamicBlueprint(featGuid); 
 
-                    var featRef = new BlueprintFeatureReference();
-                    featRef.ReadGuidFromGuid(featGuid);
-                    typeof(AddUnitFeatureEquipment).GetField("m_Feature", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(featureComp, featRef);
+                    // On met à jour la référence dans le composant
+                    var refField = featureComp.GetType().GetField("m_Feature", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    if (refField != null)
+                    {
+                        var featRef = new BlueprintFeatureReference();
+                        featRef.ReadGuidFromGuid(featGuid);
+                        refField.SetValue(featureComp, featRef);
+                        Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Successfully linked feature {featGuid} to enchantment {bp.name}");
+                    }
                 }
             }
 

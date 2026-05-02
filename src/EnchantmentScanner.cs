@@ -495,6 +495,19 @@ namespace CraftingSystem
                                                     {
                                                         var enumType = Type.GetType(paramDef.EnumTypeName);
                                                         if (enumType != null) key = Enum.GetName(enumType, selectedValue) ?? key;
+                                                        
+                                                        // Si on n'a pas trouvé le nom officiel (cas de SaveAll), on cherche dans les Overrides
+                                                        if (key == selectedValue.ToString() && paramDef.EnumOverrides != null)
+                                                        {
+                                                            foreach (var ovr in paramDef.EnumOverrides)
+                                                            {
+                                                                if (ovr.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == selectedValue)
+                                                                {
+                                                                    key = ovr.Key;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                     catch { }
                                                 }

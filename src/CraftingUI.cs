@@ -1681,14 +1681,21 @@ namespace CraftingSystem
 
                 var models = CustomEnchantmentsBuilder.AllModels.Where(m => m.Type != "Feature").ToList();
 
-                // Filtrage par type
+                // Filtrage par type (basé sur les slots d'affinité)
                 if (activeTypes.Count > 0)
                 {
                     models = models.Where(m =>
                     {
-                        if (activeTypes.Contains("Weapon") && (m.Type == "Weapon" || m.Type == "WeaponEnchantment")) return true;
-                        if (activeTypes.Contains("Armor") && (m.Type == "Armor" || m.Type == "ArmorEnchantment")) return true;
-                        if (activeTypes.Contains("Other") && m.Type != "Weapon" && m.Type != "WeaponEnchantment" && m.Type != "Armor" && m.Type != "ArmorEnchantment") return true;
+                        bool isWeapon = m.Slots != null && m.Slots.Any(s => string.Equals(s, "Weapon", StringComparison.OrdinalIgnoreCase));
+                        bool isArmor = m.Slots != null && m.Slots.Any(s => string.Equals(s, "Armor", StringComparison.OrdinalIgnoreCase) || string.Equals(s, "Shield", StringComparison.OrdinalIgnoreCase));
+                        bool isOther = (m.Slots == null || m.Slots.Count == 0) || m.Slots.Any(s => 
+                            !string.Equals(s, "Weapon", StringComparison.OrdinalIgnoreCase) && 
+                            !string.Equals(s, "Armor", StringComparison.OrdinalIgnoreCase) && 
+                            !string.Equals(s, "Shield", StringComparison.OrdinalIgnoreCase));
+
+                        if (activeTypes.Contains("Weapon") && isWeapon) return true;
+                        if (activeTypes.Contains("Armor") && isArmor) return true;
+                        if (activeTypes.Contains("Other") && isOther) return true;
                         return false;
                     }).ToList();
                 }
@@ -1814,6 +1821,7 @@ namespace CraftingSystem
                                 var filteredNames = new List<string>();
                                 var filteredValues = new List<int>();
 
+                                 // 1. On récupère les valeurs de l'Enum réel
                                  for (int i = 0; i < allNames.Length; i++)
                                  {
                                      string name = allNames[i];
@@ -1822,6 +1830,26 @@ namespace CraftingSystem
 
                                      filteredNames.Add(name);
                                      filteredValues.Add((int)allValues.GetValue(i));
+                                 }
+
+                                 // 2. On ajoute les entrées virtuelles de EnumOverrides (ex: SaveAll)
+                                 if (p.EnumOverrides != null)
+                                 {
+                                     foreach (var kvp in p.EnumOverrides)
+                                     {
+                                         if (!filteredNames.Contains(kvp.Key))
+                                         {
+                                             // Si on a un filtre EnumOnly, l'entrée virtuelle doit y être listée
+                                             if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(kvp.Key, StringComparison.OrdinalIgnoreCase))) continue;
+
+                                             // On cherche la valeur numérique dans le JObject de l'override
+                                             if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null)
+                                             {
+                                                 filteredNames.Add(kvp.Key);
+                                                 filteredValues.Add((int)jo["Value"]);
+                                             }
+                                         }
+                                     }
                                  }
 
                                 var names = filteredNames.ToArray();
@@ -1850,14 +1878,28 @@ namespace CraftingSystem
                                 else
                                 {
                                     int currentVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
-                                    string currentName = Enum.GetName(enumType, currentVal) ?? "";
-                                    string displayName = currentName;
+                                    string currentName = Enum.GetName(enumType, currentVal);
+                                    
+                                    // Support des noms virtuels (SaveAll...)
+                                    if (string.IsNullOrEmpty(currentName) && p.EnumOverrides != null)
+                                    {
+                                        foreach (var kvp in p.EnumOverrides)
+                                        {
+                                            if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == currentVal)
+                                            {
+                                                currentName = kvp.Key;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    string displayName = currentName ?? "";
                                     if (p.EnumTypeName.Contains("DamageEnergyType"))
                                         displayName = Helpers.GetString("energy_" + displayName, displayName);
                                     else
                                         displayName = Helpers.GetString("ui_enum_" + displayName, displayName);
-
-                                    if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(currentName, out object overrideObj))
+ 
+                                    if (p.EnumOverrides != null && !string.IsNullOrEmpty(currentName) && p.EnumOverrides.TryGetValue(currentName, out object overrideObj))
                                         displayName = Helpers.GetLocalizedString(overrideObj);
 
                                     if (CButton(displayName, GUILayout.Width(200 * scale)))
@@ -1907,7 +1949,31 @@ namespace CraftingSystem
                         .Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0)
                         .ToArray();
 
-                    var tempGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues, selectedModel.Type == "Feature");
+                    // --- CALCUL DU MASQUE BINAIRE DYNAMIQUE ---
+                    int mask = 0;
+                    bool hasMaskControl = false;
+                    foreach (var p in selectedModel.DynamicParams)
+                    {
+                        if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName) && p.EnumOverrides != null)
+                        {
+                            int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
+                            try {
+                                var enumType = Type.GetType(p.EnumTypeName);
+                                if (enumType != null) {
+                                    string enumName = Enum.GetName(enumType, val);
+                                    if (!string.IsNullOrEmpty(enumName) && p.EnumOverrides.TryGetValue(enumName, out object ovr)) {
+                                        if (ovr is Newtonsoft.Json.Linq.JObject jo && jo["MaskValue"] != null) {
+                                            mask |= (int)jo["MaskValue"];
+                                            hasMaskControl = true;
+                                        }
+                                    }
+                                }
+                            } catch {}
+                        }
+                    }
+                    if (!hasMaskControl) mask = 0xFFF; // Compatibilité : tout actif si pas de masque défini
+
+                    var tempGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues, selectedModel.Type == "Feature", mask);
                     var tempEnch = EnchantmentScanner.GetByGuid(tempGuid.ToString());
 
                     long totalCost = 0;
@@ -1927,7 +1993,7 @@ namespace CraftingSystem
                     {
                         try
                         {
-                            var finalGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues, selectedModel.Type == "Feature").ToString();
+                            var finalGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues, selectedModel.Type == "Feature", mask).ToString();
                             if (!queuedEnchantGuids.Contains(finalGuid))
                             {
                                 queuedEnchantGuids.Add(finalGuid);
