@@ -268,15 +268,38 @@ namespace CraftingSystem
 
                 var workshop = player.Get<UnitPartWilcerWorkshop>();
                 
-                // 2. Si l'objet est en cours de forge, on bloque !
-                if (workshop != null && workshop.ActiveProjects.Any(p => p.Item == item))
+                // 2. Si l'objet ou l'un de ses composants est en cours de forge, on bloque !
+                if (workshop != null)
                 {
-                    Kingmaker.PubSubSystem.EventBus.RaiseEvent<Kingmaker.PubSubSystem.IWarningNotificationUIHandler>(
-                        h => h.HandleWarning(Helpers.GetString("ui_warning_forge_active", "FORGE : Cet équipement est en cours de modification !"))
-                    );
+                    bool isBusy = workshop.ActiveProjects.Any(p => {
+                        if (p.Item == item) return true;
+                        
+                        // Cas du bouclier
+                        if (item.Blueprint is Kingmaker.Blueprints.Items.Shields.BlueprintItemShield)
+                        {
+                            var weaponProp = item.GetType().GetProperty("Weapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                            var subWeapon = weaponProp?.GetValue(item) as ItemEntity;
+                            if (subWeapon != null && p.Item == subWeapon) return true;
+                        }
+                        
+                        // Cas de l'arme double
+                        if (item is ItemEntityWeapon weapon)
+                        {
+                            var secondProp = weapon.GetType().GetProperty("SecondWeapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                            var secondWeapon = secondProp?.GetValue(weapon) as ItemEntity;
+                            if (secondWeapon != null && p.Item == secondWeapon) return true;
+                        }
+                        
+                        return false;
+                    });
 
-                    // Main.ModEntry.Logger.Log($"[SÉCURITÉ] Retrait bloqué pour {item.Name} car un projet est actif.");
-                    return false; 
+                    if (isBusy)
+                    {
+                        Kingmaker.PubSubSystem.EventBus.RaiseEvent<Kingmaker.PubSubSystem.IWarningNotificationUIHandler>(
+                            h => h.HandleWarning(Helpers.GetString("ui_warning_forge_active", "FORGE : Cet équipement ou l'un de ses composants est en cours de modification !"))
+                        );
+                        return false; 
+                    }
                 }
             }
             return true; // Autorise le retrait pour tout le reste

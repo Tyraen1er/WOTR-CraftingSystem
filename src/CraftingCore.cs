@@ -41,6 +41,35 @@ namespace CraftingSystem
         public static void StartCraftingProject(ItemEntity item, EnchantmentData data, int cost, int days)
         {
             if (item == null || data == null) return;
+            
+            // Redirection pour les boucliers : les enchantements d'arme vont sur l'arme du bouclier
+            if (item.Blueprint is Kingmaker.Blueprints.Items.Shields.BlueprintItemShield && data.Type == "Weapon")
+            {
+                var weaponProp = item.GetType().GetProperty("Weapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                if (weaponProp != null)
+                {
+                    var subWeapon = weaponProp.GetValue(item) as ItemEntityWeapon;
+                    if (subWeapon != null)
+                    {
+                        item = subWeapon;
+                        Main.ModEntry.Logger.Log($"[ATELIER] Redirection (via réflexion) vers l'arme du bouclier : {item.Name}");
+                    }
+                }
+                else
+                {
+                    // Tentative via le champ privé m_Weapon si la propriété n'existe pas
+                    var weaponField = item.GetType().GetField("m_Weapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    if (weaponField != null)
+                    {
+                        var subWeapon = weaponField.GetValue(item) as ItemEntityWeapon;
+                        if (subWeapon != null)
+                        {
+                            item = subWeapon;
+                            Main.ModEntry.Logger.Log($"[ATELIER] Redirection (via champ m_Weapon) vers l'arme du bouclier : {item.Name}");
+                        }
+                    }
+                }
+            }
 
             // 1. Paiement immédiat
             Game.Instance.Player.Money -= cost;

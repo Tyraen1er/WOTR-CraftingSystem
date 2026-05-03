@@ -185,6 +185,9 @@ namespace CraftingSystem
         private HashSet<string> activeCategories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private HashSet<string> activeTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
+        private ItemEntity doubleWeaponCandidate = null;
+        private bool showDoubleWeaponChoice = false;
+
         void Awake()
         {
             Instance = this;
@@ -217,6 +220,11 @@ namespace CraftingSystem
                     activeCategories.Clear();
                     activeTypes.Clear();
                     showCategoryFilter = false;
+                }
+                else if (showDoubleWeaponChoice)
+                {
+                    showDoubleWeaponChoice = false;
+                    doubleWeaponCandidate = null;
                 }
                 else if (ShowSettings) { ShowSettings = false; }
                 else IsOpen = false;
@@ -295,6 +303,86 @@ namespace CraftingSystem
             GUI.backgroundColor = oldColor;
 
             GUI.FocusWindow(string.IsNullOrEmpty(activeDescriptionPopup) ? 999 : 998);
+
+            // --- FENÊTRE DE CHOIX ARME DOUBLE ---
+            if (showDoubleWeaponChoice)
+            {
+                float dW = 600f * scale;
+                float dH = 250f * scale;
+                Rect choiceRect = new Rect((Screen.width - dW) / 2f, (Screen.height - dH) / 2f, dW, dH);
+                
+                GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
+                GUI.DrawTexture(choiceRect, Texture2D.whiteTexture);
+                GUI.color = oldGUIColor;
+                
+                GUI.Window(997, choiceRect, DrawDoubleWeaponChoice, "");
+                DrawBorder(choiceRect, 2f, Color.yellow); // Bordure jaune pour attirer l'attention
+                GUI.BringWindowToFront(997);
+            }
+        }
+
+        void DrawDoubleWeaponChoice(int id)
+        {
+            float scale = CraftingSettings.ScalePercent / 100f;
+            GUILayout.BeginVertical();
+            
+            GUIStyle textStyle = new GUIStyle(GUI.skin.label) { 
+                wordWrap = true, 
+                alignment = TextAnchor.MiddleCenter, 
+                fontSize = (int)(FONT_LARGE * scale),
+                richText = true
+            };
+            
+            GUILayout.Label(Helpers.GetString("ui_double_weapon_choice", "Le jeu considère que les armes doubles sont 2 armes distinctes, choisissez quelle partie souhaitez vous enchanter"), textStyle);
+            GUILayout.Space(30 * scale);
+            
+            GUILayout.BeginHorizontal();
+            if (CButton(Helpers.GetString("ui_btn_primary_weapon", "Arme principale"), GUILayout.Height(60 * scale)))
+            {
+                FinalizeSelection(doubleWeaponCandidate);
+                showDoubleWeaponChoice = false;
+                doubleWeaponCandidate = null;
+            }
+            GUILayout.Space(20 * scale);
+            if (CButton(Helpers.GetString("ui_btn_secondary_weapon", "Arme secondaire"), GUILayout.Height(60 * scale)))
+            {
+                // Récupération de la seconde partie par réflexion
+                var secondProp = doubleWeaponCandidate.GetType().GetProperty("SecondWeapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                var secondWeapon = secondProp?.GetValue(doubleWeaponCandidate) as ItemEntity;
+                
+                FinalizeSelection(secondWeapon ?? doubleWeaponCandidate);
+                showDoubleWeaponChoice = false;
+                doubleWeaponCandidate = null;
+            }
+            GUILayout.EndHorizontal();
+            
+            GUILayout.Space(20 * scale);
+            if (CButton(Helpers.GetString("ui_btn_cancel", "Annuler"), GUILayout.Height(30 * scale)))
+            {
+                showDoubleWeaponChoice = false;
+                doubleWeaponCandidate = null;
+            }
+            
+            GUILayout.EndVertical();
+        }
+
+        void FinalizeSelection(ItemEntity it)
+        {
+            if (it == null) return;
+            selectedItem = it;
+            newNameDraft = it.Name;
+            queuedEnchantGuids.Clear();
+            activeCategories.Clear();
+            showCategoryFilter = false;
+            
+            activeTypes.Clear();
+            if (it.Blueprint is BlueprintItemWeapon) activeTypes.Add("Weapon");
+            else if (it.Blueprint is BlueprintItemShield) { activeTypes.Add("Armor"); activeTypes.Add("Weapon"); }
+            else if (it.Blueprint is BlueprintItemArmor) activeTypes.Add("Armor");
+            else activeTypes.Add("Other");
+
+            filtersDirty = true;
+            currentPage = 0;
         }
 
         void DrawWindowContent(int windowID)
@@ -614,19 +702,23 @@ namespace CraftingSystem
                         GUI.backgroundColor = typeColor;
                         if (CButtonStyled(new GUIContent(label), entryStyle, GUILayout.Width(itemWidth), GUILayout.Height(70 * scale)))
                         {
-                            selectedItem = it;
-                            newNameDraft = it.Name;
-                            queuedEnchantGuids.Clear();
-                            activeCategories.Clear();
-                            showCategoryFilter = false;
-                            
-                            activeTypes.Clear();
-                            if (it.Blueprint is BlueprintItemWeapon) activeTypes.Add("Weapon");
-                            else if (it.Blueprint is BlueprintItemArmor || it.Blueprint is BlueprintItemShield) activeTypes.Add("Armor");
-                            else activeTypes.Add("Other");
+                            // On vérifie si c'est une arme double (via réflexion sur le Blueprint ou l'Item)
+                            bool isDouble = false;
+                            try {
+                                var prop = it.Blueprint.GetType().GetProperty("Double", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)
+                                        ?? it.Blueprint.GetType().GetProperty("IsDouble", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                                if (prop != null) isDouble = (bool)prop.GetValue(it.Blueprint);
+                            } catch { }
 
-                            filtersDirty = true;
-                            currentPage = 0;
+                            if (isDouble)
+                            {
+                                doubleWeaponCandidate = it;
+                                showDoubleWeaponChoice = true;
+                            }
+                            else
+                            {
+                                FinalizeSelection(it);
+                            }
                         }
                         GUI.backgroundColor = oldBG;
                         if (j < cols - 1) GUILayout.Space(10 * scale);
