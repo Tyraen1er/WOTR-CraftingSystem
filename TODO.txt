@@ -1,12 +1,6 @@
-
-- Service de Création de Baguettes
-- Service de Création de Potions
 - Service d'Achat d'équipement non enchanté
     - Armes
-    - Armures
-    - Bijoux
-    - Boucliers
-    - Vêtements
-    - sceptres
-    - baguettes
+        Prévoir Dump d'item non enchanté pour chercher une propriété cible qui servira de tri
+    - Armures / Armures
+    - Accessoires : Bijoux - Vêtements - sceptres - baguettes
     
