@@ -103,13 +103,41 @@ namespace CraftingSystem
                 }
             }
 
+            if (Game.Instance.CurrentMode == Kingmaker.GameModes.GameModeType.FullScreenUi 
+                || Game.Instance.CurrentMode == Kingmaker.GameModes.GameModeType.EscMode
+                || Game.Instance.CurrentMode == Kingmaker.GameModes.GameModeType.Dialog
+                || Game.Instance.CurrentMode == Kingmaker.GameModes.GameModeType.Cutscene)
+            {
+                return;
+            }
+
+            // Sécurité avancée : Détection de la saisie (Jeu, UMM, IMGUI)
+            bool isTyping = UnityEngine.GUIUtility.keyboardControl != 0;
+            
+            // On vérifie aussi les InputFields de TextMeshPro (utilisés par le jeu et certains mods) via Réflexion
+            try
+            {
+                var isFieldSelected = typeof(Kingmaker.UI.KeyboardAccess)
+                    .GetMethod("IsInputFieldSelected", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public)
+                    ?.Invoke(null, null) as bool? ?? false;
+                if (isFieldSelected) isTyping = true;
+            }
+            catch { }
+
+            if (isTyping) return;
+
+            // Sécurité : si le menu UMM est ouvert, on bloque nos raccourcis pour éviter les conflits
+            if (UnityModManager.UI.Instance != null && UnityModManager.UI.Instance.Opened) return;
+
             if (CraftingSettings.ShortcutInventory != null && CraftingSettings.ShortcutInventory.Down())
             {
+                Main.log.Log($"[SHORTCUT] Inventory triggered. FocusID: {UnityEngine.GUIUtility.keyboardControl}, GameMode: {Game.Instance.CurrentMode}");
                 if (UnityModManager.UI.Instance != null && UnityModManager.UI.Instance.Opened) UnityModManager.UI.Instance.ToggleWindow();
                 DeferredInventoryOpener.RequestUI(CraftingWindowMode.LootUI, 0.3f);
             }
             if (CraftingSettings.ShortcutIMGUI != null && CraftingSettings.ShortcutIMGUI.Down())
             {
+                Main.log.Log($"[SHORTCUT] IMGUI triggered. FocusID: {UnityEngine.GUIUtility.keyboardControl}, GameMode: {Game.Instance.CurrentMode}");
                 if (UnityModManager.UI.Instance != null && UnityModManager.UI.Instance.Opened) UnityModManager.UI.Instance.ToggleWindow();
                 DeferredInventoryOpener.RequestUI(CraftingWindowMode.StoredItemIMGUI, 0.3f);
             }

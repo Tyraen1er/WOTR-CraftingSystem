@@ -11,6 +11,7 @@ using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Shields;
 using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.UI;
+using Kingmaker.View;
 
 namespace CraftingSystem
 {
@@ -32,6 +33,20 @@ namespace CraftingSystem
             {
                 if (_isOpen == value) return;
                 _isOpen = value;
+
+                // Blocage/Déblocage de la caméra Rig (mouvement/zoom)
+                try
+                {
+                    var rig = Game.Instance.UI.GetCameraRig();
+                    if (rig != null)
+                    {
+                        rig.FixCamera.Value = _isOpen;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Main.ModEntry.Logger.Error($"[UI] Erreur lors du blocage caméra: {e.Message}");
+                }
 
                 // Reset de la navigation quand on ferme ou on ouvre
                 if (!_isOpen || _isOpen)
@@ -129,6 +144,30 @@ namespace CraftingSystem
             if (submit) inputSubmitDown = true;
             if (cancel) inputCancelDown = true;
 
+            // Détection de la saisie pour bloquer les raccourcis du jeu
+            bool isTyping = GUIUtility.keyboardControl != 0;
+            try
+            {
+                if (Game.Instance.Keyboard != null)
+                {
+                    // On utilise le CountingGuard pour bloquer/débloquer sans écraser d'autres bloqueurs
+                    if (isTyping && Game.Instance.Keyboard.Disabled.GuardCount == 0) Game.Instance.Keyboard.Disabled.Value = true;
+                    else if (!isTyping && Game.Instance.Keyboard.Disabled.GuardCount > 0) Game.Instance.Keyboard.Disabled.Value = false;
+                }
+            }
+            catch { }
+
+            if (UnityEngine.Input.anyKeyDown)
+            {
+                foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
+                {
+                    if (UnityEngine.Input.GetKeyDown(kcode))
+                    {
+                        Main.ModEntry.Logger.Log($"[UI-INPUT] Key: {kcode} | Focused: {isTyping}");
+                    }
+                }
+            }
+
             float h = 0f; float v = 0f;
             try
             {
@@ -148,7 +187,7 @@ namespace CraftingSystem
 
             if (Math.Abs(h) > 0.5f || Math.Abs(v) > 0.5f)
             {
-                if (Time.unscaledTime - lastInputTime > 0.2f)
+                if (Time.unscaledTime - lastInputTime > 0.1f)
                 {
                     int oldIndex = currentFocusIndex;
                     if (v > 0.5f || h < -0.5f) currentFocusIndex--;
@@ -246,6 +285,8 @@ namespace CraftingSystem
             if (!IsOpen)
             {
                 lastOpenState = false;
+                // Sécurité : on s'assure que le clavier est débloqué si on ferme brusquement
+                try { if (Game.Instance.Keyboard != null && Game.Instance.Keyboard.Disabled.GuardCount > 0) Game.Instance.Keyboard.Disabled.Value = false; } catch { }
                 return;
             }
 
