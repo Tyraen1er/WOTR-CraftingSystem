@@ -177,188 +177,90 @@ namespace CraftingSystem
 
             IsSyncing = true;
             LastSyncMessage = Helpers.GetString("ui_sync_in_progress", "Synchronization in progress...");
-            Main.ModEntry.Logger.Log("[SYNC] Lancement de la tâche de synchronisation en arrière-plan...");
+            
+            // On délègue au scanner unifié
+            _ = UnifiedScanner.RunFullScan();
+        }
 
-            Task.Run(() =>
+        /// <summary>
+        /// Appelée par le UnifiedScanner après la collecte binaire.
+        /// Gère l'intégration des overrides JSON et la construction de la MasterList.
+        /// </summary>
+        public static void FinalizeScan(IEnumerable<(BlueprintItemEnchantment bp, BlueprintGuid guid)> foundEnchants)
+        {
+            try
             {
-                try
+                var syncedList = new List<EnchantmentData>();
+                
+                // 1. Chargement des Overrides (Chargement du fichier JSON pour lier vos modifications)
+                var overrides = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
+                string path = Path.Combine(Main.ModEntry.Path, "Enchantments.json");
+                if (File.Exists(path))
                 {
-                    var bpCache = ResourcesLibrary.BlueprintsCache;
-                    if (bpCache == null)
+                    try
                     {
-                        LastSyncMessage = Helpers.GetString("ui_sync_error_index", "Failed: Game index inaccessible.");
-                        Main.ModEntry.Logger.Error("[SYNC] Impossible d'accéder au BlueprintsCache du jeu.");
-                        return;
-                    }
-
-                    // 1. Overrides (Chargement du fichier JSON pour lier vos modifications)
-                    var overrides = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
-                    string path = Path.Combine(Main.ModEntry.Path, "Enchantments.json");
-                    if (File.Exists(path))
-                    {
-                        try
+                        var overrideList = JsonConvert.DeserializeObject<List<EnchantmentData>>(File.ReadAllText(path)) ?? new List<EnchantmentData>();
+                        foreach (var ov in overrideList)
                         {
-                            var overrideList = JsonConvert.DeserializeObject<List<EnchantmentData>>(File.ReadAllText(path)) ?? new List<EnchantmentData>();
-                            // Validation stricte : n'ajouter que les overrides valides (GUID + Type)
-                            foreach (var ov in overrideList)
-                            {
-                                if (string.IsNullOrEmpty(ov.Guid) || string.IsNullOrEmpty(ov.Type))
-                                {
-                                    Main.ModEntry.Logger.Warning($"[SYNC] Override JSON ignoré (GUID ou internType manquant).");
-                                    continue;
-                                }
+                            if (!string.IsNullOrEmpty(ov.Guid) && !string.IsNullOrEmpty(ov.Type))
                                 overrides[ov.Guid] = ov;
-                            }
-                            // Main.ModEntry.Logger.Log($"[SYNC] Overrides chargés : {overrides.Count}");
-                        }
-                        catch (Exception ex) { Main.ModEntry.Logger.Error($"[SYNC] Impossible de parser Enchantments.json : {ex}"); }
-                    }
-
-                    // 2. Scan Multithreadé avec lecture binaire brute de ToyBox (Ultra-Rapide & Read-Only)
-                    var syncedList = new List<EnchantmentData>();
-
-                    var allKeys = bpCache.m_LoadedBlueprints.OrderBy(e => e.Value.Offset).Select(e => e.Key).ToList();
-                    TotalCount = allKeys.Count;
-                    ProcessedCount = 0;
-
-                    Main.ModEntry.Logger.Log($"[SYNC] Préparation du scan multithread binaire ({TotalCount} blueprints)...");
-
-                    var memStream = new MemoryStream();
-                    lock (bpCache.m_Lock)
-                    {
-                        bpCache.m_PackFile.Position = 0;
-                        bpCache.m_PackFile.CopyTo(memStream);
-                    }
-                    var bytes = memStream.GetBuffer();
-
-                    var chunks = allKeys.Select((k, i) => new { Index = i, Value = k })
-                                        .GroupBy(x => x.Index / 1000)
-                                        .Select(x => x.Select(v => v.Value).ToList())
-                                        .ToList();
-
-                    var chunkQueue = new ConcurrentQueue<List<BlueprintGuid>>(chunks);
-                    var foundEnchants = new ConcurrentBag<BlueprintItemEnchantment>();
-
-                    int numThreads = 4;
-                    var tasks = new List<Task>();
-
-                    for (int i = 0; i < numThreads; i++)
-                    {
-                        tasks.Add(Task.Run(() =>
-                        {
-                            Stream stream = new MemoryStream(bytes);
-                            stream.Position = 0;
-                            var serializer = new ReflectionBasedSerializer(new PrimitiveSerializer(new BinaryReader(stream), UnityObjectConverter.AssetList));
-
-                            while (chunkQueue.TryDequeue(out var chunkGuids))
-                            {
-                                foreach (var guid in chunkGuids)
-                                {
-                                    int currentCount = Interlocked.Increment(ref ProcessedCount);
-                                    if (currentCount % 1000 == 0)
-                                    {
-                                        LastSyncMessage = string.Format(Helpers.GetString("ui_sync_scanner_progress", "Multithreaded binary scanner: {0} / {1} processed..."), currentCount, TotalCount);
-                                    }
-
-                                    try
-                                    {
-                                        var mLoaded = bpCache.m_LoadedBlueprints;
-                                        if (mLoaded.TryGetValue(guid, out var entry))
-                                        {
-                                            // Si déjà officiellement chargé par le jeu (ou injecté manuellement) on l'ajoute directement.
-                                            if (entry.Blueprint != null)
-                                            {
-                                                if (entry.Blueprint is BlueprintItemEnchantment bpEnchChecked)
-                                                {
-                                                    // On marque les enchantements injectés par notre CustomEnchantmentsBuilder
-                                                    if (CustomEnchantmentsBuilder.InjectedGuids.Contains(guid))
-                                                    {
-                                                        Main.ModEntry.Logger.Log($"[DEBUG_CUSTOM_ENCHANT] Scanner found injected blueprint: {bpEnchChecked.name} ({guid})");
-                                                    }
-                                                    foundEnchants.Add(bpEnchChecked);
-                                                }
-                                                continue;
-                                            }
-
-                                            if (entry.Offset == 0U) continue;
-
-                                            // Lecture binaire brute du blueprint (sans l'injecter de force pour éviter la corruption du jeu)
-                                            stream.Seek(entry.Offset, SeekOrigin.Begin);
-                                            SimpleBlueprint simpleBlueprint = null;
-                                            serializer.Blueprint(ref simpleBlueprint);
-
-                                            if (simpleBlueprint is BlueprintItemEnchantment ench)
-                                            {
-                                                ench.AssetGuid = guid;
-                                                foundEnchants.Add(ench);
-                                            }
-                                        }
-                                    }
-                                    catch { } // on ignore les erreurs isolées de parsing (ToyBox fait pareil)
-                                }
-                            }
-                        }));
-                    }
-
-                    // Attend que tous les workers aient fini la lecture brute
-                    Task.WaitAll(tasks.ToArray());
-                    // Main.ModEntry.Logger.Log($"[SYNC] Scan binaire terminé : {foundEnchants.Count} enchantements extraits parmis {TotalCount} blueprints !");
-
-                    LastSyncMessage = Helpers.GetString("ui_sync_integration", "Integration and filtering of overrides (JSON)...");
-
-                    foreach (var bp in foundEnchants)
-                    {
-                        string guidStr = bp.AssetGuid.ToString();
-
-                        if (overrides.TryGetValue(guidStr, out var ovData))
-                        {
-                            syncedList.Add(ovData);
-                        }
-                        else
-                        {
-                            string type = "Other";
-                            if (bp is BlueprintWeaponEnchantment) type = "Weapon";
-                            else if (bp is BlueprintArmorEnchantment) type = "Armor";
-
-                            syncedList.Add(new EnchantmentData
-                            {
-                                Name = bp.name,
-                                Guid = guidStr,
-                                Type = type,
-                                Source = "Mod",
-                                PointString = bp.EnchantmentCost > 0 ? $"+{bp.EnchantmentCost}" : "+1",
-                                Description = "", // Sera résolu dynamiquement par l'UI
-                                IsEnhancement = CraftingCalculator.IsPureEnhancement(bp),
-                                Categories = new List<string> { "Discovered" }
-                            });
                         }
                     }
-
-                    lock (MasterList)
-                    {
-                        MasterList = syncedList;
-                        GuidMap = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
-                        foreach (var e in syncedList)
-                        {
-                            if (!GuidMap.ContainsKey(e.Guid)) GuidMap.Add(e.Guid, e);
-                        }
-                    }
-
-                    // --- RÉUSSITE TOTALE ---
-                    _hasSyncedThisSession = true;
-                    LastSyncMessage = string.Format(Helpers.GetString("ui_sync_success", "Sync successful ({0} Enchantments)."), MasterList.Count);
-                    // Main.ModEntry.Logger.Log($"[SYNC] Synchronisation terminée avec succès. {MasterList.Count} enchantements répertoriés.");
+                    catch (Exception ex) { Main.ModEntry.Logger.Error($"[SYNC] Impossible de parser Enchantments.json : {ex.Message}"); }
                 }
-                catch (Exception ex)
+
+                // 2. Intégration des Blueprints
+                foreach (var item in foundEnchants)
                 {
-                    LastSyncMessage = $"Échec critique : {ex.Message}";
-                    Main.ModEntry.Logger.Error($"[SYNC] Erreur critique pendant le scan : {ex}");
+                    var bp = item.bp;
+                    string guidStr = item.guid.ToString();
+
+                    if (overrides.TryGetValue(guidStr, out var ovData))
+                    {
+                        syncedList.Add(ovData);
+                    }
+                    else
+                    {
+                        string type = "Other";
+                        if (bp is BlueprintWeaponEnchantment) type = "Weapon";
+                        else if (bp is BlueprintArmorEnchantment) type = "Armor";
+
+                        syncedList.Add(new EnchantmentData
+                        {
+                            Name = bp.name,
+                            Guid = guidStr,
+                            Type = type,
+                            Source = "Mod",
+                            PointString = bp.EnchantmentCost > 0 ? $"+{bp.EnchantmentCost}" : "+1",
+                            Description = "", // Sera résolu dynamiquement par l'UI
+                            IsEnhancement = CraftingCalculator.IsPureEnhancement(bp),
+                            Categories = new List<string> { "Discovered" }
+                        });
+                    }
                 }
-                finally
+
+                lock (MasterList)
                 {
-                    IsSyncing = false;
+                    MasterList = syncedList;
+                    GuidMap = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
+                    foreach (var e in syncedList)
+                    {
+                        if (!GuidMap.ContainsKey(e.Guid)) GuidMap.Add(e.Guid, e);
+                    }
                 }
-            });
+
+                _hasSyncedThisSession = true;
+                LastSyncMessage = string.Format(Helpers.GetString("ui_sync_success", "Sync successful ({0} Enchantments)."), MasterList.Count);
+            }
+            catch (Exception ex)
+            {
+                LastSyncMessage = $"Échec finalisation : {ex.Message}";
+                Main.ModEntry.Logger.Error($"[SYNC] Erreur critique FinalizeScan : {ex}");
+            }
+            finally
+            {
+                IsSyncing = false;
+            }
         }
 
         public static List<EnchantmentData> GetFor(ItemEntity item)

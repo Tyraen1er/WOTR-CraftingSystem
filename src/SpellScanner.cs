@@ -27,31 +27,33 @@ namespace CraftingSystem
         public static void ScanAll()
         {
             if (_initialized) return;
-            
-            Main.ModEntry.Logger.Log("[SCROLL-SCAN] Starting Deep Scan of all spells...");
+            // On délègue maintenant au scanner unifié
+            _ = UnifiedScanner.RunFullScan();
+        }
+
+        /// <summary>
+        /// Appelée par le UnifiedScanner après avoir collecté tous les objets liés aux sorts.
+        /// </summary>
+        public static void FinalizeScan(IEnumerable<(BlueprintSpellbook sb, BlueprintGuid guid)> spellbooks, IEnumerable<(BlueprintSpellList sl, BlueprintGuid guid)> spellLists)
+        {
             AvailableSpells.Clear();
 
-            var bpCache = ResourcesLibrary.BlueprintsCache;
-
-            // 1. Scan des Spellbooks (Classes)
-            var allGuids = bpCache.m_LoadedBlueprints.Keys.ToArray();
-            foreach (var guid in allGuids)
+            // 1. Traitement des Spellbooks (Classes)
+            foreach (var item in spellbooks)
             {
-                var bp = ResourcesLibrary.TryGetBlueprint(guid);
-                if (bp is BlueprintSpellbook sb)
-                {
-                    var list = sb.SpellList;
-                    if (list == null) continue;
-                    ProcessSpellList(list, sb.CharacterClass?.Name ?? sb.name);
-                }
-                else if (bp is BlueprintSpellList list)
-                {
-                    ProcessSpellList(list, "Special/Other");
-                }
+                var list = item.sb.SpellList;
+                if (list == null) continue;
+                ProcessSpellList(list, item.sb.CharacterClass?.Name ?? item.sb.name);
+            }
+
+            // 2. Traitement des SpellLists directs (Special/Other)
+            foreach (var item in spellLists)
+            {
+                ProcessSpellList(item.sl, "Special/Other");
             }
 
             _initialized = true;
-            Main.ModEntry.Logger.Log($"[SCROLL-SCAN] Scan complete. Found {AvailableSpells.Count} unique scrollable spells.");
+            Main.ModEntry.Logger.Log($"[SCROLL-SCAN] Scan unifié terminé. {AvailableSpells.Count} sorts uniques trouvés.");
             
             DumpToFile();
         }
