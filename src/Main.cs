@@ -131,13 +131,13 @@ namespace CraftingSystem
 
             if (CraftingSettings.ShortcutInventory != null && CraftingSettings.ShortcutInventory.Down())
             {
-                Main.log.Log($"[SHORTCUT] Inventory triggered. FocusID: {UnityEngine.GUIUtility.keyboardControl}, GameMode: {Game.Instance.CurrentMode}");
+                // Main.log.Log($"[SHORTCUT] Inventory triggered. FocusID: {UnityEngine.GUIUtility.keyboardControl}, GameMode: {Game.Instance.CurrentMode}");
                 if (UnityModManager.UI.Instance != null && UnityModManager.UI.Instance.Opened) UnityModManager.UI.Instance.ToggleWindow();
                 DeferredInventoryOpener.RequestUI(CraftingWindowMode.LootUI, 0.3f);
             }
             if (CraftingSettings.ShortcutIMGUI != null && CraftingSettings.ShortcutIMGUI.Down())
             {
-                Main.log.Log($"[SHORTCUT] IMGUI triggered. FocusID: {UnityEngine.GUIUtility.keyboardControl}, GameMode: {Game.Instance.CurrentMode}");
+                // Main.log.Log($"[SHORTCUT] IMGUI triggered. FocusID: {UnityEngine.GUIUtility.keyboardControl}, GameMode: {Game.Instance.CurrentMode}");
                 if (UnityModManager.UI.Instance != null && UnityModManager.UI.Instance.Opened) UnityModManager.UI.Instance.ToggleWindow();
                 DeferredInventoryOpener.RequestUI(CraftingWindowMode.StoredItemIMGUI, 0.3f);
             }

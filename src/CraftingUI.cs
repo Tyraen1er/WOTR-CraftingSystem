@@ -163,7 +163,7 @@ namespace CraftingSystem
                 {
                     if (UnityEngine.Input.GetKeyDown(kcode))
                     {
-                        Main.ModEntry.Logger.Log($"[UI-INPUT] Key: {kcode} | Focused: {isTyping}");
+                        // Main.ModEntry.Logger.Log($"[UI-INPUT] Key: {kcode} | Focused: {isTyping}");
                     }
                 }
             }
