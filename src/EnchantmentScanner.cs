@@ -485,6 +485,12 @@ namespace CraftingSystem
         }
         private static string GetEnumKey(DynamicParam pDef, double val)
         {
+            // --- CAS SPÉCIAL : METAMAGIC -> LEVEL COST ---
+            if (pDef.EnumTypeName != null && pDef.EnumTypeName.Contains("Kingmaker.UnitLogic.Abilities.Metamagic"))
+            {
+                return GetMetamagicLevelCost((int)val).ToString();
+            }
+
             string key = ((int)val).ToString();
             
             // Mapping spécial pour Grade
@@ -516,6 +522,27 @@ namespace CraftingSystem
                 catch { }
             }
             return key;
+        }
+
+        private static int GetMetamagicLevelCost(int maskValue)
+        {
+            // Mapping officiel Pathfinder WOTR pour les coûts de niveau des sceptres
+            // Note: On cherche ici la valeur individuelle du masque (puisqu'on itère sur Metamagic, Metamagic2, etc.)
+            switch (maskValue)
+            {
+                case 1:    return 4; // Quicken
+                case 2:    return 1; // Extend
+                case 4:    return 3; // Maximize
+                case 8:    return 2; // Empower
+                case 32:   return 1; // Reach
+                case 64:   return 2; // Persistent
+                case 128:  return 1; // Selective
+                case 256:  return 1; // Bolstered
+                case 512:  return 1; // Piercing
+                case 2048: return 2; // Echoing
+                case 1024: return 0; // Completely Normal
+                default:   return 0;
+            }
         }
     }
 }

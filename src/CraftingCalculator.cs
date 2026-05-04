@@ -137,7 +137,27 @@ namespace CraftingSystem
         /// <returns>Le montant en pièces d'or à payer pour l'opération.</returns>
         public static long GetMarginalCost(ItemEntity item, IEnumerable<EnchantmentData> queuedEnchants, EnchantmentData nextEnchant = null, float costMultiplier = 1.0f)
         {
-            if (item == null) return 0;
+            // --- GESTION DU CALCUL SANS OBJET (CRÉATION) ---
+            // Si l'item est nul, on calcule le prix de création pur (Market Service)
+            if (item == null)
+            {
+                if (nextEnchant == null)
+                {
+                    long total = 0;
+                    if (queuedEnchants != null)
+                    {
+                        foreach (var e in queuedEnchants) total += GetMarginalCost(null, null, e, costMultiplier);
+                    }
+                    return total;
+                }
+
+                // Pour une création, on utilise soit l'override, soit un prix par défaut
+                long basePrice = nextEnchant.GoldOverride >= 0 ? nextEnchant.GoldOverride : (nextEnchant.PointCost * nextEnchant.PointCost * 1000); 
+                long finalPrice = (long)(basePrice * costMultiplier);
+                
+                if (CraftingSettings.EnableEpicCosts && nextEnchant.IsEpic) finalPrice = (long)(finalPrice * CraftingSettings.EpicCostMultiplier);
+                return finalPrice;
+            }
 
             // 1. Calcul récursif pour le prix TOTAL d'un panier
             if (nextEnchant == null)

@@ -41,10 +41,10 @@ namespace CraftingSystem
     {
         public static void StartCraftingProject(ItemEntity item, EnchantmentData data, int cost, int days)
         {
-            if (item == null || data == null) return;
+            if (data == null) return;
             
             // Redirection pour les boucliers : les enchantements d'arme vont sur l'arme du bouclier
-            if (item.Blueprint is Kingmaker.Blueprints.Items.Shields.BlueprintItemShield && data.Type == "Weapon")
+            if (item != null && item.Blueprint is Kingmaker.Blueprints.Items.Shields.BlueprintItemShield && data.Type == "Weapon")
             {
                 var weaponProp = item.GetType().GetProperty("Weapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
                 if (weaponProp != null)
@@ -81,13 +81,22 @@ namespace CraftingSystem
             // 2. CAS PARTICULIER : INSTANTANÉ (0 JOURS)
             if (days <= 0)
             {
-                UnitPartWilcerWorkshop.ApplyEnchantmentsafely(item, bp);
-                Main.ModEntry.Logger.Log($"[ATELIER] Application immédiate de {data.Name} sur {item.Name}.");
+                if (item != null && bp is BlueprintItemEnchantment bpEnch)
+                {
+                    UnitPartWilcerWorkshop.ApplyEnchantmentsafely(item, bpEnch);
+                    Main.ModEntry.Logger.Log($"[ATELIER] Application immédiate de {data.Name} sur {item.Name}.");
+                }
+                else if (bp is BlueprintItem bpItem)
+                {
+                    var newItem = bpItem.CreateEntity();
+                    var workshop = Game.Instance.Player.MainCharacter.Value.Ensure<UnitPartWilcerWorkshop>();
+                    workshop.StashedItems.Add(newItem);
+                    Main.ModEntry.Logger.Log($"[ATELIER] Création immédiate de {newItem.Name}.");
+                }
                 return;
             }
 
             // 3. MISE EN FILE D'ATTENTE (PROJET)
-            // 🛠️ CORRECTION : On utilise la durée exacte d'un jour définie par le système
             long ticksPerDay = TimeSpan.TicksPerDay; 
             long finishTime = Game.Instance.Player.GameTime.Ticks + ((long)days * ticksPerDay);
 
@@ -99,9 +108,9 @@ namespace CraftingSystem
                 GoldPaid = cost
             };
 
-            var workshop = Game.Instance.Player.MainCharacter.Value.Ensure<UnitPartWilcerWorkshop>();
-            workshop.ActiveProjects.Add(project);
-            Main.ModEntry.Logger.Log($"[ATELIER] Lancement du craft pour {item.Name}.");
+            var workshopMain = Game.Instance.Player.MainCharacter.Value.Ensure<UnitPartWilcerWorkshop>();
+            workshopMain.ActiveProjects.Add(project);
+            Main.ModEntry.Logger.Log($"[ATELIER] Lancement du craft pour {(item != null ? item.Name : data.Name)}.");
         }
     }
 

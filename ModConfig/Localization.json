@@ -146,9 +146,9 @@
             "ruRU": "Настройка: <b>{0}</b>"
         },
         "ui_selection_total_custom": {
-            "enGB": "Selection Custom: +{0} \u2014 Total: {1} gp / ~{2} d",
-            "frFR": "Sélection Perso : +{0} \u2014 Total : {1} po / ~{2} j",
-            "ruRU": "Свой выбор: +{0} \u2014 Итого: {1} gp / ~{2} дн."
+            "enGB": "Selection: +{0} \u2014 Service Cost: {1} gp / ~{2} d",
+            "frFR": "Sélection : +{0} \u2014 Coût du Service : {1} po / ~{2} j",
+            "ruRU": "Выбор: +{0} \u2014 Стоимость услуги: {1} gp / ~{2} дн."
         },
         "ui_param_element": {
             "enGB": "Element",
@@ -411,9 +411,9 @@
             "ruRU": "Автогенерация имени."
         },
         "log_project_started": {
-            "enGB": "<color=#E2C675>[Workshop]</color> <b>{0}</b> has been sent to the forge for <b>{1} gp</b>.",
-            "frFR": "<color=#E2C675>[Atelier]</color> <b>{0}</b> a été envoyé en forge pour <b>{1} po</b>.",
-            "ruRU": "<color=#E2C675>[Workshop]</color> <b>{0}</b> был отправлен в кузницу для <b>{1} gp</b>."
+            "enGB": "<color=#E2C675>[Workshop]</color> <b>{0}</b> has been ordered for <b>{1} gp</b>.",
+            "frFR": "<color=#E2C675>[Atelier]</color> <b>{0}</b> a été commandé pour <b>{1} po</b>.",
+            "ruRU": "<color=#E2C675>[Workshop]</color> <b>{0}</b> был заказан за <b>{1} gp</b>."
         },
         "ui_feedback_projects_started": {
             "enGB": "Projects started: {0} enchantment(s).",
@@ -566,9 +566,9 @@
             "ruRU": "Вес зачарования: {0}/{1}"
         },
         "ui_selection_total": {
-            "enGB": "Selection: +{0} \u2014 Total: {1} gp / ~{2} d",
-            "frFR": "Sélection : +{0} \u2014 Total : {1} po / ~{2} j",
-            "ruRU": "Выбор: +{0} \u2014 Итого: {1} gp / ~{2} дн."
+            "enGB": "Selection: +{0} \u2014 Service Cost: {1} gp / ~{2} d",
+            "frFR": "Sélection : +{0} \u2014 Coût du Service : {1} po / ~{2} j",
+            "ruRU": "Выбор: +{0} \u2014 Стоимость услуги: {1} gp / ~{2} дн."
         },
         "ui_btn_validate_selection": {
             "enGB": "Confirm Selection",
