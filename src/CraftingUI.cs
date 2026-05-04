@@ -73,6 +73,13 @@ namespace CraftingSystem
         private bool showCustomEnchantPage = false;
         private List<EnchantmentData> customEnchantments = new List<EnchantmentData>();
 
+        // Scroll Creation State
+        private string scrollSearch = "";
+        private SpellData selectedScrollSpell = null;
+        private int scrollCasterLevel = 1;
+        private int scrollSpellLevel = 1;
+        private Vector2 scrollListPos = Vector2.zero;
+
         // Paging & Optimization
         private List<EnchantmentData> cachedFilteredEnchantments = new List<EnchantmentData>();
         private int currentPage = 0;
@@ -339,20 +346,27 @@ namespace CraftingSystem
             GUILayout.BeginHorizontal();
             if (CButton(Helpers.GetString("ui_btn_primary_weapon", "Arme principale"), GUILayout.Height(60 * scale)))
             {
+                Main.ModEntry.Logger.Log($"[UI] Double weapon: selecting primary part {doubleWeaponCandidate.Name}");
                 FinalizeSelection(doubleWeaponCandidate);
                 showDoubleWeaponChoice = false;
                 doubleWeaponCandidate = null;
+                GUI.FocusWindow(999);
             }
             GUILayout.Space(20 * scale);
             if (CButton(Helpers.GetString("ui_btn_secondary_weapon", "Arme secondaire"), GUILayout.Height(60 * scale)))
             {
-                // Récupération de la seconde partie par réflexion
-                var secondProp = doubleWeaponCandidate.GetType().GetProperty("SecondWeapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
-                var secondWeapon = secondProp?.GetValue(doubleWeaponCandidate) as ItemEntity;
+                // Récupération de la seconde partie (Field 'Second' sur ItemEntityWeapon ou Property 'SecondWeapon')
+                var type = doubleWeaponCandidate.GetType();
+                var secondField = type.GetField("Second", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                var secondProp = type.GetProperty("SecondWeapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
                 
+                var secondWeapon = (secondField?.GetValue(doubleWeaponCandidate) ?? secondProp?.GetValue(doubleWeaponCandidate)) as ItemEntity;
+                
+                Main.ModEntry.Logger.Log($"[UI] Double weapon: selecting secondary part {secondWeapon?.Name ?? "null"}");
                 FinalizeSelection(secondWeapon ?? doubleWeaponCandidate);
                 showDoubleWeaponChoice = false;
                 doubleWeaponCandidate = null;
+                GUI.FocusWindow(999);
             }
             GUILayout.EndHorizontal();
             
@@ -369,6 +383,7 @@ namespace CraftingSystem
         void FinalizeSelection(ItemEntity it)
         {
             if (it == null) return;
+            Main.ModEntry.Logger.Log($"[UI] Finalizing selection for: {it.Name} (Type: {it.GetType().Name})");
             selectedItem = it;
             newNameDraft = it.Name;
             queuedEnchantGuids.Clear();
@@ -614,7 +629,145 @@ namespace CraftingSystem
             }
         }
         void DrawCreateWandGUI(float scale) { GUILayout.Label("Coming Soon: Wand Creation"); }
-        void DrawCreateScrollGUI(float scale) { GUILayout.Label("Coming Soon: Scroll Creation"); }
+        void DrawCreateScrollGUI(float scale)
+        {
+            float windowWidth = 1000f * scale;
+            float contentWidth = windowWidth - (120f * scale);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.BeginVertical(GUILayout.Width(contentWidth));
+
+            // --- HEADER ---
+            GUILayout.Space(20 * scale);
+            GUIStyle headerStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_HUGE * scale), fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
+            GUILayout.Label(Helpers.GetString("ui_page_scroll_title", "Scroll Creation Workshop"), headerStyle);
+            GUILayout.Space(10 * scale);
+
+            // --- SEARCH BAR ---
+            GUILayout.BeginHorizontal(GUI.skin.box);
+            GUILayout.Label(Helpers.GetString("ui_search", "Search:"), GUILayout.Width(100 * scale));
+            scrollSearch = GUILayout.TextField(scrollSearch);
+            if (GUILayout.Button("X", GUILayout.Width(30 * scale))) scrollSearch = "";
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(10 * scale);
+
+            // --- TWO COLUMN LAYOUT ---
+            GUILayout.BeginHorizontal();
+
+            // LEFT COLUMN: Spell List
+            GUILayout.BeginVertical(GUILayout.Width(contentWidth * 0.6f));
+            GUILayout.Label(Helpers.GetString("ui_available_spells", "Available Spells:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+            
+            scrollListPos = GUILayout.BeginScrollView(scrollListPos, "box", GUILayout.Height(400 * scale));
+            
+            var filteredSpells = SpellScanner.AvailableSpells.Values
+                .Where(s => string.IsNullOrEmpty(scrollSearch) || s.Name.IndexOf(scrollSearch, StringComparison.OrdinalIgnoreCase) >= 0)
+                .OrderBy(s => s.MinLevel).ThenBy(s => s.Name);
+
+            foreach (var spell in filteredSpells)
+            {
+                GUIStyle itemStyle = new GUIStyle(GUI.skin.button) { alignment = TextAnchor.MiddleLeft };
+                if (selectedScrollSpell != null && selectedScrollSpell.Guid == spell.Guid)
+                {
+                    itemStyle.normal.background = itemStyle.active.background;
+                    itemStyle.normal.textColor = Color.cyan;
+                }
+
+                string modTag = spell.IsFromMod ? "[MOD] " : "";
+                if (GUILayout.Button($"{modTag}Lvl {spell.MinLevel} - {spell.Name}", itemStyle))
+                {
+                    selectedScrollSpell = spell;
+                    scrollSpellLevel = spell.MinLevel;
+                    scrollCasterLevel = Math.Max(1, spell.MinLevel * 2 - 1); // Progression standard
+                    if (spell.MinLevel == 0) scrollCasterLevel = 1;
+                }
+            }
+            GUILayout.EndScrollView();
+            GUILayout.EndVertical();
+
+            GUILayout.Space(20 * scale);
+
+            // RIGHT COLUMN: Configuration
+            GUILayout.BeginVertical();
+            if (selectedScrollSpell != null)
+            {
+                GUILayout.Label(Helpers.GetString("ui_configuration", "Configuration:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+                GUILayout.Space(10 * scale);
+                
+                GUILayout.Label($"<b>{selectedScrollSpell.Name}</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
+                GUILayout.Label($"School: {selectedScrollSpell.School}");
+                GUILayout.Label($"Classes: {string.Join(", ", selectedScrollSpell.Classes.Take(2))}");
+                
+                GUILayout.Space(20 * scale);
+
+                // Spell Level
+                GUILayout.Label($"{Helpers.GetString("ui_spell_level", "Spell Level")}: {scrollSpellLevel}");
+                scrollSpellLevel = (int)GUILayout.HorizontalSlider(scrollSpellLevel, 0, 9);
+
+                // Caster Level
+                GUILayout.Label($"{Helpers.GetString("ui_caster_level", "Caster Level")}: {scrollCasterLevel}");
+                scrollCasterLevel = (int)GUILayout.HorizontalSlider(scrollCasterLevel, 1, 20);
+
+                GUILayout.Space(20 * scale);
+
+                // Price Calculation (Scroll base: 25 * CL * SL)
+                int cost = 25 * scrollCasterLevel * Math.Max(1, scrollSpellLevel);
+                if (scrollSpellLevel == 0) cost = 12; // Cantrips cheap
+                
+                GUILayout.BeginVertical(GUI.skin.box);
+                GUILayout.Label($"{Helpers.GetString("ui_total_cost", "Total Cost")}:", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label($"<color=yellow>{cost} GP</color>", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_LARGE * scale), richText = true });
+                GUILayout.EndVertical();
+
+                GUILayout.Space(30 * scale);
+
+                if (GUILayout.Button(Helpers.GetString("ui_craft_button", "CRAFT SCROLL"), GUILayout.Height(50 * scale)))
+                {
+                    // Re-calculate cost for the transaction (already calculated above, but inside button scope for safety)
+                    int finalCost = 25 * scrollCasterLevel * Math.Max(1, scrollSpellLevel);
+                    if (scrollSpellLevel == 0) finalCost = 12;
+
+                    if (Game.Instance.Player.Money >= finalCost)
+                    {
+                        var bp = CustomEnchantmentsBuilder.GetOrBuildScroll(selectedScrollSpell, scrollCasterLevel, scrollSpellLevel);
+                        if (bp != null)
+                        {
+                            Game.Instance.Player.Money -= finalCost;
+                            var item = bp.CreateEntity();
+                            var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
+                            if (workshop != null)
+                            {
+                                workshop.StashedItems.Add(item);
+                                feedbackMessage = $"<color=green>Success!</color> Created: {item.Name}";
+                            }
+                            else
+                            {
+                                feedbackMessage = "<color=red>Error:</color> Workshop not found!";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        feedbackMessage = $"<color=red>Not enough gold!</color> (Need {finalCost} GP)";
+                    }
+                }
+            }
+            else
+            {
+                GUILayout.FlexibleSpace();
+                GUILayout.Label(Helpers.GetString("ui_select_spell_hint", "Select a spell from the list to begin."), new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Italic });
+                GUILayout.FlexibleSpace();
+            }
+            GUILayout.EndVertical();
+
+            GUILayout.EndHorizontal();
+
+            GUILayout.EndVertical();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
 
         private string inventorySearch = "";
         void DrawInventoryGUI(float scale)
@@ -722,13 +875,12 @@ namespace CraftingSystem
                         GUI.backgroundColor = typeColor;
                         if (CButtonStyled(new GUIContent(label), entryStyle, GUILayout.Width(itemWidth), GUILayout.Height(70 * scale)))
                         {
-                            // On vérifie si c'est une arme double (via réflexion sur le Blueprint ou l'Item)
+                            // On vérifie si c'est une arme double
                             bool isDouble = false;
-                            try {
-                                var prop = it.Blueprint.GetType().GetProperty("Double", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)
-                                        ?? it.Blueprint.GetType().GetProperty("IsDouble", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
-                                if (prop != null) isDouble = (bool)prop.GetValue(it.Blueprint);
-                            } catch { }
+                            if (it.Blueprint is BlueprintItemWeapon bpw)
+                            {
+                                isDouble = bpw.Double || bpw.CountAsDouble;
+                            }
 
                             if (isDouble)
                             {

@@ -145,6 +145,9 @@ namespace CraftingSystem
                 // --- INJECTION DES ENCHANTEMENTS CUSTOM (JSON COMPLEXE) ---
                 CustomEnchantmentsBuilder.BuildAndInjectAll();
 
+                // --- SCAN DES SORTS POUR LES PARCHEMINS ---
+                SpellScanner.ScanAll();
+
                 // DEBUG TEMPORAIRE (Après injection pour être sûr que le cache est prêt)
                 //EnchantmentDebug.DumpBlueprint("d42fc23b92c640846ac137dc26e000d4"); // Enhancement1
                 //EnchantmentDebug.DumpBlueprint("f8125dcb57d3463a9a039e4631204cbe"); // Enhancement7

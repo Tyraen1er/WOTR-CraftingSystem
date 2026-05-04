@@ -27,9 +27,12 @@ using Kingmaker.Blueprints.Items;
 using Kingmaker.Blueprints.Items.Equipment;
 using Kingmaker.UnitLogic.ActivatableAbilities;
 using UnityEngine;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CraftingSystem
 {
+    // ... rest of the file ...
     // --- Phase 2.A : ContractResolver for Private Fields ---
     public class OwlcatContractResolver : DefaultContractResolver
     {
@@ -800,6 +803,58 @@ namespace CraftingSystem
             else
             {
                 Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Final field not found: {lastFieldName} (also tried m_{lastFieldName}) in {current.GetType().Name}");
+            }
+        }
+        public static BlueprintItemEquipmentUsable GetOrBuildScroll(SpellData spellData, int cl, int sl)
+        {
+            string seed = $"Scroll_{spellData.Guid}_{cl}_{sl}";
+            BlueprintGuid guid = CreateGuidFromSeed(seed);
+            
+            var existing = ResourcesLibrary.TryGetBlueprint(guid) as BlueprintItemEquipmentUsable;
+            if (existing != null) return existing;
+
+            Main.ModEntry.Logger.Log($"[SCROLL-BUILD] Building new scroll: {spellData.Name} (CL:{cl}, SL:{sl})");
+
+            var spell = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(spellData.Guid)) as BlueprintAbility;
+            if (spell == null) return null;
+
+            var bp = Activator.CreateInstance(Type.GetType("Kingmaker.Blueprints.Items.Equipment.BlueprintItemEquipmentUsable, Assembly-CSharp")) as BlueprintItemEquipmentUsable;
+            bp.name = $"Scroll_{spell.name}_{cl}_{sl}";
+            bp.AssetGuid = guid;
+
+            // Propriétés de base du parchemin
+            bp.Type = UsableItemType.Scroll;
+            bp.m_Ability = spell.ToReference<BlueprintAbilityReference>();
+            bp.CasterLevel = cl;
+            bp.SpellLevel = sl;
+            bp.Charges = 1;
+            bp.SpendCharges = true;
+            bp.RestoreChargesOnRest = false;
+
+            // Visuel et Identification (via Réflexion car privés dans BlueprintItem)
+            var itemType = typeof(BlueprintItem);
+            itemType.GetField("m_Icon", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, spell.Icon);
+            itemType.GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, Helpers.CreateString($"{bp.name}.Name", $"Scroll of {spell.Name}"));
+            itemType.GetField("m_DescriptionText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, spell.m_Description);
+            itemType.GetField("m_Weight", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, 0.2f);
+            itemType.GetField("m_Cost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, 10); // Prix de base symbolique, recalculé par le jeu
+
+            // Enregistrement
+            ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(guid, bp);
+            Main.ModEntry.Logger.Log($"[SCROLL-BUILD] Registered dynamic scroll GUID: {guid}");
+
+            return bp;
+        }
+
+        private static BlueprintGuid CreateGuidFromSeed(string seed)
+        {
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] hash = md5.ComputeHash(Encoding.UTF8.GetBytes(seed));
+                // On injecte notre signature "c2af" au début du GUID pour l'identifier
+                hash[0] = 0xC2;
+                hash[1] = 0xAF;
+                return new BlueprintGuid(new Guid(hash));
             }
         }
     }
