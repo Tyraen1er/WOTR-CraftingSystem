@@ -151,16 +151,28 @@ namespace CraftingSystem
                         
                         var bp = (project.EnchantmentGuid.Replace("-", "").ToLower().StartsWith("c2af") 
                             ? CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(project.EnchantmentGuid) 
-                            : ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(project.EnchantmentGuid))) as BlueprintItemEnchantment;
+                            : ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(project.EnchantmentGuid)));
+
                         if (bp == null) 
                         {
                             Main.ModEntry.Logger.Error($"[ATELIER-DEBUG] ERREUR: Blueprint introuvable pour le GUID {project.EnchantmentGuid} !");
                             continue;
                         }
 
-                        ApplyEnchantmentsafely(project.Item, bp);
+                        if (bp is BlueprintItem bpItem)
+                        {
+                            var newItem = bpItem.CreateEntity();
+                            workshop.StashedItems.Add(newItem);
+                            if (workshop._virtualBox != null) workshop._virtualBox.Add(newItem);
+                            Main.ModEntry.Logger.Log($"[ATELIER] Création réussie de l'objet : {newItem.Name}");
+                        }
+                        else if (bp is BlueprintItemEnchantment bpEnch)
+                        {
+                            ApplyEnchantmentsafely(project.Item, bpEnch);
+                            Main.ModEntry.Logger.Log($"[ATELIER] Application réussie de {bpEnch.name} sur {project.Item?.Name ?? "???"}");
+                        }
+                        
                         completedProjects.Add(project);
-                        // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Application réussie sur {itemName}");
                     }
                 } 
                 catch (Exception e) 

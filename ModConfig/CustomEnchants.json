@@ -29,6 +29,16 @@
     "Comp_ArmorEnhancement": {
       "$type": "Kingmaker.Designers.Mechanics.ArmorEnchants.ArmorEnhancementBonus, Assembly-CSharp",
       "EnhancementBonus": 0
+    },
+    "Comp_AutoMetamagic": {
+      "$type": "Kingmaker.Designers.Mechanics.Facts.AutoMetamagic, Assembly-CSharp",
+      "Metamagic": "Maximize",
+      "MaxSpellLevel": 0
+    },
+    "Comp_MetamagicRod": {
+      "$type": "Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics, Assembly-CSharp",
+      "m_RodAbility": "!bp_c2af1030100000000000000000000000",
+      "m_AbilitiesWhiteList": []
     }
   },
   "Models": [
@@ -269,7 +279,10 @@
           "ComponentIndex": -1,
           "FieldName": "Value"
         }
-      ]
+      ],
+      "EpicThresholds": {
+        "Value": 6
+      }
     },
     {
       "EnchantId": "004",
@@ -500,6 +513,169 @@
           "Max": 20,
           "ComponentIndex": -1,
           "FieldName": "Value"
+        }
+      ]
+    },
+    {
+      "EnchantId": "102",
+      "BaseName": "Model_Metamagic_Feature",
+      "Type": "Feature",
+      "Components": [
+        "Comp_AutoMetamagic"
+      ],
+      "PointCostFormula": "0",
+      "DynamicParams": [
+        {
+          "Name": "Metamagic",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": 0,
+          "FieldName": "Metamagic"
+        },
+        {
+          "Name": "Grade",
+          "Type": "Slider",
+          "Min": 0,
+          "Max": 2,
+          "ComponentIndex": -1,
+          "FieldName": "Grade"
+        },
+        {
+          "Name": "MaxSpellLevel",
+          "Type": "Slider",
+          "Min": 0,
+          "Max": 9,
+          "ComponentIndex": 0,
+          "FieldName": "MaxSpellLevel"
+        }
+      ],
+      "PointCostFormula": "Grade * 3 + 3"
+    },
+    {
+      "EnchantId": "005",
+      "BaseName": {
+        "enGB": "Permanent Metamagic",
+        "frFR": "Métamagie permanente"
+      },
+      "NameCompleted": {
+        "enGB": "Permanent {Metamagic}",
+        "frFR": "{Metamagic} permanente"
+      },
+      "Type": "WeaponEnchantment",
+      "Slots": [
+        "Weapon",
+        "Armor",
+        "Shield"
+      ],
+      "FeatureModelId": "102",
+      "Components": [
+        "Comp_EquipmentFeature"
+      ],
+      "DynamicParams": [
+        {
+          "Name": "Metamagic",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": -1,
+          "FieldName": "Metamagic"
+        }
+      ]
+    },
+    {
+      "EnchantId": "103",
+      "BaseName": "Model_Metamagic_Ability",
+      "Type": "ActivatableAbility",
+      "Components": [],
+      "DynamicParams": []
+    },
+    {
+      "EnchantId": "104",
+      "BaseName": "Model_Metamagic_Buff",
+      "Type": "Buff",
+      "Components": [
+        "Comp_MetamagicRod"
+      ],
+      "DynamicParams": [
+        {
+          "Name": "Metamagic",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": 0,
+          "FieldName": "Metamagic"
+        }
+      ]
+    },
+    {
+      "EnchantId": "007",
+      "BaseName": {
+        "enGB": "Metamagic Rod (Charges)",
+        "frFR": "Sceptre métamagique (Charges)"
+      },
+      "NameCompleted": {
+        "enGB": "{Grade} {Metamagic} Rod",
+        "frFR": "Sceptre métamagique de {Metamagic} ({Grade})"
+      },
+      "Type": "UsableItem",
+      "Slots": [],
+      "GoldOverrideFormula": "PriceTable.Rod",
+      "Components": [],
+      "PriceTables": {
+        "Rod": {
+          "Lesser_1": 3000,
+          "Normal_1": 11000,
+          "Greater_1": 24500,
+          "Lesser_2": 9000,
+          "Normal_2": 32500,
+          "Greater_2": 73000,
+          "Lesser_3": 14000,
+          "Normal_3": 54000,
+          "Greater_3": 121500,
+          "Lesser_4": 35000,
+          "Normal_4": 75500,
+          "Greater_4": 170000
+        }
+      },
+      "DynamicParams": [
+        {
+          "Name": "Metamagic",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": -1,
+          "FieldName": "Metamagic"
+        },
+        {
+          "Name": "Grade",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UI.Common.ItemsItemType, Assembly-CSharp",
+          "EnumOnly": [
+            "Other",
+            "Shield",
+            "Armor"
+          ],
+          "EnumOverrides": {
+            "Other": {
+              "frFR": "Mineur",
+              "Value": 0
+            },
+            "Shield": {
+              "frFR": "Normal",
+              "Value": 1
+            },
+            "Armor": {
+              "frFR": "Supérieur",
+              "Value": 2
+            }
+          },
+          "ComponentIndex": -1,
+          "FieldName": "Grade"
+        },
+        {
+          "Name": "Level",
+          "Type": "Slider",
+          "Min": 1,
+          "Max": 4,
+          "ComponentIndex": -1,
+          "FieldName": "Level"
         }
       ]
     }

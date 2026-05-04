@@ -1863,247 +1863,200 @@ namespace CraftingSystem
                                 dynamicParamValues[p.Name] = defVal;
                             }
                         }
-                        GUILayout.EndHorizontal();
-                    }
+                GUILayout.Label(string.Format(Helpers.GetString("ui_configuring_model", "Configuring: <b>{0}</b>"), Helpers.GetLocalizedString(selectedModel.BaseName ?? selectedModel.NameCompleted)), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
+                GUILayout.Space(15);
 
-                    GUILayout.Space(10);
-                    GUILayout.BeginHorizontal(GUI.skin.box);
-                    GUILayout.Label("<i>" + Helpers.GetString("ui_custom_todo_more", "TODO: there are more custom enchants to come in next releases") + "</i>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_SMALL * scale), alignment = TextAnchor.MiddleCenter }, GUILayout.ExpandWidth(true));
-                    GUILayout.EndHorizontal();
-                }
-            }
-            else
-            {
-                // --- MODE CONFIGURATION ---
-                GUILayout.BeginVertical(GUI.skin.box);
-                if (CButton("<< " + Helpers.GetString("ui_btn_back_to_list", "Back to list"), GUILayout.Width(150 * scale)))
+                GUIStyle paramLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) };
+                foreach (var p in selectedModel.DynamicParams)
                 {
-                    selectedModel = null;
-                }
-                else
-                {
-                    GUILayout.Space(10);
-                    GUILayout.Label(string.Format(Helpers.GetString("ui_configuring_model", "Configuring: <b>{0}</b>"), Helpers.GetLocalizedString(selectedModel.BaseName ?? selectedModel.NameCompleted)), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
-                    GUILayout.Space(15);
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label(Helpers.GetString("ui_param_" + p.Name.ToLower().Replace(" ", "_"), p.Name) + ": ", paramLabelStyle, GUILayout.Width(150 * scale));
 
-                    GUIStyle paramLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) };
-                    foreach (var p in selectedModel.DynamicParams)
+                    if (p.Type == "Slider")
                     {
-                        GUILayout.BeginHorizontal();
-                        GUILayout.Label(Helpers.GetString("ui_param_" + p.Name.ToLower().Replace(" ", "_"), p.Name) + ": ", paramLabelStyle, GUILayout.Width(150 * scale));
+                        int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
+                        GUILayout.Label(val.ToString(), paramLabelStyle, GUILayout.Width(50 * scale));
+                        int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max);
 
-                        if (p.Type == "Slider")
+                        // Snap to Step
+                        if (p.Step > 1) newVal = (newVal / p.Step) * p.Step;
+                        dynamicParamValues[p.Name] = newVal;
+                    }
+                    else if (p.Type == "Enum")
+                    {
+                        var enumType = Type.GetType(p.EnumTypeName);
+                        if (enumType != null)
                         {
-                            int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
-                            GUILayout.Label(val.ToString(), paramLabelStyle, GUILayout.Width(50 * scale));
-                            int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max);
+                            var allNames = Enum.GetNames(enumType);
+                            var allValues = Enum.GetValues(enumType);
 
-                            // Snap to Step
-                            if (p.Step > 1) newVal = (newVal / p.Step) * p.Step;
-                            dynamicParamValues[p.Name] = newVal;
-                        }
-                        else if (p.Type == "Enum")
-                        {
-                            var enumType = Type.GetType(p.EnumTypeName);
-                            if (enumType != null)
+                            var filteredNames = new List<string>();
+                            var filteredValues = new List<int>();
+
+                            // 1. On récupère les valeurs de l'Enum réel
+                            for (int i = 0; i < allNames.Length; i++)
                             {
-                                var allNames = Enum.GetNames(enumType);
-                                var allValues = Enum.GetValues(enumType);
+                                string name = allNames[i];
+                                if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(name, StringComparison.OrdinalIgnoreCase))) continue;
+                                if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Any(ee => ee.Equals(name, StringComparison.OrdinalIgnoreCase))) continue;
 
-                                var filteredNames = new List<string>();
-                                var filteredValues = new List<int>();
+                                filteredNames.Add(name);
+                                filteredValues.Add((int)allValues.GetValue(i));
+                            }
 
-                                 // 1. On récupère les valeurs de l'Enum réel
-                                 for (int i = 0; i < allNames.Length; i++)
-                                 {
-                                     string name = allNames[i];
-                                     if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(name, StringComparison.OrdinalIgnoreCase))) continue;
-                                     if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Any(ee => ee.Equals(name, StringComparison.OrdinalIgnoreCase))) continue;
-
-                                     filteredNames.Add(name);
-                                     filteredValues.Add((int)allValues.GetValue(i));
-                                 }
-
-                                 // 2. On ajoute les entrées virtuelles de EnumOverrides (ex: SaveAll)
-                                 if (p.EnumOverrides != null)
-                                 {
-                                     foreach (var kvp in p.EnumOverrides)
-                                     {
-                                         if (!filteredNames.Contains(kvp.Key))
-                                         {
-                                             // Si on a un filtre EnumOnly, l'entrée virtuelle doit y être listée
-                                             if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(kvp.Key, StringComparison.OrdinalIgnoreCase))) continue;
-
-                                             // On cherche la valeur numérique dans le JObject de l'override
-                                             if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null)
-                                             {
-                                                 filteredNames.Add(kvp.Key);
-                                                 filteredValues.Add((int)jo["Value"]);
-                                             }
-                                         }
-                                     }
-                                 }
-
-                                var names = filteredNames.ToArray();
-                                var values = filteredValues.ToArray();
-
-                                // Si un seul choix possible, on l'affiche simplement et on le sélectionne d'office
-                                if (names.Length == 1)
+                            // 2. On ajoute les entrées virtuelles de EnumOverrides (ex: SaveAll)
+                            if (p.EnumOverrides != null)
+                            {
+                                foreach (var kvp in p.EnumOverrides)
                                 {
-                                    string displayName = names[0];
-                                    // Application de la surcharge de nom pour le label aussi
-                                    if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[0], out object ovrObj))
+                                    if (!filteredNames.Contains(kvp.Key))
                                     {
-                                        displayName = Helpers.GetLocalizedString(ovrObj);
-                                    }
-                                    else
-                                    {
-                                        if (p.EnumTypeName.Contains("DamageEnergyType"))
-                                            displayName = Helpers.GetString("energy_" + names[0], names[0]);
-                                        else
-                                            displayName = Helpers.GetString("ui_enum_" + names[0], names[0]);
-                                    }
-
-                                    GUILayout.Label(displayName, paramLabelStyle);
-                                    dynamicParamValues[p.Name] = values[0];
-                                }
-                                else
-                                {
-                                    int currentVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
-                                    string currentName = Enum.GetName(enumType, currentVal);
-                                    
-                                    // Support des noms virtuels (SaveAll...)
-                                    if (string.IsNullOrEmpty(currentName) && p.EnumOverrides != null)
-                                    {
-                                        foreach (var kvp in p.EnumOverrides)
+                                        if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(kvp.Key, StringComparison.OrdinalIgnoreCase))) continue;
+                                        if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null)
                                         {
-                                            if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == currentVal)
-                                            {
-                                                currentName = kvp.Key;
-                                                break;
-                                            }
+                                            filteredNames.Add(kvp.Key);
+                                            filteredValues.Add((int)jo["Value"]);
                                         }
-                                    }
-
-                                    string displayName = currentName ?? "";
-                                    if (p.EnumTypeName.Contains("DamageEnergyType"))
-                                        displayName = Helpers.GetString("energy_" + displayName, displayName);
-                                    else
-                                        displayName = Helpers.GetString("ui_enum_" + displayName, displayName);
- 
-                                    if (p.EnumOverrides != null && !string.IsNullOrEmpty(currentName) && p.EnumOverrides.TryGetValue(currentName, out object overrideObj))
-                                        displayName = Helpers.GetLocalizedString(overrideObj);
-
-                                    if (CButton(displayName, GUILayout.Width(200 * scale)))
-                                    {
-                                        openDropdownParam = (openDropdownParam == p.Name) ? null : p.Name;
-                                    }
-
-                                    if (openDropdownParam == p.Name)
-                                    {
-                                        // Afficher les options (on ferme le horizontal pour la liste)
-                                        GUILayout.EndHorizontal();
-                                        GUILayout.BeginVertical(GUI.skin.box);
-                                        for (int i = 0; i < names.Length; i++)
-                                        {
-                                            string optName = names[i];
-                                            if (p.EnumTypeName.Contains("DamageEnergyType"))
-                                                optName = Helpers.GetString("energy_" + optName, optName);
-                                            else
-                                                optName = Helpers.GetString("ui_enum_" + optName, optName);
-
-                                            // Application de la surcharge de nom (EnumOverrides)
-                                            if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[i], out object optOverrideObj))
-                                            {
-                                                optName = Helpers.GetLocalizedString(optOverrideObj);
-                                            }
-
-                                            if (CButton(optName))
-                                            {
-                                                dynamicParamValues[p.Name] = (int)values[i];
-                                                openDropdownParam = null;
-                                            }
-                                        }
-                                        GUILayout.EndVertical();
-                                        GUILayout.BeginHorizontal(); // On réouvre pour la suite
                                     }
                                 }
                             }
-                        }
-                        GUILayout.EndHorizontal();
-                        GUILayout.Space(5);
-                    }
 
-                    GUILayout.Space(20);
+                            var names = filteredNames.ToArray();
+                            var values = filteredValues.ToArray();
 
-                    // On extrait les valeurs dans l'ordre EXACT des paramètres du modèle
-                    int[] orderedValues = selectedModel.DynamicParams
-                        .Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0)
-                        .ToArray();
+                            if (names.Length == 1)
+                            {
+                                string displayName = names[0];
+                                if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[0], out object ovrObj)) displayName = Helpers.GetLocalizedString(ovrObj);
+                                else displayName = Helpers.GetString("ui_enum_" + names[0], names[0]);
 
-                    // --- CALCUL DU MASQUE BINAIRE DYNAMIQUE ---
-                    int mask = 0;
-                    bool hasMaskControl = false;
-                    foreach (var p in selectedModel.DynamicParams)
-                    {
-                        if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName) && p.EnumOverrides != null)
-                        {
-                            int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
-                            try {
-                                var enumType = Type.GetType(p.EnumTypeName);
-                                if (enumType != null) {
-                                    string enumName = Enum.GetName(enumType, val);
-                                    if (!string.IsNullOrEmpty(enumName) && p.EnumOverrides.TryGetValue(enumName, out object ovr)) {
-                                        if (ovr is Newtonsoft.Json.Linq.JObject jo && jo["MaskValue"] != null) {
-                                            mask |= (int)jo["MaskValue"];
-                                            hasMaskControl = true;
+                                GUILayout.Label(displayName, paramLabelStyle);
+                                dynamicParamValues[p.Name] = values[0];
+                            }
+                            else
+                            {
+                                int currentVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
+                                string currentName = Enum.GetName(enumType, currentVal);
+                                
+                                if (string.IsNullOrEmpty(currentName) && p.EnumOverrides != null)
+                                {
+                                    foreach (var kvp in p.EnumOverrides)
+                                    {
+                                        if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == currentVal)
+                                        {
+                                            currentName = kvp.Key;
+                                            break;
                                         }
                                     }
                                 }
-                            } catch {}
+
+                                string displayName = currentName ?? "";
+                                if (p.EnumOverrides != null && !string.IsNullOrEmpty(currentName) && p.EnumOverrides.TryGetValue(currentName, out object overrideObj))
+                                    displayName = Helpers.GetLocalizedString(overrideObj);
+                                else
+                                    displayName = Helpers.GetString("ui_enum_" + displayName, displayName);
+
+                                if (CButton(displayName, GUILayout.Width(200 * scale)))
+                                {
+                                    openDropdownParam = (openDropdownParam == p.Name) ? null : p.Name;
+                                }
+
+                                if (openDropdownParam == p.Name)
+                                {
+                                    GUILayout.EndHorizontal();
+                                    GUILayout.BeginVertical(GUI.skin.box);
+                                    for (int i = 0; i < names.Length; i++)
+                                    {
+                                        string optName = names[i];
+                                        if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[i], out object optOverrideObj)) optName = Helpers.GetLocalizedString(optOverrideObj);
+                                        else optName = Helpers.GetString("ui_enum_" + optName, optName);
+
+                                        if (CButton(optName)) { dynamicParamValues[p.Name] = (int)values[i]; openDropdownParam = null; }
+                                    }
+                                    GUILayout.EndVertical();
+                                    GUILayout.BeginHorizontal();
+                                }
+                            }
                         }
                     }
-                    if (!hasMaskControl) mask = 0xFFF; // Compatibilité : tout actif si pas de masque défini
+                    GUILayout.EndHorizontal();
+                    GUILayout.Space(5);
+                }
 
-                    var tempGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues, selectedModel.Type == "Feature", mask);
-                    var tempEnch = EnchantmentScanner.GetByGuid(tempGuid.ToString());
+                GUILayout.Space(20);
 
-                    long totalCost = 0;
-                    int totalPoints = 0;
-                    if (tempEnch != null)
+                int[] orderedValues = selectedModel.DynamicParams.Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0).ToArray();
+                int mask = 0;
+                bool hasMaskControl = false;
+                foreach (var p in selectedModel.DynamicParams)
+                {
+                    if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName) && p.EnumOverrides != null)
                     {
-                        totalCost = CraftingCalculator.GetEnchantmentCost(selectedItem, tempEnch, CraftingSettings.CostMultiplier);
-                        totalPoints = tempEnch.PointCost;
+                        int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
+                        try {
+                            var enumType = Type.GetType(p.EnumTypeName);
+                            if (enumType != null) {
+                                string enumName = Enum.GetName(enumType, val);
+                                string keyToUse = enumName;
+                                if (string.IsNullOrEmpty(keyToUse))
+                                {
+                                    foreach (var kvp in p.EnumOverrides)
+                                    {
+                                        if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == val) { keyToUse = kvp.Key; break; }
+                                    }
+                                }
+                                if (!string.IsNullOrEmpty(keyToUse) && p.EnumOverrides.TryGetValue(keyToUse, out object ovr)) {
+                                    if (ovr is Newtonsoft.Json.Linq.JObject jo && jo["MaskValue"] != null) { mask |= (int)jo["MaskValue"]; hasMaskControl = true; }
+                                }
+                            }
+                        } catch {}
                     }
-                    int totalDays = CraftingCalculator.GetCraftingDays(totalCost, CraftingSettings.InstantCrafting);
+                }
+                if (!hasMaskControl) mask = 0xFFF;
 
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label(string.Format(Helpers.GetString("ui_selection_total_custom", "Selection Custom: +{0} \u2014 Total: {1} gp / ~{2} d"), totalPoints, totalCost, totalDays), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
-                    GUILayout.FlexibleSpace();
+                var tempGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues, selectedModel.Type == "Feature", mask);
+                var tempEnch = EnchantmentScanner.GetByGuid(tempGuid.ToString());
 
-                    if (CButton(Helpers.GetString("ui_btn_add_to_selection", "Add to selection"), GUILayout.Width(250 * scale), GUILayout.Height(40 * scale)))
+                long totalCost = 0;
+                int totalPoints = 0;
+                if (tempEnch != null)
+                {
+                    totalCost = CraftingCalculator.GetEnchantmentCost(selectedItem, tempEnch, CraftingSettings.CostMultiplier);
+                    totalPoints = tempEnch.PointCost;
+                }
+                int totalDays = CraftingCalculator.GetCraftingDays(totalCost, CraftingSettings.InstantCrafting);
+
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(string.Format(Helpers.GetString("ui_selection_total_custom", "Selection: +{0} \u2014 Total: {1} gp / ~{2} d"), totalPoints, totalCost, totalDays), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
+                GUILayout.FlexibleSpace();
+
+                string btnLabel = selectedModel.Type == "UsableItem" ? Helpers.GetString("ui_btn_create_item", "Craft this Item") : Helpers.GetString("ui_btn_add_to_selection", "Add to selection");
+                if (CButton(btnLabel, GUILayout.Width(250 * scale), GUILayout.Height(40 * scale)))
+                {
+                    try
                     {
-                        try
+                        var finalGuidStr = tempGuid.ToString();
+                        if (selectedModel.Type == "UsableItem")
                         {
-                            var finalGuid = DynamicGuidHelper.GenerateGuid(selectedModel.EnchantId, orderedValues, selectedModel.Type == "Feature", mask).ToString();
-                            if (!queuedEnchantGuids.Contains(finalGuid))
+                            CraftingActions.StartCraftingProject(null, tempEnch, (int)totalCost, totalDays);
+                            selectedModel = null;
+                        }
+                        else
+                        {
+                            if (!queuedEnchantGuids.Contains(finalGuidStr))
                             {
-                                queuedEnchantGuids.Add(finalGuid);
-                                // On s'assure que le blueprint est généré pour l'affichage
-                                CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(finalGuid);
+                                queuedEnchantGuids.Add(finalGuidStr);
+                                CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(finalGuidStr);
                             }
                             selectedModel = null;
                             filtersDirty = true;
                         }
-                        catch (Exception ex)
-                        {
-                            Main.ModEntry.Logger.Error($"Error adding custom enchantment: {ex}");
-                        }
                     }
-                    GUILayout.EndHorizontal();
+                    catch (Exception ex) { Main.ModEntry.Logger.Error($"Error finalizing custom: {ex}"); }
                 }
-                GUILayout.EndVertical();
+                GUILayout.EndHorizontal();
             }
+            GUILayout.EndVertical();
         }
 
         void DrawEnchantmentRow(EnchantmentData data, float scale, int relativeIndex)

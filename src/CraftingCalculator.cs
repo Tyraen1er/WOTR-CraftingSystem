@@ -242,29 +242,31 @@ namespace CraftingSystem
             int basketBonus = queuedEnchants != null ? queuedEnchants.Sum(e => e.PointCost) : 0;
             int totalBefore = initialBonus + basketBonus;
 
-            // 5. Calcul marginal (Nouveau Prix - Prix Panier) avec déduction
-            int pointsToAdd = nextEnchant.PointCost;
-            if (existingPointCost > 0)
+            // 5. Détermination de l'état Épique
+            bool isEpicBefore = (totalBefore > 10);
+            if (!isEpicBefore)
             {
-                pointsToAdd = Math.Max(0, pointsToAdd - existingPointCost);
+                if (item.Enchantments.Any(e => !e.IsTemporary && EnchantmentScanner.GetByGuid(e.Blueprint.AssetGuid.ToString())?.IsEpic == true)) isEpicBefore = true;
+                else if (queuedEnchants != null && queuedEnchants.Any(e => e.IsEpic)) isEpicBefore = true;
             }
+
+            int pointsToAdd = nextEnchant.PointCost;
+            if (existingPointCost > 0) pointsToAdd = Math.Max(0, pointsToAdd - existingPointCost);
 
             int totalAfter = totalBefore + pointsToAdd;
-            long priceWithBasket = (long)totalBefore * totalBefore * factor;
-            long priceWithNext = (long)totalAfter * totalAfter * factor;
+            bool isEpicAfter = isEpicBefore || (totalAfter > 10) || nextEnchant.IsEpic;
+
+            // 6. Calcul des prix
+            double mB = (CraftingSettings.EnableEpicCosts && isEpicBefore) ? CraftingSettings.EpicCostMultiplier : 1.0;
+            double mA = (CraftingSettings.EnableEpicCosts && isEpicAfter) ? CraftingSettings.EpicCostMultiplier : 1.0;
+
+            long priceWithBasket = (long)(totalBefore * totalBefore * factor * mB);
+            long priceWithNext = (long)(totalAfter * totalAfter * factor * mA);
 
             long marginalCost = (long)((priceWithNext - priceWithBasket) * costMultiplier);
-
-            // Application des pénalités sur le coût marginal
             marginalCost = (long)(marginalCost * totalPenaltyMultiplier);
 
-            // 6. Multiplicateur Épique
-            if (CraftingSettings.EnableEpicCosts && nextEnchant.IsEpic)
-            {
-                marginalCost = (long)(marginalCost * CraftingSettings.EpicCostMultiplier);
-            }
-
-            return marginalCost;
+            return Math.Max(0, marginalCost);
         }
 
         /// <summary>

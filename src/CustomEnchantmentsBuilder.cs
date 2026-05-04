@@ -169,10 +169,12 @@ namespace CraftingSystem
         public string GoldOverrideFormula;
         public string FeatureModelId; // Optionnel : ID du modèle de feature à utiliser (si différent de EnchantId)
         public int MaxNotEpic; // Seuil au-delà duquel l'enchantement devient épique
+        public Dictionary<string, int> EpicThresholds; // Seuils spécifiques par paramètre
         public int PriceFactor = 2000; // Multiplicateur de prix (2000 par défaut pour les armes)
         public List<string> Slots = new List<string>(); // Liste des types d'items autorisés (Armor, Weapon, Shield...)
         public List<object> Components = new List<object>();
         public List<DynamicParam> DynamicParams = new List<DynamicParam>();
+        public Dictionary<string, int> EpicParams; // Paramètres à vérifier pour le seuil épique
         public Dictionary<string, Dictionary<string, double>> PriceTables = new Dictionary<string, Dictionary<string, double>>();
     }
 
@@ -406,19 +408,21 @@ namespace CraftingSystem
             Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Starting creation of {Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted)} for GUID {guid} (Mask: 0x{mask:X3})");
             BlueprintScriptableObject bp = null;
             try {
-                if (model.Type == "WeaponEnchantment" || model.Type == "Weapon") bp = new BlueprintWeaponEnchantment();
-                else if (model.Type == "ArmorEnchantment" || model.Type == "Armor") bp = new BlueprintArmorEnchantment();
-                else if (model.Type == "Other" || model.Type == "Equipment") bp = new BlueprintEquipmentEnchantment();
-                else if (model.Type == "Feature") bp = new BlueprintFeature();
+                if (model.Type == "WeaponEnchantment" || model.Type == "Weapon") bp = ScriptableObject.CreateInstance<BlueprintWeaponEnchantment>();
+                else if (model.Type == "ArmorEnchantment" || model.Type == "Armor") bp = ScriptableObject.CreateInstance<BlueprintArmorEnchantment>();
+                else if (model.Type == "Other" || model.Type == "Equipment") bp = ScriptableObject.CreateInstance<BlueprintEquipmentEnchantment>();
+                else if (model.Type == "Feature") bp = ScriptableObject.CreateInstance<BlueprintFeature>();
+                else if (model.Type == "UsableItem") bp = ScriptableObject.CreateInstance<BlueprintItemEquipmentUsable>();
+                else if (model.Type == "ActivatableAbility") bp = ScriptableObject.CreateInstance<BlueprintActivatableAbility>();
+                else if (model.Type == "Buff") bp = ScriptableObject.CreateInstance<BlueprintBuff>();
                 
-                if (bp != null) {
-                    try { bp.OnEnable(); } catch {}
-                } else {
+                if (bp == null) {
                     Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] FATAL: Could not create instance for type {model.Type}");
                     return null;
                 }
-                
             } catch (Exception ex) {
+                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Blueprint instantiation failed: {ex}");
+            }
                 Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Blueprint instantiation failed: {ex}");
             }
 
@@ -536,13 +540,13 @@ namespace CraftingSystem
                 }
                 
                 Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Resolved parameter '{p.Name}': {val} -> '{resolvedVal}'");
-                replacements[p.Name] = resolvedVal;
+                replacements[model.DynamicParams[i].Name] = paramValues[i].ToString();
+                // TODO: Améliorer avec les noms d'enums
             }
 
-            // Application des noms, préfixes et suffixes avec remplacements
+            string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
             string prefix = model.Prefix != null ? Helpers.GetLocalizedString(model.Prefix, replacements) : "";
             string suffix = model.Suffix != null ? Helpers.GetLocalizedString(model.Suffix, replacements) : "";
-            string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
 
             if (!string.IsNullOrEmpty(prefix) && !finalName.StartsWith(prefix)) 
                 finalName = prefix + " " + finalName;
@@ -567,6 +571,67 @@ namespace CraftingSystem
                 var t = typeof(BlueprintUnitFact);
                 t.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(feature, Helpers.CreateString($"{bp.name}.Name", finalName));
                 t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(feature, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
+            }
+            else if (bp is BlueprintItem item)
+            {
+                var t = typeof(BlueprintItem);
+                t.GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, Helpers.CreateString($"{bp.name}.Name", finalName));
+                t.GetField("m_DescriptionText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
+                
+                if (item is BlueprintItemEquipmentUsable usable && model.EnchantId == "005")
+                {
+                    // Triade Rod: Création et lien de l'ActivatableAbility
+                    var abilityGuid = DynamicGuidHelper.GenerateGuid("103", paramValues.ToArray(), false, mask);
+                    var abilityBp = GetOrBuildDynamicBlueprint(abilityGuid) as BlueprintActivatableAbility;
+                    if (abilityBp != null)
+                    {
+                        usable.m_ActivatableAbility = abilityBp.ToReference<BlueprintActivatableAbilityReference>();
+                        usable.Charges = 3;
+                        usable.SpendCharges = true;
+                        usable.RestoreChargesOnRest = true;
+                        
+                        // Paramètres optionnels via paramValues (si on veut varier les charges un jour)
+                        // ex: if (model.EnchantId == "RodMasterpiece") usable.Charges = 6;
+                    }
+                }
+            }
+            else if (bp is BlueprintActivatableAbility ability)
+            {
+                var t = typeof(BlueprintUnitFact);
+                t.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ability, Helpers.CreateString($"{bp.name}.Name", finalName));
+                t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ability, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
+
+                if (model.EnchantId == "103")
+                {
+                    // Triade Rod: Création et lien du Buff
+                    var buffGuid = DynamicGuidHelper.GenerateGuid("104", paramValues.ToArray(), false, mask);
+                    var buffBp = GetOrBuildDynamicBlueprint(buffGuid) as BlueprintBuff;
+                    if (buffBp != null)
+                    {
+                        ability.m_Buff = buffBp.ToReference<BlueprintBuffReference>();
+                        ability.ActivationType = AbilityActivateOnType.Immediately;
+                        ability.DeactivateImmediately = true;
+                    }
+                }
+            }
+            else if (bp is BlueprintBuff buff)
+            {
+                var t = typeof(BlueprintUnitFact);
+                t.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(buff, Helpers.CreateString($"{bp.name}.Name", finalName));
+                t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(buff, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
+
+                if (model.EnchantId == "104")
+                {
+                    // Triade Rod: Lien retour vers l'Ability pour MetamagicRodMechanics
+                    var rodComp = buff.ComponentsArray.OfType<MetamagicRodMechanics>().FirstOrDefault();
+                    if (rodComp != null)
+                    {
+                        var abilityGuid = DynamicGuidHelper.GenerateGuid("103", paramValues.ToArray(), false, mask);
+                        var abilityRef = new BlueprintActivatableAbilityReference();
+                        abilityRef.ReadGuidFromGuid(abilityGuid);
+                        rodComp.m_RodAbility = abilityRef;
+                    }
+                }
             }
 
             // Application des paramètres dynamiques aux composants via indexMap

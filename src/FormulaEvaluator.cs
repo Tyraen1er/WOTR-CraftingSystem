@@ -16,41 +16,75 @@ namespace CraftingSystem
             if (string.IsNullOrEmpty(formula)) return 0;
 
             string expression = formula;
+            var missingVars = new List<string>();
 
             // 1. Remplacement des variables
-            // On trie les variables par longueur décroissante pour éviter que "Val" ne remplace le début de "Value"
-            var sortedVars = variables.Keys.OrderByDescending(k => k.Length);
+            var sortedVars = variables.Keys.OrderByDescending(k => k.Length).ToList();
+            
+            // On vérifie d'abord si toutes les variables potentielles de la formule sont présentes
+            // Pour être simple, on check juste le texte de la formule
+            // Mais le remplacement par Regex \b est déjà une bonne sécurité.
+
             foreach (var varName in sortedVars)
             {
-                // On utilise Regex pour s'assurer qu'on remplace le mot entier (\b)
-                // On échappe le nom de la variable car il peut contenir des points (ex: PriceTable.Stat)
                 string escapedVarName = Regex.Escape(varName);
-                expression = Regex.Replace(expression, @"\b" + escapedVarName + @"\b", variables[varName].ToString(System.Globalization.CultureInfo.InvariantCulture));
+                string pattern = @"\b" + escapedVarName + @"\b";
+                if (Regex.IsMatch(expression, pattern))
+                {
+                    expression = Regex.Replace(expression, pattern, variables[varName].ToString(System.Globalization.CultureInfo.InvariantCulture));
+                }
+            }
+
+            // Vérification après remplacement : reste-t-il des patterns alphabétiques non résolus ?
+            // On exclut les fonctions mathématiques si on en ajoute plus tard (ici aucune)
+            var matches = Regex.Matches(expression, @"[a-zA-Z_][a-zA-Z0-9_\.]*");
+            foreach (Match m in matches)
+            {
+                if (!double.TryParse(m.Value, out _)) missingVars.Add(m.Value);
+            }
+
+            if (missingVars.Count > 0)
+            {
+                Main.ModEntry.Logger.Error($"[FORMULA] Missing variables in formula '{formula}': {string.Join(", ", missingVars)}");
+                return double.NaN;
             }
 
             try
             {
-                // Nettoyage pour le parser simple
                 expression = expression.Replace(" ", "");
                 double result = ParseExpression(expression);
-                Main.ModEntry.Logger.Log($"[FORMULA] Evaluated '{formula}' -> '{expression}' = {result}");
+                
+                if (double.IsInfinity(result) || double.IsNaN(result))
+                {
+                    Main.ModEntry.Logger.Error($"[FORMULA] Calculation resulted in non-finite value: '{expression}' = {result}");
+                    return double.NaN;
+                }
+
                 return result;
             }
             catch (Exception ex)
             {
                 Main.ModEntry.Logger.Error($"[FORMULA] Error evaluating formula '{formula}' (processed as '{expression}'): {ex.Message}");
-                return 0;
+                return double.NaN;
             }
         }
 
         public static int EvaluateInt(string formula, Dictionary<string, double> variables)
         {
-            return (int)Math.Round(Evaluate(formula, variables));
+            double res = Evaluate(formula, variables);
+            if (double.IsNaN(res) || double.IsInfinity(res)) return 0;
+            if (res > int.MaxValue) return int.MaxValue;
+            if (res < int.MinValue) return int.MinValue;
+            return (int)Math.Round(res);
         }
 
         public static long EvaluateLong(string formula, Dictionary<string, double> variables)
         {
-            return (long)Math.Round(Evaluate(formula, variables));
+            double res = Evaluate(formula, variables);
+            if (double.IsNaN(res) || double.IsInfinity(res)) return 0;
+            if (res > long.MaxValue) return long.MaxValue;
+            if (res < long.MinValue) return long.MinValue;
+            return (long)Math.Round(res);
         }
 
         // --- PARSER MANUEL SIMPLE (Recursive Descent) ---

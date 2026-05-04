@@ -460,7 +460,7 @@ namespace CraftingSystem
                             {
                                 Guid = guid,
                                 Name = fullDisplayName.Replace("  ", " ").Trim(),
-                                Type = model.Type,
+                                Type = model.Type.Replace("Enchantment", ""), // Standardisation: WeaponEnchantment -> Weapon
                                 Source = "Custom",
                                 PointString = model.EnchantmentCost.ToString(),
                                 IsEnhancement = model.Components.Any(c => c.GetType().Name == "WeaponEnhancementBonus" || c.GetType().Name == "ArmorEnhancementBonus"),
@@ -468,80 +468,123 @@ namespace CraftingSystem
                                 Slots = new List<string>(model.Slots)
                             };
 
-                                // Évaluation des formules si présentes
-                                if (!string.IsNullOrEmpty(model.PointCostFormula))
+                            // --- GESTION DU SEUIL ÉPIQUE (Paramètres Joueurs uniquement) ---
+                            // On vérifie si un des paramètres (numériques) dépasse son seuil spécifique ou le seuil global
+                            bool isEpic = false;
+                            foreach (var pDef in model.DynamicParams)
+                            {
+                                if (formulaVars.TryGetValue(pDef.Name, out double pVal))
                                 {
-                                    dynamicData.PointString = FormulaEvaluator.EvaluateInt(model.PointCostFormula, formulaVars).ToString();
-                                }
-
-                                if (!string.IsNullOrEmpty(model.GoldOverrideFormula))
-                                {
-                                    // Injection des variables de PriceTables
-                                    if (model.PriceTables != null)
+                                    // 1. Seuil spécifique au paramètre
+                                    if (model.EpicThresholds != null && model.EpicThresholds.TryGetValue(pDef.Name, out int threshold))
                                     {
-                                        foreach (var table in model.PriceTables)
-                                        {
-                                            string paramName = table.Key;
-                                            if (formulaVars.TryGetValue(paramName, out double selectedValueDouble))
-                                            {
-                                                int selectedValue = (int)selectedValueDouble;
-                                                string key = selectedValue.ToString();
+                                        if (pVal > threshold) { isEpic = true; break; }
+                                    }
+                                    // 2. Seuil global hérité
+                                    else if (model.MaxNotEpic > 0 && pVal > model.MaxNotEpic)
+                                    {
+                                        isEpic = true; break;
+                                    }
+                                }
+                            }
+                            dynamicData.IsEpic = isEpic;
 
-                                                // Pour les Enums, on essaie de trouver le nom de l'entrée pour une table plus lisible
-                                                var paramDef = model.DynamicParams.FirstOrDefault(p => p.Name == paramName);
-                                                if (paramDef != null && paramDef.Type == "Enum")
+                            // Évaluation des formules si présentes
+                            if (!string.IsNullOrEmpty(model.PointCostFormula))
+                            {
+                                dynamicData.PointString = FormulaEvaluator.EvaluateInt(model.PointCostFormula, formulaVars).ToString();
+                            }
+
+                            // --- RÉSOLUTION DES TABLES DE PRIX ---
+                            if (model.PriceTables != null)
+                            {
+                                foreach (var table in model.PriceTables)
+                                {
+                                    string tableName = table.Key;
+                                    double resolvedPrice = 0;
+                                    bool found = false;
+
+                                    // 1. Recherche de clé composite (ex: Grade_Level)
+                                    if (table.Value.Keys.Any(k => k.Contains("_")))
+                                    {
+                                        // On tente de trouver deux paramètres pour former une clé composite
+                                        // On cherche Grade/Level d'abord (format Rod), puis on itère sur les params
+                                        var pNames = model.DynamicParams.Select(p => p.Name).ToList();
+                                        foreach (var p1 in pNames)
+                                        {
+                                            foreach (var p2 in pNames)
+                                            {
+                                                if (p1 == p2) continue;
+                                                if (formulaVars.TryGetValue(p1, out double v1) && formulaVars.TryGetValue(p2, out double v2))
                                                 {
-                                                    try
+                                                    // Mapping spécial pour Grade (format Rod)
+                                                    string k1 = v1.ToString();
+                                                    if (p1 == "Grade") {
+                                                        if (v1 == 0) k1 = "Lesser"; else if (v1 == 1) k1 = "Normal"; else if (v1 == 2) k1 = "Greater";
+                                                    }
+                                                    string k2 = v2.ToString();
+                                                    if (p2 == "Grade") {
+                                                        if (v2 == 0) k2 = "Lesser"; else if (v2 == 1) k2 = "Normal"; else if (v2 == 2) k2 = "Greater";
+                                                    }
+
+                                                    string compositeKey = $"{k1}_{k2}";
+                                                    if (table.Value.TryGetValue(compositeKey, out double cp)) { resolvedPrice = cp; found = true; break; }
+                                                    
+                                                    // On tente l'inverse
+                                                    compositeKey = $"{k2}_{k1}";
+                                                    if (table.Value.TryGetValue(compositeKey, out double cp2)) { resolvedPrice = cp2; found = true; break; }
+                                                }
+                                            }
+                                            if (found) break;
+                                        }
+                                    }
+
+                                    // 2. Recherche par paramètre simple (comportement standard)
+                                    if (!found && formulaVars.TryGetValue(tableName, out double selectedValueDouble))
+                                    {
+                                        int selectedValue = (int)selectedValueDouble;
+                                        string key = selectedValue.ToString();
+
+                                        var paramDef = model.DynamicParams.FirstOrDefault(p => p.Name == tableName);
+                                        if (paramDef != null && paramDef.Type == "Enum")
+                                        {
+                                            try {
+                                                var enumType = Type.GetType(paramDef.EnumTypeName);
+                                                if (enumType != null) key = Enum.GetName(enumType, selectedValue) ?? key;
+                                                
+                                                if (key == selectedValue.ToString() && paramDef.EnumOverrides != null)
+                                                {
+                                                    foreach (var ovr in paramDef.EnumOverrides)
                                                     {
-                                                        var enumType = Type.GetType(paramDef.EnumTypeName);
-                                                        if (enumType != null) key = Enum.GetName(enumType, selectedValue) ?? key;
-                                                        
-                                                        // Si on n'a pas trouvé le nom officiel (cas de SaveAll), on cherche dans les Overrides
-                                                        if (key == selectedValue.ToString() && paramDef.EnumOverrides != null)
+                                                        if (ovr.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == selectedValue)
                                                         {
-                                                            foreach (var ovr in paramDef.EnumOverrides)
-                                                            {
-                                                                if (ovr.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == selectedValue)
-                                                                {
-                                                                    key = ovr.Key;
-                                                                    break;
-                                                                }
-                                                            }
+                                                            key = ovr.Key;
+                                                            break;
                                                         }
                                                     }
-                                                    catch { }
                                                 }
-
-                                                double multiplier = 1.0;
-                                                if (table.Value.TryGetValue(key, out double m)) multiplier = m;
-                                                else if (table.Value.TryGetValue("DEFAULT", out double dm)) multiplier = dm;
-
-                                                formulaVars[paramName + "_Mult"] = multiplier; // Legacy support
-                                                formulaVars["PriceTable." + paramName] = multiplier; // New format (readable)
-                                            }
+                                            } catch { }
                                         }
-                                    }
 
-                                    dynamicData.GoldOverride = (int)FormulaEvaluator.EvaluateLong(model.GoldOverrideFormula, formulaVars);
-                                    Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Calculated Price: {dynamicData.GoldOverride} for {guid} (Variables: {string.Join(", ", formulaVars.Select(kvp => kvp.Key + "=" + kvp.Value))})");
-                                }
-
-                                // --- GESTION DU SEUIL ÉPIQUE ---
-                                if (model.MaxNotEpic > 0)
-                                {
-                                    // On vérifie si un des paramètres (numériques) dépasse le seuil
-                                    foreach (var val in formulaVars.Values)
-                                    {
-                                        if (val > model.MaxNotEpic)
+                                        if (table.Value.TryGetValue(key, out double m))
                                         {
-                                            dynamicData.IsEpic = true;
-                                            Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Epic threshold exceeded ({val} > {model.MaxNotEpic}). Setting IsEpic = true.");
-                                            break;
+                                            resolvedPrice = m;
+                                            found = true;
                                         }
                                     }
-                                }
 
-                                return dynamicData;
+                                    if (!found && table.Value.TryGetValue("DEFAULT", out double dm)) resolvedPrice = dm;
+                                    formulaVars["PriceTable." + tableName] = resolvedPrice;
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(model.GoldOverrideFormula))
+                            {
+                                dynamicData.GoldOverride = (int)FormulaEvaluator.EvaluateLong(model.GoldOverrideFormula, formulaVars);
+                                Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Calculated Price: {dynamicData.GoldOverride} for {guid} (Variables: {string.Join(", ", formulaVars.Select(kvp => kvp.Key + "=" + kvp.Value))})");
+                            }
+
+                            return dynamicData;
                         }
                         else
                         {
