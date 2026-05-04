@@ -103,7 +103,7 @@ namespace CraftingSystem
     public static class EnchantmentScanner
     {
         public static List<EnchantmentData> MasterList = new List<EnchantmentData>();
-        public static Dictionary<string, EnchantmentData> GuidMap = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
+        public static ConcurrentDictionary<string, EnchantmentData> GuidMap = new ConcurrentDictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
         private static bool _hasSyncedThisSession = false;
         public static bool IsSyncing = false;
         public static int ProcessedCount = 0;
@@ -131,12 +131,11 @@ namespace CraftingSystem
                     }
 
                     MasterList = list;
-                    GuidMap = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
+                    GuidMap = new ConcurrentDictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
                     foreach (var e in list)
                     {
                         if (string.IsNullOrEmpty(e.Guid)) continue;
-                        if (!GuidMap.ContainsKey(e.Guid)) GuidMap.Add(e.Guid, e);
-                        else Main.ModEntry.Logger.Warning($"[SYNC] Doublon de GUID détecté dans Enchantments.json : {e.Guid} ({e.Name})");
+                        if (!GuidMap.TryAdd(e.Guid, e)) Main.ModEntry.Logger.Warning($"[SYNC] Doublon de GUID détecté dans Enchantments.json : {e.Guid} ({e.Name})");
                     }
                     LastSyncMessage = $"JSON chargé ({MasterList.Count} entrées).";
                     // Main.ModEntry.Logger.Log($"[SYNC] JSON d'enchantements chargé : {MasterList.Count} entrées.");
@@ -242,10 +241,10 @@ namespace CraftingSystem
                 lock (MasterList)
                 {
                     MasterList = syncedList;
-                    GuidMap = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
+                    GuidMap = new ConcurrentDictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
                     foreach (var e in syncedList)
                     {
-                        if (!GuidMap.ContainsKey(e.Guid)) GuidMap.Add(e.Guid, e);
+                        GuidMap.TryAdd(e.Guid, e);
                     }
                 }
 
@@ -282,263 +281,221 @@ namespace CraftingSystem
         public static EnchantmentData GetByGuid(string guid)
         {
             if (string.IsNullOrEmpty(guid)) return null;
-            lock (MasterList)
+            if (GuidMap.TryGetValue(guid, out var result)) return result;
+
+            string cleanGuid = guid.Replace("-", "").ToLower();
+            if (cleanGuid.StartsWith(DynamicGuidHelper.Signature.ToLower()))
             {
-                if (GuidMap.TryGetValue(guid, out var result)) return result;
-
-                string cleanGuid = guid.Replace("-", "").ToLower();
-                Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] GetByGuid: {guid} (clean: {cleanGuid})");
-
-                // --- RÉSOLUTION DYNAMIQUE DES GUIDS C2AF ---
-                if (cleanGuid.StartsWith(DynamicGuidHelper.Signature.ToLower()))
+                var dynamicData = ResolveDynamicEnchantment(guid);
+                if (dynamicData != null)
                 {
-                    Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Dynamic Signature detected for {cleanGuid}");
-                    if (DynamicGuidHelper.TryDecodeGuid(BlueprintGuid.Parse(guid), out string modelId, out List<int> values))
+                    GuidMap.TryAdd(guid, dynamicData);
+                    return dynamicData;
+                }
+            }
+
+            return null;
+        }
+
+        public static EnchantmentData ResolveDynamicEnchantment(string guid)
+        {
+            if (string.IsNullOrEmpty(guid)) return null;
+            if (!DynamicGuidHelper.TryDecodeGuid(BlueprintGuid.Parse(guid), out string modelId, out List<int> values)) return null;
+
+            // On cherche le modèle (vals[0] == 1 signifie Feature)
+            bool isFeature = values.Count > 0 && values[0] == 1;
+            var model = CustomEnchantmentsBuilder.AllModels.FirstOrDefault(m =>
+                m.EnchantId == modelId && (isFeature ? m.Type == "Feature" : m.Type != "Feature"));
+
+            if (model == null) return null;
+
+            // Préparation des variables pour les formules et remplacements de texte
+            var formulaVars = new Dictionary<string, double>();
+            var replacements = new Dictionary<string, string>();
+            
+            if (modelId == "007")
+            {
+                // Format 007 : [0:isFeature] [1:Grade] [2:Charges] [3:Count] [4+:Metamagics...]
+                int grade = values.Count > 1 ? values[1] : 0;
+                int charges = values.Count > 2 ? values[2] : 3;
+                int mCount = values.Count > 3 ? values[3] : 0;
+                
+                formulaVars["Grade"] = grade;
+                formulaVars["Charges"] = charges;
+                formulaVars["MetamagicCount"] = mCount;
+
+                var mCosts = new List<double>();
+                var mNames = new List<string>();
+
+                for (int i = 0; i < mCount; i++)
+                {
+                    int val = values.Count > (4 + i) ? values[4 + i] : 0;
+                    if (val == 0) continue;
+
+                    int cost = GetMetamagicLevelCost(val);
+                    mCosts.Add(cost);
+                    
+                    string mName = Enum.GetName(typeof(Kingmaker.UnitLogic.Abilities.Metamagic), val) ?? val.ToString();
+                    mNames.Add(Helpers.GetString("ui_enum_" + mName, mName));
+                }
+
+                replacements["Grade"] = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
+                replacements["Charges"] = charges.ToString();
+                replacements["Metamagic"] = string.Join(", ", mNames);
+
+                var sortedCosts = mCosts.OrderByDescending(c => c).ToList();
+                double[] resolvedCosts = new double[3] { 0, 0, 0 };
+                string gradeKey = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
+                
+                if (model.PriceTables != null && model.PriceTables.TryGetValue("Rod", out var rodTable))
+                {
+                    for (int i = 0; i < Math.Min(3, sortedCosts.Count); i++)
                     {
-                        Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Decoded ModelId: {modelId}, Values: {string.Join(",", values)}");
+                        string key = $"{gradeKey}_{(int)sortedCosts[i]}";
+                        if (rodTable.TryGetValue(key, out double p)) resolvedCosts[i] = p;
+                    }
+                }
 
-                        // On cherche le modèle (vals[0] == 1 signifie Feature)
-                        bool isFeature = values.Count > 0 && values[0] == 1;
-                        var model = CustomEnchantmentsBuilder.AllModels.FirstOrDefault(m =>
-                            m.EnchantId == modelId && (isFeature ? m.Type == "Feature" : m.Type != "Feature"));
+                formulaVars["Metamagic"] = sortedCosts.Count > 0 ? sortedCosts[0] : 0;
+                formulaVars["Metamagic2"] = sortedCosts.Count > 1 ? sortedCosts[1] : 0;
+                formulaVars["Metamagic3"] = sortedCosts.Count > 2 ? sortedCosts[2] : 0;
 
-                        if (model != null)
+                formulaVars["RodPrice1"] = resolvedCosts[0];
+                formulaVars["RodPrice2"] = resolvedCosts[1];
+                formulaVars["RodPrice3"] = resolvedCosts[2];
+            }
+            else
+            {
+                for (int i = 0; i < model.DynamicParams.Count; i++)
+                {
+                    if (i + 1 < values.Count)
+                    {
+                        var p = model.DynamicParams[i];
+                        int val = values[i + 1];
+                        string resolvedVal = val.ToString();
+
+                        if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
                         {
-                            Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Found Model: {model.BaseName} for ID {modelId}");
-
-                            // Préparation des variables pour les formules et remplacements de texte
-                            var formulaVars = new Dictionary<string, double>();
-                            var replacements = new Dictionary<string, string>();
-                            
-                            if (modelId == "007")
-                            {
-                                // Format 007 : [0:isFeature] [1:Grade] [2:Charges] [3:Count] [4+:Metamagics...]
-                                int grade = values.Count > 1 ? values[1] : 0;
-                                int charges = values.Count > 2 ? values[2] : 3;
-                                int mCount = values.Count > 3 ? values[3] : 0;
-                                
-                                formulaVars["Grade"] = grade;
-                                formulaVars["Charges"] = charges;
-                                formulaVars["MetamagicCount"] = mCount;
- 
-                                var mCosts = new List<double>();
-                                var mNames = new List<string>();
- 
-                                for (int i = 0; i < mCount; i++)
-                                {
-                                    int val = values.Count > (4 + i) ? values[4 + i] : 0;
-                                    if (val == 0) continue;
- 
-                                    int cost = GetMetamagicLevelCost(val);
-                                    mCosts.Add(cost);
-                                    
-                                    string mName = Enum.GetName(typeof(Kingmaker.UnitLogic.Abilities.Metamagic), val) ?? val.ToString();
-                                    mNames.Add(Helpers.GetString("ui_enum_" + mName, mName));
-                                }
- 
-                                replacements["Grade"] = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
-                                replacements["Charges"] = charges.ToString();
-                                replacements["Metamagic"] = string.Join(", ", mNames);
- 
-                                // On trie les coûts par ordre décroissant pour alimenter Metamagic, Metamagic2, Metamagic3
-                                var sortedCosts = mCosts.OrderByDescending(c => c).ToList();
-                                
-                                // On résout les prix via la table pour les 3 premiers
-                                double[] resolvedCosts = new double[3] { 0, 0, 0 };
-                                string gradeKey = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
-                                
-                                if (model.PriceTables != null && model.PriceTables.TryGetValue("Rod", out var rodTable))
-                                {
-                                    for (int i = 0; i < Math.Min(3, sortedCosts.Count); i++)
+                            try {
+                                var enumType = Type.GetType(p.EnumTypeName);
+                                if (enumType != null) {
+                                    string enumName = Enum.GetName(enumType, val);
+                                    if (!string.IsNullOrEmpty(enumName))
                                     {
-                                        string key = $"{gradeKey}_{(int)sortedCosts[i]}";
-                                        if (rodTable.TryGetValue(key, out double p)) resolvedCosts[i] = p;
+                                        if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(enumName, out object overrideObj))
+                                            resolvedVal = Helpers.GetLocalizedString(overrideObj);
+                                        else
+                                            resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
                                     }
                                 }
- 
-                                formulaVars["Metamagic"] = sortedCosts.Count > 0 ? sortedCosts[0] : 0;
-                                formulaVars["Metamagic2"] = sortedCosts.Count > 1 ? sortedCosts[1] : 0;
-                                formulaVars["Metamagic3"] = sortedCosts.Count > 2 ? sortedCosts[2] : 0;
- 
-                                formulaVars["PriceTable.Rod.Metamagic"] = resolvedCosts[0];
-                                formulaVars["PriceTable.Rod.Metamagic2"] = resolvedCosts[1];
-                                formulaVars["PriceTable.Rod.Metamagic3"] = resolvedCosts[2];
-                            }
-                            else
-                            {
-                                for (int i = 0; i < model.DynamicParams.Count; i++)
-                                {
-                                    if (i + 1 < values.Count)
-                                    {
-                                        var p = model.DynamicParams[i];
-                                        int val = values[i + 1];
-                                        string resolvedVal = val.ToString();
-
-                                        // Résolution des noms d'Enums pour l'affichage (ex: DamageEnergyType.Fire -> Feu)
-                                        if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
-                                        {
-                                            try {
-                                                var enumType = Type.GetType(p.EnumTypeName);
-                                                if (enumType != null) {
-                                                    string enumName = Enum.GetName(enumType, val);
-                                                    if (!string.IsNullOrEmpty(enumName))
-                                                    {
-                                                        // On vérifie s'il y a une surcharge de nom dans le JSON
-                                                        if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(enumName, out object overrideObj))
-                                                        {
-                                                            resolvedVal = Helpers.GetLocalizedString(overrideObj);
-                                                        }
-                                                        else
-                                                        {
-                                                            resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
-                                                        }
-                                                    }
-                                                }
-                                            } catch { }
-                                        }
-
-                                        replacements[p.Name] = resolvedVal;
-                                        formulaVars[p.Name] = val;
-                                    }
-                                }
-                            }
-
-                            // Création du nom complet avec gestion intelligente des espaces et doublons
-                            string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
-                            string prefix = model.Prefix != null ? Helpers.GetLocalizedString(model.Prefix, replacements) : "";
-                            string suffix = model.Suffix != null ? Helpers.GetLocalizedString(model.Suffix, replacements) : "";
-
-                            string fullDisplayName = finalName;
-                            if (!string.IsNullOrEmpty(prefix) && !fullDisplayName.StartsWith(prefix)) 
-                                fullDisplayName = prefix + " " + fullDisplayName;
-                            
-                            if (!string.IsNullOrEmpty(suffix) && !fullDisplayName.Contains(suffix)) 
-                                fullDisplayName = fullDisplayName + " " + suffix;
-
-                            var dynamicData = new EnchantmentData
-                            {
-                                Guid = guid,
-                                Name = fullDisplayName.Replace("  ", " ").Trim(),
-                                Type = model.Type.Replace("Enchantment", ""), // Standardisation: WeaponEnchantment -> Weapon
-                                Source = "Custom",
-                                PointString = model.EnchantmentCost.ToString(),
-                                IsEnhancement = model.Components.Any(c => c.GetType().Name == "WeaponEnhancementBonus" || c.GetType().Name == "ArmorEnhancementBonus"),
-                                PriceFactor = model.PriceFactor,
-                                Slots = new List<string>(model.Slots)
-                            };
-
-                            // --- GESTION DU SEUIL ÉPIQUE (Paramètres Joueurs uniquement) ---
-                            // On vérifie si un des paramètres (numériques) dépasse son seuil spécifique ou le seuil global
-                            bool isEpic = false;
-                            foreach (var pDef in model.DynamicParams)
-                            {
-                                if (formulaVars.TryGetValue(pDef.Name, out double pVal))
-                                {
-                                    // 1. Seuil spécifique au paramètre
-                                    if (model.EpicThresholds != null && model.EpicThresholds.TryGetValue(pDef.Name, out int threshold))
-                                    {
-                                        if (pVal > threshold) { isEpic = true; break; }
-                                    }
-                                    // 2. Seuil global hérité
-                                    else if (model.MaxNotEpic > 0 && pVal > model.MaxNotEpic)
-                                    {
-                                        isEpic = true; break;
-                                    }
-                                }
-                            }
-                            dynamicData.IsEpic = isEpic;
-
-                            // Évaluation des formules si présentes
-                            if (!string.IsNullOrEmpty(model.PointCostFormula))
-                            {
-                                dynamicData.PointString = FormulaEvaluator.EvaluateInt(model.PointCostFormula, formulaVars).ToString();
-                            }
-
-                            // --- RÉSOLUTION DES TABLES DE PRIX ---
-                            if (model.PriceTables != null)
-                            {
-                                foreach (var table in model.PriceTables)
-                                {
-                                    string tableName = table.Key;
-                                    
-                                    // On itère sur TOUS les paramètres pour voir s'ils peuvent être résolus par cette table
-                                    foreach (var pDef in model.DynamicParams)
-                                    {
-                                        if (formulaVars.TryGetValue(pDef.Name, out double pVal))
-                                        {
-                                            double resolvedPrice = 0;
-                                            bool found = false;
-
-                                            // 1. Recherche de clé composite (priorité au paramètre actuel + un autre)
-                                            // On cherche si ce paramètre pDef peut former une clé composite avec un autre
-                                            foreach (var pOther in model.DynamicParams)
-                                            {
-                                                if (pDef.Name == pOther.Name) continue;
-                                                if (formulaVars.TryGetValue(pOther.Name, out double vOther))
-                                                {
-                                                    string k1 = GetEnumKey(pDef, pVal);
-                                                    string k2 = GetEnumKey(pOther, vOther);
-
-                                                    string compositeKey = $"{k1}_{k2}";
-                                                    if (table.Value.TryGetValue(compositeKey, out double cp)) { resolvedPrice = cp; found = true; break; }
-                                                    
-                                                    compositeKey = $"{k2}_{k1}";
-                                                    if (table.Value.TryGetValue(compositeKey, out double cp2)) { resolvedPrice = cp2; found = true; break; }
-                                                }
-                                            }
-
-                                            // 2. Recherche par paramètre simple
-                                            if (!found)
-                                            {
-                                                string key = GetEnumKey(pDef, pVal);
-                                                if (table.Value.TryGetValue(key, out double m)) { resolvedPrice = m; found = true; }
-                                            }
-
-                                            if (!found && table.Value.TryGetValue("DEFAULT", out double dm)) resolvedPrice = dm;
-
-                                            // Injection : PriceTable.TableName.ParamName
-                                            formulaVars[$"PriceTable.{tableName}.{pDef.Name}"] = resolvedPrice;
-                                            
-                                            // Compatibilité descendante : si le nom de la table est EXACTEMENT le nom du paramètre
-                                            if (tableName == pDef.Name) formulaVars["PriceTable." + tableName] = resolvedPrice;
-                                    }
-                                }
-                            }
+                            } catch { }
                         }
+                        replacements[p.Name] = resolvedVal;
+                        formulaVars[p.Name] = val;
+                    }
+                }
+            }
 
-                            // --- INJECTION DE VARIABLES DE COMPTAGE (Metamagies multiples) ---
-                            int metamagicCount = 0;
-                            foreach (var p in model.DynamicParams)
-                            {
-                                if (p.Name.StartsWith("Metamagic") && formulaVars.TryGetValue(p.Name, out double val) && val > 0)
-                                {
-                                    metamagicCount++;
-                                    formulaVars["Has" + p.Name] = 1;
-                                }
-                                else if (p.Name.StartsWith("Metamagic"))
-                                {
-                                    formulaVars["Has" + p.Name] = 0;
-                                }
-                            }
-                            formulaVars["MetamagicCount"] = metamagicCount;
+            string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
+            string prefix = model.Prefix != null ? Helpers.GetLocalizedString(model.Prefix, replacements) : "";
+            string suffix = model.Suffix != null ? Helpers.GetLocalizedString(model.Suffix, replacements) : "";
 
-                            if (!string.IsNullOrEmpty(model.GoldOverrideFormula))
-                            {
-                                dynamicData.GoldOverride = (int)FormulaEvaluator.EvaluateLong(model.GoldOverrideFormula, formulaVars);
-                                Main.ModEntry.Logger.Log($"[DEBUG_SCANNER] Calculated Price: {dynamicData.GoldOverride} for {guid} (Variables: {string.Join(", ", formulaVars.Select(kvp => kvp.Key + "=" + kvp.Value))})");
-                            }
+            string fullDisplayName = finalName;
+            if (!string.IsNullOrEmpty(prefix) && !fullDisplayName.StartsWith(prefix)) fullDisplayName = prefix + " " + fullDisplayName;
+            if (!string.IsNullOrEmpty(suffix) && !fullDisplayName.Contains(suffix)) fullDisplayName = fullDisplayName + " " + suffix;
 
-                            return dynamicData;
-                        }
-                        else
+            var dynamicData = new EnchantmentData
+            {
+                Guid = guid,
+                Name = fullDisplayName.Replace("  ", " ").Trim(),
+                Type = model.Type.Replace("Enchantment", ""),
+                Source = "Custom",
+                PointString = model.EnchantmentCost.ToString(),
+                IsEnhancement = model.Components.Any(c => c.GetType().Name == "WeaponEnhancementBonus" || c.GetType().Name == "ArmorEnhancementBonus"),
+                PriceFactor = model.PriceFactor,
+                Slots = new List<string>(model.Slots)
+            };
+
+            bool isEpic = false;
+            foreach (var pDef in model.DynamicParams)
+            {
+                if (formulaVars.TryGetValue(pDef.Name, out double pVal))
+                {
+                    if (model.EpicThresholds != null && model.EpicThresholds.TryGetValue(pDef.Name, out int threshold))
+                    {
+                        if (pVal > threshold) { isEpic = true; break; }
+                    }
+                    else if (model.MaxNotEpic > 0 && pVal > model.MaxNotEpic)
+                    {
+                        isEpic = true; break;
+                    }
+                }
+            }
+            dynamicData.IsEpic = isEpic;
+
+            if (!string.IsNullOrEmpty(model.PointCostFormula))
+            {
+                dynamicData.PointString = FormulaEvaluator.EvaluateInt(model.PointCostFormula, formulaVars).ToString();
+            }
+
+            if (model.PriceTables != null)
+            {
+                foreach (var table in model.PriceTables)
+                {
+                    string tableName = table.Key;
+                    foreach (var pDef in model.DynamicParams)
+                    {
+                        if (formulaVars.TryGetValue(pDef.Name, out double pVal))
                         {
-                            Main.ModEntry.Logger.Warning($"[DYNAMIC] Model {modelId} not found for GUID {guid} (isFeature: {isFeature})");
+                            double resolvedPrice = 0;
+                            bool found = false;
+                            foreach (var pOther in model.DynamicParams)
+                            {
+                                if (pDef.Name == pOther.Name) continue;
+                                if (formulaVars.TryGetValue(pOther.Name, out double vOther))
+                                {
+                                    string k1 = GetEnumKey(pDef, pVal);
+                                    string k2 = GetEnumKey(pOther, vOther);
+                                    string compositeKey = $"{k1}_{k2}";
+                                    if (table.Value.TryGetValue(compositeKey, out double cp)) { resolvedPrice = cp; found = true; break; }
+                                    compositeKey = $"{k2}_{k1}";
+                                    if (table.Value.TryGetValue(compositeKey, out double cp2)) { resolvedPrice = cp2; found = true; break; }
+                                }
+                            }
+                            if (!found)
+                            {
+                                string key = GetEnumKey(pDef, pVal);
+                                if (table.Value.TryGetValue(key, out double m)) { resolvedPrice = m; found = true; }
+                            }
+                            if (!found && table.Value.TryGetValue("DEFAULT", out double dm)) resolvedPrice = dm;
+                            formulaVars[$"PriceTable.{tableName}.{pDef.Name}"] = resolvedPrice;
+                            if (tableName == pDef.Name) formulaVars["PriceTable." + tableName] = resolvedPrice;
                         }
                     }
                 }
             }
 
-            return null;
+            int metamagicCount = 0;
+            foreach (var p in model.DynamicParams)
+            {
+                if (p.Name.StartsWith("Metamagic") && formulaVars.TryGetValue(p.Name, out double val) && val > 0)
+                {
+                    metamagicCount++;
+                    formulaVars["Has" + p.Name] = 1;
+                }
+                else if (p.Name.StartsWith("Metamagic"))
+                {
+                    formulaVars["Has" + p.Name] = 0;
+                }
+            }
+            formulaVars["MetamagicCount"] = metamagicCount;
+
+            if (!string.IsNullOrEmpty(model.GoldOverrideFormula))
+            {
+                dynamicData.GoldOverride = (int)FormulaEvaluator.EvaluateLong(model.GoldOverrideFormula, formulaVars);
+            }
+
+            return dynamicData;
         }
         private static string GetEnumKey(DynamicParam pDef, double val)
         {
@@ -583,23 +540,25 @@ namespace CraftingSystem
 
         private static int GetMetamagicLevelCost(int maskValue)
         {
-            // Mapping officiel Pathfinder WOTR (Metamagic enum) vers coûts de niveau des sorts
-            switch (maskValue)
-            {
-                case 1:    return 2; // Empower
-                case 2:    return 3; // Maximize
-                case 4:    return 4; // Quicken
-                case 8:    return 1; // Extend
-                case 16:   return 1; // Heighten
-                case 32:   return 1; // Reach
-                case 64:   return 0; // Completely Normal
-                case 128:  return 2; // Persistent
-                case 256:  return 1; // Selective
-                case 512:  return 1; // Bolstered
-                case 1024: return 1; // Piercing
-                case 2048: return 1; // Intensified
-                default:   return 0;
-            }
+            var metamagic = (Kingmaker.UnitLogic.Abilities.Metamagic)maskValue;
+
+            if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Quicken)) return 4;
+            if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Maximize)) return 3;
+            if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Empower)) return 2;
+            if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Persistent)) return 2;
+            
+            // Quintessence : On pourrait utiliser une valeur dynamique, mais par défaut on met 1 
+            // car le prix est déjà capé par le Grade du sceptre (Mineur/Normal/Supérieur)
+            if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Heighten)) return 1;
+
+            if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Extend)) return 1;
+            if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Reach)) return 1;
+            if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Selective)) return 1;
+            if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Bolstered)) return 1;
+            if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Piercing)) return 1;
+            if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Intensified)) return 1;
+
+            return 0;
         }
     }
 }

@@ -904,6 +904,208 @@
             "enGB": "Cost / Time",
             "frFR": "Coût / Temps",
             "ruRU": "Стоимость / Время"
+        },
+        "ui_menu_create_potion": {
+            "enGB": "Create Potion",
+            "frFR": "Créer une Potion",
+            "ruRU": "Создать зелье"
+        },
+        "ui_page_forge_title": {
+            "enGB": "{0}",
+            "frFR": "{0}",
+            "ruRU": "{0}"
+        },
+        "ui_page_magic_title": {
+            "enGB": "{0}",
+            "frFR": "{0}",
+            "ruRU": "{0}"
+        },
+        "ui_no_items_found": {
+            "enGB": "No items found. Please run a scan.",
+            "frFR": "Aucun objet trouvé. Veuillez lancer un scan.",
+            "ruRU": "Предметы не найдены. Пожалуйста, запустите сканирование."
+        },
+        "ui_btn_buy": {
+            "enGB": "BUY",
+            "frFR": "ACHETER",
+            "ruRU": "КУПИТЬ"
+        },
+        "ui_spell_level": {
+            "enGB": "Spell Level",
+            "frFR": "Niveau de sort",
+            "ruRU": "Уровень заклинания"
+        },
+        "ui_caster_level": {
+            "enGB": "Caster Level",
+            "frFR": "Niveau de lanceur",
+            "ruRU": "Уровень заклинателя"
+        },
+        "ui_total_cost": {
+            "enGB": "Total Cost",
+            "frFR": "Coût Total",
+            "ruRU": "Общая стоимость"
+        },
+        "ui_craft_button": {
+            "enGB": "CRAFT",
+            "frFR": "FABRIQUER",
+            "ruRU": "СОЗДАТЬ"
+        },
+        "ui_menu_weapon_workshop": {
+            "enGB": "Weapon Workshop",
+            "frFR": "Atelier d'Armes",
+            "ruRU": "Мастерская оружия"
+        },
+        "ui_menu_armor_workshop": {
+            "enGB": "Armor Workshop",
+            "frFR": "Atelier d'Armures",
+            "ruRU": "Мастерская доспехов"
+        },
+        "ui_menu_accessory_workshop": {
+            "enGB": "Accessory Workshop",
+            "frFR": "Atelier d'Accessoires",
+            "ruRU": "Мастерская аксессуаров"
+        },
+        "ui_item_cost": {
+            "enGB": "Cost: {0} GP",
+            "frFR": "Coût : {0} po",
+            "ruRU": "Цена: {0} gp"
+        },
+        "ui_success_purchased": {
+            "enGB": "<color=green>Success!</color> Purchased: {0}",
+            "frFR": "<color=green>Succès !</color> Acheté : {0}",
+            "ruRU": "<color=green>Успех!</color> Куплено: {0}"
+        },
+        "ui_err_not_enough_gold_need": {
+            "enGB": "<color=red>Not enough gold!</color> (Need {0} GP)",
+            "frFR": "<color=red>Pas assez d'or !</color> (Besoin de {0} po)",
+            "ruRU": "<color=red>Недостаточно золота!</color> (Требуется {0} gp)"
+        },
+        "ui_menu_wand_workshop": {
+            "enGB": "Wand Workshop",
+            "frFR": "Atelier de Baguettes",
+            "ruRU": "Мастерская палочек"
+        },
+        "ui_menu_potion_workshop": {
+            "enGB": "Potion Workshop",
+            "frFR": "Atelier de Potions",
+            "ruRU": "Мастерская зелий"
+        },
+        "ui_lvl_format": {
+            "enGB": "Lvl {0} - {1}",
+            "frFR": "Niv {0} - {1}",
+            "ruRU": "Ур. {0} - {1}"
+        },
+        "ui_err_rod_not_found": {
+            "enGB": "<color=red><b>ERROR:</b> Metamagic Rod model (007) not found.</color>",
+            "frFR": "<color=red><b>ERREUR :</b> Modèle de Sceptre métamagique (007) non trouvé.</color>",
+            "ruRU": "<color=red><b>ОШИБКА:</b> Модель метамагического жезла (007) не найдена.</color>"
+        },
+        "ui_err_check_config": {
+            "enGB": "Ensure CustomEnchants.json is correctly loaded and contains ID 007.",
+            "frFR": "Assurez-vous que CustomEnchants.json est correctement chargé et contient l'ID 007.",
+            "ruRU": "Убедитесь, что CustomEnchants.json правильно загружен и содержит ID 007."
+        },
+        "ui_btn_force_reload": {
+            "enGB": "Force Reload Config",
+            "frFR": "Forcer le rechargement de la config",
+            "ruRU": "Принудительная перезагрузка конфигурации"
+        },
+        "ui_available_spells": {
+            "enGB": "Available Spells:",
+            "frFR": "Sorts disponibles :",
+            "ruRU": "Доступные заклинания:"
+        },
+        "ui_configuration": {
+            "enGB": "Configuration:",
+            "frFR": "Configuration :",
+            "ruRU": "Конфигурация:"
+        },
+        "ui_school": {
+            "enGB": "School: {0}",
+            "frFR": "École : {0}",
+            "ruRU": "Школа: {0}"
+        },
+        "ui_classes": {
+            "enGB": "Classes: {0}",
+            "frFR": "Classes : {0}",
+            "ruRU": "Классы: {0}"
+        },
+        "ui_btn_craft_scroll": {
+            "enGB": "CRAFT SCROLL",
+            "frFR": "FABRIQUER PARCHEMIN",
+            "ruRU": "СОЗДАТЬ СВИТОК"
+        },
+        "ui_success_created": {
+            "enGB": "<color=green>Success!</color> Created: {0}",
+            "frFR": "<color=green>Succès !</color> Créé : {0}",
+            "ruRU": "<color=green>Успех!</color> Создано: {0}"
+        },
+        "ui_select_spell_hint": {
+            "enGB": "Select a spell from the list to begin.",
+            "frFR": "Sélectionnez un sort dans la liste pour commencer.",
+            "ruRU": "Выберите заклинание из списка, чтобы начать."
+        },
+        "ui_filter_all": {
+            "enGB": "Show All",
+            "frFR": "Tout afficher",
+            "ruRU": "Показать всё"
+        },
+        "ui_no_item_match": {
+            "enGB": "(No items match the current filters)",
+            "frFR": "(Aucun objet ne correspond aux filtres)",
+            "ruRU": "(Нет предметов, соответствующих фильтрам)"
+        },
+        "ui_selection_total_summary": {
+            "enGB": "Selection: +{0} \u2014 Total: {1} gp / ~{2} d",
+            "frFR": "Sélection : +{0} \u2014 Total : {1} po / ~{2} j",
+            "ruRU": "Выбор: +{0} \u2014 Всего: {1} gp / ~{2} дн."
+        },
+        "ui_metamagic_slot": {
+            "enGB": "Slot",
+            "frFR": "Emplacement",
+            "ruRU": "Слот"
+        },
+        "ui_btn_add_metamagic": {
+            "enGB": "Add Metamagic",
+            "frFR": "Ajouter métamagie",
+            "ruRU": "Добавить метамагию"
+        },
+        "ui_btn_create_item": {
+            "enGB": "Craft this item",
+            "frFR": "Fabriquer cet objet",
+            "ruRU": "Создать этот предмет"
+        },
+        "ui_section_basics": {
+            "enGB": "Basic Parameters",
+            "frFR": "Paramètres de base",
+            "ruRU": "Основные параметры"
+        },
+        "ui_section_metamagic": {
+            "enGB": "Metamagic Configuration",
+            "frFR": "Configuration de la Métamagie",
+            "ruRU": "Настройка метамагии"
+        },
+        "ui_param_element": { "enGB": "Element", "frFR": "Élément", "ruRU": "Стихия" },
+        "ui_param_value": { "enGB": "Value", "frFR": "Valeur", "ruRU": "Значение" },
+        "ui_param_bonus": { "enGB": "Bonus", "frFR": "Bonus", "ruRU": "Бонус" },
+        "ui_param_stat": { "enGB": "Stat", "frFR": "Statistique", "ruRU": "Характеристика" },
+        "ui_param_descriptor": { "enGB": "Descriptor", "frFR": "Type de bonus", "ruRU": "Тип бонуса" },
+        "ui_param_metamagic": { "enGB": "Metamagic", "frFR": "Métamagie", "ruRU": "Метамагия" },
+        "ui_param_grade": { "enGB": "Grade", "frFR": "Puissance", "ruRU": "Ранг" },
+        "ui_param_charges": { "enGB": "Charges", "frFR": "Charges", "ruRU": "Заряды" },
+        "ui_param_heighten_level": { "enGB": "Heighten level", "frFR": "Niveau de Quintessence", "ruRU": "Уровень метамагии" },
+        "ui_enum_strength": { "enGB": "Strength", "frFR": "Force", "ruRU": "Сила" },
+        "ui_enum_dexterity": { "enGB": "Dexterity", "frFR": "Dextérité", "ruRU": "Ловкость" },
+        "ui_enum_constitution": { "enGB": "Constitution", "frFR": "Constitution", "ruRU": "Выносливость" },
+        "ui_enum_intelligence": { "enGB": "Intelligence", "frFR": "Intelligence", "ruRU": "Интеллект" },
+        "ui_enum_wisdom": { "enGB": "Wisdom", "frFR": "Sagesse", "ruRU": "Мудрость" },
+        "ui_enum_charisma": { "enGB": "Charisma", "frFR": "Charisme", "ruRU": "Харизма" },
+        "ui_enum_ac": { "enGB": "AC", "frFR": "CA", "ruRU": "КБ" },
+        "ui_enum_none": { "enGB": "None", "frFR": "Aucun(e)", "ruRU": "Нет" },
+        "ui_configuring_model": {
+            "enGB": "Configuring: <b>{0}</b>",
+            "frFR": "Configuration : <b>{0}</b>",
+            "ruRU": "Настройка: <b>{0}</b>"
         }
     }
 }

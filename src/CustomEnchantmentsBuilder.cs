@@ -321,9 +321,9 @@ namespace CraftingSystem
 
                 foreach (var model in AllModels)
                 {
-                    string internalKey = Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted); // Utilise la locale actuelle, mais au moins c'est une string
+                    string internalKey = Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted);
                     _customModels[internalKey] = model;
-                    Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Registered model: {internalKey} (ID: {model.EnchantId})");
+                    Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] REGISTERED: ID='{model.EnchantId}', Name='{internalKey}', Type='{model.Type}'");
 
                     // On pré-injecte le modèle de base si c'est une Feature (utile pour les résistances)
                     if (model.Type == "Feature")
@@ -849,6 +849,78 @@ namespace CraftingSystem
             ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(guid, bp);
             Main.ModEntry.Logger.Log($"[SCROLL-BUILD] Registered dynamic scroll GUID: {guid}");
 
+            return bp;
+        }
+
+        public static BlueprintItemEquipmentUsable GetOrBuildWand(SpellData spellData, int cl, int sl)
+        {
+            string seed = $"Wand_{spellData.Guid}_{cl}_{sl}";
+            BlueprintGuid guid = CreateGuidFromSeed(seed);
+            
+            var existing = ResourcesLibrary.TryGetBlueprint(guid) as BlueprintItemEquipmentUsable;
+            if (existing != null) return existing;
+
+            Main.ModEntry.Logger.Log($"[WAND-BUILD] Building new wand: {spellData.Name} (CL:{cl}, SL:{sl})");
+
+            var spell = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(spellData.Guid)) as BlueprintAbility;
+            if (spell == null) return null;
+
+            var bp = Activator.CreateInstance(Type.GetType("Kingmaker.Blueprints.Items.Equipment.BlueprintItemEquipmentUsable, Assembly-CSharp")) as BlueprintItemEquipmentUsable;
+            bp.name = $"Wand_{spell.name}_{cl}_{sl}";
+            bp.AssetGuid = guid;
+
+            bp.Type = UsableItemType.Wand;
+            bp.m_Ability = spell.ToReference<BlueprintAbilityReference>();
+            bp.CasterLevel = cl;
+            bp.SpellLevel = sl;
+            bp.Charges = 50;
+            bp.SpendCharges = true;
+            bp.RestoreChargesOnRest = false;
+
+            var itemType = typeof(BlueprintItem);
+            itemType.GetField("m_Icon", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, spell.Icon);
+            itemType.GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, Helpers.CreateString($"{bp.name}.Name", $"Wand of {spell.Name}"));
+            itemType.GetField("m_DescriptionText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, spell.m_Description);
+            itemType.GetField("m_Weight", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, 1.0f);
+            itemType.GetField("m_Cost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, 100);
+
+            ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(guid, bp);
+            return bp;
+        }
+
+        public static BlueprintItemEquipmentUsable GetOrBuildPotion(SpellData spellData, int cl, int sl)
+        {
+            string seed = $"Potion_{spellData.Guid}_{cl}_{sl}";
+            BlueprintGuid guid = CreateGuidFromSeed(seed);
+            
+            var existing = ResourcesLibrary.TryGetBlueprint(guid) as BlueprintItemEquipmentUsable;
+            if (existing != null) return existing;
+
+            Main.ModEntry.Logger.Log($"[POTION-BUILD] Building new potion: {spellData.Name} (CL:{cl}, SL:{sl})");
+
+            var spell = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(spellData.Guid)) as BlueprintAbility;
+            if (spell == null) return null;
+
+            var bp = Activator.CreateInstance(Type.GetType("Kingmaker.Blueprints.Items.Equipment.BlueprintItemEquipmentUsable, Assembly-CSharp")) as BlueprintItemEquipmentUsable;
+            bp.name = $"Potion_{spell.name}_{cl}_{sl}";
+            bp.AssetGuid = guid;
+
+            bp.Type = UsableItemType.Potion;
+            bp.m_Ability = spell.ToReference<BlueprintAbilityReference>();
+            bp.CasterLevel = cl;
+            bp.SpellLevel = sl;
+            bp.Charges = 1;
+            bp.SpendCharges = true;
+            bp.RestoreChargesOnRest = false;
+
+            var itemType = typeof(BlueprintItem);
+            itemType.GetField("m_Icon", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, spell.Icon);
+            itemType.GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, Helpers.CreateString($"{bp.name}.Name", $"Potion of {spell.Name}"));
+            itemType.GetField("m_DescriptionText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, spell.m_Description);
+            itemType.GetField("m_Weight", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, 0.5f);
+            itemType.GetField("m_Cost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, 50);
+
+            ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(guid, bp);
             return bp;
         }
 

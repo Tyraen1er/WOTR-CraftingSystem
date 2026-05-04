@@ -1,6 +1,12 @@
-- Sceptre métamagique
-    Vérifier intégrité du système de création de sceptre métamagique.
-- Parchemins
-- Baguettes
-- Potions
-- Achat équipement
+
+- Service de Création de Baguettes
+- Service de Création de Potions
+- Service d'Achat d'équipement non enchanté
+    - Armes
+    - Armures
+    - Bijoux
+    - Boucliers
+    - Vêtements
+    - sceptres
+    - baguettes
+    

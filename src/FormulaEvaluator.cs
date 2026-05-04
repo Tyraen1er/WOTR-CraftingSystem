@@ -30,7 +30,9 @@ namespace CraftingSystem
             foreach (var varName in sortedVars)
             {
                 string escapedVarName = Regex.Escape(varName);
-                string pattern = @"\b" + escapedVarName + @"\b";
+                // On utilise un lookbehind/lookahead pour s'assurer qu'on ne remplace pas un morceau de variable
+                // mais on autorise les points et underscores à l'intérieur.
+                string pattern = @"(?<![a-zA-Z0-9_\.])" + escapedVarName + @"(?![a-zA-Z0-9_\.])";
                 if (Regex.IsMatch(expression, pattern))
                 {
                     expression = Regex.Replace(expression, pattern, variables[varName].ToString(System.Globalization.CultureInfo.InvariantCulture));

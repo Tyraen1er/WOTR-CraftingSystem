@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using Kingmaker;
 using Kingmaker.Items;
+using Kingmaker.Blueprints.Items;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Items.Weapons;
@@ -95,6 +97,7 @@ namespace CraftingSystem
         private int scrollCasterLevel = 1;
         private int scrollSpellLevel = 1;
         private Vector2 scrollListPos = Vector2.zero;
+        private Vector2 metamagicScrollPos = Vector2.zero;
 
         // Paging & Optimization
         private List<EnchantmentData> cachedFilteredEnchantments = new List<EnchantmentData>();
@@ -121,7 +124,8 @@ namespace CraftingSystem
             CreateAccessory,
             CreateMetamagicRod,
             CreateWand,
-            CreateScroll
+            CreateScroll,
+            CreatePotion
         }
         private CraftingPage currentPageType = CraftingPage.MainMenu;
 
@@ -300,7 +304,9 @@ namespace CraftingSystem
             processIndex = 0;
             inputSubmitDown = false;
 
-            EnchantmentScanner.StartSync();
+            if (Event.current.type == EventType.Layout) {
+                EnchantmentScanner.StartSync();
+            }
 
             var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
             workshop?.CheckAndFinishProjects();
@@ -468,6 +474,7 @@ namespace CraftingSystem
                     case CraftingPage.CreateMetamagicRod: title = Helpers.GetString("ui_menu_create_rod", "Create Metamagic Rod"); break;
                     case CraftingPage.CreateWand: title = Helpers.GetString("ui_menu_create_wand", "Create Wand"); break;
                     case CraftingPage.CreateScroll: title = Helpers.GetString("ui_menu_create_scroll", "Create Scroll"); break;
+                    case CraftingPage.CreatePotion: title = Helpers.GetString("ui_menu_create_potion", "Create Potion"); break;
                 }
             }
 
@@ -539,6 +546,7 @@ namespace CraftingSystem
                     case CraftingPage.CreateMetamagicRod: DrawCreateMetamagicRodGUI(scale); break;
                     case CraftingPage.CreateWand: DrawCreateWandGUI(scale); break;
                     case CraftingPage.CreateScroll: DrawCreateScrollGUI(scale); break;
+                    case CraftingPage.CreatePotion: DrawCreatePotionGUI(scale); break;
                 }
             }
         }
@@ -606,14 +614,17 @@ namespace CraftingSystem
             DrawSeparator(contentWidth, new Color(0.6f, 0.3f, 0.8f, 0.8f));
             GUILayout.Space(15 * scale);
 
+            float colWidth4 = (contentWidth / 4f) - (10 * scale);
             Color magicTint = new Color(0.4f, 0.2f, 0.6f);
 
             GUILayout.BeginHorizontal();
-            DrawMenuButton(new GUIContent("<b>🪄 " + Helpers.GetString("ui_menu_create_rod", "Create Metamagic Rod") + "</b>"), btnStyle, CraftingPage.CreateMetamagicRod, magicTint, GUILayout.Width(colWidth3));
+            DrawMenuButton(new GUIContent("<b>🪄 " + Helpers.GetString("ui_menu_create_rod", "Rod") + "</b>"), btnStyle, CraftingPage.CreateMetamagicRod, magicTint, GUILayout.Width(colWidth4));
             GUILayout.Space(10 * scale);
-            DrawMenuButton(new GUIContent("<b>⚡ " + Helpers.GetString("ui_menu_create_wand", "Create Wand") + "</b>"), btnStyle, CraftingPage.CreateWand, magicTint, GUILayout.Width(colWidth3));
+            DrawMenuButton(new GUIContent("<b>⚡ " + Helpers.GetString("ui_menu_create_wand", "Wand") + "</b>"), btnStyle, CraftingPage.CreateWand, magicTint, GUILayout.Width(colWidth4));
             GUILayout.Space(10 * scale);
-            DrawMenuButton(new GUIContent("<b>📜 " + Helpers.GetString("ui_menu_create_scroll", "Create Scroll") + "</b>"), btnStyle, CraftingPage.CreateScroll, magicTint, GUILayout.Width(colWidth3));
+            DrawMenuButton(new GUIContent("<b>📜 " + Helpers.GetString("ui_menu_create_scroll", "Scroll") + "</b>"), btnStyle, CraftingPage.CreateScroll, magicTint, GUILayout.Width(colWidth4));
+            GUILayout.Space(10 * scale);
+            DrawMenuButton(new GUIContent("<b>🧪 " + Helpers.GetString("ui_menu_create_potion", "Potion") + "</b>"), btnStyle, CraftingPage.CreatePotion, magicTint, GUILayout.Width(colWidth4));
             GUILayout.EndHorizontal();
 
             GUILayout.EndVertical();
@@ -639,36 +650,236 @@ namespace CraftingSystem
             GUI.color = Color.white;
         }
 
-        void DrawCreateWeaponGUI(float scale) { GUILayout.Label("Coming Soon: Weapon Creation"); }
-        void DrawCreateArmorGUI(float scale) { GUILayout.Label("Coming Soon: Armor Creation"); }
-        void DrawCreateAccessoryGUI(float scale) { GUILayout.Label("Coming Soon: Accessory Creation"); }
+        void DrawCreateWeaponGUI(float scale) { DrawItemBrowser(scale, ItemScanner.Weapons, Helpers.GetString("ui_menu_weapon_workshop", "Weapon Workshop")); }
+        void DrawCreateArmorGUI(float scale) { DrawItemBrowser(scale, ItemScanner.Armors, Helpers.GetString("ui_menu_armor_workshop", "Armor Workshop")); }
+        void DrawCreateAccessoryGUI(float scale) { DrawItemBrowser(scale, ItemScanner.Accessories, Helpers.GetString("ui_menu_accessory_workshop", "Accessory Workshop")); }
+
+        private void DrawItemBrowser(float scale, List<ItemData> items, string title)
+        {
+            float windowWidth = 1000f * scale;
+            float contentWidth = windowWidth - (120f * scale);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.BeginVertical(GUILayout.Width(contentWidth));
+            
+            GUILayout.Space(20 * scale);
+            GUIStyle headerStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_HUGE * scale), fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
+            GUILayout.Label(string.Format(Helpers.GetString("ui_page_forge_title", "{0}"), title), headerStyle);
+            GUILayout.Space(10 * scale);
+
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, "box");
+            if (items == null || items.Count == 0)
+            {
+                GUILayout.Label(Helpers.GetString("ui_no_items_found", "No items found. Please run a scan."), new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+            }
+            else
+            {
+                foreach (var item in items)
+                {
+                    GUILayout.BeginHorizontal("box");
+                    if (item.Icon != null)
+                        GUILayout.Label(new GUIContent(item.Icon.texture), GUILayout.Width(40 * scale), GUILayout.Height(40 * scale));
+                    
+                    GUILayout.BeginVertical();
+                    GUILayout.Label($"<b>{item.Name}</b>", new GUIStyle(GUI.skin.label) { richText = true });
+                    GUILayout.Label(string.Format(Helpers.GetString("ui_item_cost", "Cost: {0} GP"), item.Cost), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_SMALL * scale) });
+                    GUILayout.EndVertical();
+
+                    GUILayout.FlexibleSpace();
+
+                    if (CButton(Helpers.GetString("ui_btn_buy", "BUY"), GUILayout.Width(80 * scale), GUILayout.Height(40 * scale)))
+                    {
+                        if (Game.Instance.Player.Money >= item.Cost)
+                        {
+                            var bp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(item.Guid)) as BlueprintItem;
+                            if (bp != null)
+                            {
+                                Game.Instance.Player.Money -= item.Cost;
+                                var entity = bp.CreateEntity();
+                                DeferredInventoryOpener.CraftingBox.Add(entity);
+                                feedbackMessage = string.Format(Helpers.GetString("ui_success_purchased", "<color=green>Success!</color> Purchased: {0}"), entity.Name);
+                            }
+                        }
+                        else
+                        {
+                            feedbackMessage = string.Format(Helpers.GetString("ui_err_not_enough_gold_need", "<color=red>Not enough gold!</color> (Need {0} GP)"), item.Cost);
+                        }
+                    }
+                    GUILayout.EndHorizontal();
+                }
+            }
+            GUILayout.EndScrollView();
+
+            GUILayout.EndVertical();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+
+        void DrawCreateWandGUI(float scale) 
+        {
+            DrawMagicItemGUI(scale, Helpers.GetString("ui_menu_wand_workshop", "Wand Workshop"), 750, 50, (s, cl, sl) => CustomEnchantmentsBuilder.GetOrBuildWand(s, cl, sl));
+        }
+
+        void DrawCreatePotionGUI(float scale)
+        {
+            DrawMagicItemGUI(scale, Helpers.GetString("ui_menu_potion_workshop", "Potion Workshop"), 50, 1, (s, cl, sl) => CustomEnchantmentsBuilder.GetOrBuildPotion(s, cl, sl));
+        }
+
+        private void DrawMagicItemGUI(float scale, string title, int basePrice, int charges, Func<SpellData, int, int, BlueprintItemEquipmentUsable> builder)
+        {
+            float windowWidth = 1000f * scale;
+            float contentWidth = windowWidth - (120f * scale);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.BeginVertical(GUILayout.Width(contentWidth));
+
+            GUILayout.Space(20 * scale);
+            GUIStyle headerStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_HUGE * scale), fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
+            GUILayout.Label(string.Format(Helpers.GetString("ui_page_magic_title", "{0}"), title), headerStyle);
+            GUILayout.Space(10 * scale);
+
+            // Search Bar
+            GUILayout.BeginHorizontal(GUI.skin.box);
+            GUILayout.Label(Helpers.GetString("ui_search", "Search:"), GUILayout.Width(100 * scale));
+            scrollSearch = GUILayout.TextField(scrollSearch);
+            if (GUILayout.Button("X", GUILayout.Width(30 * scale))) scrollSearch = "";
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(10 * scale);
+
+            GUILayout.BeginHorizontal();
+
+            // LEFT: Spell List
+            GUILayout.BeginVertical(GUILayout.Width(contentWidth * 0.6f));
+            scrollListPos = GUILayout.BeginScrollView(scrollListPos, "box", GUILayout.Height(400 * scale));
+            
+            var filteredSpells = SpellScanner.AvailableSpells.Values
+                .Where(s => string.IsNullOrEmpty(scrollSearch) || s.Name.IndexOf(scrollSearch, StringComparison.OrdinalIgnoreCase) >= 0)
+                .OrderBy(s => s.MinLevel).ThenBy(s => s.Name);
+
+            foreach (var spell in filteredSpells)
+            {
+                GUIStyle itemStyle = new GUIStyle(GUI.skin.button) { alignment = TextAnchor.MiddleLeft };
+                if (selectedScrollSpell != null && selectedScrollSpell.Guid == spell.Guid)
+                {
+                    itemStyle.normal.background = itemStyle.active.background;
+                    itemStyle.normal.textColor = Color.cyan;
+                }
+
+                string btnText = string.Format(Helpers.GetString("ui_lvl_format", "Lvl {0} - {1}"), spell.MinLevel, spell.Name);
+                if (GUILayout.Button(btnText, itemStyle))
+                {
+                    selectedScrollSpell = spell;
+                    scrollSpellLevel = spell.MinLevel;
+                    scrollCasterLevel = Math.Max(1, spell.MinLevel * 2 - 1);
+                    if (spell.MinLevel == 0) scrollCasterLevel = 1;
+                }
+            }
+            GUILayout.EndScrollView();
+            GUILayout.EndVertical();
+
+            GUILayout.Space(20 * scale);
+
+            // RIGHT: Config
+            GUILayout.BeginVertical();
+            if (selectedScrollSpell != null)
+            {
+                GUILayout.Label($"<b>{selectedScrollSpell.Name}</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
+                GUILayout.Space(10 * scale);
+
+                // Spell Level
+                GUILayout.Label($"{Helpers.GetString("ui_spell_level", "Spell Level")}: {scrollSpellLevel}", new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
+                int nextSL = (int)GUILayout.HorizontalSlider(scrollSpellLevel, selectedScrollSpell.MinLevel, 9);
+                if (nextSL != scrollSpellLevel)
+                {
+                    scrollSpellLevel = nextSL;
+                    int minCL = (scrollSpellLevel == 0) ? 1 : Math.Max(1, scrollSpellLevel * 2 - 1);
+                    if (scrollCasterLevel < minCL) scrollCasterLevel = minCL;
+                }
+
+                // Caster Level
+                GUILayout.Label($"{Helpers.GetString("ui_caster_level", "Caster Level")}: {scrollCasterLevel}", new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
+                int minAllowedCL = (scrollSpellLevel == 0) ? 1 : Math.Max(1, scrollSpellLevel * 2 - 1);
+                scrollCasterLevel = (int)GUILayout.HorizontalSlider(scrollCasterLevel, minAllowedCL, 20);
+
+                GUILayout.Space(20 * scale);
+
+                int cost = basePrice * scrollCasterLevel * Math.Max(1, scrollSpellLevel);
+                if (scrollSpellLevel == 0) cost = basePrice / 2;
+                
+                GUILayout.BeginVertical(GUI.skin.box);
+                GUILayout.Label($"{Helpers.GetString("ui_total_cost", "Total Cost")}:", new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
+                GUILayout.Label(string.Format(Helpers.GetString("ui_gp_format", "<color=yellow>{0} GP</color>"), cost), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_LARGE * scale), richText = true });
+                GUILayout.EndVertical();
+
+                GUILayout.Space(30 * scale);
+
+                if (GUILayout.Button(Helpers.GetString("ui_craft_button", "CRAFT"), GUILayout.Height(50 * scale)))
+                {
+                    if (Game.Instance.Player.Money >= cost)
+                    {
+                        var bp = builder(selectedScrollSpell, scrollCasterLevel, scrollSpellLevel);
+                        if (bp != null)
+                        {
+                            Game.Instance.Player.Money -= cost;
+                            var item = bp.CreateEntity();
+                            DeferredInventoryOpener.CraftingBox.Add(item);
+                            feedbackMessage = string.Format(Helpers.GetString("ui_success_created", "<color=green>Success!</color> Created: {0}"), item.Name);
+                        }
+                    }
+                    else
+                    {
+                        feedbackMessage = string.Format(Helpers.GetString("ui_err_not_enough_gold_need", "<color=red>Not enough gold!</color> (Need {0} GP)"), cost);
+                    }
+                }
+            }
+            GUILayout.EndVertical();
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
         void DrawCreateMetamagicRodGUI(float scale) 
         { 
             if (selectedModel == null || selectedModel.EnchantId != "007")
             {
-                selectedModel = CustomEnchantmentsBuilder.AllModels.FirstOrDefault(m => m.EnchantId == "007");
+                selectedModel = CustomEnchantmentsBuilder.GetModelById("007");
                 if (selectedModel != null)
                 {
                     dynamicParamValues.Clear();
-                    foreach (var p in selectedModel.DynamicParams) dynamicParamValues[p.Name] = p.Min;
-                    if (selectedModel.EnchantId == "007")
+                    foreach (var p in selectedModel.DynamicParams)
                     {
-                        dynamicParamValues["MetamagicCount"] = 1;
-                        dynamicParamValues["Metamagic_0"] = 0; // None
+                        int defVal = p.Min;
+                        if (p.DefaultValue != null)
+                        {
+                            if (p.DefaultValue is long || p.DefaultValue is int) defVal = Convert.ToInt32(p.DefaultValue);
+                            else if (p.DefaultValue is string defStr && p.Type == "Enum")
+                            {
+                                try {
+                                    var enumType = Type.GetType(p.EnumTypeName);
+                                    if (enumType != null) defVal = (int)Enum.Parse(enumType, defStr, true);
+                                } catch {}
+                            }
+                        }
+                        dynamicParamValues[p.Name] = defVal;
                     }
+                    
+                    dynamicParamValues["MetamagicCount"] = 1;
+                    int initialMetamagic = dynamicParamValues.ContainsKey("Metamagic") ? dynamicParamValues["Metamagic"] : 1;
+                    dynamicParamValues["Metamagic_0"] = initialMetamagic;
+                }
+                else {
+                    Main.ModEntry.Logger.Error("[ATELIER] CRITICAL: Metamagic Rod model (007) not found in CustomEnchantmentsBuilder.AllModels!");
+                    currentPageType = CraftingPage.MainMenu;
+                    return;
                 }
             }
             
-            if (selectedModel != null)
-            {
-                DrawCustomEnchantmentGUI_Content(scale);
-            }
-            else
-            {
-                GUILayout.Label("Metamagic Rod model (007) not found in CustomEnchants.json");
-            }
+            DrawCustomEnchantmentGUI_Content(scale);
         }
-        void DrawCreateWandGUI(float scale) { GUILayout.Label("Coming Soon: Wand Creation"); }
         void DrawCreateScrollGUI(float scale)
         {
             float windowWidth = 1000f * scale;
@@ -686,7 +897,7 @@ namespace CraftingSystem
 
             // --- SEARCH BAR ---
             GUILayout.BeginHorizontal(GUI.skin.box);
-            GUILayout.Label(Helpers.GetString("ui_search", "Search:"), GUILayout.Width(100 * scale));
+            GUILayout.Label(Helpers.GetString("ui_search", "Search:"), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.Width(100 * scale));
             scrollSearch = GUILayout.TextField(scrollSearch);
             if (GUILayout.Button("X", GUILayout.Width(30 * scale))) scrollSearch = "";
             GUILayout.EndHorizontal();
@@ -698,7 +909,7 @@ namespace CraftingSystem
 
             // LEFT COLUMN: Spell List
             GUILayout.BeginVertical(GUILayout.Width(contentWidth * 0.6f));
-            GUILayout.Label(Helpers.GetString("ui_available_spells", "Available Spells:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+            GUILayout.Label(Helpers.GetString("ui_available_spells", "Available Spells:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(FONT_NORMAL * scale) });
             
             scrollListPos = GUILayout.BeginScrollView(scrollListPos, "box", GUILayout.Height(400 * scale));
             
@@ -716,7 +927,8 @@ namespace CraftingSystem
                 }
 
                 string modTag = spell.IsFromMod ? "[MOD] " : "";
-                if (GUILayout.Button($"{modTag}Lvl {spell.MinLevel} - {spell.Name}", itemStyle))
+                string btnText = $"{modTag}{string.Format(Helpers.GetString("ui_lvl_format", "Lvl {0} - {1}"), spell.MinLevel, spell.Name)}";
+                if (GUILayout.Button(btnText, itemStyle))
                 {
                     selectedScrollSpell = spell;
                     scrollSpellLevel = spell.MinLevel;
@@ -733,22 +945,29 @@ namespace CraftingSystem
             GUILayout.BeginVertical();
             if (selectedScrollSpell != null)
             {
-                GUILayout.Label(Helpers.GetString("ui_configuration", "Configuration:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+                GUILayout.Label(Helpers.GetString("ui_configuration", "Configuration:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(FONT_NORMAL * scale) });
                 GUILayout.Space(10 * scale);
                 
                 GUILayout.Label($"<b>{selectedScrollSpell.Name}</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
-                GUILayout.Label($"School: {selectedScrollSpell.School}");
-                GUILayout.Label($"Classes: {string.Join(", ", selectedScrollSpell.Classes.Take(2))}");
+                GUILayout.Label(string.Format(Helpers.GetString("ui_school", "School: {0}"), selectedScrollSpell.School), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
+                GUILayout.Label(string.Format(Helpers.GetString("ui_classes", "Classes: {0}"), string.Join(", ", selectedScrollSpell.Classes.Take(2))), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
                 
                 GUILayout.Space(20 * scale);
 
                 // Spell Level
-                GUILayout.Label($"{Helpers.GetString("ui_spell_level", "Spell Level")}: {scrollSpellLevel}");
-                scrollSpellLevel = (int)GUILayout.HorizontalSlider(scrollSpellLevel, 0, 9);
+                GUILayout.Label($"{Helpers.GetString("ui_spell_level", "Spell Level")}: {scrollSpellLevel}", new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
+                int nextScrollSL = (int)GUILayout.HorizontalSlider(scrollSpellLevel, selectedScrollSpell.MinLevel, 9);
+                if (nextScrollSL != scrollSpellLevel)
+                {
+                    scrollSpellLevel = nextScrollSL;
+                    int minCL = (scrollSpellLevel == 0) ? 1 : Math.Max(1, scrollSpellLevel * 2 - 1);
+                    if (scrollCasterLevel < minCL) scrollCasterLevel = minCL;
+                }
 
                 // Caster Level
-                GUILayout.Label($"{Helpers.GetString("ui_caster_level", "Caster Level")}: {scrollCasterLevel}");
-                scrollCasterLevel = (int)GUILayout.HorizontalSlider(scrollCasterLevel, 1, 20);
+                GUILayout.Label($"{Helpers.GetString("ui_caster_level", "Caster Level")}: {scrollCasterLevel}", new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
+                int minAllowedScrollCL = (scrollSpellLevel == 0) ? 1 : Math.Max(1, scrollSpellLevel * 2 - 1);
+                scrollCasterLevel = (int)GUILayout.HorizontalSlider(scrollCasterLevel, minAllowedScrollCL, 20);
 
                 GUILayout.Space(20 * scale);
 
@@ -757,7 +976,7 @@ namespace CraftingSystem
                 if (scrollSpellLevel == 0) cost = 12; // Cantrips cheap
                 
                 GUILayout.BeginVertical(GUI.skin.box);
-                GUILayout.Label($"{Helpers.GetString("ui_total_cost", "Total Cost")}:", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label($"{Helpers.GetString("ui_total_cost", "Total Cost")}:", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_NORMAL * scale) });
                 GUILayout.Label($"<color=yellow>{cost} GP</color>", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_LARGE * scale), richText = true });
                 GUILayout.EndVertical();
 
@@ -777,12 +996,12 @@ namespace CraftingSystem
                             Game.Instance.Player.Money -= finalCost;
                             var item = bp.CreateEntity();
                             DeferredInventoryOpener.CraftingBox.Add(item);
-                            feedbackMessage = $"<color=green>Success!</color> Created: {item.Name} (Available in Workshop Box)";
+                            feedbackMessage = string.Format(Helpers.GetString("ui_success_created", "<color=green>Success!</color> Created: {0}"), item.Name);
                         }
                     }
                     else
                     {
-                        feedbackMessage = $"<color=red>Not enough gold!</color> (Need {finalCost} GP)";
+                        feedbackMessage = string.Format(Helpers.GetString("ui_err_not_enough_gold_need", "<color=red>Not enough gold!</color> (Need {0} GP)"), finalCost);
                     }
                 }
             }
@@ -951,7 +1170,7 @@ namespace CraftingSystem
                 double remainingDays = Math.Max(0, remainingTicks / (double)TimeSpan.TicksPerDay);
                 GUILayout.Label(Helpers.GetString("ui_wilcer_working", "<b>WILCER IS CURRENTLY WORKING ON THIS ITEM</b>"), new GUIStyle(GUI.skin.label) { richText = true, alignment = TextAnchor.MiddleCenter });
                 string remText = string.Format(Helpers.GetString("ui_time_remaining", "Estimated remaining time: {0:F1} days"), remainingDays);
-                GUILayout.Label(remText, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label(remText, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_NORMAL * scale) });
                 GUILayout.Space(20);
                 if (CButton(Helpers.GetString("ui_btn_close_ui", "Close Interface"), GUILayout.Height(40 * scale))) IsOpen = false;
                 GUILayout.EndVertical();
@@ -977,13 +1196,13 @@ namespace CraftingSystem
 
             GUILayout.Space(10 * scale);
 
-            if (CButton(Helpers.GetString("ui_btn_rename", "Renommer"), GUILayout.Width(120 * scale), GUILayout.Height(35 * scale)))
+            if (CButton(Helpers.GetString("ui_btn_rename_action", "Rename"), GUILayout.Width(120 * scale), GUILayout.Height(35 * scale)))
             {
                 ItemRenamer.RenameItem(selectedItem, newNameDraft);
                 feedbackMessage = Helpers.GetString("ui_feedback_renamed", "The item has been renamed!");
             }
 
-            if (selectedItem != null && CButton(Helpers.GetString("ui_btn_auto", "Auto"), GUILayout.Width(100 * scale), GUILayout.Height(35 * scale)))
+            if (selectedItem != null && CButton(Helpers.GetString("ui_btn_auto_name", "Auto"), GUILayout.Width(100 * scale), GUILayout.Height(35 * scale)))
             {
                 string autoName = ItemRenamer.GenerateAutoName(selectedItem);
                 ItemRenamer.RenameItem(selectedItem, autoName);
@@ -1164,7 +1383,7 @@ namespace CraftingSystem
                     GUILayout.BeginHorizontal();
                     if (CButton(Helpers.GetString("ui_filter_check_all", "Check All"), GUILayout.Width(120 * scale))) foreach (var c in allCategoriesList) activeCategories.Add(c);
                     if (CButton(Helpers.GetString("ui_filter_uncheck_all", "Uncheck All"), GUILayout.Width(120 * scale))) activeCategories.Clear();
-                    GUILayout.Label(activeCategories.Count == 0 ? Helpers.GetString("ui_filter_none_active", " <i>(No filter active = Show all)</i>") : "", new GUIStyle(GUI.skin.label) { richText = true });
+                    GUILayout.Label(activeCategories.Count == 0 ? Helpers.GetString("ui_filter_none_active", " <i>(No filter active = Show all)</i>") : "", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_NORMAL * scale) });
                     GUILayout.EndHorizontal();
                     GUILayout.Space(5);
 
@@ -1336,7 +1555,7 @@ namespace CraftingSystem
             GUILayout.BeginHorizontal();
             GUILayout.Label(string.Format(Helpers.GetString("ui_current_level", "Current level: {0}/{1}"), currentLevelPoints, maxLevel), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.ExpandWidth(false));
             GUILayout.FlexibleSpace();
-            GUILayout.Label(string.Format(Helpers.GetString("ui_selection_total", "Selection: +{0} \u2014 Total: {1} gp / ~{2} d"), selectedPoints, totalCost, totalDays), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.ExpandWidth(false));
+            GUILayout.Label(string.Format(Helpers.GetString("ui_selection_total_summary", "Selection: +{0} \u2014 Total: {1} gp / ~{2} d"), selectedPoints, totalCost, totalDays), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.ExpandWidth(false));
             GUILayout.EndHorizontal();
 
             GUILayout.Space(6);
@@ -1521,9 +1740,16 @@ namespace CraftingSystem
 
             GUILayout.Label(Helpers.GetString("ui_settings_diagnostic", "Diagnostic Tools:"), settingsLabelStyle);
             GUILayout.Label(EnchantmentScanner.LastSyncMessage, settingsLabelStyle);
+            GUILayout.Label(string.Format("Custom Models Loaded: {0}", CustomEnchantmentsBuilder.AllModels?.Count ?? 0), settingsLabelStyle);
             if (CButton(Helpers.GetString("ui_settings_force_sync", "Force Synchronization (Full Scan)"), GUILayout.Height(35 * scale)))
             {
                 EnchantmentScanner.ForceSync();
+            }
+            if (CButton("Dump Weapons for Debug (Desktop/WeaponsDump.txt)", GUILayout.Height(35 * scale)))
+            {
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WeaponsDump.txt");
+                WeaponDump.DumpWeapons(path);
+                feedbackMessage = "Weapon dump created on Desktop!";
             }
 
             GUILayout.FlexibleSpace();
@@ -2078,142 +2304,109 @@ namespace CraftingSystem
         else
         {
                 // --- MODE CONFIGURATION ---
+                GUILayout.BeginHorizontal();
                 if (CButton(Helpers.GetString("ui_btn_back", "Back"), GUILayout.Width(100 * scale), GUILayout.Height(30 * scale)))
                 {
+                    if (currentPageType == CraftingPage.CreateMetamagicRod) currentPageType = CraftingPage.MainMenu;
                     selectedModel = null;
                 }
-                GUILayout.Space(10);
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
+
+                GUILayout.Space(10 * scale);
+
+                // En-tête stylisé
+                GUIStyle titleStyle = new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_HUGE * scale), fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
+                GUILayout.Label(string.Format(Helpers.GetString("ui_configuring_model", "Configuring: <color=#E2C675>{0}</color>"), Helpers.GetLocalizedString(selectedModel.BaseName ?? selectedModel.NameCompleted)), titleStyle);
+                
+                GUILayout.Space(20 * scale);
+
                 string currentlyOpenParam = openDropdownParam;
- 
-                GUILayout.Label(string.Format(Helpers.GetString("ui_configuring_model", "Configuring: <b>{0}</b>"), Helpers.GetLocalizedString(selectedModel.BaseName ?? selectedModel.NameCompleted)), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
-                GUILayout.Space(15);
-
-                GUIStyle paramLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) };
-                foreach (var p in selectedModel.DynamicParams)
-                {
-                    if (selectedModel.EnchantId == "007" && p.Name.StartsWith("Metamagic")) continue;
- 
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label(Helpers.GetString("ui_param_" + p.Name.ToLower().Replace(" ", "_"), p.Name) + ": ", paramLabelStyle, GUILayout.Width(150 * scale));
-
-                    if (p.Type == "Slider")
-                    {
-                        int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
-                        GUILayout.Label(val.ToString(), paramLabelStyle, GUILayout.Width(50 * scale));
-                        int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max);
-
-                        // Snap to Step
-                        if (p.Step > 1) newVal = (newVal / p.Step) * p.Step;
-                        dynamicParamValues[p.Name] = newVal;
-                    }
-                    else if (p.Type == "Enum")
-                    {
-                        var enumType = Type.GetType(p.EnumTypeName);
-                        if (enumType != null)
-                        {
-                            var allNames = Enum.GetNames(enumType);
-                            var allValues = Enum.GetValues(enumType);
-
-                            var filteredNames = new List<string>();
-                            var filteredValues = new List<int>();
-
-                            // 1. On récupère les valeurs de l'Enum réel
-                            for (int i = 0; i < allNames.Length; i++)
-                            {
-                                string name = allNames[i];
-                                if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(name, StringComparison.OrdinalIgnoreCase))) continue;
-                                if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Any(ee => ee.Equals(name, StringComparison.OrdinalIgnoreCase))) continue;
-
-                                filteredNames.Add(name);
-                                filteredValues.Add((int)allValues.GetValue(i));
-                            }
-
-                            // 2. On ajoute les entrées virtuelles de EnumOverrides (ex: SaveAll)
-                            if (p.EnumOverrides != null)
-                            {
-                                foreach (var kvp in p.EnumOverrides)
-                                {
-                                    if (!filteredNames.Contains(kvp.Key))
-                                    {
-                                        if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(kvp.Key, StringComparison.OrdinalIgnoreCase))) continue;
-                                        if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null)
-                                        {
-                                            filteredNames.Add(kvp.Key);
-                                            filteredValues.Add((int)jo["Value"]);
-                                        }
-                                    }
-                                }
-                            }
-
-                            var names = filteredNames.ToArray();
-                            var values = filteredValues.ToArray();
-
-                            if (names.Length == 1)
-                            {
-                                string displayName = names[0];
-                                if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[0], out object ovrObj)) displayName = Helpers.GetLocalizedString(ovrObj);
-                                else displayName = Helpers.GetString("ui_enum_" + names[0], names[0]);
-
-                                GUILayout.Label(displayName, paramLabelStyle);
-                                dynamicParamValues[p.Name] = values[0];
-                            }
-                            else
-                            {
-                                int currentVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
-                                string currentName = Enum.GetName(enumType, currentVal);
-                                
-                                if (string.IsNullOrEmpty(currentName) && p.EnumOverrides != null)
-                                {
-                                    foreach (var kvp in p.EnumOverrides)
-                                    {
-                                        if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == currentVal)
-                                        {
-                                            currentName = kvp.Key;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                string displayName = currentName ?? "";
-                                if (p.EnumOverrides != null && !string.IsNullOrEmpty(currentName) && p.EnumOverrides.TryGetValue(currentName, out object overrideObj))
-                                    displayName = Helpers.GetLocalizedString(overrideObj);
-                                else
-                                    displayName = Helpers.GetString("ui_enum_" + displayName, displayName);
-
-                                if (CButton(displayName, GUILayout.Width(200 * scale)))
-                                {
-                                    openDropdownParam = (openDropdownParam == p.Name) ? null : p.Name;
-                                }
-
-                                if (currentlyOpenParam == p.Name)
-                                {
-                                    GUILayout.EndHorizontal();
-                                    GUILayout.BeginVertical(GUI.skin.box);
-                                    for (int i = 0; i < names.Length; i++)
-                                    {
-                                        string optName = names[i];
-                                        if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[i], out object optOverrideObj)) optName = Helpers.GetLocalizedString(optOverrideObj);
-                                        else optName = Helpers.GetString("ui_enum_" + optName, optName);
-
-                                        if (CButton(optName)) { dynamicParamValues[p.Name] = (int)values[i]; openDropdownParam = null; }
-                                    }
-                                    GUILayout.EndVertical();
-                                    GUILayout.BeginHorizontal();
-                                }
-                            }
-                        }
-                    }
-                    GUILayout.EndHorizontal();
-                    GUILayout.Space(5);
-                }
 
                 if (selectedModel.EnchantId == "007")
                 {
-                    DrawDynamicMetamagicList(scale, currentlyOpenParam);
-                }
- 
-                GUILayout.Space(20);
+                    // --- LAYOUT SPÉCIFIQUE SCEPTRES (2 COLONNES) ---
+                    GUILayout.BeginHorizontal();
+                    
+                    // COLONNE GAUCHE : Paramètres techniques
+                    GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(450 * scale));
+                    GUILayout.Label($"<b>{Helpers.GetString("ui_section_basics", "Basic Parameters")}</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
+                    GUILayout.Space(10 * scale);
 
+                    foreach (var p in selectedModel.DynamicParams)
+                    {
+                        if (p.Name.StartsWith("Metamagic")) continue;
+
+                        GUILayout.BeginVertical();
+                        string paramLabel = Helpers.GetString("ui_param_" + p.Name.ToLower().Replace(" ", "_"), p.Name);
+                        GUILayout.Label($"<color=#CCCCCC>{paramLabel} :</color>", new GUIStyle(GUI.skin.label) { richText = true });
+
+                        if (p.Type == "Slider")
+                        {
+                            int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
+                            GUILayout.BeginHorizontal();
+                            int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max, GUILayout.ExpandWidth(true));
+                            GUILayout.Space(10);
+                            GUILayout.Label(val.ToString(), GUILayout.Width(30 * scale));
+                            GUILayout.EndHorizontal();
+
+                            if (p.Step > 1) newVal = (newVal / p.Step) * p.Step;
+                            dynamicParamValues[p.Name] = newVal;
+                        }
+                        else if (p.Type == "Enum")
+                        {
+                            DrawEnumSelector(p, scale, currentlyOpenParam);
+                        }
+                        GUILayout.EndVertical();
+                        GUILayout.Space(10 * scale);
+                    }
+
+                    GUILayout.EndVertical();
+                    
+                    GUILayout.Space(20 * scale);
+
+                    // COLONNE DROITE : Métamagie
+                    GUILayout.BeginVertical(GUI.skin.box);
+                    GUILayout.Label($"<b>{Helpers.GetString("ui_section_metamagic", "Metamagic Configuration")}</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
+                    GUILayout.Space(10 * scale);
+                    
+                    metamagicScrollPos = GUILayout.BeginScrollView(metamagicScrollPos, GUILayout.ExpandHeight(true));
+                    DrawDynamicMetamagicList(scale, currentlyOpenParam);
+                    GUILayout.EndScrollView();
+                    
+                    GUILayout.EndVertical();
+                    GUILayout.EndHorizontal();
+                }
+                else
+                {
+                    // --- LAYOUT STANDARD (BOX CENTRALE) ---
+                    GUILayout.BeginVertical(GUI.skin.box);
+                    foreach (var p in selectedModel.DynamicParams)
+                    {
+                        GUILayout.BeginHorizontal();
+                        GUILayout.Label(Helpers.GetString("ui_param_" + p.Name.ToLower().Replace(" ", "_"), p.Name) + ": ", GUILayout.Width(150 * scale));
+
+                        if (p.Type == "Slider")
+                        {
+                            int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
+                            GUILayout.Label(val.ToString(), GUILayout.Width(50 * scale));
+                            int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max);
+                            if (p.Step > 1) newVal = (newVal / p.Step) * p.Step;
+                            dynamicParamValues[p.Name] = newVal;
+                        }
+                        else if (p.Type == "Enum")
+                        {
+                            DrawEnumSelector(p, scale, currentlyOpenParam);
+                        }
+                        GUILayout.EndHorizontal();
+                        GUILayout.Space(5);
+                    }
+                    GUILayout.EndVertical();
+                }
+
+                GUILayout.Space(30 * scale);
+
+                // --- CALCUL DU RÉSULTAT ET PRIX (BARRE DU BAS) ---
                 int[] orderedValues = selectedModel.DynamicParams.Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0).ToArray();
                 int mask = 0;
                 bool hasMaskControl = false;
@@ -2276,19 +2469,30 @@ namespace CraftingSystem
                 int totalDays = CraftingCalculator.GetCraftingDays(totalCost, CraftingSettings.InstantCrafting);
 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(string.Format(Helpers.GetString("ui_selection_total_custom", "Selection: +{0} \u2014 Total: {1} gp / ~{2} d"), totalPoints, totalCost, totalDays), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
+                GUILayout.Label(string.Format(Helpers.GetString("ui_selection_total_custom", "Selection: +{0} \u2014 Total: {1} gp / ~{2} d"), totalPoints, totalCost, totalDays), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
                 GUILayout.FlexibleSpace();
 
-                string btnLabel = selectedModel.Type == "UsableItem" ? Helpers.GetString("ui_btn_create_item", "Craft this Item") : Helpers.GetString("ui_btn_add_to_selection", "Add to selection");
+                string btnLabel = selectedModel.Type == "UsableItem" ? Helpers.GetString("ui_btn_create_item", "Craft this item") : Helpers.GetString("ui_btn_add_to_selection", "Add to selection");
                 if (CButton(btnLabel, GUILayout.Width(250 * scale), GUILayout.Height(40 * scale)))
                 {
                     try
                     {
                         var finalGuidStr = tempGuid.ToString();
+                        // Pour les objets utilisables (Sceptres), on doit s'assurer que le Blueprint est généré avant de lancer le projet
                         if (selectedModel.Type == "UsableItem")
                         {
-                            CraftingActions.StartCraftingProject(null, tempEnch, (int)totalCost, totalDays);
-                            selectedModel = null;
+                            var builtBp = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(finalGuidStr);
+                            var finalEnch = EnchantmentScanner.GetByGuid(finalGuidStr); // On rafraîchit pour avoir les données à jour
+                            
+                            if (finalEnch != null)
+                            {
+                                CraftingActions.StartCraftingProject(null, finalEnch, (int)totalCost, totalDays);
+                                selectedModel = null;
+                            }
+                            else
+                            {
+                                feedbackMessage = "<color=red>Error: Could not generate item data.</color>";
+                            }
                         }
                         else
                         {
@@ -2306,6 +2510,111 @@ namespace CraftingSystem
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndVertical();
+        }
+
+        private void DrawEnumSelector(DynamicParam p, float scale, string currentlyOpenParam)
+        {
+            var enumType = Type.GetType(p.EnumTypeName);
+            if (enumType == null) return;
+
+            var allNames = Enum.GetNames(enumType);
+            var allValues = Enum.GetValues(enumType);
+
+            var filteredNames = new List<string>();
+            var filteredValues = new List<int>();
+
+            // 1. On récupère les valeurs de l'Enum réel
+            for (int i = 0; i < allNames.Length; i++)
+            {
+                string name = allNames[i];
+                if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(name, StringComparison.OrdinalIgnoreCase))) continue;
+                if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Any(ee => ee.Equals(name, StringComparison.OrdinalIgnoreCase))) continue;
+
+                filteredNames.Add(name);
+                filteredValues.Add((int)allValues.GetValue(i));
+            }
+
+            // 2. On ajoute les entrées virtuelles de EnumOverrides
+            if (p.EnumOverrides != null)
+            {
+                foreach (var kvp in p.EnumOverrides)
+                {
+                    if (!filteredNames.Contains(kvp.Key))
+                    {
+                        if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(kvp.Key, StringComparison.OrdinalIgnoreCase))) continue;
+                        if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null)
+                        {
+                            filteredNames.Add(kvp.Key);
+                            filteredValues.Add((int)jo["Value"]);
+                        }
+                    }
+                }
+            }
+
+            // 3. Tri final par valeur numérique pour garantir l'ordre (ex: Mineur -> Normal -> Supérieur)
+            var combined = filteredNames.Zip(filteredValues, (n, v) => new { Name = n, Value = v })
+                            .OrderBy(x => {
+                                // Si une override de valeur existe pour ce nom, on l'utilise pour le tri
+                                if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(x.Name, out object ovr) && ovr is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null)
+                                    return (int)jo["Value"];
+                                return x.Value;
+                            })
+                            .ToList();
+
+            var names = combined.Select(x => x.Name).ToArray();
+            var values = combined.Select(x => x.Value).ToArray();
+
+            if (names.Length == 1)
+            {
+                string displayName = names[0];
+                if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[0], out object ovrObj)) displayName = Helpers.GetLocalizedString(ovrObj);
+                else displayName = Helpers.GetString("ui_enum_" + names[0], names[0]);
+
+                GUILayout.Label(displayName, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
+                dynamicParamValues[p.Name] = values[0];
+            }
+            else
+            {
+                int currentVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
+                string currentName = Enum.GetName(enumType, currentVal);
+
+                if (string.IsNullOrEmpty(currentName) && p.EnumOverrides != null)
+                {
+                    foreach (var kvp in p.EnumOverrides)
+                    {
+                        if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == currentVal)
+                        {
+                            currentName = kvp.Key;
+                            break;
+                        }
+                    }
+                }
+
+                string displayName = currentName ?? "";
+                if (p.EnumOverrides != null && !string.IsNullOrEmpty(currentName) && p.EnumOverrides.TryGetValue(currentName, out object overrideObj))
+                    displayName = Helpers.GetLocalizedString(overrideObj);
+                else
+                    displayName = Helpers.GetString("ui_enum_" + displayName, displayName);
+
+                if (CButton(displayName, GUILayout.Width(200 * scale)))
+                {
+                    openDropdownParam = (openDropdownParam == p.Name) ? null : p.Name;
+                }
+
+                if (currentlyOpenParam == p.Name)
+                {
+                    GUILayout.BeginVertical(GUI.skin.box);
+                    for (int i = 0; i < names.Length; i++)
+                    {
+                        string optName = names[i];
+                        if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[i], out object optOverrideObj)) optName = Helpers.GetLocalizedString(optOverrideObj);
+                        else optName = Helpers.GetString("ui_enum_" + optName, optName);
+
+                        if (CButton(optName)) { dynamicParamValues[p.Name] = (int)values[i]; openDropdownParam = null; }
+                    }
+                    GUILayout.EndVertical();
+                }
+            }
         }
 
         void DrawEnchantmentRow(EnchantmentData data, float scale, int relativeIndex)
@@ -2450,10 +2759,7 @@ namespace CraftingSystem
             {
                 string key = "Metamagic_" + i;
                 int currentVal = dynamicParamValues[key];
- 
-                GUILayout.BeginHorizontal();
-                GUILayout.Label($"{Helpers.GetString("ui_metamagic_slot", "Metamagic Slot")} {i + 1}: ", paramLabelStyle, GUILayout.Width(150 * scale));
- 
+
                 // Filtrage pour ne pas proposer ce qui est déjà sélectionné (sauf la valeur actuelle du slot)
                 var availableNames = new List<string>();
                 var availableValues = new List<int>();
@@ -2464,20 +2770,26 @@ namespace CraftingSystem
                     availableNames.Add(allNames[j]);
                     availableValues.Add(val);
                 }
- 
+
                 string currentName = Enum.GetName(enumType, currentVal) ?? "None";
                 string displayName = Helpers.GetString("ui_enum_" + currentName, currentName);
- 
-                if (CButton(displayName, GUILayout.Width(200 * scale)))
+
+                // --- RENDU DU SLOT DANS UNE BOX ---
+                GUILayout.BeginVertical(GUI.skin.box);
+                GUILayout.BeginHorizontal();
+                
+                GUILayout.Label($"{Helpers.GetString("ui_metamagic_slot", "Slot")} {i + 1}", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.Width(100 * scale));
+                
+                if (CButton(displayName, GUILayout.ExpandWidth(true)))
                 {
                     openDropdownParam = (openDropdownParam == key) ? null : key;
                 }
-                
-                if (i > 0) // Bouton pour supprimer le slot
+
+                if (i > 0) // Bouton pour supprimer le slot (uniquement après le premier)
                 {
-                    if (CButton("X", GUILayout.Width(30 * scale)))
+                    if (CButton("<color=red><b>X</b></color>", GUILayout.Width(30 * scale)))
                     {
-                        // On remonte les suivants
+                        // Décalage des slots suivants
                         for (int k = i; k < count - 1; k++) dynamicParamValues["Metamagic_" + k] = dynamicParamValues["Metamagic_" + (k + 1)];
                         dynamicParamValues.Remove("Metamagic_" + (count - 1));
                         dynamicParamValues["MetamagicCount"] = count - 1;
@@ -2485,9 +2797,8 @@ namespace CraftingSystem
                         return;
                     }
                 }
- 
                 GUILayout.EndHorizontal();
- 
+
                 if (currentlyOpenParam == key)
                 {
                     GUILayout.BeginVertical(GUI.skin.box);
@@ -2499,12 +2810,28 @@ namespace CraftingSystem
                     }
                     GUILayout.EndVertical();
                 }
-                GUILayout.Space(5);
+                GUILayout.EndVertical();
+                GUILayout.Space(10 * scale);
             }
  
-            if (CButton("+ " + Helpers.GetString("ui_btn_add_metamagic", "Add Metamagic"), GUILayout.Width(200 * scale)))
+            var allMetamagics = Enum.GetValues(typeof(Kingmaker.UnitLogic.Abilities.Metamagic)).Cast<int>().Where(v => v != 0).ToList();
+            int maxPossibleMetamagics = allMetamagics.Count;
+
+            if (count < maxPossibleMetamagics && CButton("+ " + Helpers.GetString("ui_btn_add_metamagic", "Add Metamagic"), GUILayout.Width(200 * scale)))
             {
-                dynamicParamValues["Metamagic_" + count] = 0;
+                // Trouver la première métamagie non déjà utilisée
+                int nextValidMetamagic = 1; // Empower par défaut
+                
+                foreach (var v in allMetamagics)
+                {
+                    if (!selectedMetamagics.Contains(v))
+                    {
+                        nextValidMetamagic = v;
+                        break;
+                    }
+                }
+
+                dynamicParamValues["Metamagic_" + count] = nextValidMetamagic;
                 dynamicParamValues["MetamagicCount"] = count + 1;
             }
         }

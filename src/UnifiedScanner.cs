@@ -11,6 +11,10 @@ using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Blueprints.JsonSystem;
 using Kingmaker.Blueprints.JsonSystem.BinaryFormat;
 using Kingmaker.Blueprints.JsonSystem.Converters;
+using Kingmaker.Blueprints.Items.Weapons;
+using Kingmaker.Blueprints.Items.Armors;
+using Kingmaker.Blueprints.Items.Shields;
+using Kingmaker.Blueprints.Items.Equipment;
 
 namespace CraftingSystem
 {
@@ -52,6 +56,10 @@ namespace CraftingSystem
                 var enchants = new ConcurrentBag<(BlueprintItemEnchantment bp, BlueprintGuid guid)>();
                 var spellbooks = new ConcurrentBag<(BlueprintSpellbook bp, BlueprintGuid guid)>();
                 var spellLists = new ConcurrentBag<(BlueprintSpellList bp, BlueprintGuid guid)>();
+                var weapons = new ConcurrentBag<(BlueprintItemWeapon bp, BlueprintGuid guid)>();
+                var armors = new ConcurrentBag<(BlueprintItemArmor bp, BlueprintGuid guid)>();
+                var shields = new ConcurrentBag<(BlueprintItemShield bp, BlueprintGuid guid)>();
+                var accessories = new ConcurrentBag<(BlueprintItemEquipment bp, BlueprintGuid guid)>();
 
                 int processed = 0;
 
@@ -98,6 +106,22 @@ namespace CraftingSystem
                                     {
                                         spellLists.Add((sl, guid));
                                     }
+                                    else if (bp is BlueprintItemWeapon weapon)
+                                    {
+                                        weapons.Add((weapon, guid));
+                                    }
+                                    else if (bp is BlueprintItemArmor armor)
+                                    {
+                                        armors.Add((armor, guid));
+                                    }
+                                    else if (bp is BlueprintItemShield shield)
+                                    {
+                                        shields.Add((shield, guid));
+                                    }
+                                    else if (bp is BlueprintItemEquipment equipment)
+                                    {
+                                        accessories.Add((equipment, guid));
+                                    }
                                 }
                                 catch { /* On ignore les erreurs individuelles de lecture (blueprints corrompus) */ }
                             }
@@ -111,6 +135,7 @@ namespace CraftingSystem
                 // On passe les résultats aux scanners spécifiques qui vont transformer les BPs en Data
                 EnchantmentScanner.FinalizeScan(enchants);
                 SpellScanner.FinalizeScan(spellbooks, spellLists);
+                ItemScanner.FinalizeScan(weapons, armors, shields, accessories);
 
                 Main.ModEntry.Logger.Log($"[UNIFIED-SCAN] Scan completed: Found {enchants.Count} enchants and {spellbooks.Count + spellLists.Count} spell-related objects.");
             }
