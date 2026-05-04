@@ -310,39 +310,96 @@ namespace CraftingSystem
                             var formulaVars = new Dictionary<string, double>();
                             var replacements = new Dictionary<string, string>();
                             
-                            for (int i = 0; i < model.DynamicParams.Count; i++)
+                            if (modelId == "007")
                             {
-                                if (i + 1 < values.Count)
+                                // Format 007 : [0:isFeature] [1:Grade] [2:Charges] [3:Count] [4+:Metamagics...]
+                                int grade = values.Count > 1 ? values[1] : 0;
+                                int charges = values.Count > 2 ? values[2] : 3;
+                                int mCount = values.Count > 3 ? values[3] : 0;
+                                
+                                formulaVars["Grade"] = grade;
+                                formulaVars["Charges"] = charges;
+                                formulaVars["MetamagicCount"] = mCount;
+ 
+                                var mCosts = new List<double>();
+                                var mNames = new List<string>();
+ 
+                                for (int i = 0; i < mCount; i++)
                                 {
-                                    var p = model.DynamicParams[i];
-                                    int val = values[i + 1];
-                                    string resolvedVal = val.ToString();
-
-                                    // Résolution des noms d'Enums pour l'affichage (ex: DamageEnergyType.Fire -> Feu)
-                                    if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
+                                    int val = values.Count > (4 + i) ? values[4 + i] : 0;
+                                    if (val == 0) continue;
+ 
+                                    int cost = GetMetamagicLevelCost(val);
+                                    mCosts.Add(cost);
+                                    
+                                    string mName = Enum.GetName(typeof(Kingmaker.UnitLogic.Abilities.Metamagic), val) ?? val.ToString();
+                                    mNames.Add(Helpers.GetString("ui_enum_" + mName, mName));
+                                }
+ 
+                                replacements["Grade"] = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
+                                replacements["Charges"] = charges.ToString();
+                                replacements["Metamagic"] = string.Join(", ", mNames);
+ 
+                                // On trie les coûts par ordre décroissant pour alimenter Metamagic, Metamagic2, Metamagic3
+                                var sortedCosts = mCosts.OrderByDescending(c => c).ToList();
+                                
+                                // On résout les prix via la table pour les 3 premiers
+                                double[] resolvedCosts = new double[3] { 0, 0, 0 };
+                                string gradeKey = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
+                                
+                                if (model.PriceTables != null && model.PriceTables.TryGetValue("Rod", out var rodTable))
+                                {
+                                    for (int i = 0; i < Math.Min(3, sortedCosts.Count); i++)
                                     {
-                                        try {
-                                            var enumType = Type.GetType(p.EnumTypeName);
-                                            if (enumType != null) {
-                                                string enumName = Enum.GetName(enumType, val);
-                                                if (!string.IsNullOrEmpty(enumName))
-                                                {
-                                                    // On vérifie s'il y a une surcharge de nom dans le JSON
-                                                    if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(enumName, out object overrideObj))
+                                        string key = $"{gradeKey}_{(int)sortedCosts[i]}";
+                                        if (rodTable.TryGetValue(key, out double p)) resolvedCosts[i] = p;
+                                    }
+                                }
+ 
+                                formulaVars["Metamagic"] = sortedCosts.Count > 0 ? sortedCosts[0] : 0;
+                                formulaVars["Metamagic2"] = sortedCosts.Count > 1 ? sortedCosts[1] : 0;
+                                formulaVars["Metamagic3"] = sortedCosts.Count > 2 ? sortedCosts[2] : 0;
+ 
+                                formulaVars["PriceTable.Rod.Metamagic"] = resolvedCosts[0];
+                                formulaVars["PriceTable.Rod.Metamagic2"] = resolvedCosts[1];
+                                formulaVars["PriceTable.Rod.Metamagic3"] = resolvedCosts[2];
+                            }
+                            else
+                            {
+                                for (int i = 0; i < model.DynamicParams.Count; i++)
+                                {
+                                    if (i + 1 < values.Count)
+                                    {
+                                        var p = model.DynamicParams[i];
+                                        int val = values[i + 1];
+                                        string resolvedVal = val.ToString();
+
+                                        // Résolution des noms d'Enums pour l'affichage (ex: DamageEnergyType.Fire -> Feu)
+                                        if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
+                                        {
+                                            try {
+                                                var enumType = Type.GetType(p.EnumTypeName);
+                                                if (enumType != null) {
+                                                    string enumName = Enum.GetName(enumType, val);
+                                                    if (!string.IsNullOrEmpty(enumName))
                                                     {
-                                                        resolvedVal = Helpers.GetLocalizedString(overrideObj);
-                                                    }
-                                                    else
-                                                    {
-                                                        resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
+                                                        // On vérifie s'il y a une surcharge de nom dans le JSON
+                                                        if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(enumName, out object overrideObj))
+                                                        {
+                                                            resolvedVal = Helpers.GetLocalizedString(overrideObj);
+                                                        }
+                                                        else
+                                                        {
+                                                            resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        } catch { }
-                                    }
+                                            } catch { }
+                                        }
 
-                                    replacements[p.Name] = resolvedVal;
-                                    formulaVars[p.Name] = val;
+                                        replacements[p.Name] = resolvedVal;
+                                        formulaVars[p.Name] = val;
+                                    }
                                 }
                             }
 
@@ -526,21 +583,21 @@ namespace CraftingSystem
 
         private static int GetMetamagicLevelCost(int maskValue)
         {
-            // Mapping officiel Pathfinder WOTR pour les coûts de niveau des sceptres
-            // Note: On cherche ici la valeur individuelle du masque (puisqu'on itère sur Metamagic, Metamagic2, etc.)
+            // Mapping officiel Pathfinder WOTR (Metamagic enum) vers coûts de niveau des sorts
             switch (maskValue)
             {
-                case 1:    return 4; // Quicken
-                case 2:    return 1; // Extend
-                case 4:    return 3; // Maximize
-                case 8:    return 2; // Empower
+                case 1:    return 2; // Empower
+                case 2:    return 3; // Maximize
+                case 4:    return 4; // Quicken
+                case 8:    return 1; // Extend
+                case 16:   return 1; // Heighten
                 case 32:   return 1; // Reach
-                case 64:   return 2; // Persistent
-                case 128:  return 1; // Selective
-                case 256:  return 1; // Bolstered
-                case 512:  return 1; // Piercing
-                case 2048: return 2; // Echoing
-                case 1024: return 0; // Completely Normal
+                case 64:   return 0; // Completely Normal
+                case 128:  return 2; // Persistent
+                case 256:  return 1; // Selective
+                case 512:  return 1; // Bolstered
+                case 1024: return 1; // Piercing
+                case 2048: return 1; // Intensified
                 default:   return 0;
             }
         }

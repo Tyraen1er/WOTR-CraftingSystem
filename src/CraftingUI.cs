@@ -9,6 +9,7 @@ using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Shields;
+using Kingmaker.Blueprints.Items.Equipment;
 using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.UI;
 using Kingmaker.View;
@@ -650,6 +651,11 @@ namespace CraftingSystem
                 {
                     dynamicParamValues.Clear();
                     foreach (var p in selectedModel.DynamicParams) dynamicParamValues[p.Name] = p.Min;
+                    if (selectedModel.EnchantId == "007")
+                    {
+                        dynamicParamValues["MetamagicCount"] = 1;
+                        dynamicParamValues["Metamagic_0"] = 0; // None
+                    }
                 }
             }
             
@@ -770,16 +776,8 @@ namespace CraftingSystem
                         {
                             Game.Instance.Player.Money -= finalCost;
                             var item = bp.CreateEntity();
-                            var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
-                            if (workshop != null)
-                            {
-                                workshop.StashedItems.Add(item);
-                                feedbackMessage = $"<color=green>Success!</color> Created: {item.Name}";
-                            }
-                            else
-                            {
-                                feedbackMessage = "<color=red>Error:</color> Workshop not found!";
-                            }
+                            DeferredInventoryOpener.CraftingBox.Add(item);
+                            feedbackMessage = $"<color=green>Success!</color> Created: {item.Name} (Available in Workshop Box)";
                         }
                     }
                     else
@@ -859,6 +857,7 @@ namespace CraftingSystem
 
             // Filtrage des items
             var filteredItems = allItems.Where(it => {
+                if (it.Blueprint is BlueprintItemEquipmentUsable) return false;
                 if (!string.IsNullOrEmpty(inventorySearch) && !it.Name.ToLower().Contains(inventorySearch.ToLower())) return false;
                 if (activeTypes.Count > 0 && activeTypes.Count < 3) {
                     if (activeTypes.Contains("Weapon") && it.Blueprint is BlueprintItemWeapon) return true;
@@ -1894,6 +1893,7 @@ namespace CraftingSystem
 
         void DrawCustomEnchantmentGUI_Content(float scale)
         {
+            GUILayout.BeginVertical();
             // --- RAPPEL DES SÉLECTIONS CUSTOM ---
             var queuedCustoms = queuedEnchantGuids.Where(g => g.Replace("-", "").ToUpper().StartsWith(DynamicGuidHelper.Signature)).ToList();
             if (queuedCustoms.Count > 0)
@@ -2083,13 +2083,16 @@ namespace CraftingSystem
                     selectedModel = null;
                 }
                 GUILayout.Space(10);
-
+                string currentlyOpenParam = openDropdownParam;
+ 
                 GUILayout.Label(string.Format(Helpers.GetString("ui_configuring_model", "Configuring: <b>{0}</b>"), Helpers.GetLocalizedString(selectedModel.BaseName ?? selectedModel.NameCompleted)), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
                 GUILayout.Space(15);
 
                 GUIStyle paramLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) };
                 foreach (var p in selectedModel.DynamicParams)
                 {
+                    if (selectedModel.EnchantId == "007" && p.Name.StartsWith("Metamagic")) continue;
+ 
                     GUILayout.BeginHorizontal();
                     GUILayout.Label(Helpers.GetString("ui_param_" + p.Name.ToLower().Replace(" ", "_"), p.Name) + ": ", paramLabelStyle, GUILayout.Width(150 * scale));
 
@@ -2182,7 +2185,7 @@ namespace CraftingSystem
                                     openDropdownParam = (openDropdownParam == p.Name) ? null : p.Name;
                                 }
 
-                                if (openDropdownParam == p.Name)
+                                if (currentlyOpenParam == p.Name)
                                 {
                                     GUILayout.EndHorizontal();
                                     GUILayout.BeginVertical(GUI.skin.box);
@@ -2204,33 +2207,58 @@ namespace CraftingSystem
                     GUILayout.Space(5);
                 }
 
+                if (selectedModel.EnchantId == "007")
+                {
+                    DrawDynamicMetamagicList(scale, currentlyOpenParam);
+                }
+ 
                 GUILayout.Space(20);
 
                 int[] orderedValues = selectedModel.DynamicParams.Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0).ToArray();
                 int mask = 0;
                 bool hasMaskControl = false;
-                foreach (var p in selectedModel.DynamicParams)
+ 
+                if (selectedModel.EnchantId == "007")
                 {
-                    if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName) && p.EnumOverrides != null)
+                    int count = dynamicParamValues.ContainsKey("MetamagicCount") ? dynamicParamValues["MetamagicCount"] : 1;
+                    List<int> vals = new List<int>();
+                    vals.Add(dynamicParamValues.ContainsKey("Grade") ? dynamicParamValues["Grade"] : 0);
+                    vals.Add(dynamicParamValues.ContainsKey("Charges") ? dynamicParamValues["Charges"] : 3);
+                    vals.Add(count);
+                    for (int i = 0; i < count; i++)
                     {
-                        int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
-                        try {
-                            var enumType = Type.GetType(p.EnumTypeName);
-                            if (enumType != null) {
-                                string enumName = Enum.GetName(enumType, val);
-                                string keyToUse = enumName;
-                                if (string.IsNullOrEmpty(keyToUse))
-                                {
-                                    foreach (var kvp in p.EnumOverrides)
+                        int m = dynamicParamValues.ContainsKey("Metamagic_" + i) ? dynamicParamValues["Metamagic_" + i] : 0;
+                        vals.Add(m);
+                        mask |= m;
+                    }
+                    orderedValues = vals.ToArray();
+                    hasMaskControl = true;
+                }
+                else
+                {
+                    foreach (var p in selectedModel.DynamicParams)
+                    {
+                        if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName) && p.EnumOverrides != null)
+                        {
+                            int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
+                            try {
+                                var enumType = Type.GetType(p.EnumTypeName);
+                                if (enumType != null) {
+                                    string enumName = Enum.GetName(enumType, val);
+                                    string keyToUse = enumName;
+                                    if (string.IsNullOrEmpty(keyToUse))
                                     {
-                                        if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == val) { keyToUse = kvp.Key; break; }
+                                        foreach (var kvp in p.EnumOverrides)
+                                        {
+                                            if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == val) { keyToUse = kvp.Key; break; }
+                                        }
+                                    }
+                                    if (!string.IsNullOrEmpty(keyToUse) && p.EnumOverrides.TryGetValue(keyToUse, out object ovr)) {
+                                        if (ovr is Newtonsoft.Json.Linq.JObject jo && jo["MaskValue"] != null) { mask |= (int)jo["MaskValue"]; hasMaskControl = true; }
                                     }
                                 }
-                                if (!string.IsNullOrEmpty(keyToUse) && p.EnumOverrides.TryGetValue(keyToUse, out object ovr)) {
-                                    if (ovr is Newtonsoft.Json.Linq.JObject jo && jo["MaskValue"] != null) { mask |= (int)jo["MaskValue"]; hasMaskControl = true; }
-                                }
-                            }
-                        } catch {}
+                            } catch {}
+                        }
                     }
                 }
                 if (!hasMaskControl) mask = 0xFFF;
@@ -2398,6 +2426,86 @@ namespace CraftingSystem
                 GUI.color = new Color(1f, 1f, 1f, 0.06f); // Calque blanc très léger (6% d'opacité)
                 GUI.DrawTexture(lastRect, Texture2D.whiteTexture);
                 GUI.color = oldC;
+            }
+        }
+ 
+        private void DrawDynamicMetamagicList(float scale, string currentlyOpenParam)
+        {
+            int count = dynamicParamValues.ContainsKey("MetamagicCount") ? dynamicParamValues["MetamagicCount"] : 1;
+            GUIStyle paramLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) };
+            
+            var enumType = typeof(Kingmaker.UnitLogic.Abilities.Metamagic);
+            var allNames = Enum.GetNames(enumType);
+            var allValues = (int[])Enum.GetValues(enumType);
+ 
+            List<int> selectedMetamagics = new List<int>();
+            for (int i = 0; i < count; i++)
+            {
+                string key = "Metamagic_" + i;
+                if (dynamicParamValues.ContainsKey(key)) selectedMetamagics.Add(dynamicParamValues[key]);
+                else { dynamicParamValues[key] = 0; selectedMetamagics.Add(0); }
+            }
+ 
+            for (int i = 0; i < count; i++)
+            {
+                string key = "Metamagic_" + i;
+                int currentVal = dynamicParamValues[key];
+ 
+                GUILayout.BeginHorizontal();
+                GUILayout.Label($"{Helpers.GetString("ui_metamagic_slot", "Metamagic Slot")} {i + 1}: ", paramLabelStyle, GUILayout.Width(150 * scale));
+ 
+                // Filtrage pour ne pas proposer ce qui est déjà sélectionné (sauf la valeur actuelle du slot)
+                var availableNames = new List<string>();
+                var availableValues = new List<int>();
+                for (int j = 0; j < allNames.Length; j++)
+                {
+                    int val = allValues[j];
+                    if (val != 0 && val != currentVal && selectedMetamagics.Contains(val)) continue;
+                    availableNames.Add(allNames[j]);
+                    availableValues.Add(val);
+                }
+ 
+                string currentName = Enum.GetName(enumType, currentVal) ?? "None";
+                string displayName = Helpers.GetString("ui_enum_" + currentName, currentName);
+ 
+                if (CButton(displayName, GUILayout.Width(200 * scale)))
+                {
+                    openDropdownParam = (openDropdownParam == key) ? null : key;
+                }
+                
+                if (i > 0) // Bouton pour supprimer le slot
+                {
+                    if (CButton("X", GUILayout.Width(30 * scale)))
+                    {
+                        // On remonte les suivants
+                        for (int k = i; k < count - 1; k++) dynamicParamValues["Metamagic_" + k] = dynamicParamValues["Metamagic_" + (k + 1)];
+                        dynamicParamValues.Remove("Metamagic_" + (count - 1));
+                        dynamicParamValues["MetamagicCount"] = count - 1;
+                        openDropdownParam = null;
+                        return;
+                    }
+                }
+ 
+                GUILayout.EndHorizontal();
+ 
+                if (currentlyOpenParam == key)
+                {
+                    GUILayout.BeginVertical(GUI.skin.box);
+                    for (int j = 0; j < availableNames.Count; j++)
+                    {
+                        string optName = availableNames[j];
+                        string displayOpt = Helpers.GetString("ui_enum_" + optName, optName);
+                        if (CButton(displayOpt)) { dynamicParamValues[key] = availableValues[j]; openDropdownParam = null; }
+                    }
+                    GUILayout.EndVertical();
+                }
+                GUILayout.Space(5);
+            }
+ 
+            if (CButton("+ " + Helpers.GetString("ui_btn_add_metamagic", "Add Metamagic"), GUILayout.Width(200 * scale)))
+            {
+                dynamicParamValues["Metamagic_" + count] = 0;
+                dynamicParamValues["MetamagicCount"] = count + 1;
             }
         }
     }

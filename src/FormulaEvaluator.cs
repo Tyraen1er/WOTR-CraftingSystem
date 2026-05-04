@@ -7,6 +7,8 @@ namespace CraftingSystem
 {
     public static class FormulaEvaluator
     {
+        private static readonly HashSet<string> SupportedFunctions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "MAX", "MIN", "ABS", "FLOOR", "CEIL", "ROUND" };
+ 
         /// <summary>
         /// Évalue une expression mathématique simple en remplaçant les variables par leurs valeurs.
         /// Supporte : +, -, *, /, (, )
@@ -35,14 +37,21 @@ namespace CraftingSystem
                 }
             }
 
-            // Vérification après remplacement : reste-t-il des patterns alphabétiques non résolus ?
-            // On exclut les fonctions mathématiques si on en ajoute plus tard (ici aucune)
+            // 2. Prétraitement des fonctions (MAX, MIN, ABS, etc.)
+            // On le fait AVANT la vérification des variables manquantes pour que MAX(...) disparaisse
+            try {
+                expression = expression.Replace(" ", "");
+                expression = ProcessFunctions(expression);
+            } catch { /* On laisse la vérification suivante attraper les erreurs */ }
+ 
+            // 3. Vérification après remplacement : reste-t-il des patterns alphabétiques non résolus ?
             var matches = Regex.Matches(expression, @"[a-zA-Z_][a-zA-Z0-9_\.]*");
             foreach (Match m in matches)
             {
+                if (SupportedFunctions.Contains(m.Value)) continue;
                 if (!double.TryParse(m.Value, out _)) missingVars.Add(m.Value);
             }
-
+ 
             if (missingVars.Count > 0)
             {
                 Main.ModEntry.Logger.Error($"[FORMULA] Missing variables in formula '{formula}': {string.Join(", ", missingVars)}");
@@ -51,11 +60,6 @@ namespace CraftingSystem
 
             try
             {
-                expression = expression.Replace(" ", "");
-                
-                // 2. Prétraitement des fonctions (MAX, MIN, ABS, etc.)
-                expression = ProcessFunctions(expression);
-
                 double result = ParseExpression(expression);
                 
                 if (double.IsInfinity(result) || double.IsNaN(result))

@@ -126,7 +126,7 @@ namespace CraftingSystem
 
             bool isWeapon = item.Blueprint is BlueprintItemWeapon;
             bool isArmor = item.Blueprint is BlueprintItemArmor;
-            bool isEquipable = item.Blueprint is BlueprintItemEquipment && !(item.Blueprint is BlueprintItemEquipmentUsable);
+            bool isEquipable = item.Blueprint is BlueprintItemEquipment;
 
             if (!isWeapon && !isArmor && !isEquipable) SpitItemBack(item);
         }

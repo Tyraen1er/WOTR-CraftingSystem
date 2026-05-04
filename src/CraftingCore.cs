@@ -89,9 +89,9 @@ namespace CraftingSystem
                 else if (bp is BlueprintItem bpItem)
                 {
                     var newItem = bpItem.CreateEntity();
-                    var workshop = Game.Instance.Player.MainCharacter.Value.Ensure<UnitPartWilcerWorkshop>();
-                    workshop.StashedItems.Add(newItem);
-                    Main.ModEntry.Logger.Log($"[ATELIER] Création immédiate de {newItem.Name}.");
+                    DeferredInventoryOpener.CraftingBox.Add(newItem);
+                    Game.Instance.Player.MainCharacter.Value.Ensure<UnitPartWilcerWorkshop>().SyncFromBox();
+                    Main.ModEntry.Logger.Log($"[ATELIER] Création immédiate et livraison dans le coffre de {newItem.Name}.");
                 }
                 return;
             }
@@ -172,9 +172,9 @@ namespace CraftingSystem
                         if (bp is BlueprintItem bpItem)
                         {
                             var newItem = bpItem.CreateEntity();
-                            StashedItems.Add(newItem);
-                            if (_virtualBox != null) _virtualBox.Add(newItem);
-                            Main.ModEntry.Logger.Log($"[ATELIER] Création réussie de l'objet : {newItem.Name}");
+                            DeferredInventoryOpener.CraftingBox.Add(newItem);
+                            SyncFromBox(); // Synchronise la liste interne StashedItems
+                            Main.ModEntry.Logger.Log($"[ATELIER] Création et livraison dans le coffre de : {newItem.Name}");
                         }
                         else if (bp is BlueprintItemEnchantment bpEnch)
                         {

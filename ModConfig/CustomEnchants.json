@@ -35,15 +35,15 @@
       "Metamagic": "Maximize",
       "MaxSpellLevel": 0
     },
-    "Comp_MetamagicRod": {
-      "$type": "Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics, Assembly-CSharp",
-      "m_RodAbility": "!bp_c2af1030100000000000000000000000",
-      "m_AbilitiesWhiteList": []
-    },
     "Comp_ActivatableResource": {
       "$type": "Kingmaker.UnitLogic.ActivatableAbilities.ActivatableAbilityResourceLogic, Assembly-CSharp",
-      "m_RequiredResource": "!bp_c2af1050100000000000000000000000",
-      "SpendType": "OncePerUse"
+      "m_RequiredResource": "!bp_e60057ae395368a44955b24467ec6a0f",
+      "SpendType": "TurnOn"
+    },
+    "Comp_MetamagicRod": {
+      "$type": "Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics, Assembly-CSharp",
+      "Metamagic": "None",
+      "MaxSpellLevel": 3
     },
     "Comp_AddFact": {
       "$type": "Kingmaker.UnitLogic.FactLogic.AddFacts, Assembly-CSharp",
@@ -58,7 +58,6 @@
     }
   },
   "Models": [
-...
     {
       "EnchantId": "008",
       "BaseName": {
@@ -751,8 +750,8 @@
         "frFR": "Sceptre métamagique (Charges)"
       },
       "NameCompleted": {
-        "enGB": "{Grade} {Metamagic} {Metamagic2} {Metamagic3} Rod",
-        "frFR": "Sceptre métamagique de {Metamagic} {Metamagic2} {Metamagic3} ({Grade})"
+        "enGB": "{Grade} {Metamagic} Rod ({Charges} charges)",
+        "frFR": "Sceptre métamagique de {Metamagic} ({Grade}, {Charges} charges)"
       },
       "Type": "UsableItem",
       "Slots": [],
@@ -778,20 +777,6 @@
       "DynamicParams": [
         {
           "Name": "Metamagic",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Metamagic"
-        },
-        {
-          "Name": "Metamagic2",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Metamagic"
-        },
-        {
-          "Name": "Metamagic3",
           "Type": "Enum",
           "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
           "ComponentIndex": -1,
@@ -824,12 +809,13 @@
           "FieldName": "Grade"
         },
         {
-          "Name": "Level",
+          "Name": "Charges",
           "Type": "Slider",
           "Min": 1,
-          "Max": 4,
+          "Max": 10,
+          "DefaultValue": 3,
           "ComponentIndex": -1,
-          "FieldName": "Level"
+          "FieldName": "Charges"
         }
       ]
     }

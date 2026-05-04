@@ -430,6 +430,12 @@ namespace CraftingSystem
                     Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] FATAL: Could not create instance for type {model.Type}");
                     return null;
                 }
+ 
+                // --- CAS SPÉCIAL : SCEPTRE MÉTAMAGIQUE DYNAMIQUE (007) ---
+                if (model.EnchantId == "007")
+                {
+                    return BuildComplexMetamagicRod(model, (BlueprintItemEquipmentUsable)bp, guid, paramValues);
+                }
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Blueprint instantiation failed: {ex}");
                 return null;
@@ -846,6 +852,90 @@ namespace CraftingSystem
             return bp;
         }
 
+        private static BlueprintScriptableObject BuildComplexMetamagicRod(CustomEnchantmentData model, BlueprintItemEquipmentUsable item, BlueprintGuid guid, List<int> paramValues)
+        {
+            // [0:Grade] [1:Charges] [2:Count] [3+:Metamagics]
+            int grade = paramValues.Count > 0 ? paramValues[0] : 0;
+            int charges = paramValues.Count > 1 ? paramValues[1] : 3;
+            int mCount = paramValues.Count > 2 ? paramValues[2] : 0;
+            int mask = 0;
+            for (int i = 0; i < mCount; i++) mask |= (paramValues.Count > (3 + i) ? paramValues[3 + i] : 0);
+ 
+            string baseName = $"Rod_{guid}";
+            
+            // 1. BUFF
+            var buff = Helpers.CreateBlueprint<BlueprintBuff>(CreateGuidFromSeed(baseName + "_Buff").ToString(), baseName + "_Buff");
+            // m_Flags est privé ainsi que l'enum Flags. StayOnDeath (8) | HiddenInUi (2) = 10
+            var buffType = typeof(BlueprintBuff);
+            var flagsField = buffType.GetField("m_Flags", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (flagsField != null) {
+                flagsField.SetValue(buff, Enum.ToObject(flagsField.FieldType, 10));
+            }
+            
+            var mechanics = new Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics();
+            mechanics.Metamagic = (Kingmaker.UnitLogic.Abilities.Metamagic)mask;
+            mechanics.MaxSpellLevel = (grade == 0 ? 3 : (grade == 1 ? 6 : 9));
+            buff.ComponentsArray = new BlueprintComponent[] { mechanics };
+ 
+            // 2. RESOURCE
+            var resource = Helpers.CreateBlueprint<BlueprintAbilityResource>(CreateGuidFromSeed(baseName + "_Resource").ToString(), baseName + "_Resource");
+            resource.m_MaxAmount = new BlueprintAbilityResource.Amount { BaseValue = charges };
+            
+            // 3. ACTIVATABLE ABILITY
+            var ability = Helpers.CreateBlueprint<BlueprintActivatableAbility>(CreateGuidFromSeed(baseName + "_Ability").ToString(), baseName + "_Ability");
+            ability.m_Buff = buff.ToReference<BlueprintBuffReference>();
+            ability.Group = ActivatableAbilityGroup.MetamagicRod;
+            ability.DeactivateImmediately = true;
+            
+            var resourceLogic = new ActivatableAbilityResourceLogic();
+            resourceLogic.m_RequiredResource = resource.ToReference<BlueprintAbilityResourceReference>();
+            resourceLogic.SpendType = ActivatableAbilityResourceLogic.ResourceSpendType.TurnOn;
+            ability.ComponentsArray = new BlueprintComponent[] { resourceLogic };
+ 
+            // Link back mechanics to ability (required for ManualSpendResource)
+            typeof(Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics).GetField("m_RodAbility", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(mechanics, ability.ToReference<BlueprintActivatableAbilityReference>());
+ 
+            // 4. ITEM
+            item.name = baseName;
+            item.AssetGuid = guid;
+            item.Type = UsableItemType.Other; // Les sceptres sont "Other" dans WOTR pour le toggle
+            item.m_Ability = null; // Pas d'ability directe, c'est l'activatable qui compte
+            
+            var addFact = new AddFacts();
+            addFact.m_Facts = new BlueprintUnitFactReference[] { ability.ToReference<BlueprintUnitFactReference>(), resource.ToReference<BlueprintUnitFactReference>() };
+            item.ComponentsArray = new BlueprintComponent[] { addFact };
+ 
+            // Visuals
+            var itemType = typeof(BlueprintItem);
+            itemType.GetField("m_Weight", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, 1.0f);
+            itemType.GetField("m_Cost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, 100);
+ 
+            // Injection des textes (Resolving names)
+            var replacements = new Dictionary<string, string>();
+            replacements["Grade"] = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
+            replacements["Charges"] = charges.ToString();
+            
+            var mNames = new List<string>();
+            for (int i = 0; i < mCount; i++) {
+                int val = paramValues[3 + i];
+                string n = Enum.GetName(typeof(Kingmaker.UnitLogic.Abilities.Metamagic), val) ?? "None";
+                mNames.Add(Helpers.GetString("ui_enum_" + n, n));
+            }
+            replacements["Metamagic"] = string.Join(", ", mNames);
+ 
+            string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
+            itemType.GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, Helpers.CreateString($"{item.name}.Name", finalName));
+ 
+            // Register all
+            ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(buff.AssetGuid, buff);
+            ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(resource.AssetGuid, resource);
+            ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(ability.AssetGuid, ability);
+            ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(item.AssetGuid, item);
+ 
+            Main.ModEntry.Logger.Log($"[DYNAMIC_ROD] Created complex rod chain for {finalName}");
+            return item;
+        }
+ 
         private static BlueprintGuid CreateGuidFromSeed(string seed)
         {
             using (MD5 md5 = MD5.Create())
