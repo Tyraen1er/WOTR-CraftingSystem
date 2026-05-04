@@ -311,21 +311,8 @@ namespace CraftingSystem
 
             GUI.FocusWindow(string.IsNullOrEmpty(activeDescriptionPopup) ? 999 : 998);
 
-            // --- FENÊTRE DE CHOIX ARME DOUBLE ---
-            if (showDoubleWeaponChoice)
-            {
-                float dW = 600f * scale;
-                float dH = 250f * scale;
-                Rect choiceRect = new Rect((Screen.width - dW) / 2f, (Screen.height - dH) / 2f, dW, dH);
-                
-                GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
-                GUI.DrawTexture(choiceRect, Texture2D.whiteTexture);
-                GUI.color = oldGUIColor;
-                
-                GUI.Window(997, choiceRect, DrawDoubleWeaponChoice, "");
-                DrawBorder(choiceRect, 2f, Color.yellow); // Bordure jaune pour attirer l'attention
-                GUI.BringWindowToFront(997);
-            }
+            GUI.Window(999, windowRect, DrawWindowContent, "");
+            DrawBorder(windowRect, 2f, Color.gray);
         }
 
         void DrawDoubleWeaponChoice(int id)
@@ -409,6 +396,12 @@ namespace CraftingSystem
             GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
             GUI.DrawTexture(new Rect(0, 0, 1000f * scale, Mathf.Min(900f * scale, Screen.height * 0.9f)), Texture2D.whiteTexture);
             GUI.color = oldColor;
+
+            if (showDoubleWeaponChoice)
+            {
+                DrawDoubleWeaponChoice(windowID);
+                return;
+            }
 
             if (!string.IsNullOrEmpty(feedbackMessage))
             {
