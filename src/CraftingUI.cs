@@ -592,7 +592,27 @@ namespace CraftingSystem
         void DrawCreateWeaponGUI(float scale) { GUILayout.Label("Coming Soon: Weapon Creation"); }
         void DrawCreateArmorGUI(float scale) { GUILayout.Label("Coming Soon: Armor Creation"); }
         void DrawCreateAccessoryGUI(float scale) { GUILayout.Label("Coming Soon: Accessory Creation"); }
-        void DrawCreateMetamagicRodGUI(float scale) { GUILayout.Label("Coming Soon: Metamagic Rod Creation"); }
+        void DrawCreateMetamagicRodGUI(float scale) 
+        { 
+            if (selectedModel == null || selectedModel.EnchantId != "007")
+            {
+                selectedModel = CustomEnchantmentsBuilder.AllModels.FirstOrDefault(m => m.EnchantId == "007");
+                if (selectedModel != null)
+                {
+                    dynamicParamValues.Clear();
+                    foreach (var p in selectedModel.DynamicParams) dynamicParamValues[p.Name] = p.Min;
+                }
+            }
+            
+            if (selectedModel != null)
+            {
+                DrawCustomEnchantmentGUI_Content(scale);
+            }
+            else
+            {
+                GUILayout.Label("Metamagic Rod model (007) not found in CustomEnchants.json");
+            }
+        }
         void DrawCreateWandGUI(float scale) { GUILayout.Label("Coming Soon: Wand Creation"); }
         void DrawCreateScrollGUI(float scale) { GUILayout.Label("Coming Soon: Scroll Creation"); }
 
@@ -1860,9 +1880,24 @@ namespace CraftingSystem
                                         }
                                     } catch {}
                                 }
-                                dynamicParamValues[p.Name] = defVal;
-                            }
+                            dynamicParamValues[p.Name] = defVal;
+                            filtersDirty = true;
                         }
+                        selectedModel = model; // On s'assure qu'il est bien assigné
+                    }
+                    GUILayout.EndHorizontal();
+                }
+            }
+        }
+        else
+        {
+                // --- MODE CONFIGURATION ---
+                if (CButton(Helpers.GetString("ui_btn_back", "Back"), GUILayout.Width(100 * scale), GUILayout.Height(30 * scale)))
+                {
+                    selectedModel = null;
+                }
+                GUILayout.Space(10);
+
                 GUILayout.Label(string.Format(Helpers.GetString("ui_configuring_model", "Configuring: <b>{0}</b>"), Helpers.GetLocalizedString(selectedModel.BaseName ?? selectedModel.NameCompleted)), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
                 GUILayout.Space(15);
 

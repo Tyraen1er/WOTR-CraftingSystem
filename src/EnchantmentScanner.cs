@@ -501,82 +501,67 @@ namespace CraftingSystem
                                 foreach (var table in model.PriceTables)
                                 {
                                     string tableName = table.Key;
-                                    double resolvedPrice = 0;
-                                    bool found = false;
-
-                                    // 1. Recherche de clé composite (ex: Grade_Level)
-                                    if (table.Value.Keys.Any(k => k.Contains("_")))
+                                    
+                                    // On itère sur TOUS les paramètres pour voir s'ils peuvent être résolus par cette table
+                                    foreach (var pDef in model.DynamicParams)
                                     {
-                                        // On tente de trouver deux paramètres pour former une clé composite
-                                        // On cherche Grade/Level d'abord (format Rod), puis on itère sur les params
-                                        var pNames = model.DynamicParams.Select(p => p.Name).ToList();
-                                        foreach (var p1 in pNames)
+                                        if (formulaVars.TryGetValue(pDef.Name, out double pVal))
                                         {
-                                            foreach (var p2 in pNames)
+                                            double resolvedPrice = 0;
+                                            bool found = false;
+
+                                            // 1. Recherche de clé composite (priorité au paramètre actuel + un autre)
+                                            // On cherche si ce paramètre pDef peut former une clé composite avec un autre
+                                            foreach (var pOther in model.DynamicParams)
                                             {
-                                                if (p1 == p2) continue;
-                                                if (formulaVars.TryGetValue(p1, out double v1) && formulaVars.TryGetValue(p2, out double v2))
+                                                if (pDef.Name == pOther.Name) continue;
+                                                if (formulaVars.TryGetValue(pOther.Name, out double vOther))
                                                 {
-                                                    // Mapping spécial pour Grade (format Rod)
-                                                    string k1 = v1.ToString();
-                                                    if (p1 == "Grade") {
-                                                        if (v1 == 0) k1 = "Lesser"; else if (v1 == 1) k1 = "Normal"; else if (v1 == 2) k1 = "Greater";
-                                                    }
-                                                    string k2 = v2.ToString();
-                                                    if (p2 == "Grade") {
-                                                        if (v2 == 0) k2 = "Lesser"; else if (v2 == 1) k2 = "Normal"; else if (v2 == 2) k2 = "Greater";
-                                                    }
+                                                    string k1 = GetEnumKey(pDef, pVal);
+                                                    string k2 = GetEnumKey(pOther, vOther);
 
                                                     string compositeKey = $"{k1}_{k2}";
                                                     if (table.Value.TryGetValue(compositeKey, out double cp)) { resolvedPrice = cp; found = true; break; }
                                                     
-                                                    // On tente l'inverse
                                                     compositeKey = $"{k2}_{k1}";
                                                     if (table.Value.TryGetValue(compositeKey, out double cp2)) { resolvedPrice = cp2; found = true; break; }
                                                 }
                                             }
-                                            if (found) break;
-                                        }
+
+                                            // 2. Recherche par paramètre simple
+                                            if (!found)
+                                            {
+                                                string key = GetEnumKey(pDef, pVal);
+                                                if (table.Value.TryGetValue(key, out double m)) { resolvedPrice = m; found = true; }
+                                            }
+
+                                            if (!found && table.Value.TryGetValue("DEFAULT", out double dm)) resolvedPrice = dm;
+
+                                            // Injection : PriceTable.TableName.ParamName
+                                            formulaVars[$"PriceTable.{tableName}.{pDef.Name}"] = resolvedPrice;
+                                            
+                                            // Compatibilité descendante : si le nom de la table est EXACTEMENT le nom du paramètre
+                                            if (tableName == pDef.Name) formulaVars["PriceTable." + tableName] = resolvedPrice;
                                     }
-
-                                    // 2. Recherche par paramètre simple (comportement standard)
-                                    if (!found && formulaVars.TryGetValue(tableName, out double selectedValueDouble))
-                                    {
-                                        int selectedValue = (int)selectedValueDouble;
-                                        string key = selectedValue.ToString();
-
-                                        var paramDef = model.DynamicParams.FirstOrDefault(p => p.Name == tableName);
-                                        if (paramDef != null && paramDef.Type == "Enum")
-                                        {
-                                            try {
-                                                var enumType = Type.GetType(paramDef.EnumTypeName);
-                                                if (enumType != null) key = Enum.GetName(enumType, selectedValue) ?? key;
-                                                
-                                                if (key == selectedValue.ToString() && paramDef.EnumOverrides != null)
-                                                {
-                                                    foreach (var ovr in paramDef.EnumOverrides)
-                                                    {
-                                                        if (ovr.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == selectedValue)
-                                                        {
-                                                            key = ovr.Key;
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                            } catch { }
-                                        }
-
-                                        if (table.Value.TryGetValue(key, out double m))
-                                        {
-                                            resolvedPrice = m;
-                                            found = true;
-                                        }
-                                    }
-
-                                    if (!found && table.Value.TryGetValue("DEFAULT", out double dm)) resolvedPrice = dm;
-                                    formulaVars["PriceTable." + tableName] = resolvedPrice;
                                 }
                             }
+                        }
+
+                            // --- INJECTION DE VARIABLES DE COMPTAGE (Metamagies multiples) ---
+                            int metamagicCount = 0;
+                            foreach (var p in model.DynamicParams)
+                            {
+                                if (p.Name.StartsWith("Metamagic") && formulaVars.TryGetValue(p.Name, out double val) && val > 0)
+                                {
+                                    metamagicCount++;
+                                    formulaVars["Has" + p.Name] = 1;
+                                }
+                                else if (p.Name.StartsWith("Metamagic"))
+                                {
+                                    formulaVars["Has" + p.Name] = 0;
+                                }
+                            }
+                            formulaVars["MetamagicCount"] = metamagicCount;
 
                             if (!string.IsNullOrEmpty(model.GoldOverrideFormula))
                             {
@@ -595,6 +580,40 @@ namespace CraftingSystem
             }
 
             return null;
+        }
+        private static string GetEnumKey(DynamicParam pDef, double val)
+        {
+            string key = ((int)val).ToString();
+            
+            // Mapping spécial pour Grade
+            if (pDef.Name == "Grade")
+            {
+                if ((int)val == 0) return "Lesser";
+                if ((int)val == 1) return "Normal";
+                if ((int)val == 2) return "Greater";
+            }
+
+            if (pDef.Type == "Enum" && !string.IsNullOrEmpty(pDef.EnumTypeName))
+            {
+                try
+                {
+                    var enumType = Type.GetType(pDef.EnumTypeName);
+                    if (enumType != null) key = Enum.GetName(enumType, (int)val) ?? key;
+
+                    if (key == ((int)val).ToString() && pDef.EnumOverrides != null)
+                    {
+                        foreach (var ovr in pDef.EnumOverrides)
+                        {
+                            if (ovr.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == (int)val)
+                            {
+                                return ovr.Key;
+                            }
+                        }
+                    }
+                }
+                catch { }
+            }
+            return key;
         }
     }
 }

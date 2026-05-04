@@ -23,6 +23,9 @@ using Kingmaker.UnitLogic.Mechanics.Actions;
 using Kingmaker.Utility;
 using Kingmaker.Localization;
 using Kingmaker.Blueprints.Classes;
+using Kingmaker.Blueprints.Items;
+using Kingmaker.Blueprints.Items.Equipment;
+using Kingmaker.UnitLogic.ActivatableAbilities;
 using UnityEngine;
 
 namespace CraftingSystem
@@ -408,13 +411,17 @@ namespace CraftingSystem
             Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Starting creation of {Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted)} for GUID {guid} (Mask: 0x{mask:X3})");
             BlueprintScriptableObject bp = null;
             try {
-                if (model.Type == "WeaponEnchantment" || model.Type == "Weapon") bp = ScriptableObject.CreateInstance<BlueprintWeaponEnchantment>();
-                else if (model.Type == "ArmorEnchantment" || model.Type == "Armor") bp = ScriptableObject.CreateInstance<BlueprintArmorEnchantment>();
-                else if (model.Type == "Other" || model.Type == "Equipment") bp = ScriptableObject.CreateInstance<BlueprintEquipmentEnchantment>();
-                else if (model.Type == "Feature") bp = ScriptableObject.CreateInstance<BlueprintFeature>();
-                else if (model.Type == "UsableItem") bp = ScriptableObject.CreateInstance<BlueprintItemEquipmentUsable>();
-                else if (model.Type == "ActivatableAbility") bp = ScriptableObject.CreateInstance<BlueprintActivatableAbility>();
-                else if (model.Type == "Buff") bp = ScriptableObject.CreateInstance<BlueprintBuff>();
+                switch (model.Type)
+                {
+                    case "WeaponEnchantment": bp = Activator.CreateInstance(typeof(BlueprintWeaponEnchantment)) as BlueprintScriptableObject; break;
+                    case "ArmorEnchantment": bp = Activator.CreateInstance(typeof(BlueprintArmorEnchantment)) as BlueprintScriptableObject; break;
+                    case "EquipmentEnchantment": bp = Activator.CreateInstance(typeof(BlueprintEquipmentEnchantment)) as BlueprintScriptableObject; break;
+                    case "Feature": bp = Activator.CreateInstance(typeof(BlueprintFeature)) as BlueprintScriptableObject; break;
+                    case "UsableItem": bp = Activator.CreateInstance(Type.GetType("Kingmaker.Blueprints.Items.Equipment.BlueprintItemEquipmentUsable, Assembly-CSharp")) as BlueprintScriptableObject; break;
+                    case "ActivatableAbility": bp = Activator.CreateInstance(Type.GetType("Kingmaker.UnitLogic.ActivatableAbilities.BlueprintActivatableAbility, Assembly-CSharp")) as BlueprintScriptableObject; break;
+                    case "Buff": bp = Activator.CreateInstance(typeof(BlueprintBuff)) as BlueprintScriptableObject; break;
+                    case "AbilityResource": bp = Activator.CreateInstance(typeof(BlueprintAbilityResource)) as BlueprintScriptableObject; break;
+                }
                 
                 if (bp == null) {
                     Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] FATAL: Could not create instance for type {model.Type}");
@@ -422,8 +429,7 @@ namespace CraftingSystem
                 }
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Blueprint instantiation failed: {ex}");
-            }
-                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Blueprint instantiation failed: {ex}");
+                return null;
             }
 
             if (bp == null) return null;
@@ -529,22 +535,30 @@ namespace CraftingSystem
                                 }
                             }
 
-                            if (!string.IsNullOrEmpty(enumName)) {
+                            if (enumName == "None" || val == 0) {
+                                resolvedVal = "";
+                            } else if (!string.IsNullOrEmpty(enumName)) {
                                 if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(enumName, out object ovrObj))
                                     resolvedVal = Helpers.GetLocalizedString(ovrObj);
-                                else
+                                else if (p.EnumTypeName.Contains("DamageEnergyType"))
                                     resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
+                                else
+                                    resolvedVal = Helpers.GetString("ui_enum_" + enumName, enumName);
                             }
                         }
                     } catch { }
                 }
                 
                 Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Resolved parameter '{p.Name}': {val} -> '{resolvedVal}'");
-                replacements[model.DynamicParams[i].Name] = paramValues[i].ToString();
-                // TODO: Améliorer avec les noms d'enums
+                replacements[p.Name] = resolvedVal;
             }
 
             string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
+            
+            // Nettoyage des doubles espaces (si certains enums étaient vides/None)
+            while (finalName.Contains("  ")) finalName = finalName.Replace("  ", " ");
+            finalName = finalName.Trim();
+
             string prefix = model.Prefix != null ? Helpers.GetLocalizedString(model.Prefix, replacements) : "";
             string suffix = model.Suffix != null ? Helpers.GetLocalizedString(model.Suffix, replacements) : "";
 
@@ -559,78 +573,100 @@ namespace CraftingSystem
 
             if (bp is BlueprintItemEnchantment ench)
             {
-                var t = typeof(BlueprintItemEnchantment);
-                t.GetField("m_EnchantName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Name", finalName));
-                t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
-                t.GetField("m_Prefix", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Prefix", Helpers.GetLocalizedString(model.Prefix, replacements) ?? ""));
-                t.GetField("m_Suffix", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Suffix", Helpers.GetLocalizedString(model.Suffix, replacements) ?? ""));
-                t.GetField("m_EnchantmentCost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, model.EnchantmentCost);
+                var tEnch = typeof(BlueprintItemEnchantment);
+                tEnch.GetField("m_EnchantName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Name", finalName));
+                tEnch.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
+                tEnch.GetField("m_Prefix", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Prefix", Helpers.GetLocalizedString(model.Prefix, replacements) ?? ""));
+                tEnch.GetField("m_Suffix", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, Helpers.CreateString($"{bp.name}.Suffix", Helpers.GetLocalizedString(model.Suffix, replacements) ?? ""));
+                tEnch.GetField("m_EnchantmentCost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ench, model.EnchantmentCost);
             }
-            else if (bp is BlueprintFeature feature)
+            else if (bp is BlueprintFeature featData)
             {
-                var t = typeof(BlueprintUnitFact);
-                t.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(feature, Helpers.CreateString($"{bp.name}.Name", finalName));
-                t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(feature, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
+                var tFact = typeof(BlueprintUnitFact);
+                tFact.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(featData, Helpers.CreateString($"{bp.name}.Name", finalName));
+                tFact.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(featData, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
             }
-            else if (bp is BlueprintItem item)
+            else if (bp is BlueprintItem itemData)
             {
-                var t = typeof(BlueprintItem);
-                t.GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, Helpers.CreateString($"{bp.name}.Name", finalName));
-                t.GetField("m_DescriptionText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
-                
-                if (item is BlueprintItemEquipmentUsable usable && model.EnchantId == "005")
+                var tItem = typeof(BlueprintItem);
+                tItem.GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(itemData, Helpers.CreateString($"{bp.name}.Name", finalName));
+                tItem.GetField("m_DescriptionText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(itemData, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
+            }
+            else if (bp is BlueprintActivatableAbility actAbilityData)
+            {
+                var tFact = typeof(BlueprintUnitFact);
+                tFact.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(actAbilityData, Helpers.CreateString($"{bp.name}.Name", finalName));
+                tFact.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(actAbilityData, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
+
+                if (model.EnchantId == "103" || model.EnchantId == "106")
                 {
-                    // Triade Rod: Création et lien de l'ActivatableAbility
+                    actAbilityData.ActivationType = AbilityActivationType.Immediately;
+                    actAbilityData.DeactivateImmediately = true;
+                }
+            }
+            else if (bp is BlueprintBuff buffData)
+            {
+                var tFact = typeof(BlueprintUnitFact);
+                tFact.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(buffData, Helpers.CreateString($"{bp.name}.Name", finalName));
+                tFact.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(buffData, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
+            }
+
+            // --- LIAISONS SPÉCIALES (RODS & RESOURCES) ---
+            if (bp is BlueprintItemEquipmentUsable usableItem)
+            {
+                var abilityGuid = DynamicGuidHelper.GenerateGuid("103", paramValues.ToArray(), false, mask);
+                GetOrBuildDynamicBlueprint(abilityGuid);
+                var abilityRef = new BlueprintActivatableAbilityReference();
+                abilityRef.ReadGuidFromGuid(abilityGuid);
+                usableItem.m_ActivatableAbility = abilityRef;
+            }
+
+            if (bp is BlueprintActivatableAbility abilityLink)
+            {
+                // Liaison Resource -> Ability (si présent)
+                var resLogic = abilityLink.ComponentsArray.OfType<ActivatableAbilityResourceLogic>().FirstOrDefault();
+                if (resLogic != null)
+                {
+                    var resGuid = DynamicGuidHelper.GenerateGuid("105", paramValues.ToArray(), false, mask);
+                    GetOrBuildDynamicBlueprint(resGuid);
+                    
+                    var resRef = new BlueprintAbilityResourceReference();
+                    resRef.ReadGuidFromGuid(resGuid);
+                    
+                    var resField = resLogic.GetType().GetField("m_RequiredResource", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    if (resField != null) resField.SetValue(resLogic, resRef);
+                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Linked Resource {resGuid} to Ability {bp.name}");
+                }
+            }
+
+            if (bp is BlueprintBuff buffTarget)
+            {
+                var rodComp = buffTarget.ComponentsArray.OfType<MetamagicRodMechanics>().FirstOrDefault();
+                if (rodComp != null)
+                {
                     var abilityGuid = DynamicGuidHelper.GenerateGuid("103", paramValues.ToArray(), false, mask);
-                    var abilityBp = GetOrBuildDynamicBlueprint(abilityGuid) as BlueprintActivatableAbility;
-                    if (abilityBp != null)
-                    {
-                        usable.m_ActivatableAbility = abilityBp.ToReference<BlueprintActivatableAbilityReference>();
-                        usable.Charges = 3;
-                        usable.SpendCharges = true;
-                        usable.RestoreChargesOnRest = true;
-                        
-                        // Paramètres optionnels via paramValues (si on veut varier les charges un jour)
-                        // ex: if (model.EnchantId == "RodMasterpiece") usable.Charges = 6;
-                    }
+                    var abilityRef = new BlueprintActivatableAbilityReference();
+                    abilityRef.ReadGuidFromGuid(abilityGuid);
+                    
+                    var field = rodComp.GetType().GetField("m_RodAbility", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    if (field != null) field.SetValue(rodComp, abilityRef);
                 }
             }
-            else if (bp is BlueprintActivatableAbility ability)
-            {
-                var t = typeof(BlueprintUnitFact);
-                t.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ability, Helpers.CreateString($"{bp.name}.Name", finalName));
-                t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ability, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
 
-                if (model.EnchantId == "103")
-                {
-                    // Triade Rod: Création et lien du Buff
-                    var buffGuid = DynamicGuidHelper.GenerateGuid("104", paramValues.ToArray(), false, mask);
-                    var buffBp = GetOrBuildDynamicBlueprint(buffGuid) as BlueprintBuff;
-                    if (buffBp != null)
-                    {
-                        ability.m_Buff = buffBp.ToReference<BlueprintBuffReference>();
-                        ability.ActivationType = AbilityActivateOnType.Immediately;
-                        ability.DeactivateImmediately = true;
-                    }
-                }
-            }
-            else if (bp is BlueprintBuff buff)
+            if (bp is BlueprintFeature featComp)
             {
-                var t = typeof(BlueprintUnitFact);
-                t.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(buff, Helpers.CreateString($"{bp.name}.Name", finalName));
-                t.GetField("m_Description", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(buff, Helpers.CreateString($"{bp.name}.Desc", staticDesc));
-
-                if (model.EnchantId == "104")
+                var addFacts = featComp.ComponentsArray.OfType<AddFacts>().FirstOrDefault();
+                if (addFacts != null)
                 {
-                    // Triade Rod: Lien retour vers l'Ability pour MetamagicRodMechanics
-                    var rodComp = buff.ComponentsArray.OfType<MetamagicRodMechanics>().FirstOrDefault();
-                    if (rodComp != null)
-                    {
-                        var abilityGuid = DynamicGuidHelper.GenerateGuid("103", paramValues.ToArray(), false, mask);
-                        var abilityRef = new BlueprintActivatableAbilityReference();
-                        abilityRef.ReadGuidFromGuid(abilityGuid);
-                        rodComp.m_RodAbility = abilityRef;
-                    }
+                    // Si c'est le modèle 107 (Feature Chargée), on lie vers l'Ability 106
+                    string abilityId = model.EnchantId == "107" ? "106" : "103";
+                    var abilityGuid = DynamicGuidHelper.GenerateGuid(abilityId, paramValues.ToArray(), false, mask);
+                    GetOrBuildDynamicBlueprint(abilityGuid);
+                    
+                    var factRef = new BlueprintUnitFactReference();
+                    factRef.ReadGuidFromGuid(abilityGuid);
+                    addFacts.m_Facts = new BlueprintUnitFactReference[] { factRef };
+                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Linked Fact {abilityGuid} to Feature {bp.name}");
                 }
             }
 
@@ -739,9 +775,27 @@ namespace CraftingSystem
             
             if (lastField != null)
             {
-                if (lastField.FieldType.IsEnum) lastField.SetValue(current, Enum.ToObject(lastField.FieldType, value));
-                else lastField.SetValue(current, Convert.ChangeType(value, lastField.FieldType));
-                Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Successfully set {lastField.Name} to {value}");
+                if (lastField.FieldType.IsEnum)
+                {
+                    if (Attribute.IsDefined(lastField.FieldType, typeof(FlagsAttribute)))
+                    {
+                        // Pour les enums [Flags], on combine (OR) au lieu d'écraser
+                        int currentVal = 0;
+                        try {
+                            currentVal = Convert.ToInt32(lastField.GetValue(current));
+                        } catch { }
+                        lastField.SetValue(current, Enum.ToObject(lastField.FieldType, currentVal | value));
+                    }
+                    else
+                    {
+                        lastField.SetValue(current, Enum.ToObject(lastField.FieldType, value));
+                    }
+                }
+                else
+                {
+                    lastField.SetValue(current, Convert.ChangeType(value, lastField.FieldType));
+                }
+                Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Successfully set/combined {lastField.Name} with {value}");
             }
             else
             {

@@ -15,6 +15,7 @@ using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Equipment;
 using Kingmaker.Blueprints.Items.Ecnchantments;
+using Kingmaker.Blueprints.Items;
 using Newtonsoft.Json; 
 using UniRx;
 using System.Linq;
@@ -162,8 +163,8 @@ namespace CraftingSystem
                         if (bp is BlueprintItem bpItem)
                         {
                             var newItem = bpItem.CreateEntity();
-                            workshop.StashedItems.Add(newItem);
-                            if (workshop._virtualBox != null) workshop._virtualBox.Add(newItem);
+                            StashedItems.Add(newItem);
+                            if (_virtualBox != null) _virtualBox.Add(newItem);
                             Main.ModEntry.Logger.Log($"[ATELIER] Création réussie de l'objet : {newItem.Name}");
                         }
                         else if (bp is BlueprintItemEnchantment bpEnch)

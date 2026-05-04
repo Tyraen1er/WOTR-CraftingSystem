@@ -39,9 +39,93 @@
       "$type": "Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics, Assembly-CSharp",
       "m_RodAbility": "!bp_c2af1030100000000000000000000000",
       "m_AbilitiesWhiteList": []
+    },
+    "Comp_ActivatableResource": {
+      "$type": "Kingmaker.UnitLogic.ActivatableAbilities.ActivatableAbilityResourceLogic, Assembly-CSharp",
+      "m_RequiredResource": "!bp_c2af1050100000000000000000000000",
+      "SpendType": "OncePerUse"
+    },
+    "Comp_AddFact": {
+      "$type": "Kingmaker.UnitLogic.FactLogic.AddFacts, Assembly-CSharp",
+      "m_Facts": [
+        "!bp_c2af1030100000000000000000000000"
+      ],
+      "CasterLevel": 0,
+      "DoNotRestoreDirectly": false,
+      "HasDifficultyRequirements": false,
+      "InvertDifficultyRequirements": false,
+      "MinDifficulty": "Story"
     }
   },
   "Models": [
+...
+    {
+      "EnchantId": "008",
+      "BaseName": {
+        "enGB": "Charged Metamagic Enchantment",
+        "frFR": "Enchantement métamagique à charges"
+      },
+      "NameCompleted": {
+        "enGB": "Charged {Metamagic} {Metamagic2} {Metamagic3}",
+        "frFR": "{Metamagic} {Metamagic2} {Metamagic3} (Charges)"
+      },
+      "Type": "WeaponEnchantment",
+      "Slots": [
+        "Weapon",
+        "Armor"
+      ],
+      "FeatureModelId": "107",
+      "Components": [
+        "Comp_EquipmentFeature"
+      ],
+      "DynamicParams": [
+        {
+          "Name": "Metamagic",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": -1,
+          "FieldName": "Metamagic"
+        },
+        {
+          "Name": "Metamagic2",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": -1,
+          "FieldName": "Metamagic"
+        },
+        {
+          "Name": "Metamagic3",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": -1,
+          "FieldName": "Metamagic"
+        },
+        {
+          "Name": "Charges",
+          "Type": "Slider",
+          "Min": 1,
+          "Max": 10,
+          "ComponentIndex": -1,
+          "FieldName": "Charges"
+        }
+      ]
+    },
+    {
+      "EnchantId": "105",
+      "BaseName": "Model_Metamagic_Resource",
+      "Type": "AbilityResource",
+      "Components": [],
+      "DynamicParams": [
+        {
+          "Name": "Charges",
+          "Type": "Slider",
+          "Min": 1,
+          "Max": 10,
+          "ComponentIndex": -1,
+          "FieldName": "m_MaxAmount.BaseValue"
+        }
+      ]
+    },
     {
       "EnchantId": "100",
       "BaseName": "Model_StatBonus_Feature",
@@ -558,8 +642,8 @@
         "frFR": "Métamagie permanente"
       },
       "NameCompleted": {
-        "enGB": "Permanent {Metamagic}",
-        "frFR": "{Metamagic} permanente"
+        "enGB": "Permanent {Metamagic} {Metamagic2} {Metamagic3}",
+        "frFR": "{Metamagic} {Metamagic2} {Metamagic3} permanente"
       },
       "Type": "WeaponEnchantment",
       "Slots": [
@@ -578,6 +662,20 @@
           "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
           "ComponentIndex": -1,
           "FieldName": "Metamagic"
+        },
+        {
+          "Name": "Metamagic2",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": -1,
+          "FieldName": "Metamagic"
+        },
+        {
+          "Name": "Metamagic3",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": -1,
+          "FieldName": "Metamagic"
         }
       ]
     },
@@ -587,6 +685,33 @@
       "Type": "ActivatableAbility",
       "Components": [],
       "DynamicParams": []
+    },
+    {
+      "EnchantId": "106",
+      "BaseName": "Model_Metamagic_Ability_Charged",
+      "Type": "ActivatableAbility",
+      "Components": [
+        "Comp_ActivatableResource"
+      ],
+      "DynamicParams": []
+    },
+    {
+      "EnchantId": "107",
+      "BaseName": "Model_Metamagic_Feature_Charged",
+      "Type": "Feature",
+      "Components": [
+        "Comp_AddFact"
+      ],
+      "DynamicParams": [
+        {
+          "Name": "Charges",
+          "Type": "Slider",
+          "Min": 1,
+          "Max": 10,
+          "ComponentIndex": -1,
+          "FieldName": "Charges"
+        }
+      ]
     },
     {
       "EnchantId": "104",
@@ -602,6 +727,20 @@
           "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
           "ComponentIndex": 0,
           "FieldName": "Metamagic"
+        },
+        {
+          "Name": "Metamagic2",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": 0,
+          "FieldName": "Metamagic"
+        },
+        {
+          "Name": "Metamagic3",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": 0,
+          "FieldName": "Metamagic"
         }
       ]
     },
@@ -612,12 +751,12 @@
         "frFR": "Sceptre métamagique (Charges)"
       },
       "NameCompleted": {
-        "enGB": "{Grade} {Metamagic} Rod",
-        "frFR": "Sceptre métamagique de {Metamagic} ({Grade})"
+        "enGB": "{Grade} {Metamagic} {Metamagic2} {Metamagic3} Rod",
+        "frFR": "Sceptre métamagique de {Metamagic} {Metamagic2} {Metamagic3} ({Grade})"
       },
       "Type": "UsableItem",
       "Slots": [],
-      "GoldOverrideFormula": "PriceTable.Rod",
+      "GoldOverrideFormula": "MAX(PriceTable.Rod.Metamagic, PriceTable.Rod.Metamagic2, PriceTable.Rod.Metamagic3) + (PriceTable.Rod.Metamagic + PriceTable.Rod.Metamagic2 + PriceTable.Rod.Metamagic3 - MAX(PriceTable.Rod.Metamagic, PriceTable.Rod.Metamagic2, PriceTable.Rod.Metamagic3)) * 1.5",
       "Components": [],
       "PriceTables": {
         "Rod": {
@@ -632,12 +771,27 @@
           "Greater_3": 121500,
           "Lesser_4": 35000,
           "Normal_4": 75500,
-          "Greater_4": 170000
+          "Greater_4": 170000,
+          "DEFAULT": 0
         }
       },
       "DynamicParams": [
         {
           "Name": "Metamagic",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": -1,
+          "FieldName": "Metamagic"
+        },
+        {
+          "Name": "Metamagic2",
+          "Type": "Enum",
+          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+          "ComponentIndex": -1,
+          "FieldName": "Metamagic"
+        },
+        {
+          "Name": "Metamagic3",
           "Type": "Enum",
           "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
           "ComponentIndex": -1,

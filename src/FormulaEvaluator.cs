@@ -52,6 +52,10 @@ namespace CraftingSystem
             try
             {
                 expression = expression.Replace(" ", "");
+                
+                // 2. Prétraitement des fonctions (MAX, MIN, ABS, etc.)
+                expression = ProcessFunctions(expression);
+
                 double result = ParseExpression(expression);
                 
                 if (double.IsInfinity(result) || double.IsNaN(result))
@@ -67,6 +71,34 @@ namespace CraftingSystem
                 Main.ModEntry.Logger.Error($"[FORMULA] Error evaluating formula '{formula}' (processed as '{expression}'): {ex.Message}");
                 return double.NaN;
             }
+        }
+
+        private static string ProcessFunctions(string expr)
+        {
+            expr = HandleFunction(expr, "MAX", args => args.Max());
+            expr = HandleFunction(expr, "MIN", args => args.Min());
+            expr = HandleFunction(expr, "ABS", args => Math.Abs(args[0]));
+            expr = HandleFunction(expr, "FLOOR", args => Math.Floor(args[0]));
+            expr = HandleFunction(expr, "CEIL", args => Math.Ceiling(args[0]));
+            expr = HandleFunction(expr, "ROUND", args => Math.Round(args[0]));
+            return expr;
+        }
+
+        private static string HandleFunction(string expr, string funcName, Func<List<double>, double> logic)
+        {
+            string pattern = funcName + @"\(([^()]+)\)";
+            while (Regex.IsMatch(expr, pattern))
+            {
+                expr = Regex.Replace(expr, pattern, m =>
+                {
+                    // On parse chaque argument séparément (peut être une sous-formule sans virgule)
+                    var args = m.Groups[1].Value.Split(',')
+                                .Select(s => ParseExpression(s.Trim()))
+                                .ToList();
+                    return logic(args).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                });
+            }
+            return expr;
         }
 
         public static int EvaluateInt(string formula, Dictionary<string, double> variables)
