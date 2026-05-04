@@ -6,19 +6,22 @@ using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.Localization;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Blueprints.Items.Armors;
+using Kingmaker.Blueprints.Items;
 
 namespace CraftingSystem
 {
     public static class DescriptionManager
     {
-        public static string GetLocalizedDescription(BlueprintItemEnchantment bp, EnchantmentData data, out DescriptionSource source)
+        public static string GetLocalizedDescription(BlueprintScriptableObject bpObj, EnchantmentData data, out DescriptionSource source)
         {
             source = DescriptionSource.None;
+            var bp = bpObj as BlueprintItemEnchantment;
+            var item = bpObj as BlueprintItem;
 
             // 1. Priorité au Jeu (Description localisée officielle)
-            if (bp != null)
+            if (bp != null || item != null)
             {
-                string localized = bp.m_Description?.ToString();
+                string localized = bp != null ? bp.m_Description?.ToString() : item.m_DescriptionText?.ToString();
                 if (!string.IsNullOrEmpty(localized) && localized != bp.name) 
                 {
                     source = DescriptionSource.Official;
@@ -49,14 +52,21 @@ namespace CraftingSystem
             return "";
         }
 
-        public static string GetDisplayName(BlueprintItemEnchantment bp, EnchantmentData data)
+        public static string GetDisplayName(BlueprintScriptableObject bpObj, EnchantmentData data)
         {
             string finalName = "";
+            var bp = bpObj as BlueprintItemEnchantment;
+            var item = bpObj as BlueprintItem;
 
             if (bp != null && bp.m_EnchantName != null)
             {
                 string localized = bp.m_EnchantName.ToString();
                 if (!string.IsNullOrWhiteSpace(localized) && localized != bp.name) finalName = localized;
+            }
+            else if (item != null && item.m_DisplayNameText != null)
+            {
+                string localized = item.m_DisplayNameText.ToString();
+                if (!string.IsNullOrWhiteSpace(localized) && localized != item.name) finalName = localized;
             }
 
             if (string.IsNullOrEmpty(finalName) && data != null && !string.IsNullOrWhiteSpace(data.Name)) 

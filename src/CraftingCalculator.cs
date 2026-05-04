@@ -29,8 +29,9 @@ namespace CraftingSystem
         /// Vérifie si le Blueprint est une altération PURE en regardant ses composants internes,
         /// sans jamais lire son nom. Ignore automatiquement les effets spéciaux (Flaming, Agile...).
         /// </summary>
-        public static bool IsPureEnhancement(BlueprintItemEnchantment bp)
+        public static bool IsPureEnhancement(BlueprintScriptableObject bpObj)
         {
+            var bp = bpObj as BlueprintItemEnchantment;
             if (bp == null) return false;
             
             // Approche robuste : On scanne les noms des composants pour éviter les problèmes de versions/types

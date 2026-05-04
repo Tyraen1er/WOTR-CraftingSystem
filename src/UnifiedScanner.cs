@@ -10,6 +10,7 @@ using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Blueprints.JsonSystem;
 using Kingmaker.Blueprints.JsonSystem.BinaryFormat;
+using Kingmaker.Blueprints.JsonSystem.Converters;
 
 namespace CraftingSystem
 {

@@ -86,16 +86,16 @@ namespace CraftingSystem
         }
 
         [JsonIgnore]
-        public BlueprintItemEnchantment Blueprint
+        public BlueprintScriptableObject Blueprint
         {
             get
             {
                 if (string.IsNullOrEmpty(Guid)) return null;
                 if (Guid.Replace("-", "").ToLower().StartsWith("c2af"))
                 {
-                    return CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(Guid) as BlueprintItemEnchantment;
+                    return CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(Guid);
                 }
-                return ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(Guid)) as BlueprintItemEnchantment;
+                return (BlueprintScriptableObject)ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(Guid));
             }
         }
     }

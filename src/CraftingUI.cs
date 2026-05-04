@@ -1904,8 +1904,8 @@ namespace CraftingSystem
                 {
                     string displayName = Helpers.GetString("ui_custom_enchantment_placeholder", "Custom Enchantment");
                     EnchantmentData data = EnchantmentScanner.GetByGuid(g);
-                    BlueprintItemEnchantment bp = null;
-
+                    BlueprintScriptableObject bp = null;
+ 
                     if (data != null)
                     {
                         displayName = data.Name;
@@ -1913,8 +1913,8 @@ namespace CraftingSystem
                     }
                     else
                     {
-                        bp = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(g) as BlueprintItemEnchantment;
-                        if (bp != null) displayName = bp.Name ?? bp.name;
+                        bp = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(g);
+                        if (bp != null) displayName = bp.name;
                     }
 
                     GUILayout.BeginHorizontal(GUI.skin.box);

@@ -75,7 +75,7 @@ namespace CraftingSystem
             // 1. Paiement immédiat
             Game.Instance.Player.Money -= cost;
 
-            var bp = data.Blueprint;
+            BlueprintScriptableObject bp = data.Blueprint;
             if (bp == null) return;
 
             // 2. CAS PARTICULIER : INSTANTANÉ (0 JOURS)
