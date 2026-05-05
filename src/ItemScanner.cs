@@ -182,22 +182,50 @@ namespace CraftingSystem
 
         private static int DetectLevel(string bpName, string typeName)
         {
-            // Règle TODO : +0 => Standard + Type
-            if (bpName == "Standard" + typeName) return 0;
-            
-            // Règle TODO : +1 à +5 => [Standard] + Type + "Plus" + N
-            string pattern = "Plus";
-            int plusIdx = bpName.IndexOf(pattern, StringComparison.OrdinalIgnoreCase);
-            if (plusIdx != -1)
+            // Nettoyage du type : "CouvertureType" -> "Couverture"
+            string baseType = typeName;
+            if (typeName.EndsWith("Type", StringComparison.OrdinalIgnoreCase))
             {
-                string basePart = bpName.Substring(0, plusIdx);
-                if (basePart == "Standard" + typeName || basePart == typeName)
+                baseType = typeName.Substring(0, typeName.Length - 4);
+            }
+
+            // --- RÈGLE POUR +0 ---
+            // 1. Format Standard (ex: StandardLongsword)
+            // 2. Format Armure Spécifique (ex: CouvertureStandard)
+            if (bpName == "Standard" + typeName || bpName == baseType + "Standard") 
+                return 0;
+            
+            // --- RÈGLE POUR +1 à +5 ---
+            
+            // A. Format "StandartPlus" (avec un 't') - Spécifique aux nouvelles armures
+            string standartPattern = "StandartPlus";
+            if (bpName.Contains(standartPattern))
+            {
+                int tIdx = bpName.IndexOf(standartPattern, StringComparison.OrdinalIgnoreCase);
+                string prefix = bpName.Substring(0, tIdx);
+                if (prefix == baseType)
                 {
-                    string levelStr = bpName.Substring(plusIdx + pattern.Length);
+                    string levelStr = bpName.Substring(tIdx + standartPattern.Length);
                     if (int.TryParse(levelStr, out int level) && level >= 1 && level <= 5)
                         return level;
                 }
             }
+
+            // B. Format classique "Plus" (ex: StandardLongswordPlus1 ou LongswordPlus1)
+            string plusPattern = "Plus";
+            if (bpName.Contains(plusPattern))
+            {
+                int pIdx = bpName.IndexOf(plusPattern, StringComparison.OrdinalIgnoreCase);
+                string prefix = bpName.Substring(0, pIdx);
+                
+                if (prefix == "Standard" + typeName || prefix == typeName || prefix == baseType + "Standard")
+                {
+                    string levelStr = bpName.Substring(pIdx + plusPattern.Length);
+                    if (int.TryParse(levelStr, out int level) && level >= 1 && level <= 5)
+                        return level;
+                }
+            }
+
             return -1;
         }
 

@@ -182,7 +182,7 @@ namespace CraftingSystem
                 //EnchantmentDebug.DumpBlueprint("dd0e096412423d646929d9b945fd6d4c"); // AcidResistance10Enchant
 
                 // --- DUMP DES ITEMS DE BASE ---
-                BaseItemDumper.DumpAll();
+                // BaseItemDumper.DumpAll();
                 
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Error in BlueprintsCache.Init: {ex}");

@@ -28,10 +28,7 @@ namespace CraftingSystem
                     allGuids = ResourcesLibrary.BlueprintsCache.m_LoadedBlueprints.Keys.ToList();
                 }
                 
-                var wilcerWeapons = new List<BlueprintItem>();
                 var wilcerArmors = new List<BlueprintItem>();
-                
-                var standardWeapons = new List<BlueprintItem>();
                 var standardArmors = new List<BlueprintItem>();
 
                 foreach (var guid in allGuids)
@@ -39,12 +36,7 @@ namespace CraftingSystem
                     var bp = ResourcesLibrary.TryGetBlueprint(guid);
                     if (bp == null) continue;
 
-                    if (bp is BlueprintItemWeapon w)
-                    {
-                        if (IsWilcerBaseItem(w)) wilcerWeapons.Add(w);
-                        standardWeapons.Add(w);
-                    }
-                    else if (bp is BlueprintItemArmor a)
+                    if (bp is BlueprintItemArmor a)
                     {
                         if (IsWilcerBaseItem(a)) wilcerArmors.Add(a);
                         standardArmors.Add(a);
@@ -55,8 +47,8 @@ namespace CraftingSystem
                     }
                 }
 
-                ExecuteDump(wilcerWeapons, wilcerArmors, "WilcerBaseItems.csv");
-                ExecuteDump(standardWeapons, standardArmors, "StandardItemsDump.csv");
+                ExecuteDump(wilcerArmors, "WilcerBaseItems.csv");
+                ExecuteDump(standardArmors, "StandardItemsDump.csv");
             }
             catch (Exception ex)
             {
@@ -126,7 +118,7 @@ namespace CraftingSystem
             return false;
         }
 
-        private static void ExecuteDump(List<BlueprintItem> weapons, List<BlueprintItem> armors, string fileName)
+        private static void ExecuteDump(List<BlueprintItem> allItems, string fileName)
         {
             try
             {
@@ -134,7 +126,6 @@ namespace CraftingSystem
                 if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
                 string filePath = Path.Combine(folder, fileName);
 
-                var allItems = weapons.Concat(armors).ToList();
                 if (allItems.Count == 0) { Main.ModEntry.Logger.Log($"[DUMP] Aucun item trouvé pour {fileName}."); return; }
 
                 // Collecter TOUTES les propriétés uniques de TOUS les types présents dans la liste
