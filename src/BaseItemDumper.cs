@@ -28,11 +28,11 @@ namespace CraftingSystem
                     allGuids = ResourcesLibrary.BlueprintsCache.m_LoadedBlueprints.Keys.ToList();
                 }
                 
-                var wilcerWeapons = new List<BlueprintItemWeapon>();
-                var wilcerArmors = new List<BlueprintItemArmor>();
+                var wilcerWeapons = new List<BlueprintItem>();
+                var wilcerArmors = new List<BlueprintItem>();
                 
-                var standardWeapons = new List<BlueprintItemWeapon>();
-                var standardArmors = new List<BlueprintItemArmor>();
+                var standardWeapons = new List<BlueprintItem>();
+                var standardArmors = new List<BlueprintItem>();
 
                 foreach (var guid in allGuids)
                 {
@@ -41,15 +41,17 @@ namespace CraftingSystem
 
                     if (bp is BlueprintItemWeapon w)
                     {
-                        bool isStandard = w.Type != null && bp.name == "Standard" + w.Type.name;
                         if (IsWilcerBaseItem(w)) wilcerWeapons.Add(w);
-                        if (isStandard) standardWeapons.Add(w);
+                        standardWeapons.Add(w);
                     }
                     else if (bp is BlueprintItemArmor a)
                     {
-                        bool isStandard = a.Type != null && bp.name == "Standard" + a.Type.name;
                         if (IsWilcerBaseItem(a)) wilcerArmors.Add(a);
-                        if (isStandard) standardArmors.Add(a);
+                        standardArmors.Add(a);
+                    }
+                    else if (bp is BlueprintItemShield s)
+                    {
+                        standardArmors.Add(s);
                     }
                 }
 
@@ -124,7 +126,7 @@ namespace CraftingSystem
             return false;
         }
 
-        private static void ExecuteDump(List<BlueprintItemWeapon> weapons, List<BlueprintItemArmor> armors, string fileName)
+        private static void ExecuteDump(List<BlueprintItem> weapons, List<BlueprintItem> armors, string fileName)
         {
             try
             {
@@ -132,22 +134,38 @@ namespace CraftingSystem
                 if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
                 string filePath = Path.Combine(folder, fileName);
 
-                var allItems = weapons.Cast<SimpleBlueprint>().Concat(armors.Cast<SimpleBlueprint>()).ToList();
+                var allItems = weapons.Concat(armors).ToList();
                 if (allItems.Count == 0) { Main.ModEntry.Logger.Log($"[DUMP] Aucun item trouvé pour {fileName}."); return; }
 
-                var model = allItems.OrderByDescending(x => x is BlueprintItemWeapon ? 1 : 0).First();
-                var members = GetInspectableMembers(model.GetType());
+                // Collecter TOUTES les propriétés uniques de TOUS les types présents dans la liste
+                var allTypes = allItems.Select(x => x.GetType()).Distinct().ToList();
+                var membersMap = new Dictionary<string, System.Reflection.MemberInfo>();
+                foreach (var type in allTypes)
+                {
+                    foreach (var m in GetInspectableMembers(type))
+                    {
+                        if (!membersMap.ContainsKey(m.Name))
+                            membersMap[m.Name] = m;
+                    }
+                }
+                var sortedMembers = membersMap.Values.OrderBy(m => m.Name).ToList();
 
                 using (var writer = new StreamWriter(filePath, false))
                 {
-                    writer.WriteLine("Category|" + string.Join("|", members.Select(m => m.Name)));
+                    writer.WriteLine("Category|" + string.Join("|", sortedMembers.Select(m => m.Name)));
 
                     foreach (var bp in allItems)
                     {
-                        var values = new List<string> { bp is BlueprintItemWeapon ? "Weapon" : "Armor" };
-                        foreach (var member in members)
+                        var values = new List<string> { bp is BlueprintItemWeapon ? "Weapon" : (bp is BlueprintItemShield ? "Shield" : "Armor") };
+                        foreach (var member in sortedMembers)
                         {
-                            values.Add(FormatValue(GetMemberValue(member, bp)));
+                            // On vérifie si le membre appartient au type de l'objet (ou un de ses parents)
+                            object val = null;
+                            if (member.DeclaringType.IsAssignableFrom(bp.GetType()))
+                            {
+                                val = GetMemberValue(member, bp);
+                            }
+                            values.Add(FormatValue(val));
                         }
                         writer.WriteLine(string.Join("|", values));
                     }
