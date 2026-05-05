@@ -156,7 +156,7 @@ namespace CraftingSystem
                 long basePrice = nextEnchant.GoldOverride >= 0 ? nextEnchant.GoldOverride : (nextEnchant.PointCost * nextEnchant.PointCost * 1000); 
                 long finalPrice = (long)(basePrice * costMultiplier);
                 
-                if (CraftingSettings.EnableEpicCosts && nextEnchant.IsEpic) finalPrice = (long)(finalPrice * CraftingSettings.EpicCostMultiplier);
+                if (CraftingSettings.Instance.EnableEpicCosts && nextEnchant.IsEpic) finalPrice = (long)(finalPrice * CraftingSettings.EpicCostMultiplier);
                 return finalPrice;
             }
 
@@ -177,7 +177,7 @@ namespace CraftingSystem
             }
 
             // --- CALCUL DES MULTIPLICATEURS DE PÉNALITÉ ---
-            float slotMultiplier = (CraftingSettings.ApplySlotPenalty && IsWrongSlot(item, nextEnchant)) ? 1.5f : 1.0f;
+            float slotMultiplier = (CraftingSettings.Instance.ApplySlotPenalty && IsWrongSlot(item, nextEnchant)) ? 1.5f : 1.0f;
             float wondrousMultiplier = (IsWondrousItem(item) && HasMultipleAbilities(item, queuedEnchants)) ? 1.5f : 1.0f;
             float totalPenaltyMultiplier = slotMultiplier * wondrousMultiplier;
 
@@ -237,7 +237,7 @@ namespace CraftingSystem
                 fixedCost = (long)(fixedCost * totalPenaltyMultiplier);
 
                 // Multiplicateur Épique
-                if (CraftingSettings.EnableEpicCosts && nextEnchant.IsEpic) fixedCost = (long)(fixedCost * CraftingSettings.EpicCostMultiplier);
+                if (CraftingSettings.Instance.EnableEpicCosts && nextEnchant.IsEpic) fixedCost = (long)(fixedCost * CraftingSettings.EpicCostMultiplier);
                 
                 return fixedCost;
             }
@@ -278,8 +278,8 @@ namespace CraftingSystem
             bool isEpicAfter = isEpicBefore || (totalAfter > 10) || nextEnchant.IsEpic;
 
             // 6. Calcul des prix
-            double mB = (CraftingSettings.EnableEpicCosts && isEpicBefore) ? CraftingSettings.EpicCostMultiplier : 1.0;
-            double mA = (CraftingSettings.EnableEpicCosts && isEpicAfter) ? CraftingSettings.EpicCostMultiplier : 1.0;
+            double mB = (CraftingSettings.Instance.EnableEpicCosts && isEpicBefore) ? CraftingSettings.EpicCostMultiplier : 1.0;
+            double mA = (CraftingSettings.Instance.EnableEpicCosts && isEpicAfter) ? CraftingSettings.EpicCostMultiplier : 1.0;
 
             long priceWithBasket = (long)(totalBefore * totalBefore * factor * mB);
             long priceWithNext = (long)(totalAfter * totalAfter * factor * mA);
@@ -391,7 +391,7 @@ namespace CraftingSystem
             
             bool isWeaponOrArmor = item.Blueprint is BlueprintItemWeapon || item.Blueprint is BlueprintItemArmor;
 
-            if (CraftingSettings.RequirePlusOneFirst && isWeaponOrArmor)
+            if (CraftingSettings.Instance.RequirePlusOneFirst && isWeaponOrArmor)
             {
                 // Si l'objet n'a pas déjà de +1 ET qu'on ne l'a pas mis dans le "panier" actuel
                 if (!hasEnhancementOriginally && !queueAddsEnhancement)
@@ -407,8 +407,8 @@ namespace CraftingSystem
             }
 
             int addedPoints = selectedList.Sum(d => d.PointCost);
-            if (CraftingSettings.EnforcePointsLimit && currentPoints + addedPoints > CraftingSettings.MaxTotalBonus)
-                return string.Format(Helpers.GetString("err_limit_total", "Limite de puissance totale dépassée (max +{0})."), CraftingSettings.MaxTotalBonus);
+            if (CraftingSettings.Instance.EnforcePointsLimit && currentPoints + addedPoints > CraftingSettings.Instance.MaxTotalBonus)
+                return string.Format(Helpers.GetString("err_limit_total", "Limite de puissance totale dépassée (max +{0})."), CraftingSettings.Instance.MaxTotalBonus);
 
             int selectedMaxEnh = 0;
             foreach (var d in selectedList)
@@ -416,8 +416,8 @@ namespace CraftingSystem
                 if (IsPureEnhancement(d))
                     selectedMaxEnh = Math.Max(selectedMaxEnh, d.PointCost);
             }
-            if (CraftingSettings.EnforcePointsLimit && Math.Max(currentEnhancement, selectedMaxEnh) > CraftingSettings.MaxEnhancementBonus)
-                return string.Format(Helpers.GetString("err_limit_enhancement", "Limite d'altération pure dépassée (max +{0})."), CraftingSettings.MaxEnhancementBonus);
+            if (CraftingSettings.Instance.EnforcePointsLimit && Math.Max(currentEnhancement, selectedMaxEnh) > CraftingSettings.Instance.MaxEnhancementBonus)
+                return string.Format(Helpers.GetString("err_limit_enhancement", "Limite d'altération pure dépassée (max +{0})."), CraftingSettings.Instance.MaxEnhancementBonus);
 
             return null;
         }

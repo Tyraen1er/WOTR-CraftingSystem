@@ -1,152 +1,77 @@
 using System;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using System.Text;
+using Newtonsoft.Json;
 using UnityModManagerNet;
 
 namespace CraftingSystem
 {
-    // L'Enumération des filtres
     public enum SourceFilter { TTRPG = 0, Owlcat = 1, OwlcatPlus = 2, Mods = 3, All = 4 }
 
-    public static class CraftingSettings
+    public class CraftingSettings : UnityModManager.ModSettings
     {
-        // =========================================================================
-        // VARIABLES GLOBALES
-        // =========================================================================
-        public static float CostMultiplier = 1.0f;
-        public static bool InstantCrafting = false;
-        public static bool EnforcePointsLimit = true;
-        public static int MaxTotalBonus = 10;
-        public static int MaxEnhancementBonus = 5;
-        public static bool RequirePlusOneFirst = true;
-        public static bool ApplySlotPenalty = true;
-        public static bool EnableEpicCosts = true;
-        public const float EpicCostMultiplier = 10.0f;
-        public static int ScalePercent = 100;
-        public static SourceFilter CurrentSourceFilter = SourceFilter.TTRPG;
-        public static bool HasOpenedCheats = false;
-        public static int ItemsPerPage = 15;
-
-        // Raccourcis clavier
-        public static KeyBinding ShortcutInventory = new KeyBinding();
-        public static KeyBinding ShortcutIMGUI = new KeyBinding();
-
-        // Constantes d'interface
         public const float BUTTON_OPTION_WIDTH_BASE = 160f;
         public const float BUTTON_CLOSE_WIDTH_BASE = 80f;
-        private const string SETTINGS_FILENAME = "settings.json";
+        public const float EpicCostMultiplier = 10.0f;
 
-        // =========================================================================
-        // CLASSE PRIVÉE POUR LA SÉRIALISATION
-        // =========================================================================
-        [DataContract]
-        private class UiSettingsData
+        public float CostMultiplier = 1.0f;
+        public bool InstantCrafting = false;
+        public bool EnforcePointsLimit = true;
+        public int MaxTotalBonus = 10;
+        public int MaxEnhancementBonus = 5;
+        public bool RequirePlusOneFirst = true;
+        public bool ApplySlotPenalty = true;
+        public bool EnableEpicCosts = true;
+        public int ScalePercent = 100;
+        public SourceFilter CurrentSourceFilter = SourceFilter.TTRPG;
+        public bool HasOpenedCheats = false;
+        public int ItemsPerPage = 15;
+
+        // Raccourcis clavier
+        public KeyBinding ShortcutInventory = new KeyBinding();
+        public KeyBinding ShortcutIMGUI = new KeyBinding();
+
+        // Instance statique pour un accès facile
+        public static CraftingSettings Instance;
+
+        private static string GetSettingsPath(UnityModManager.ModEntry modEntry) => Path.Combine(modEntry.Path, "settings.json");
+
+        public static void Load(UnityModManager.ModEntry modEntry)
         {
-            [DataMember] public float CostMultiplier = 1.0f;
-            [DataMember] public bool InstantCrafting = false;
-            [DataMember] public bool EnforcePointsLimit = true;
-            [DataMember] public int MaxTotalBonus = 10;
-            [DataMember] public int MaxEnhancementBonus = 5;
-            [DataMember] public bool RequirePlusOneFirst = true;
-            [DataMember] public bool ApplySlotPenalty = true;
-            [DataMember] public bool EnableEpicCosts = true;
-            [DataMember] public int ScalePercent = 100;
-            [DataMember] public float OptionButtonBase = 160f;
-            [DataMember] public float CloseButtonBase = 80f;
-            [DataMember] public SourceFilter SourceFilterValue = SourceFilter.TTRPG;
-            [DataMember] public int ShortcutInventoryKey = 0;
-            [DataMember] public int ShortcutInventoryMod = 0;
-            [DataMember] public int ShortcutIMGUIKey = 0;
-            [DataMember] public int ShortcutIMGUIMod = 0;
-            [DataMember] public bool HasOpenedCheats = false;
-            [DataMember] public int ItemsPerPage = 15;
+            var path = GetSettingsPath(modEntry);
+            if (File.Exists(path))
+            {
+                try
+                {
+                    Instance = JsonConvert.DeserializeObject<CraftingSettings>(File.ReadAllText(path));
+                    if (Instance != null) return;
+                }
+                catch (Exception e)
+                {
+                    modEntry.Logger.Error($"[ATELIER] Erreur lors du chargement des paramètres : {e.Message}");
+                }
+            }
+            
+            Instance = new CraftingSettings();
+            Instance.Save(modEntry);
         }
 
-        // =========================================================================
-        // MÉTHODES DE CHARGEMENT / SAUVEGARDE
-        // =========================================================================
-        public static void LoadSettings()
+        public override void Save(UnityModManager.ModEntry modEntry)
         {
             try
             {
-                if (Main.ModEntry == null || string.IsNullOrEmpty(Main.ModEntry.Path)) return;
-                var path = Path.Combine(Main.ModEntry.Path, SETTINGS_FILENAME);
-                if (!File.Exists(path))
-                {
-                    SaveSettings();
-                    return;
-                }
-
-                using (var fs = File.OpenRead(path))
-                {
-                    var serializer = new DataContractJsonSerializer(typeof(UiSettingsData));
-                    var obj = serializer.ReadObject(fs) as UiSettingsData;
-                    if (obj == null) return;
-
-                    CostMultiplier = obj.CostMultiplier;
-                    InstantCrafting = obj.InstantCrafting;
-                    EnforcePointsLimit = obj.EnforcePointsLimit;
-                    MaxTotalBonus = obj.MaxTotalBonus;
-                    MaxEnhancementBonus = obj.MaxEnhancementBonus;
-                    RequirePlusOneFirst = obj.RequirePlusOneFirst;
-                    ApplySlotPenalty = obj.ApplySlotPenalty;
-                    EnableEpicCosts = obj.EnableEpicCosts;
-                    if (obj.ScalePercent > 0) ScalePercent = obj.ScalePercent;
-                    CurrentSourceFilter = obj.SourceFilterValue;
-                    HasOpenedCheats = obj.HasOpenedCheats;
-                    if (obj.ItemsPerPage > 0) ItemsPerPage = obj.ItemsPerPage;
-
-                    ShortcutInventory = new KeyBinding { keyCode = (UnityEngine.KeyCode)obj.ShortcutInventoryKey, modifiers = (byte)obj.ShortcutInventoryMod };
-                    ShortcutIMGUI = new KeyBinding { keyCode = (UnityEngine.KeyCode)obj.ShortcutIMGUIKey, modifiers = (byte)obj.ShortcutIMGUIMod };
-                }
+                var path = GetSettingsPath(modEntry);
+                string json = JsonConvert.SerializeObject(this, Formatting.Indented);
+                File.WriteAllText(path, json);
             }
-            catch (Exception ex) { Main.ModEntry.Logger.Error($"[ATELIER] Failed to load UI settings: {ex}"); }
-        }
-
-        public static void SaveSettings()
-        {
-            try
+            catch (Exception e)
             {
-                if (Main.ModEntry == null || string.IsNullOrEmpty(Main.ModEntry.Path)) return;
-                var path = Path.Combine(Main.ModEntry.Path, SETTINGS_FILENAME);
-
-                var s = new UiSettingsData
-                {
-                    CostMultiplier = CostMultiplier,
-                    InstantCrafting = InstantCrafting,
-                    EnforcePointsLimit = EnforcePointsLimit,
-                    MaxTotalBonus = MaxTotalBonus,
-                    MaxEnhancementBonus = MaxEnhancementBonus,
-                    RequirePlusOneFirst = RequirePlusOneFirst,
-                    ApplySlotPenalty = ApplySlotPenalty,
-                    EnableEpicCosts = EnableEpicCosts,
-                    ScalePercent = ScalePercent,
-                    OptionButtonBase = BUTTON_OPTION_WIDTH_BASE,
-                    CloseButtonBase = BUTTON_CLOSE_WIDTH_BASE,
-                    SourceFilterValue = CurrentSourceFilter,
-                    ShortcutInventoryKey = (int)ShortcutInventory.keyCode,
-                    ShortcutInventoryMod = ShortcutInventory.modifiers,
-                    ShortcutIMGUIKey = (int)ShortcutIMGUI.keyCode,
-                    ShortcutIMGUIMod = ShortcutIMGUI.modifiers,
-                    HasOpenedCheats = HasOpenedCheats,
-                    ItemsPerPage = ItemsPerPage
-                };
-
-                using (var ms = new MemoryStream())
-                {
-                    var serializer = new DataContractJsonSerializer(typeof(UiSettingsData));
-                    serializer.WriteObject(ms, s);
-                    ms.Position = 0;
-                    using (var sr = new StreamReader(ms, Encoding.UTF8))
-                    {
-                        var json = sr.ReadToEnd();
-                        File.WriteAllText(path, json);
-                    }
-                }
+                modEntry.Logger.Error($"[ATELIER] Erreur lors de la sauvegarde des paramètres : {e.Message}");
             }
-            catch (Exception ex) { Main.ModEntry.Logger.Error($"[ATELIER] Failed to save UI settings: {ex}"); }
         }
+
+        // --- Rétro-compatibilité pour le reste du code ---
+        public static float CostMultiplier_Static => Instance.CostMultiplier;
+        // On pourrait ajouter des propriétés statiques si nécessaire, 
+        // mais il vaut mieux mettre à jour les appels vers CraftingSettings.Instance.Field
     }
 }

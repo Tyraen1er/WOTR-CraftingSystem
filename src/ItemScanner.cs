@@ -23,11 +23,19 @@ namespace CraftingSystem
         public Dictionary<int, string> VariantGuids = new Dictionary<int, string>();
         // Level -> Cost
         public Dictionary<int, int> VariantCosts = new Dictionary<int, int>();
+        // Level -> Icon
+        public Dictionary<int, Sprite> VariantIcons = new Dictionary<int, Sprite>();
 
         public string GetGuid(int level)
         {
             if (VariantGuids.TryGetValue(level, out var guid)) return guid;
             return VariantGuids.ContainsKey(0) ? VariantGuids[0] : null;
+        }
+
+        public Sprite GetIcon(int level)
+        {
+            if (VariantIcons.TryGetValue(level, out var icon) && icon != null) return icon;
+            return Icon;
         }
 
         public int GetCost(int level)
@@ -94,6 +102,7 @@ namespace CraftingSystem
 
                 data.VariantGuids[level] = item.guid.ToString();
                 data.VariantCosts[level] = (int)item.bp.m_Cost;
+                data.VariantIcons[level] = item.bp.Icon;
             }
             Weapons.AddRange(weaponMap.Values.OrderBy(x => x.Name));
 
@@ -122,6 +131,7 @@ namespace CraftingSystem
 
                 data.VariantGuids[level] = item.guid.ToString();
                 data.VariantCosts[level] = (int)item.bp.m_Cost;
+                data.VariantIcons[level] = item.bp.Icon;
             }
             Armors.AddRange(armorMap.Values.OrderBy(x => x.Name));
 
@@ -150,6 +160,7 @@ namespace CraftingSystem
 
                 data.VariantGuids[level] = item.guid.ToString();
                 data.VariantCosts[level] = (int)item.bp.m_Cost;
+                data.VariantIcons[level] = item.bp.Icon;
             }
             Shields.AddRange(shieldMap.Values.OrderBy(x => x.Name));
 

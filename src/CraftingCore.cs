@@ -155,7 +155,7 @@ namespace CraftingSystem
             {
                 try 
                 {
-                    if (currentTime >= project.FinishTimeTicks || CraftingSettings.InstantCrafting)
+                    if (currentTime >= project.FinishTimeTicks || CraftingSettings.Instance.InstantCrafting)
                     {
                         // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Tentative de finition pour : {itemName} avec l'enchantement {project.EnchantmentGuid}");
                         
