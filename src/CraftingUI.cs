@@ -688,24 +688,25 @@ namespace CraftingSystem
 
                     GUILayout.FlexibleSpace();
 
-                    if (CButton(Helpers.GetString("ui_btn_buy", "BUY"), GUILayout.Width(80 * scale), GUILayout.Height(40 * scale)))
+                    // Bouton d'achat standard
+                    if (CButton(Helpers.GetString("ui_btn_buy", "BUY"), GUILayout.Width(70 * scale), GUILayout.Height(40 * scale)))
                     {
-                        if (Game.Instance.Player.Money >= item.Cost)
+                        BuyItem(item.Guid, item.Cost);
+                    }
+
+                    // Boutons d'altération (+1 à +5) pour Armes/Armures/Boucliers
+                    if (item.Category == "Weapon" || item.Category == "Armor" || item.Category == "Shield")
+                    {
+                        GUILayout.Space(10 * scale);
+                        for (int plus = 1; plus <= 5; plus++)
                         {
-                            var bp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(item.Guid)) as BlueprintItem;
-                            if (bp != null)
+                            if (CButton($"+{plus}", GUILayout.Width(40 * scale), GUILayout.Height(40 * scale)))
                             {
-                                Game.Instance.Player.Money -= item.Cost;
-                                var entity = bp.CreateEntity();
-                                DeferredInventoryOpener.CraftingBox.Add(entity);
-                                feedbackMessage = string.Format(Helpers.GetString("ui_success_purchased", "<color=green>Success!</color> Purchased: {0}"), entity.Name);
+                                TryBuyPlusItem(item, plus);
                             }
                         }
-                        else
-                        {
-                            feedbackMessage = string.Format(Helpers.GetString("ui_err_not_enough_gold_need", "<color=red>Not enough gold!</color> (Need {0} GP)"), item.Cost);
-                        }
                     }
+
                     GUILayout.EndHorizontal();
                 }
             }
@@ -1745,12 +1746,7 @@ namespace CraftingSystem
             {
                 EnchantmentScanner.ForceSync();
             }
-            if (CButton("Dump Weapons for Debug (Desktop/WeaponsDump.txt)", GUILayout.Height(35 * scale)))
-            {
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WeaponsDump.txt");
-                WeaponDump.DumpWeapons(path);
-                feedbackMessage = "Weapon dump created on Desktop!";
-            }
+
 
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
@@ -2833,6 +2829,74 @@ namespace CraftingSystem
 
                 dynamicParamValues["Metamagic_" + count] = nextValidMetamagic;
                 dynamicParamValues["MetamagicCount"] = count + 1;
+            }
+        }
+        private void BuyItem(string guid, int cost)
+        {
+            if (Game.Instance.Player.Money >= cost)
+            {
+                var bp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(guid)) as BlueprintItem;
+                if (bp != null)
+                {
+                    Game.Instance.Player.Money -= cost;
+                    var entity = bp.CreateEntity();
+                    DeferredInventoryOpener.CraftingBox.Add(entity);
+                    feedbackMessage = string.Format(Helpers.GetString("ui_success_purchased", "<color=green>Success!</color> Purchased: {0}"), entity.Name);
+                }
+            }
+            else
+            {
+                feedbackMessage = string.Format(Helpers.GetString("ui_err_not_enough_gold_need", "<color=red>Not enough gold!</color> (Need {0} GP)"), cost);
+            }
+        }
+
+        private void TryBuyPlusItem(ItemData baseItem, int bonus)
+        {
+            var baseBp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(baseItem.Guid)) as BlueprintItem;
+            if (baseBp == null) return;
+
+            // Détermination du nom interne du type
+            string typeName = "";
+            if (baseBp is BlueprintItemWeapon w) typeName = w.Type?.name;
+            else if (baseBp is BlueprintItemArmor a) typeName = a.Type?.name;
+            else if (baseBp is BlueprintItemShield s) typeName = s.Type?.name;
+
+            if (string.IsNullOrEmpty(typeName)) {
+                feedbackMessage = "<color=red>Error:</color> Could not determine item type name.";
+                return;
+            }
+
+            // Tentative de résolution selon la règle : [Standard] + Type + "Plus" + Bonus
+            string nameWithStandard = "Standard" + typeName + "Plus" + bonus;
+            string nameWithoutStandard = typeName + "Plus" + bonus;
+
+            BlueprintItem targetBp = ResourcesLibrary.BlueprintsCache.m_LoadedBlueprints.Keys
+                .Select(guid => ResourcesLibrary.TryGetBlueprint(guid))
+                .OfType<BlueprintItem>()
+                .FirstOrDefault(b => b.name == nameWithStandard || b.name == nameWithoutStandard);
+
+            if (targetBp == null)
+            {
+                feedbackMessage = string.Format(Helpers.GetString("ui_err_plus_not_found", "<color=red>Error:</color> Could not find blueprint for {0}"), nameWithStandard);
+                return;
+            }
+
+            // Calcul du prix (Prix de base + Prix magique standard)
+            // Pour les armes : +1 = 2000, +2 = 8000, +3 = 18000... (Bonus^2 * 2000)
+            // Pour les armures : Bonus^2 * 1000
+            int magicCost = (bonus * bonus) * (baseItem.Category == "Weapon" ? 2000 : 1000);
+            int totalCost = baseItem.Cost + magicCost;
+
+            if (Game.Instance.Player.Money >= totalCost)
+            {
+                Game.Instance.Player.Money -= totalCost;
+                var entity = targetBp.CreateEntity();
+                DeferredInventoryOpener.CraftingBox.Add(entity);
+                feedbackMessage = string.Format(Helpers.GetString("ui_success_purchased", "<color=green>Success!</color> Purchased: {0}"), entity.Name);
+            }
+            else
+            {
+                feedbackMessage = string.Format(Helpers.GetString("ui_err_not_enough_gold_need", "<color=red>Not enough gold!</color> (Need {0} GP)"), totalCost);
             }
         }
     }

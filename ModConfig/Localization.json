@@ -1106,6 +1106,16 @@
             "enGB": "Configuring: <b>{0}</b>",
             "frFR": "Configuration : <b>{0}</b>",
             "ruRU": "Настройка: <b>{0}</b>"
+        },
+        "ui_btn_dump_all": {
+            "enGB": "Dump Base Items for Analysis (ModPath/Dumps/)",
+            "frFR": "Dump des Items de Base pour Analyse (ModPath/Dumps/)",
+            "ruRU": "Дамп базовых предметов для анализа (ModPath/Dumps/)"
+        },
+        "ui_feedback_dump_done": {
+            "enGB": "Base items dump finished! Check the 'Dumps' folder in mod directory.",
+            "frFR": "Export des items de base terminé ! Consultez le dossier 'Dumps' dans le répertoire du mod.",
+            "ruRU": "Дамп базовых предметов завершен! Проверьте папку 'Dumps' в каталоге мода."
         }
     }
 }

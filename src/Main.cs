@@ -181,13 +181,8 @@ namespace CraftingSystem
                 //EnchantmentDebug.DumpBlueprint("f8125dcb57d3463a9a039e4631204cbe"); // Enhancement7
                 //EnchantmentDebug.DumpBlueprint("dd0e096412423d646929d9b945fd6d4c"); // AcidResistance10Enchant
 
-                // --- DUMP DES ENCHANTEMENTS ---
-                // À commenter
-                //EnchantmentDumper.DumpAll();
-                
-                // --- DUMP STORYTELLER ---
-                // À commenter
-                //StorytellerDumper.Initialize();
+                // --- DUMP DES ITEMS DE BASE ---
+                BaseItemDumper.DumpAll();
                 
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Error in BlueprintsCache.Init: {ex}");

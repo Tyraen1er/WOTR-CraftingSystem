@@ -1,6 +1,8 @@
 - Service d'Achat d'équipement non enchanté
     - Armes
-        Prévoir Dump d'item non enchanté pour chercher une propriété cible qui servira de tri
+        Bouton de selection d'altération +0 à +5
+            Si altération +0, on affiche les items respecatant cette règle : bp.name == "Standard" + bp.Type
+            Pour les altération +1 à +5, le mot standard est facultatif : bp.name = "Standard" + bp.Type + "Plus" + AlterationLevel
     - Armures / Armures
     - Accessoires : Bijoux - Vêtements - sceptres - baguettes
     
