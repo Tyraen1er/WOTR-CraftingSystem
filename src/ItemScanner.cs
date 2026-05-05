@@ -13,12 +13,38 @@ namespace CraftingSystem
 {
     public class ItemData
     {
-        public string Guid;
         public string Name;
-        public int Cost;
+        public int BaseCost;
         public string Category;
         public Sprite Icon;
         public string Description;
+        public string TypeName;
+        // Level -> Guid
+        public Dictionary<int, string> VariantGuids = new Dictionary<int, string>();
+        // Level -> Cost
+        public Dictionary<int, int> VariantCosts = new Dictionary<int, int>();
+
+        public string GetGuid(int level)
+        {
+            if (VariantGuids.TryGetValue(level, out var guid)) return guid;
+            return VariantGuids.ContainsKey(0) ? VariantGuids[0] : null;
+        }
+
+        public int GetCost(int level)
+        {
+            if (VariantCosts.TryGetValue(level, out int cost)) return cost;
+
+            // Fallback: Prix de base + (Bonus^2 * (Weapon ? 2000 : 1000))
+            int magicCost = (level * level) * (Category == "Weapon" ? 2000 : 1000);
+            return BaseCost + magicCost;
+        }
+
+        public string GetDisplayName(int level)
+        {
+            string name = Name ?? "Unknown Item";
+            if (level <= 0) return name;
+            return $"{name} +{level}";
+        }
     }
 
     public static class ItemScanner
@@ -39,131 +65,161 @@ namespace CraftingSystem
             Shields.Clear();
             Accessories.Clear();
 
-            // Filtrage : On ne garde que les items "base" (pas d'enchantements)
-            // On exclut aussi les items nommés "Placeholder", "Test" ou avec des GUIDs suspects si nécessaire
+            var weaponMap = new Dictionary<string, ItemData>();
+            var armorMap = new Dictionary<string, ItemData>();
+            var shieldMap = new Dictionary<string, ItemData>();
 
+            // 1. SCAN WEAPONS
             foreach (var item in weapons)
             {
                 if (item.bp.Type == null) continue;
                 string typeName = item.bp.Type.name;
-                bool isStandardName = item.bp.name == "Standard" + typeName || item.bp.name == typeName;
+                int level = DetectLevel(item.bp.name, typeName);
                 
-                if (isStandardName && item.bp.Enchantments.Count == 0 && IsBaseItem(item.bp))
-                    Weapons.Add(CreateData(item.bp, item.guid, "Weapon"));
-            }
+                if (level == -1) continue; // Pas un item standard/plus
 
+                if (!weaponMap.TryGetValue(typeName, out var data))
+                {
+                    data = CreateBaseData(item.bp, "Weapon", typeName);
+                    weaponMap[typeName] = data;
+                }
+
+                if (level == 0)
+                {
+                    data.Name = item.bp.Name;
+                    data.Icon = item.bp.Icon;
+                    data.Description = item.bp.Description;
+                    data.BaseCost = (int)item.bp.m_Cost;
+                }
+
+                data.VariantGuids[level] = item.guid.ToString();
+                data.VariantCosts[level] = (int)item.bp.m_Cost;
+            }
+            Weapons.AddRange(weaponMap.Values.OrderBy(x => x.Name));
+
+            // 2. SCAN ARMORS
             foreach (var item in armors)
             {
                 if (item.bp.Type == null) continue;
                 string typeName = item.bp.Type.name;
-                bool isStandardName = item.bp.name == "Standard" + typeName || item.bp.name == typeName;
+                int level = DetectLevel(item.bp.name, typeName);
 
-                if (isStandardName && item.bp.Enchantments.Count == 0 && IsBaseItem(item.bp))
-                    Armors.Add(CreateData(item.bp, item.guid, "Armor"));
+                if (level == -1) continue;
+
+                if (!armorMap.TryGetValue(typeName, out var data))
+                {
+                    data = CreateBaseData(item.bp, "Armor", typeName);
+                    armorMap[typeName] = data;
+                }
+
+                if (level == 0)
+                {
+                    data.Name = item.bp.Name;
+                    data.Icon = item.bp.Icon;
+                    data.Description = item.bp.Description;
+                    data.BaseCost = (int)item.bp.m_Cost;
+                }
+
+                data.VariantGuids[level] = item.guid.ToString();
+                data.VariantCosts[level] = (int)item.bp.m_Cost;
             }
+            Armors.AddRange(armorMap.Values.OrderBy(x => x.Name));
 
+            // 3. SCAN SHIELDS
             foreach (var item in shields)
             {
                 if (item.bp.Type == null) continue;
                 string typeName = item.bp.Type.name;
-                bool isStandardName = item.bp.name == "Standard" + typeName || item.bp.name == typeName;
+                int level = DetectLevel(item.bp.name, typeName);
 
-                if (isStandardName && item.bp.Enchantments.Count == 0 && IsBaseItem(item.bp))
-                    Shields.Add(CreateData(item.bp, item.guid, "Shield"));
+                if (level == -1) continue;
+
+                if (!shieldMap.TryGetValue(typeName, out var data))
+                {
+                    data = CreateBaseData(item.bp, "Shield", typeName);
+                    shieldMap[typeName] = data;
+                }
+
+                if (level == 0)
+                {
+                    data.Name = item.bp.Name;
+                    data.Icon = item.bp.Icon;
+                    data.Description = item.bp.Description;
+                    data.BaseCost = (int)item.bp.m_Cost;
+                }
+
+                data.VariantGuids[level] = item.guid.ToString();
+                data.VariantCosts[level] = (int)item.bp.m_Cost;
             }
+            Shields.AddRange(shieldMap.Values.OrderBy(x => x.Name));
 
+            // 4. SCAN ACCESSORIES (No levels)
             foreach (var item in accessories)
             {
-                if (item.bp.Enchantments.Count == 0 && IsBaseItem(item.bp) && !item.bp.IsNotable)
-                    Accessories.Add(CreateData(item.bp, item.guid, "Accessory"));
+                if (IsBaseOrEnhancementOnly(item.bp) && !item.bp.IsNotable)
+                {
+                    var data = CreateBaseData(item.bp, "Accessory", "");
+                    data.VariantGuids[0] = item.guid.ToString();
+                    data.VariantCosts[0] = (int)item.bp.m_Cost;
+                    Accessories.Add(data);
+                }
             }
-
+            Accessories = Accessories.OrderBy(x => x.Name).ToList();
 
             Main.ModEntry.Logger.Log($"[ITEM-SCAN] Finalisé. W:{Weapons.Count} A:{Armors.Count} S:{Shields.Count} Acc:{Accessories.Count}");
         }
 
-        public static bool IsBaseItem(BlueprintItem bp)
+        private static int DetectLevel(string bpName, string typeName)
         {
-            return GetBaseItemError(bp) == null;
+            // Règle TODO : +0 => Standard + Type
+            if (bpName == "Standard" + typeName) return 0;
+            
+            // Règle TODO : +1 à +5 => [Standard] + Type + "Plus" + N
+            string pattern = "Plus";
+            int plusIdx = bpName.IndexOf(pattern, StringComparison.OrdinalIgnoreCase);
+            if (plusIdx != -1)
+            {
+                string basePart = bpName.Substring(0, plusIdx);
+                if (basePart == "Standard" + typeName || basePart == typeName)
+                {
+                    string levelStr = bpName.Substring(plusIdx + pattern.Length);
+                    if (int.TryParse(levelStr, out int level) && level >= 1 && level <= 5)
+                        return level;
+                }
+            }
+            return -1;
         }
 
-        public static string GetBaseItemError(BlueprintItem bp)
+        private static bool IsBaseOrEnhancementOnly(BlueprintItem bp)
         {
-            if (bp == null) return "NullBP";
+            if (bp == null) return false;
 
-            // --- TEST DES ENCHANTEMENTS ---
-            var enchants = bp.Enchantments;
-            if (enchants != null)
-            {
-                foreach (var enchRef in enchants)
-                {
-                    var ench = enchRef;
-                    if (ench == null) continue;
-
-                    // On autorise UNIQUEMENT le Masterwork
-                    bool isMasterwork = ench.name != null && ench.name.ToLower().Contains("masterwork");
-                    if (!isMasterwork) return $"MagicEnch:{ench.name ?? "Unknown"}";
-                }
-            }
-
-            // --- TEST DES COMPOSANTS MAGIQUES DIRECTS ---
-            var comps = bp.Components;
-            if (comps != null)
-            {
-                foreach (var comp in comps)
-                {
-                    if (comp == null) continue;
-                    string cName = comp.GetType().Name;
-                    if (cName.Contains("EnhancementBonus") || 
-                        cName.Contains("WeaponSpecialAbility") ||
-                        cName.Contains("AddDamage") ||
-                        cName.Contains("ArmorBonusBlueprints")) 
-                        return $"MagicComp:{cName}";
-                }
-            }
-
-            // --- FILTRAGE SPÉCIFIQUE AUX ARMES ---
-            if (bp is BlueprintItemWeapon weapon)
-            {
-                if (weapon.Type == null) return "InvalidType";
-                if (weapon.IsNatural || weapon.Type.IsNatural) return "Natural";
-                
-                var atkType = weapon.AttackType;
-                if (atkType == Kingmaker.RuleSystem.AttackType.Touch || atkType == Kingmaker.RuleSystem.AttackType.RangedTouch) return "Touch/Ray";
-
-                var cat = weapon.Category;
-                if (cat == Kingmaker.Enums.WeaponCategory.Touch ||
-                    cat == Kingmaker.Enums.WeaponCategory.Ray ||
-                    cat == Kingmaker.Enums.WeaponCategory.Bomb ||
-                    cat == Kingmaker.Enums.WeaponCategory.KineticBlast) return "TechnicalCategory";
-
-                if (weapon.Icon == null) return "NoIcon";
-            }
-
-            // --- FILTRAGE NOM/MÉTADONNÉES ---
+            // On évite les items techniques ou de l'armée
             string name = bp.name.ToLower();
-            if (name.Contains("placeholder") || name.Contains("test") || name.Contains("broken") || name.Contains("internal")) return "TechnicalName";
-            if (name.Contains("army") || name.Contains("croisade")) return "ArmyItem";
-            if (name.Contains("standard") && name.Contains("natural")) return "NaturalStandard";
+            if (name.Contains("placeholder") || name.Contains("test") || name.Contains("broken") || name.Contains("internal")) return false;
+            if (name.Contains("army") || name.Contains("croisade")) return false;
+            
+            if (bp.m_DisplayNameText == null || string.IsNullOrEmpty(bp.m_DisplayNameText.ToString())) return false;
+            if (bp.m_Cost < 1) return false;
 
-            if (bp.m_DisplayNameText == null || string.IsNullOrEmpty(bp.m_DisplayNameText.ToString())) return "NoDisplayName";
-
-            // On évite les items qui n'ont pas de coût réel (souvent des items techniques)
-            if (bp.m_Cost <= 1) return "LowCost";
-
-            return null; // OK
+            return true;
         }
 
-        private static ItemData CreateData(BlueprintItem bp, BlueprintGuid guid, string cat)
+        private static ItemData CreateBaseData(BlueprintItem bp, string cat, string typeName)
         {
+            string cleanName = bp.Name;
+            // Nettoyage du suffixe +N pour le nom de base
+            int plusIdx = cleanName.LastIndexOf(" +");
+            if (plusIdx != -1) cleanName = cleanName.Substring(0, plusIdx);
+
             return new ItemData
             {
-                Guid = guid.ToString(),
-                Name = bp.Name,
-                Cost = bp.m_Cost,
+                Name = cleanName,
+                BaseCost = (int)bp.m_Cost,
                 Category = cat,
                 Icon = bp.Icon,
-                Description = bp.Description
+                Description = bp.Description,
+                TypeName = typeName
             };
         }
     }

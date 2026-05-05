@@ -98,6 +98,7 @@ namespace CraftingSystem
         private int scrollSpellLevel = 1;
         private Vector2 scrollListPos = Vector2.zero;
         private Vector2 metamagicScrollPos = Vector2.zero;
+        private int selectedAlteration = 0;
 
         // Paging & Optimization
         private List<EnchantmentData> cachedFilteredEnchantments = new List<EnchantmentData>();
@@ -668,6 +669,26 @@ namespace CraftingSystem
             GUILayout.Label(string.Format(Helpers.GetString("ui_page_forge_title", "{0}"), title), headerStyle);
             GUILayout.Space(10 * scale);
 
+            // --- NOUVEAU : SÉLECTION D'ALTÉRATION GLOBALE (+0 à +5) ---
+            if (currentPageType == CraftingPage.CreateWeapon || currentPageType == CraftingPage.CreateArmor)
+            {
+                GUILayout.BeginHorizontal("box");
+                GUILayout.Label("<b>" + Helpers.GetString("ui_enhancement_level", "Enhancement Level:") + "</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.Width(180 * scale));
+                for (int i = 0; i <= 5; i++)
+                {
+                    Color oldBG = GUI.backgroundColor;
+                    if (selectedAlteration == i) GUI.backgroundColor = Color.cyan;
+                    if (CButton($"+{i}", GUILayout.Width(50 * scale), GUILayout.Height(30 * scale)))
+                    {
+                        selectedAlteration = i;
+                    }
+                    GUI.backgroundColor = oldBG;
+                    GUILayout.Space(5 * scale);
+                }
+                GUILayout.EndHorizontal();
+                GUILayout.Space(10 * scale);
+            }
+
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, "box");
             if (items == null || items.Count == 0)
             {
@@ -682,30 +703,22 @@ namespace CraftingSystem
                         GUILayout.Label(new GUIContent(item.Icon.texture), GUILayout.Width(40 * scale), GUILayout.Height(40 * scale));
                     
                     GUILayout.BeginVertical();
-                    GUILayout.Label($"<b>{item.Name}</b>", new GUIStyle(GUI.skin.label) { richText = true });
-                    GUILayout.Label(string.Format(Helpers.GetString("ui_item_cost", "Cost: {0} GP"), item.Cost), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_SMALL * scale) });
+                    GUILayout.Label($"<b>{item.GetDisplayName(selectedAlteration)}</b>", new GUIStyle(GUI.skin.label) { richText = true });
+                    GUILayout.Label(string.Format(Helpers.GetString("ui_item_cost", "Cost: {0} GP"), item.GetCost(selectedAlteration)), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_SMALL * scale) });
                     GUILayout.EndVertical();
 
                     GUILayout.FlexibleSpace();
 
-                    // Bouton d'achat standard
+                    // Bouton d'achat dynamique basé sur l'altération sélectionnée
+                    string targetGuid = item.GetGuid(selectedAlteration);
+                    bool canBuy = !string.IsNullOrEmpty(targetGuid);
+                    
+                    GUI.enabled = canBuy;
                     if (CButton(Helpers.GetString("ui_btn_buy", "BUY"), GUILayout.Width(70 * scale), GUILayout.Height(40 * scale)))
                     {
-                        BuyItem(item.Guid, item.Cost);
+                        BuyItem(targetGuid, item.GetCost(selectedAlteration));
                     }
-
-                    // Boutons d'altération (+1 à +5) pour Armes/Armures/Boucliers
-                    if (item.Category == "Weapon" || item.Category == "Armor" || item.Category == "Shield")
-                    {
-                        GUILayout.Space(10 * scale);
-                        for (int plus = 1; plus <= 5; plus++)
-                        {
-                            if (CButton($"+{plus}", GUILayout.Width(40 * scale), GUILayout.Height(40 * scale)))
-                            {
-                                TryBuyPlusItem(item, plus);
-                            }
-                        }
-                    }
+                    GUI.enabled = true;
 
                     GUILayout.EndHorizontal();
                 }
@@ -2850,54 +2863,5 @@ namespace CraftingSystem
             }
         }
 
-        private void TryBuyPlusItem(ItemData baseItem, int bonus)
-        {
-            var baseBp = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(baseItem.Guid)) as BlueprintItem;
-            if (baseBp == null) return;
-
-            // Détermination du nom interne du type
-            string typeName = "";
-            if (baseBp is BlueprintItemWeapon w) typeName = w.Type?.name;
-            else if (baseBp is BlueprintItemArmor a) typeName = a.Type?.name;
-            else if (baseBp is BlueprintItemShield s) typeName = s.Type?.name;
-
-            if (string.IsNullOrEmpty(typeName)) {
-                feedbackMessage = "<color=red>Error:</color> Could not determine item type name.";
-                return;
-            }
-
-            // Tentative de résolution selon la règle : [Standard] + Type + "Plus" + Bonus
-            string nameWithStandard = "Standard" + typeName + "Plus" + bonus;
-            string nameWithoutStandard = typeName + "Plus" + bonus;
-
-            BlueprintItem targetBp = ResourcesLibrary.BlueprintsCache.m_LoadedBlueprints.Keys
-                .Select(guid => ResourcesLibrary.TryGetBlueprint(guid))
-                .OfType<BlueprintItem>()
-                .FirstOrDefault(b => b.name == nameWithStandard || b.name == nameWithoutStandard);
-
-            if (targetBp == null)
-            {
-                feedbackMessage = string.Format(Helpers.GetString("ui_err_plus_not_found", "<color=red>Error:</color> Could not find blueprint for {0}"), nameWithStandard);
-                return;
-            }
-
-            // Calcul du prix (Prix de base + Prix magique standard)
-            // Pour les armes : +1 = 2000, +2 = 8000, +3 = 18000... (Bonus^2 * 2000)
-            // Pour les armures : Bonus^2 * 1000
-            int magicCost = (bonus * bonus) * (baseItem.Category == "Weapon" ? 2000 : 1000);
-            int totalCost = baseItem.Cost + magicCost;
-
-            if (Game.Instance.Player.Money >= totalCost)
-            {
-                Game.Instance.Player.Money -= totalCost;
-                var entity = targetBp.CreateEntity();
-                DeferredInventoryOpener.CraftingBox.Add(entity);
-                feedbackMessage = string.Format(Helpers.GetString("ui_success_purchased", "<color=green>Success!</color> Purchased: {0}"), entity.Name);
-            }
-            else
-            {
-                feedbackMessage = string.Format(Helpers.GetString("ui_err_not_enough_gold_need", "<color=red>Not enough gold!</color> (Need {0} GP)"), totalCost);
-            }
-        }
     }
 }

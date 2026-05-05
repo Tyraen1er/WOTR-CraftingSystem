@@ -21,12 +21,14 @@ namespace CraftingSystem
                     writer.WriteLine("DisplayName|InternalName|Guid|Category|AttackType|IsNatural|IsUnarmed|Cost|Icon");
                     foreach (var data in weaponData)
                     {
-                        var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemWeapon>(data.Guid);
+                        string guidStr = data.GetGuid(0);
+                        if (string.IsNullOrEmpty(guidStr)) continue;
+                        var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemWeapon>(BlueprintGuid.Parse(guidStr));
                         if (bp == null) continue;
 
                         string name = data.Name ?? "NULL";
                         string bpName = bp.name ?? "NULL";
-                        string guid = data.Guid.ToString();
+                        string guid = guidStr;
                         string cat = bp.Category.ToString();
                         string atk = bp.AttackType.ToString();
                         string nat = bp.IsNatural.ToString();
