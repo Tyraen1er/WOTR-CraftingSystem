@@ -990,6 +990,11 @@
             "frFR": "Atelier de Potions",
             "ruRU": "Мастерская зелий"
         },
+        "ui_menu_scroll_workshop": {
+            "enGB": "Scroll Workshop",
+            "frFR": "Atelier de Parchemins",
+            "ruRU": "Мастерская свитков"
+        },
         "ui_lvl_format": {
             "enGB": "Lvl {0} - {1}",
             "frFR": "Niv {0} - {1}",
@@ -1094,6 +1099,13 @@
         "ui_param_grade": { "enGB": "Grade", "frFR": "Puissance", "ruRU": "Ранг" },
         "ui_param_charges": { "enGB": "Charges", "frFR": "Charges", "ruRU": "Заряды" },
         "ui_param_heighten_level": { "enGB": "Heighten level", "frFR": "Niveau de Quintessence", "ruRU": "Уровень метамагии" },
+        "ui_param_metamagic2": { "enGB": "Metamagic 2", "frFR": "Métamagie 2", "ruRU": "Метамагия 2" },
+        "ui_param_metamagic3": { "enGB": "Metamagic 3", "frFR": "Métamagie 3", "ruRU": "Метамагия 3" },
+        "ui_param_school": { "enGB": "School", "frFR": "École", "ruRU": "Школа" },
+        "ui_param_type": { "enGB": "Type", "frFR": "Type", "ruRU": "Тип" },
+        "ui_param_alignment": { "enGB": "Alignment", "frFR": "Alignement", "ruRU": "Мировоззрение" },
+        "ui_param_bonusdc": { "enGB": "Bonus DC", "frFR": "Bonus au DD", "ruRU": "Бонус к сложности" },
+        "ui_param_range": { "enGB": "Range", "frFR": "Portée", "ruRU": "Дистанция" },
         "ui_enum_strength": { "enGB": "Strength", "frFR": "Force", "ruRU": "Сила" },
         "ui_enum_dexterity": { "enGB": "Dexterity", "frFR": "Dextérité", "ruRU": "Ловкость" },
         "ui_enum_constitution": { "enGB": "Constitution", "frFR": "Constitution", "ruRU": "Выносливость" },
@@ -1116,6 +1128,33 @@
             "enGB": "Base items dump finished! Check the 'Dumps' folder in mod directory.",
             "frFR": "Export des items de base terminé ! Consultez le dossier 'Dumps' dans le répertoire du mod.",
             "ruRU": "Дамп базовых предметов завершен! Проверьте папку 'Dumps' в каталоге мода."
-        }
+        },
+        "ui_btn_auto_name": { "enGB": "Auto", "frFR": "Auto", "ruRU": "Авто" },
+        "ui_btn_buy_inventory": { "enGB": "INVENTORY", "frFR": "INVENTAIRE", "ruRU": "ИНВЕНТАРЬ" },
+        "ui_btn_buy_workshop": { "enGB": "WORKSHOP", "frFR": "ATELIER", "ruRU": "МАСТЕРСКАЯ" },
+        "ui_btn_cancel": { "enGB": "Cancel", "frFR": "Annuler", "ruRU": "Отмена" },
+        "ui_btn_primary_weapon": { "enGB": "Primary Weapon", "frFR": "Arme principale", "ruRU": "Основное оружие" },
+        "ui_btn_rename_action": { "enGB": "Rename", "frFR": "Renommer", "ruRU": "Переименовать" },
+        "ui_btn_secondary_weapon": { "enGB": "Secondary Weapon", "frFR": "Arme secondaire", "ruRU": "Вторичное оружие" },
+        "ui_double_weapon_choice": { 
+            "enGB": "Double weapons are considered as 2 distinct weapons, choose which part you want to enchant", 
+            "frFR": "Le jeu considère que les armes doubles sont 2 armes distinctes, choisissez quelle partie souhaitez-vous enchanter", 
+            "ruRU": "Двойное оружие считается как 2 разных оружия, выберите, какую часть вы хотите зачаровать" 
+        },
+        "ui_enhancement_level": { "enGB": "Enhancement Level:", "frFR": "Niveau d'altération :", "ruRU": "Уровень усиления:" },
+        "ui_gp_format": { "enGB": "<color=yellow>{0} GP</color>", "frFR": "<color=yellow>{0} po</color>", "ruRU": "<color=yellow>{0} gp</color>" },
+        "ui_success_purchased_box": { 
+            "enGB": "<color=green>Success!</color> {0} added to workshop.", 
+            "frFR": "<color=green>Succès !</color> {0} ajouté à l'établi.", 
+            "ruRU": "<color=green>Успех!</color> {0} добавлен в мастерскую." 
+        },
+        "ui_success_purchased_inv": { 
+            "enGB": "<color=green>Success!</color> {0} added to inventory.", 
+            "frFR": "<color=green>Succès !</color> {0} ajouté à l'inventaire.", 
+            "ruRU": "<color=green>Успех!</color> {0} добавлен в инвентарь." 
+        },
+        "ui_epic_tag": { "enGB": " (Epic)", "frFR": " (Épique)", "ruRU": " (Эпик)" },
+        "ui_settings_models_loaded": { "enGB": "Custom Models Loaded: {0}", "frFR": "Modèles personnalisés chargés : {0}", "ruRU": "Загружено пользовательских моделей: {0}" },
+        "ui_err_generate_item": { "enGB": "Error: Could not generate item data.", "frFR": "Erreur : Impossible de générer les données de l'objet.", "ruRU": "Ошибка: не удалось сгенерировать данные предмета." }
     }
 }

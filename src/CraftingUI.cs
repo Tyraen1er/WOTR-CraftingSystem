@@ -1704,7 +1704,7 @@ namespace CraftingSystem
 
             GUILayout.Label(Helpers.GetString("ui_settings_diagnostic", "Diagnostic Tools:"), settingsLabelStyle);
             GUILayout.Label(EnchantmentScanner.LastSyncMessage, settingsLabelStyle);
-            GUILayout.Label(string.Format("Custom Models Loaded: {0}", CustomEnchantmentsBuilder.AllModels?.Count ?? 0), settingsLabelStyle);
+            GUILayout.Label(string.Format(Helpers.GetString("ui_settings_models_loaded", "Custom Models Loaded: {0}"), CustomEnchantmentsBuilder.AllModels?.Count ?? 0), settingsLabelStyle);
             if (CButton(Helpers.GetString("ui_settings_force_sync", "Force Synchronization (Full Scan)"), GUILayout.Height(35 * scale)))
             {
                 EnchantmentScanner.ForceSync();
@@ -2148,7 +2148,7 @@ namespace CraftingSystem
                     if (data != null)
                     {
                         metadata = $" <color=#E2C675>[+{data.PointString}]</color>";
-                        if (data.IsEpic) metadata += " <color=#FF4500>(Epic)</color>";
+                        if (data.IsEpic) metadata += Helpers.GetString("ui_epic_tag", " <color=#FF4500>(Epic)</color>");
                     }
 
                     GUILayout.Label(" • " + displayName + metadata, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), richText = true }, GUILayout.ExpandWidth(true));
@@ -2490,7 +2490,7 @@ namespace CraftingSystem
                             }
                             else
                             {
-                                feedbackMessage = "<color=red>Error: Could not generate item data.</color>";
+                                feedbackMessage = "<color=red>" + Helpers.GetString("ui_err_generate_item", "Error: Could not generate item data.") + "</color>";
                             }
                         }
                         else
