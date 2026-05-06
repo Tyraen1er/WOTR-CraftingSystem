@@ -14,6 +14,7 @@ using Kingmaker.Blueprints.Items.Shields;
 using Kingmaker.Blueprints.Items.Equipment;
 using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.UI;
+using Kingmaker.UI.Common;
 using Kingmaker.View;
 
 namespace CraftingSystem
@@ -62,6 +63,7 @@ namespace CraftingSystem
                     activeCategories.Clear();
                     activeTypes.Clear();
                     showCategoryFilter = false;
+                    showIconBrowser = false;
                     scrollPosition = Vector2.zero;
                     titleScrollPosition = Vector2.zero;
                     descriptionScrollPosition = Vector2.zero;
@@ -99,6 +101,8 @@ namespace CraftingSystem
         private Vector2 scrollListPos = Vector2.zero;
         private Vector2 metamagicScrollPos = Vector2.zero;
         private int selectedAlteration = 0;
+        private bool showIconBrowser = false;
+        private Vector2 iconScrollPos = Vector2.zero;
 
         // Paging & Optimization
         private List<EnchantmentData> cachedFilteredEnchantments = new List<EnchantmentData>();
@@ -272,6 +276,7 @@ namespace CraftingSystem
                     activeCategories.Clear();
                     activeTypes.Clear();
                     showCategoryFilter = false;
+                    showIconBrowser = false;
                 }
                 else if (showDoubleWeaponChoice)
                 {
@@ -540,13 +545,17 @@ namespace CraftingSystem
                 if (CButtonStyled(new GUIContent(Helpers.GetString("ui_btn_back", "<< BACK")), navStyle, GUILayout.Width(130 * scale), GUILayout.Height(35 * scale)))
                 {
                     if (selectedItem != null) {
-                        selectedItem = null;
-                        showCustomEnchantPage = false;
-                        newNameDraft = "";
-                        queuedEnchantGuids.Clear();
-                        activeCategories.Clear();
-                        activeTypes.Clear();
-                        showCategoryFilter = false;
+                        if (showIconBrowser) {
+                            showIconBrowser = false;
+                        } else {
+                            selectedItem = null;
+                            showCustomEnchantPage = false;
+                            newNameDraft = "";
+                            queuedEnchantGuids.Clear();
+                            activeCategories.Clear();
+                            activeTypes.Clear();
+                            showCategoryFilter = false;
+                        }
                     } else {
                         currentPageType = CraftingPage.MainMenu;
                     }
@@ -1128,6 +1137,12 @@ namespace CraftingSystem
 
         void DrawItemModificationGUI(float scale)
         {
+            if (showIconBrowser)
+            {
+                DrawIconBrowserGUI(scale);
+                return;
+            }
+
             var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
             var activeProject = workshop?.ActiveProjects.FirstOrDefault(p => p.Item == selectedItem);
 
@@ -1162,7 +1177,6 @@ namespace CraftingSystem
             textFieldStyle.fontSize = (int)(FONT_NORMAL * scale);
 
             newNameDraft = CTextFieldStyled(newNameDraft, textFieldStyle, GUILayout.Width(exactTextWidth), GUILayout.Height(35 * scale));
-
             GUILayout.Space(10 * scale);
 
             if (CButton(Helpers.GetString("ui_btn_rename_action", "Rename"), GUILayout.Width(120 * scale), GUILayout.Height(35 * scale)))
@@ -1178,6 +1192,33 @@ namespace CraftingSystem
                 newNameDraft = autoName;
                 feedbackMessage = Helpers.GetString("ui_feedback_autoname_gen", "Automatic name generated.");
             }
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(10 * scale);
+
+            // --- SECTION ICÔNE ---
+            GUILayout.Label(Helpers.GetString("ui_special_action_icon", "Special Action: Change icon (Free)"), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
+            GUILayout.BeginHorizontal();
+
+            // Aperçu de l'icône actuelle (Patchée par Harmony si personnalisée)
+            DrawSprite(selectedItem.Icon, 40 * scale);
+            GUILayout.Space(10 * scale);
+
+            if (CButton(Helpers.GetString("ui_btn_change_icon", "Change Icon"), GUILayout.Width(150 * scale), GUILayout.Height(40 * scale)))
+            {
+                showIconBrowser = true;
+                iconScrollPos = Vector2.zero;
+            }
+
+            GUILayout.Space(10 * scale);
+
+            if (CButton(Helpers.GetString("ui_btn_reset_icon", "Reset"), GUILayout.Width(100 * scale), GUILayout.Height(40 * scale)))
+            {
+                ItemRenamer.ChangeIcon(selectedItem, null);
+                feedbackMessage = Helpers.GetString("ui_feedback_icon_reset", "Icon reset to default.");
+            }
+
+            GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
             GUILayout.Space(20);
@@ -1587,6 +1628,103 @@ namespace CraftingSystem
             GUILayout.EndVertical();
         }
 
+        private void DrawAbadarWarningGUI(float scale)
+        {
+            GUILayout.BeginVertical(GUI.skin.box);
+            GUILayout.Label(Helpers.GetString("ui_abadar_warning_title", "<b><color=red>WARNING: CHEATS & EXPERIMENTAL OPTIONS</color></b>"), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale), alignment = TextAnchor.MiddleCenter });
+            GUILayout.Space(20);
+            GUILayout.Label(Helpers.GetString("ui_abadar_warning_desc", "You are about to enter a zone strictly monitored by Abadar.\n\nModifying these options may disrupt the intended balance of the game, break the economy, or cause unexpected behaviors.\n\nAre you sure you want to proceed?"), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), alignment = TextAnchor.MiddleCenter });
+            GUILayout.Space(40);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (CButton(Helpers.GetString("ui_btn_yes_proceed", "Yes, Proceed"), GUILayout.Width(200 * scale), GUILayout.Height(50 * scale)))
+            {
+                CraftingSettings.Instance.HasOpenedCheats = true;
+                CraftingSettings.Instance.Save(Main.ModEntry);
+                showAbadarWarning = false;
+                ShowSettings = true;
+            }
+            GUILayout.Space(20);
+            if (CButton(Helpers.GetString("ui_btn_no_cancel", "No, Go Back"), GUILayout.Width(200 * scale), GUILayout.Height(50 * scale)))
+            {
+                showAbadarWarning = false;
+                ShowSettings = false;
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+
+            GUILayout.EndVertical();
+        }
+
+        private void DrawIconBrowserGUI(float scale)
+        {
+            GUIStyle titleStyle = new GUIStyle(GUI.skin.label)
+            {
+                fontSize = (int)(FONT_LARGE * scale),
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter
+            };
+            GUILayout.Label(Helpers.GetString("ui_icon_browser_title", "Select a new icon"), titleStyle);
+            GUILayout.Space(20 * scale);
+
+            var itemType = selectedItem.Blueprint.ItemType;
+            if (!ItemScanner.IconCache.TryGetValue(itemType, out var icons) || icons.Count == 0)
+            {
+                GUILayout.Label(Helpers.GetString("ui_icon_browser_empty", "No icons found for this item type."), new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+                return;
+            }
+
+            iconScrollPos = GUILayout.BeginScrollView(iconScrollPos, false, true, GUILayout.ExpandHeight(true));
+            
+            int cols = (int)Mathf.Max(1, (800f * scale) / (120f * scale));
+            int currentCol = 0;
+            float iconSize = 80 * scale;
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace(); // Centrage de la grille
+            foreach (var bp in icons)
+            {
+                GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(iconSize + 20 * scale), GUILayout.Height(iconSize + 50 * scale));
+                
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+                DrawSprite(bp.Icon, iconSize);
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
+
+                GUILayout.Space(5 * scale);
+
+                if (CButton(Helpers.GetString("ui_btn_select", "Select"), GUILayout.Width(iconSize + 10 * scale), GUILayout.Height(30 * scale)))
+                {
+                    ItemRenamer.ChangeIcon(selectedItem, bp.AssetGuid.ToString());
+                    feedbackMessage = Helpers.GetString("ui_feedback_icon_changed", "Icon changed successfully.");
+                    showIconBrowser = false;
+                }
+                
+                GUILayout.EndVertical();
+                
+                currentCol++;
+                if (currentCol >= cols)
+                {
+                    GUILayout.FlexibleSpace();
+                    GUILayout.EndHorizontal();
+                    GUILayout.Space(10 * scale);
+                    GUILayout.BeginHorizontal();
+                    GUILayout.FlexibleSpace();
+                    currentCol = 0;
+                }
+                else
+                {
+                    GUILayout.Space(10 * scale);
+                }
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            
+            GUILayout.EndScrollView();
+        }
+
         void DrawSettingsGUI(float scale)
         {
             float prevCostMult = CraftingSettings.Instance.CostMultiplier;
@@ -1874,51 +2012,6 @@ namespace CraftingSystem
         }
 
         // ======================= CONTROLLER WRAPPERS =======================
-        private void DrawAbadarWarningGUI(float scale)
-        {
-            Color oldBG = GUI.backgroundColor;
-            GUI.backgroundColor = new Color(0.3f, 0.3f, 0.3f, 1.0f);
-            GUILayout.BeginVertical(GUI.skin.box);
-            GUI.backgroundColor = oldBG;
-
-            GUILayout.Space(20);
-            GUIStyle warningStyle = new GUIStyle(GUI.skin.label)
-            {
-                fontSize = (int)(FONT_LARGE * scale),
-                fontStyle = FontStyle.Bold,
-                alignment = TextAnchor.MiddleCenter,
-                wordWrap = true
-            };
-
-            GUILayout.Label(Helpers.GetString("ui_abadar_warning", "Abadar, dieu des lois, du commerce et des cités, vous regarde avec sévérité.\n\nÊtes-vous certain de vouloir accéder à ce menu ?"), warningStyle);
-
-            GUILayout.Space(40);
-
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-
-            if (CButton(Helpers.GetString("ui_btn_yes", "Oui"), GUILayout.Width(150 * scale), GUILayout.Height(40 * scale)))
-            {
-                CraftingSettings.Instance.HasOpenedCheats = true;
-                CraftingSettings.Instance.Save(Main.ModEntry);
-                showAbadarWarning = false;
-                ShowSettings = true;
-            }
-
-            GUILayout.Space(50);
-
-            if (CButton(Helpers.GetString("ui_btn_no", "Non"), GUILayout.Width(150 * scale), GUILayout.Height(40 * scale)))
-            {
-                showAbadarWarning = false;
-                ShowSettings = false;
-            }
-
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-
-            GUILayout.Space(20);
-            GUILayout.EndVertical();
-        }
 
         private void DrawSprite(Sprite sprite, float size)
         {

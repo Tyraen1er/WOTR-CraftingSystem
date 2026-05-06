@@ -7,6 +7,7 @@ using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Shields;
 using Kingmaker.Blueprints.Items.Equipment;
 using Kingmaker.Blueprints.Items;
+using Kingmaker.UI.Common;
 using UnityEngine;
 
 namespace CraftingSystem
@@ -62,6 +63,9 @@ namespace CraftingSystem
         public static List<ItemData> Shields = new List<ItemData>();
         public static List<ItemData> Accessories = new List<ItemData>();
 
+        // Cache des icônes pour le navigateur d'icônes
+        public static Dictionary<ItemsFilter.ItemType, List<BlueprintItem>> IconCache = new Dictionary<ItemsFilter.ItemType, List<BlueprintItem>>();
+
         public static void FinalizeScan(
             IEnumerable<(BlueprintItemWeapon bp, BlueprintGuid guid)> weapons,
             IEnumerable<(BlueprintItemArmor bp, BlueprintGuid guid)> armors,
@@ -72,10 +76,22 @@ namespace CraftingSystem
             Armors.Clear();
             Shields.Clear();
             Accessories.Clear();
+            IconCache.Clear();
 
             var weaponMap = new Dictionary<string, ItemData>();
             var armorMap = new Dictionary<string, ItemData>();
             var shieldMap = new Dictionary<string, ItemData>();
+
+            HashSet<Sprite> uniqueWeaponIcons = new HashSet<Sprite>();
+            HashSet<Sprite> uniqueArmorIcons = new HashSet<Sprite>();
+            HashSet<Sprite> uniqueShieldIcons = new HashSet<Sprite>();
+            HashSet<Sprite> uniqueAccessoryIcons = new HashSet<Sprite>();
+
+            IconCache[ItemsFilter.ItemType.Weapon] = new List<BlueprintItem>();
+            IconCache[ItemsFilter.ItemType.Armor] = new List<BlueprintItem>();
+            IconCache[ItemsFilter.ItemType.Shield] = new List<BlueprintItem>();
+            // Pour les accessoires, on les regroupe dans les autres catégories si on veut, ou on ajoute tout l'équipement
+            IconCache[ItemsFilter.ItemType.Usable] = new List<BlueprintItem>();
 
             // 1. SCAN WEAPONS
             foreach (var item in weapons)
@@ -98,6 +114,8 @@ namespace CraftingSystem
                 
                 // On garde le nom du +0 comme nom de référence s'il existe
                 if (level == 0) data.Name = item.bp.Name; 
+
+                if (item.bp.Icon != null && uniqueWeaponIcons.Add(item.bp.Icon)) IconCache[ItemsFilter.ItemType.Weapon].Add(item.bp);
             }
             Weapons.AddRange(weaponMap.Values.OrderBy(x => x.Name));
 
@@ -121,6 +139,8 @@ namespace CraftingSystem
                 data.VariantIcons[level] = item.bp.Icon;
 
                 if (level == 0) data.Name = item.bp.Name;
+
+                if (item.bp.Icon != null && uniqueArmorIcons.Add(item.bp.Icon)) IconCache[ItemsFilter.ItemType.Armor].Add(item.bp);
             }
             Armors.AddRange(armorMap.Values.OrderBy(x => x.Name));
 
@@ -146,6 +166,8 @@ namespace CraftingSystem
                 data.VariantIcons[level] = item.bp.Icon;
 
                 if (level == 0) data.Name = item.bp.Name;
+
+                if (item.bp.Icon != null && uniqueShieldIcons.Add(item.bp.Icon)) IconCache[ItemsFilter.ItemType.Shield].Add(item.bp);
             }
             var finalShields = shieldMap.Values.OrderBy(x => x.Name).ToList();
             Shields.AddRange(finalShields);
@@ -162,6 +184,12 @@ namespace CraftingSystem
                     data.VariantGuids[0] = item.guid.ToString();
                     data.VariantCosts[0] = (int)item.bp.m_Cost;
                     Accessories.Add(data);
+                }
+
+                if (item.bp.Icon != null && uniqueAccessoryIcons.Add(item.bp.Icon))
+                {
+                    if (!IconCache.ContainsKey(item.bp.ItemType)) IconCache[item.bp.ItemType] = new List<BlueprintItem>();
+                    IconCache[item.bp.ItemType].Add(item.bp);
                 }
             }
             Accessories = Accessories.OrderBy(x => x.Name).ToList();

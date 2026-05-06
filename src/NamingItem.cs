@@ -4,6 +4,7 @@ using System.Linq;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.Blueprints.Items.Weapons;
+using Kingmaker.Blueprints.Items;
 using Kingmaker.Designers;
 using Kingmaker.Items;
 using Kingmaker.Designers.Mechanics.Facts;using Kingmaker.EntitySystem;
@@ -19,6 +20,7 @@ using Kingmaker;
 using Kingmaker.PubSubSystem;
 using Kingmaker.UI.Models.Log;
 using Kingmaker.Blueprints.Root;
+using UnityEngine;
 
 
 namespace CraftingSystem
@@ -27,6 +29,12 @@ namespace CraftingSystem
     {
         [JsonProperty]
         public string CustomName;
+    }
+
+    public class ItemPartCustomIcon : EntityPart
+    {
+        [JsonProperty]
+        public string IconBlueprintGuid;
     }
 
 
@@ -111,12 +119,12 @@ namespace CraftingSystem
         }
     }
 
-    // --- SUPPORT DU RENOMMAGE PERSISTANT ---
-    [HarmonyPatch(typeof(ItemEntity), "get_Name")]
-    public static class ItemEntity_Name_Patch
+    // --- SUPPORT DU RENOMMAGE ET VISUEL PERSISTANT ---
+    [HarmonyPatch(typeof(ItemEntity))]
+    public static class ItemEntity_Visual_Patch
     {
-        [HarmonyPostfix]
-        public static void Postfix(ItemEntity __instance, ref string __result)
+        [HarmonyPatch("get_Name"), HarmonyPostfix]
+        public static void NamePostfix(ItemEntity __instance, ref string __result)
         {
             try {
                 var part = __instance.Get<ItemPartCustomName>();
@@ -126,9 +134,22 @@ namespace CraftingSystem
                 }
             } catch { }
         }
+
+        [HarmonyPatch("get_Icon"), HarmonyPostfix]
+        public static void IconPostfix(ItemEntity __instance, ref Sprite __result)
+        {
+            try {
+                var part = __instance.Get<ItemPartCustomIcon>();
+                if (part != null && !string.IsNullOrEmpty(part.IconBlueprintGuid))
+                {
+                    var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItem>(part.IconBlueprintGuid);
+                    if (bp != null && bp.Icon != null) __result = bp.Icon;
+                }
+            } catch { }
+        }
     }
 
-    // --- SÉCURITÉ : PRÉSERVER LE NOM LORS D'UN SPLIT ---
+    // --- SÉCURITÉ : PRÉSERVER LES DONNÉES LORS D'UN SPLIT ---
     [HarmonyPatch(typeof(ItemEntity), nameof(ItemEntity.Split))]
     public static class ItemEntity_Split_Patch
     {
@@ -136,11 +157,19 @@ namespace CraftingSystem
         public static void Postfix(ItemEntity __instance, ItemEntity __result)
         {
             if (__instance == null || __result == null || __instance == __result) return;
-            var originalPart = __instance.Get<ItemPartCustomName>();
-            if (originalPart != null)
+            
+            var originalNamePart = __instance.Get<ItemPartCustomName>();
+            if (originalNamePart != null)
             {
                 var newPart = __result.Ensure<ItemPartCustomName>();
-                newPart.CustomName = originalPart.CustomName;
+                newPart.CustomName = originalNamePart.CustomName;
+            }
+
+            var originalIconPart = __instance.Get<ItemPartCustomIcon>();
+            if (originalIconPart != null)
+            {
+                var newPart = __result.Ensure<ItemPartCustomIcon>();
+                newPart.IconBlueprintGuid = originalIconPart.IconBlueprintGuid;
             }
         }
     }
@@ -192,6 +221,19 @@ namespace CraftingSystem
                 Main.ModEntry.Logger.Log($"[ATELIER] Renommé : {(string.IsNullOrEmpty(name) ? "Original" : name)}");
             }
             catch (Exception ex) { Main.ModEntry.Logger.Error($"Erreur renommage : {ex}"); }
+        }
+
+        public static void ChangeIcon(ItemEntity item, string blueprintGuid)
+        {
+            if (item == null) return;
+            try
+            {
+                if (string.IsNullOrEmpty(blueprintGuid)) item.Remove<ItemPartCustomIcon>();
+                else item.Ensure<ItemPartCustomIcon>().IconBlueprintGuid = blueprintGuid;
+                
+                Main.ModEntry.Logger.Log($"[ATELIER] Icône changée : {(string.IsNullOrEmpty(blueprintGuid) ? "Originale" : blueprintGuid)}");
+            }
+            catch (Exception ex) { Main.ModEntry.Logger.Error($"Erreur changement icône : {ex}"); }
         }
     }
 }
