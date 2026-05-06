@@ -499,7 +499,7 @@
       },
       "FeatureModelId": "100",
       "Type": "Other",
-      "MaxNotEpic": 8,
+      "MaxNotEpic": 5,
       "Slots": [
         "Armor",
         "Shield",
@@ -579,7 +579,10 @@
             }
           },
           "ComponentIndex": -1,
-          "FieldName": "Descriptor"
+          "FieldName": "Descriptor",
+          "EnumThresholdOverrides": {
+            "Armor": 8
+          }
         },
         {
           "Name": "Value",

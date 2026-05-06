@@ -152,6 +152,7 @@ namespace CraftingSystem
         public List<string> EnumOnly = null; // Optionnel : ne garder que ces valeurs d'enum
         public List<string> EnumExclude = null; // Optionnel : exclure ces valeurs d'enum
         public Dictionary<string, object> EnumOverrides = null; // Optionnel : surcharger le texte affiché (localisable)
+        public Dictionary<string, int> EnumThresholdOverrides = null; // Optionnel : surcharger MaxNotEpic selon la valeur choisie
         public object DefaultValue = null; // Optionnel : valeur pré-sélectionnée par défaut (int ou string)
 
         // Cible pour l'injection

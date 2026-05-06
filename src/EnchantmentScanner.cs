@@ -416,6 +416,22 @@ namespace CraftingSystem
                 Slots = new List<string>(model.Slots)
             };
 
+            int currentMaxNotEpic = model.MaxNotEpic == 0 ? 100 : model.MaxNotEpic;
+            foreach (var p in model.DynamicParams)
+            {
+                if (p.EnumThresholdOverrides != null && formulaVars.TryGetValue(p.Name, out double val))
+                {
+                    try {
+                        var enumType = Type.GetType(p.EnumTypeName);
+                        if (enumType != null) {
+                            string enumName = Enum.GetName(enumType, (int)val);
+                            if (enumName != null && p.EnumThresholdOverrides.TryGetValue(enumName, out int overVal))
+                                currentMaxNotEpic = overVal;
+                        }
+                    } catch {}
+                }
+            }
+
             bool isEpic = false;
             foreach (var pDef in model.DynamicParams)
             {
@@ -427,8 +443,7 @@ namespace CraftingSystem
                     }
                     else 
                     {
-                        int globalThreshold = model.MaxNotEpic == 0 ? 100 : model.MaxNotEpic;
-                        if (pVal > globalThreshold)
+                        if (pDef.Type != "Enum" && pVal > currentMaxNotEpic)
                         {
                             isEpic = true; break;
                         }
