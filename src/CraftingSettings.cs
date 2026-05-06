@@ -11,7 +11,7 @@ namespace CraftingSystem
     {
         public const float BUTTON_OPTION_WIDTH_BASE = 160f;
         public const float BUTTON_CLOSE_WIDTH_BASE = 80f;
-        public const float EpicCostMultiplier = 10.0f;
+        public float EpicCostMultiplier = 10.0f;
 
         public float CostMultiplier = 1.0f;
         public bool InstantCrafting = false;

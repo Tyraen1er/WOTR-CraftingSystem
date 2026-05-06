@@ -77,39 +77,81 @@ namespace CraftingSystem
             var armorMap = new Dictionary<string, ItemData>();
             var shieldMap = new Dictionary<string, ItemData>();
 
-            // 1. SCAN WEAPONS (Désactivé)
-            /*
+            // 1. SCAN WEAPONS
             foreach (var item in weapons)
             {
-                // ...
+                if (item.bp == null) continue;
+                
+                string typeName = item.bp.Type?.name ?? "";
+                int level = DetectLevel(item.bp.name, typeName);
+                if (level < 0) continue;
+
+                if (!weaponMap.TryGetValue(typeName, out var data))
+                {
+                    data = CreateBaseData(item.bp, "Weapon", typeName);
+                    weaponMap[typeName] = data;
+                }
+
+                data.VariantGuids[level] = item.guid.ToString();
+                data.VariantCosts[level] = (int)item.bp.m_Cost;
+                data.VariantIcons[level] = item.bp.Icon;
+                
+                // On garde le nom du +0 comme nom de référence s'il existe
+                if (level == 0) data.Name = item.bp.Name; 
             }
             Weapons.AddRange(weaponMap.Values.OrderBy(x => x.Name));
-            */
 
-            // 2. SCAN ARMORS (Désactivé)
-            /*
+            // 2. SCAN ARMORS
             foreach (var item in armors)
             {
-                // ...
+                if (item.bp == null) continue;
+
+                string typeName = item.bp.Type?.name ?? "";
+                int level = DetectLevel(item.bp.name, typeName);
+                if (level < 0) continue;
+
+                if (!armorMap.TryGetValue(typeName, out var data))
+                {
+                    data = CreateBaseData(item.bp, "Armor", typeName);
+                    armorMap[typeName] = data;
+                }
+
+                data.VariantGuids[level] = item.guid.ToString();
+                data.VariantCosts[level] = (int)item.bp.m_Cost;
+                data.VariantIcons[level] = item.bp.Icon;
+
+                if (level == 0) data.Name = item.bp.Name;
             }
             Armors.AddRange(armorMap.Values.OrderBy(x => x.Name));
-            */
 
-            // 3. SCAN SHIELDS (Désactivé)
-            /*
+            // 3. SCAN SHIELDS
             foreach (var item in shields)
             {
-                // ...
+                if (item.bp == null) continue;
+
+                // Pour les boucliers, le type est souvent dans m_Type ou simplement le BlueprintItemShield lui-même
+                // Mais DetectLevel utilise typeName pour matcher les patterns.
+                string typeName = item.bp.Type?.name ?? "";
+                int level = DetectLevel(item.bp.name, typeName, true);
+                if (level < 0) continue;
+
+                if (!shieldMap.TryGetValue(typeName, out var data))
+                {
+                    data = CreateBaseData(item.bp, "Armor", typeName); // On les traite comme des armures pour la forge
+                    shieldMap[typeName] = data;
+                }
+
+                data.VariantGuids[level] = item.guid.ToString();
+                data.VariantCosts[level] = (int)item.bp.m_Cost;
+                data.VariantIcons[level] = item.bp.Icon;
+
+                if (level == 0) data.Name = item.bp.Name;
             }
-            */
-            // 3. SCAN SHIELDS (Désactivé)
-            /*
             var finalShields = shieldMap.Values.OrderBy(x => x.Name).ToList();
             Shields.AddRange(finalShields);
-            // On les rend disponibles dans l'atelier d'armure
+            // On ajoute les boucliers à la liste des armures pour qu'ils soient achetables dans le même menu
             Armors.AddRange(finalShields);
             Armors = Armors.OrderBy(x => x.Name).ToList();
-            */
 
             // 4. SCAN ACCESSORIES (No levels)
             foreach (var item in accessories)

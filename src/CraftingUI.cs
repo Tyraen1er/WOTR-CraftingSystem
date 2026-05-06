@@ -1594,6 +1594,7 @@ namespace CraftingSystem
             bool prevRequirePlus = CraftingSettings.Instance.RequirePlusOneFirst;
             bool prevSlotPenalty = CraftingSettings.Instance.ApplySlotPenalty;
             bool prevEnableEpic = CraftingSettings.Instance.EnableEpicCosts;
+            float prevEpicMult = CraftingSettings.Instance.EpicCostMultiplier;
             SourceFilter prevSourceFilter = CraftingSettings.Instance.CurrentSourceFilter;
 
             Color oldBG = GUI.backgroundColor;
@@ -1655,8 +1656,19 @@ namespace CraftingSystem
 
                 GUILayout.Space(5);
                 bool oldEpic = CraftingSettings.Instance.EnableEpicCosts;
-                CraftingSettings.Instance.EnableEpicCosts = CToggle(CraftingSettings.Instance.EnableEpicCosts, Helpers.GetString("ui_settings_enable_epic", " Enable Epic Multiplier (x10)"));
+                CraftingSettings.Instance.EnableEpicCosts = CToggle(CraftingSettings.Instance.EnableEpicCosts, Helpers.GetString("ui_settings_enable_epic", " Enable Epic Multiplier"));
                 if (oldEpic != CraftingSettings.Instance.EnableEpicCosts) filtersDirty = true;
+
+                if (CraftingSettings.Instance.EnableEpicCosts)
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Space(20 * scale);
+                    float oldMult = CraftingSettings.Instance.EpicCostMultiplier;
+                    GUILayout.Label(string.Format(Helpers.GetString("ui_settings_epic_multiplier", " Epic Multiplier: x{0:F1}"), CraftingSettings.Instance.EpicCostMultiplier), settingsLabelStyle, GUILayout.Width(200 * scale));
+                    CraftingSettings.Instance.EpicCostMultiplier = (float)Math.Round(GUILayout.HorizontalSlider(CraftingSettings.Instance.EpicCostMultiplier, 1f, 10f, GUILayout.Width(150 * scale)) * 2) / 2f;
+                    if (oldMult != CraftingSettings.Instance.EpicCostMultiplier) filtersDirty = true;
+                    GUILayout.EndHorizontal();
+                }
 
                 GUILayout.Space(8); // Un peu plus d'espace avant les sliders
                 GUILayout.BeginHorizontal();
@@ -1719,6 +1731,7 @@ namespace CraftingSystem
             if (prevCostMult != CraftingSettings.Instance.CostMultiplier || prevInstant != CraftingSettings.Instance.InstantCrafting || prevEnforce != CraftingSettings.Instance.EnforcePointsLimit
                 || prevMaxEnh != CraftingSettings.Instance.MaxEnhancementBonus || prevMaxTotal != CraftingSettings.Instance.MaxTotalBonus || prevRequirePlus != CraftingSettings.Instance.RequirePlusOneFirst
                 || prevSlotPenalty != CraftingSettings.Instance.ApplySlotPenalty || prevEnableEpic != CraftingSettings.Instance.EnableEpicCosts
+                || prevEpicMult != CraftingSettings.Instance.EpicCostMultiplier
                 || prevSourceFilter != CraftingSettings.Instance.CurrentSourceFilter)
             {
                 CraftingSettings.Instance.Save(Main.ModEntry);

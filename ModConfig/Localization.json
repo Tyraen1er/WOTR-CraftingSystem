@@ -626,9 +626,9 @@
             "ruRU": " Применить штраф за слот (x1,5)"
         },
         "ui_settings_enable_epic": {
-            "enGB": " Enable Epic Multiplier (x10)",
-            "frFR": " Activer le multiplicateur Épique (x10)",
-            "ruRU": " Включить эпический множитель (x10)"
+            "enGB": " Enable Epic Multiplier",
+            "frFR": " Activer le multiplicateur Épique",
+            "ruRU": " Включить эпический множитель"
         },
         "ui_settings_epic_multiplier": {
             "enGB": " Epic Multiplier: x{0:F1}",

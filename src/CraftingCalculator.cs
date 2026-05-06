@@ -156,7 +156,7 @@ namespace CraftingSystem
                 long basePrice = nextEnchant.GoldOverride >= 0 ? nextEnchant.GoldOverride : (nextEnchant.PointCost * nextEnchant.PointCost * 1000); 
                 long finalPrice = (long)(basePrice * costMultiplier);
                 
-                if (CraftingSettings.Instance.EnableEpicCosts && nextEnchant.IsEpic) finalPrice = (long)(finalPrice * CraftingSettings.EpicCostMultiplier);
+                if (CraftingSettings.Instance.EnableEpicCosts && nextEnchant.IsEpic) finalPrice = (long)(finalPrice * CraftingSettings.Instance.EpicCostMultiplier);
                 return finalPrice;
             }
 
@@ -237,7 +237,7 @@ namespace CraftingSystem
                 fixedCost = (long)(fixedCost * totalPenaltyMultiplier);
 
                 // Multiplicateur Épique
-                if (CraftingSettings.Instance.EnableEpicCosts && nextEnchant.IsEpic) fixedCost = (long)(fixedCost * CraftingSettings.EpicCostMultiplier);
+                if (CraftingSettings.Instance.EnableEpicCosts && nextEnchant.IsEpic) fixedCost = (long)(fixedCost * CraftingSettings.Instance.EpicCostMultiplier);
                 
                 return fixedCost;
             }
@@ -278,8 +278,8 @@ namespace CraftingSystem
             bool isEpicAfter = isEpicBefore || (totalAfter > 10) || nextEnchant.IsEpic;
 
             // 6. Calcul des prix
-            double mB = (CraftingSettings.Instance.EnableEpicCosts && isEpicBefore) ? CraftingSettings.EpicCostMultiplier : 1.0;
-            double mA = (CraftingSettings.Instance.EnableEpicCosts && isEpicAfter) ? CraftingSettings.EpicCostMultiplier : 1.0;
+            double mB = (CraftingSettings.Instance.EnableEpicCosts && isEpicBefore) ? CraftingSettings.Instance.EpicCostMultiplier : 1.0;
+            double mA = (CraftingSettings.Instance.EnableEpicCosts && isEpicAfter) ? CraftingSettings.Instance.EpicCostMultiplier : 1.0;
 
             long priceWithBasket = (long)(totalBefore * totalBefore * factor * mB);
             long priceWithNext = (long)(totalAfter * totalAfter * factor * mA);

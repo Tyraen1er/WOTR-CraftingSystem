@@ -425,9 +425,13 @@ namespace CraftingSystem
                     {
                         if (pVal > threshold) { isEpic = true; break; }
                     }
-                    else if (model.MaxNotEpic > 0 && pVal > model.MaxNotEpic)
+                    else 
                     {
-                        isEpic = true; break;
+                        int globalThreshold = model.MaxNotEpic == 0 ? 100 : model.MaxNotEpic;
+                        if (pVal > globalThreshold)
+                        {
+                            isEpic = true; break;
+                        }
                     }
                 }
             }
