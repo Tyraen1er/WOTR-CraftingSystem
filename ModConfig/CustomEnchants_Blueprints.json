@@ -1,0 +1,232 @@
+[
+  {
+    "EnchantId": "100",
+    "BaseName": "Model_StatBonus_Feature",
+    "Type": "Feature",
+    "Hidden": true,
+    "Components": [
+      "Comp_AddStatBonus"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Stat"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Descriptor"
+      },
+      {
+        "Name": "Value",
+        "FieldName": "Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "101",
+    "BaseName": "Model_SavingThrows_Feature",
+    "Type": "Feature",
+    "Hidden": true,
+    "Components": [
+      "Comp_AddStatBonus",
+      "Comp_BuffAllSaves"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "EnumOnly": [
+          "SaveFortitude",
+          "SaveReflex",
+          "SaveWill",
+          "SaveAll"
+        ],
+        "EnumOverrides": {
+          "SaveFortitude": {
+            "frFR": "Vigueur",
+            "MaskValue": 1
+          },
+          "SaveReflex": {
+            "frFR": "Réflexes",
+            "MaskValue": 1
+          },
+          "SaveWill": {
+            "frFR": "Volonté",
+            "MaskValue": 1
+          },
+          "SaveAll": {
+            "frFR": "Tous les jets de sauvegarde",
+            "MaskValue": 2,
+            "Value": 255
+          }
+        },
+        "ComponentIndex": 0,
+        "FieldName": "Stat"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Descriptor"
+      },
+      {
+        "Name": "Value",
+        "Max": 20,
+        "ComponentIndex": -1,
+        "FieldName": "Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "102",
+    "BaseName": "Model_Resist_Feature",
+    "Type": "Feature",
+    "Hidden": true,
+    "Components": [
+      "Comp_EnergyResist"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Element",
+        "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Type"
+      },
+      {
+        "Name": "Value",
+        "Type": "Slider",
+        "Min": 5,
+        "Max": 50,
+        "Step": 5,
+        "ComponentIndex": 0,
+        "FieldName": "Value.Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "103",
+    "BaseName": "Model_Metamagic_Ability",
+    "Type": "ActivatableAbility",
+    "Hidden": true,
+    "Components": [],
+    "DynamicParams": []
+  },
+  {
+    "EnchantId": "104",
+    "BaseName": "Model_Metamagic_Buff",
+    "Type": "Buff",
+    "Hidden": true,
+    "Components": [
+      "Comp_MetamagicRod"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Metamagic",
+        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Metamagic"
+      },
+      {
+        "Name": "Metamagic2",
+        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Metamagic"
+      },
+      {
+        "Name": "Metamagic3",
+        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Metamagic"
+      }
+    ]
+  },
+  {
+    "EnchantId": "105",
+    "BaseName": "Model_Metamagic_Resource",
+    "Type": "AbilityResource",
+    "Hidden": true,
+    "Components": [],
+    "DynamicParams": [
+      {
+        "Name": "Charges",
+        "Max": 10,
+        "ComponentIndex": -1,
+        "FieldName": "m_MaxAmount.BaseValue"
+      }
+    ]
+  },
+  {
+    "EnchantId": "106",
+    "BaseName": "Model_Metamagic_Ability_Charged",
+    "Type": "ActivatableAbility",
+    "Hidden": true,
+    "Components": [
+      "Comp_ActivatableResource"
+    ],
+    "DynamicParams": []
+  },
+  {
+    "EnchantId": "107",
+    "BaseName": "Model_Metamagic_Feature_Charged",
+    "Type": "Feature",
+    "Hidden": true,
+    "Components": [
+      "Comp_AddFact"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Charges",
+        "Max": 10,
+        "ComponentIndex": -1,
+        "FieldName": "Charges"
+      }
+    ]
+  },
+  {
+    "EnchantId": "999",
+    "BaseName": {
+      "enGB": "Stat Explorer",
+      "frFR": "Explorateur de Stats"
+    },
+    "NameCompleted": {
+      "enGB": "{Stat} +{Value} ({Descriptor})",
+      "frFR": "{Stat} +{Value} ({Descriptor})"
+    },
+    "FeatureModelId": "100",
+    "Type": "Other",
+    "Hidden": true,
+    "MaxNotEpic": 100,
+    "Slots": [
+      "Neck"
+    ],
+    "GoldOverrideFormula": "1",
+    "PointCostFormula": "0",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Stat"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Descriptor"
+      },
+      {
+        "Name": "Value",
+        "Max": 20,
+        "ComponentIndex": -1,
+        "FieldName": "Value"
+      }
+    ]
+  }
+]

@@ -752,6 +752,9 @@ namespace CraftingSystem
                 int index = 0;
                 foreach (var item in items)
                 {
+                    // NOUVEAU : On cache l'item si la variante pour le niveau sélectionné (+0, +1...) n'existe pas
+                    if (!item.VariantGuids.ContainsKey(selectedAlteration)) continue;
+
                     index++;
                     Color oldBG = GUI.backgroundColor;
                     // Zebra stripping : alternance de couleur une ligne sur deux

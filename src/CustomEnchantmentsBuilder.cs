@@ -266,7 +266,8 @@ namespace CraftingSystem
         {
             // Les fichiers sont copiés à la racine du mod par le script de build
             string compPath = Path.Combine(Main.ModEntry.Path, "CustomEnchants_Components.json");
-            string modelsPath = Path.Combine(Main.ModEntry.Path, "CustomEnchants_Models.json");
+            string enchPath = Path.Combine(Main.ModEntry.Path, "CustomEnchants_Enchantments.json");
+            string bpPath = Path.Combine(Main.ModEntry.Path, "CustomEnchants_Blueprints.json");
 
             var settings = new JsonSerializerSettings
             {
@@ -281,9 +282,9 @@ namespace CraftingSystem
 
             try
             {
-                if (File.Exists(compPath) && File.Exists(modelsPath))
+                if (File.Exists(compPath) && File.Exists(enchPath) && File.Exists(bpPath))
                 {
-                    Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Loading from split files: {compPath} and {modelsPath}");
+                    Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Loading from split files: {compPath}, {enchPath} and {bpPath}");
                     
                     using (var sr = new StreamReader(compPath))
                     using (var jr = new JsonTextReader(sr))
@@ -291,17 +292,27 @@ namespace CraftingSystem
                         ComponentLibrary = serializer.Deserialize<Dictionary<string, object>>(jr) ?? new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
                     }
                     
-                    using (var sr = new StreamReader(modelsPath))
+                    AllModels = new List<CustomEnchantmentData>();
+                    
+                    using (var sr = new StreamReader(enchPath))
                     using (var jr = new JsonTextReader(sr))
                     {
-                        AllModels = serializer.Deserialize<List<CustomEnchantmentData>>(jr) ?? new List<CustomEnchantmentData>();
+                        var enchants = serializer.Deserialize<List<CustomEnchantmentData>>(jr);
+                        if (enchants != null) AllModels.AddRange(enchants);
+                    }
+
+                    using (var sr = new StreamReader(bpPath))
+                    using (var jr = new JsonTextReader(sr))
+                    {
+                        var bps = serializer.Deserialize<List<CustomEnchantmentData>>(jr);
+                        if (bps != null) AllModels.AddRange(bps);
                     }
                     
                     Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Loaded {ComponentLibrary?.Count ?? 0} components and {AllModels?.Count ?? 0} models.");
                 }
                 else
                 {
-                    Main.ModEntry.Logger.Error($"[CUSTOM_ENCHANTS] FATAL: Missing split configuration files! Expected {compPath} and {modelsPath}");
+                    Main.ModEntry.Logger.Error($"[CUSTOM_ENCHANTS] FATAL: Missing split configuration files! Expected {compPath}, {enchPath} and {bpPath}");
                     return;
                 }
                 
@@ -435,8 +446,11 @@ namespace CraftingSystem
             try {
                 switch (model.Type)
                 {
+                    case "Weapon":
                     case "WeaponEnchantment": bp = Activator.CreateInstance(typeof(BlueprintWeaponEnchantment)) as BlueprintScriptableObject; break;
+                    case "Armor":
                     case "ArmorEnchantment": bp = Activator.CreateInstance(typeof(BlueprintArmorEnchantment)) as BlueprintScriptableObject; break;
+                    case "Other":
                     case "EquipmentEnchantment": bp = Activator.CreateInstance(typeof(BlueprintEquipmentEnchantment)) as BlueprintScriptableObject; break;
                     case "Feature": bp = Activator.CreateInstance(typeof(BlueprintFeature)) as BlueprintScriptableObject; break;
                     case "UsableItem": bp = Activator.CreateInstance(Type.GetType("Kingmaker.Blueprints.Items.Equipment.BlueprintItemEquipmentUsable, Assembly-CSharp")) as BlueprintScriptableObject; break;

@@ -116,13 +116,14 @@
     <None Include="ModConfig\EnchantmentTemplates.json" />
     <None Include="ModConfig\EnchantmentDescriptionGlossary.json" />
     <None Include="ModConfig\CustomEnchants_Components.json" />
-    <None Include="ModConfig\CustomEnchants_Models.json" />
+    <None Include="ModConfig\CustomEnchants_Enchantments.json" />
+    <None Include="ModConfig\CustomEnchants_Blueprints.json" />
     <None Include="Enchantments.csv" />
   </ItemGroup>
 
 <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
-      <ModFiles Include="$(TargetDir)$(TargetName).dll;ModConfig\Info.json;ModConfig\Localization.json;ModConfig\Enchantments.json;ModConfig\EnchantmentTemplates.json;ModConfig\EnchantmentDescriptionGlossary.json;ModConfig\CustomEnchants_Components.json;ModConfig\CustomEnchants_Models.json" />
+      <ModFiles Include="$(TargetDir)$(TargetName).dll;ModConfig\Info.json;ModConfig\Localization.json;ModConfig\Enchantments.json;ModConfig\EnchantmentTemplates.json;ModConfig\EnchantmentDescriptionGlossary.json;ModConfig\CustomEnchants_Components.json;ModConfig\CustomEnchants_Enchantments.json;ModConfig\CustomEnchants_Blueprints.json" />
     </ItemGroup>
     
     <Exec Command="python &quot;$(ProjectDir)convert_csv_to_json.py&quot; &quot;$(ProjectDir)Enchantments.csv&quot;" 

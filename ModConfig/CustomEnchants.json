@@ -499,7 +499,7 @@
       },
       "FeatureModelId": "100",
       "Type": "Other",
-      "MaxNotEpic": 5,
+      "MaxNotEpic": 8,
       "Slots": [
         "Armor",
         "Shield",
@@ -579,10 +579,7 @@
             }
           },
           "ComponentIndex": -1,
-          "FieldName": "Descriptor",
-          "EnumThresholdOverrides": {
-            "Armor": 8
-          }
+          "FieldName": "Descriptor"
         },
         {
           "Name": "Value",
@@ -824,52 +821,6 @@
         }
       ],
       "PointCostFormula": "Grade * 3 + 3"
-    },
-    {
-      "EnchantId": "999",
-      "BaseName": {
-        "enGB": "Stat Explorer",
-        "frFR": "Explorateur de Stats"
-      },
-      "NameCompleted": {
-        "enGB": "{Stat} +{Value} ({Descriptor})",
-        "frFR": "{Stat} +{Value} ({Descriptor})"
-      },
-      "FeatureModelId": "100",
-      "Type": "Other",
-      "MaxNotEpic": 100,
-      "Slots": [
-        "Neck"
-      ],
-      "GoldOverrideFormula": "1",
-      "PointCostFormula": "0",
-      "Components": [
-        "Comp_EquipmentFeature"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Stat",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Stat"
-        },
-        {
-          "Name": "Descriptor",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Descriptor"
-        },
-        {
-          "Name": "Value",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 20,
-          "ComponentIndex": -1,
-          "FieldName": "Value"
-        }
-      ]
     }
   ]
 }
