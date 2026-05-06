@@ -28,27 +28,26 @@ namespace CraftingSystem
                     allGuids = ResourcesLibrary.BlueprintsCache.m_LoadedBlueprints.Keys.ToList();
                 }
                 
-                var wilcerArmors = new List<BlueprintItem>();
-                var standardArmors = new List<BlueprintItem>();
+                var wilcerShields = new List<BlueprintItem>();
+                var allShields = new List<BlueprintItem>();
 
                 foreach (var guid in allGuids)
                 {
                     var bp = ResourcesLibrary.TryGetBlueprint(guid);
                     if (bp == null) continue;
 
-                    if (bp is BlueprintItemArmor a)
+                    if (bp is BlueprintItemShield s)
                     {
-                        if (IsWilcerBaseItem(a)) wilcerArmors.Add(a);
-                        standardArmors.Add(a);
-                    }
-                    else if (bp is BlueprintItemShield s)
-                    {
-                        standardArmors.Add(s);
+                        // 1. Filtre Wilcer (pour comparaison)
+                        if (IsWilcerBaseItem(s)) wilcerShields.Add(s);
+                        
+                        // 2. Scan TOTAL (aucun filtre sur le nom)
+                        allShields.Add(s);
                     }
                 }
 
-                ExecuteDump(wilcerArmors, "WilcerBaseItems.csv");
-                ExecuteDump(standardArmors, "StandardItemsDump.csv");
+                ExecuteDump(wilcerShields, "WilcerShields.csv");
+                ExecuteDump(allShields, "AllShieldsDump.csv");
             }
             catch (Exception ex)
             {
@@ -70,6 +69,10 @@ namespace CraftingSystem
             {
                 if (armor.Type == null) return false;
                 if (armor.Size != Kingmaker.Enums.Size.Medium) return false;
+            }
+            if (bp is BlueprintItemShield shield)
+            {
+                if (shield.Type == null) return false;
             }
             
             if (bp.Cost <= 0) return false;

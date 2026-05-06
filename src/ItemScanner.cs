@@ -83,7 +83,7 @@ namespace CraftingSystem
                 if (item.bp.Type == null) continue;
                 string typeName = item.bp.Type.name;
                 int level = DetectLevel(item.bp.name, typeName);
-                
+
                 if (level == -1) continue; // Pas un item standard/plus
 
                 if (!weaponMap.TryGetValue(typeName, out var data))
@@ -115,6 +115,8 @@ namespace CraftingSystem
 
                 if (level == -1) continue;
 
+                // Main.ModEntry.Logger.Log($"[SCAN-ARMOR-OK] Level:{level} | Localized:'{item.bp.Name}' | Internal:'{item.bp.name}' | Type:'{typeName}'");
+
                 if (!armorMap.TryGetValue(typeName, out var data))
                 {
                     data = CreateBaseData(item.bp, "Armor", typeName);
@@ -140,7 +142,7 @@ namespace CraftingSystem
             {
                 if (item.bp.Type == null) continue;
                 string typeName = item.bp.Type.name;
-                int level = DetectLevel(item.bp.name, typeName);
+                int level = DetectLevel(item.bp.name, typeName, true);
 
                 if (level == -1) continue;
 
@@ -162,7 +164,11 @@ namespace CraftingSystem
                 data.VariantCosts[level] = (int)item.bp.m_Cost;
                 data.VariantIcons[level] = item.bp.Icon;
             }
-            Shields.AddRange(shieldMap.Values.OrderBy(x => x.Name));
+            var finalShields = shieldMap.Values.OrderBy(x => x.Name).ToList();
+            Shields.AddRange(finalShields);
+            // On les rend disponibles dans l'atelier d'armure
+            Armors.AddRange(finalShields);
+            Armors = Armors.OrderBy(x => x.Name).ToList();
 
             // 4. SCAN ACCESSORIES (No levels)
             foreach (var item in accessories)
@@ -180,7 +186,7 @@ namespace CraftingSystem
             Main.ModEntry.Logger.Log($"[ITEM-SCAN] Finalisé. W:{Weapons.Count} A:{Armors.Count} S:{Shields.Count} Acc:{Accessories.Count}");
         }
 
-        private static int DetectLevel(string bpName, string typeName)
+        private static int DetectLevel(string bpName, string typeName, bool isShield = false)
         {
             // Nettoyage du type : "CouvertureType" -> "Couverture"
             string baseType = typeName;
@@ -192,11 +198,15 @@ namespace CraftingSystem
             // --- RÈGLE POUR +0 ---
             // 1. Format Standard (ex: StandardLongsword)
             // 2. Format Armure Spécifique (ex: CouvertureStandard)
-            if (bpName == "Standard" + typeName || bpName == baseType + "Standard") 
+            if (bpName == "Standard" + typeName || bpName == baseType + "Standard")
                 return 0;
-            
+
+            // 3. Exception Bouclier (ex: HeavyShieldType -> HeavyShield)
+            if (isShield && bpName == baseType)
+                return 0;
+
             // --- RÈGLE POUR +1 à +5 ---
-            
+
             // A. Format "StandartPlus" (avec un 't') - Spécifique aux nouvelles armures
             string standartPattern = "StandartPlus";
             if (bpName.Contains(standartPattern))
@@ -211,13 +221,27 @@ namespace CraftingSystem
                 }
             }
 
-            // B. Format classique "Plus" (ex: StandardLongswordPlus1 ou LongswordPlus1)
+            // B. Format "ItemPlus" - Spécifique aux boucliers (ex: TowerShieldItemPlus2)
+            string itemPlusPattern = "ItemPlus";
+            if (bpName.Contains(itemPlusPattern))
+            {
+                int iIdx = bpName.IndexOf(itemPlusPattern, StringComparison.OrdinalIgnoreCase);
+                string prefix = bpName.Substring(0, iIdx);
+                if (prefix == baseType)
+                {
+                    string levelStr = bpName.Substring(iIdx + itemPlusPattern.Length);
+                    if (int.TryParse(levelStr, out int level) && level >= 1 && level <= 5)
+                        return level;
+                }
+            }
+
+            // C. Format classique "Plus" (ex: StandardLongswordPlus1 ou LongswordPlus1)
             string plusPattern = "Plus";
             if (bpName.Contains(plusPattern))
             {
                 int pIdx = bpName.IndexOf(plusPattern, StringComparison.OrdinalIgnoreCase);
                 string prefix = bpName.Substring(0, pIdx);
-                
+
                 if (prefix == "Standard" + typeName || prefix == typeName || prefix == baseType + "Standard")
                 {
                     string levelStr = bpName.Substring(pIdx + plusPattern.Length);
@@ -237,7 +261,7 @@ namespace CraftingSystem
             string name = bp.name.ToLower();
             if (name.Contains("placeholder") || name.Contains("test") || name.Contains("broken") || name.Contains("internal")) return false;
             if (name.Contains("army") || name.Contains("croisade")) return false;
-            
+
             if (bp.m_DisplayNameText == null || string.IsNullOrEmpty(bp.m_DisplayNameText.ToString())) return false;
             if (bp.m_Cost < 1) return false;
 
