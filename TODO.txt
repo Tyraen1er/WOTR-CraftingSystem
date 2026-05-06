@@ -1,3 +1,4 @@
+- To fix custom enchant: enhancement bonus not working on weapon.
 
 A ignorer pour le moment :
 - Service d'Achat d'équipement non enchanté

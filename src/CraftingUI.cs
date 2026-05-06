@@ -2139,8 +2139,10 @@ namespace CraftingSystem
             {
                 GUILayout.BeginVertical(GUI.skin.box);
                 GUILayout.Label(Helpers.GetString("ui_custom_queued_title", "Custom Selection in queue:"), new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(FONT_NORMAL * scale) });
+                int customIdx = 0;
                 foreach (var g in queuedCustoms)
                 {
+                    customIdx++;
                     string displayName = Helpers.GetString("ui_custom_enchantment_placeholder", "Custom Enchantment");
                     EnchantmentData data = EnchantmentScanner.GetByGuid(g);
                     BlueprintScriptableObject bp = null;
@@ -2216,7 +2218,7 @@ namespace CraftingSystem
                 DrawTypeFilters(scale);
                 GUILayout.Space(5);
 
-                var models = CustomEnchantmentsBuilder.AllModels.Where(m => m.Type != "Feature").ToList();
+                var models = CustomEnchantmentsBuilder.AllModels.Where(m => !m.Hidden).ToList();
 
                 // Filtrage par type (basé sur les slots d'affinité)
                 if (activeTypes.Count > 0)
@@ -2243,8 +2245,10 @@ namespace CraftingSystem
                 }
                 else
                 {
+                    int modelIdx = 0;
                     foreach (var model in models)
                     {
+                        modelIdx++;
                         GUILayout.BeginHorizontal(GUI.skin.box);
                         GUILayout.Label(Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.ExpandWidth(true));
 
@@ -2308,9 +2312,17 @@ namespace CraftingSystem
                             dynamicParamValues[p.Name] = defVal;
                             filtersDirty = true;
                         }
-                        selectedModel = model; // On s'assure qu'il est bien assigné
                     }
                     GUILayout.EndHorizontal();
+
+                    if (Event.current.type == EventType.Repaint && modelIdx % 2 == 0)
+                    {
+                        Rect lastRect = GUILayoutUtility.GetLastRect();
+                        Color oldC = GUI.color;
+                        GUI.color = new Color(1f, 1f, 1f, 0.06f);
+                        GUI.DrawTexture(lastRect, Texture2D.whiteTexture);
+                        GUI.color = oldC;
+                    }
                 }
             }
         }

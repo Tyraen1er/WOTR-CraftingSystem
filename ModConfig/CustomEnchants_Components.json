@@ -1,0 +1,58 @@
+{
+  "Comp_AddStatBonus": {
+    "$type": "Kingmaker.UnitLogic.FactLogic.AddStatBonus, Assembly-CSharp",
+    "Stat": "Strength",
+    "Value": 0,
+    "Descriptor": "Enhancement"
+  },
+  "Comp_BuffAllSaves": {
+    "$type": "Kingmaker.Designers.Mechanics.Buffs.BuffAllSavesBonus, Assembly-CSharp",
+    "Descriptor": "Resistance",
+    "Value": 0
+  },
+  "Comp_EnergyResist": {
+    "$type": "Kingmaker.UnitLogic.FactLogic.AddDamageResistanceEnergy, Assembly-CSharp",
+    "Value": {
+      "Value": 0
+    },
+    "Type": "Acid"
+  },
+  "Comp_EquipmentFeature": {
+    "$type": "Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment, Assembly-CSharp",
+    "m_Feature": "!bp_c2af1010100000000000000000000000"
+  },
+  "Comp_WeaponEnhancement": {
+    "$type": "Kingmaker.Designers.Mechanics.WeaponEnchants.WeaponEnhancementBonus, Assembly-CSharp",
+    "EnhancementBonus": 0
+  },
+  "Comp_ArmorEnhancement": {
+    "$type": "Kingmaker.Designers.Mechanics.ArmorEnchants.ArmorEnhancementBonus, Assembly-CSharp",
+    "EnhancementBonus": 0
+  },
+  "Comp_AutoMetamagic": {
+    "$type": "Kingmaker.Designers.Mechanics.Facts.AutoMetamagic, Assembly-CSharp",
+    "Metamagic": "Maximize",
+    "MaxSpellLevel": 0
+  },
+  "Comp_ActivatableResource": {
+    "$type": "Kingmaker.UnitLogic.ActivatableAbilities.ActivatableAbilityResourceLogic, Assembly-CSharp",
+    "m_RequiredResource": "!bp_e60057ae395368a44955b24467ec6a0f",
+    "SpendType": "TurnOn"
+  },
+  "Comp_MetamagicRod": {
+    "$type": "Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics, Assembly-CSharp",
+    "Metamagic": 0,
+    "MaxSpellLevel": 3
+  },
+  "Comp_AddFact": {
+    "$type": "Kingmaker.UnitLogic.FactLogic.AddFacts, Assembly-CSharp",
+    "m_Facts": [
+      "!bp_c2af1030100000000000000000000000"
+    ],
+    "CasterLevel": 0,
+    "DoNotRestoreDirectly": false,
+    "HasDifficultyRequirements": false,
+    "InvertDifficultyRequirements": false,
+    "MinDifficulty": "Story"
+  }
+}

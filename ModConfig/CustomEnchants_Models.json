@@ -1,0 +1,671 @@
+[
+  {
+    "EnchantId": "001",
+    "BaseName": {
+      "enGB": "Energy Resistance",
+      "frFR": "Résistance aux énergies"
+    },
+    "NameCompleted": {
+      "enGB": "{Element} Resistance {Value}",
+      "frFR": "Résistance {Element} {Value}"
+    },
+    "FeatureModelId": "102",
+    "Type": "Other",
+    "MaxNotEpic": 30,
+    "Slots": [
+      "Body",
+      "Ring"
+    ],
+    "GoldOverrideFormula": "1600 * Value - 4000",
+    "PointCostFormula": "0",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Element",
+        "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Element"
+      },
+      {
+        "Name": "Value",
+        "Min": 5,
+        "Max": 50,
+        "Step": 5,
+        "ComponentIndex": -1,
+        "FieldName": "Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "002",
+    "BaseName": {
+      "enGB": "Weapon Enhancement",
+      "frFR": "Altération d'Arme"
+    },
+    "NameCompleted": {
+      "enGB": "+{Bonus} Enhancement",
+      "frFR": "Altération +{Bonus}"
+    },
+    "Type": "Weapon",
+    "MaxNotEpic": 5,
+    "Slots": [
+      "Weapon"
+    ],
+    "GoldOverrideFormula": "2000 * Bonus * Bonus",
+    "PointCostFormula": "Bonus",
+    "Components": [
+      "Comp_WeaponEnhancement"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Bonus",
+        "Max": 10,
+        "ComponentIndex": 0,
+        "FieldName": "EnhancementBonus"
+      }
+    ]
+  },
+  {
+    "EnchantId": "003",
+    "BaseName": {
+      "enGB": "Physical Attribute Bonus",
+      "frFR": "Bonus de Caractéristique Physique"
+    },
+    "NameCompleted": {
+      "enGB": "{Stat} +{Value} ({Descriptor})",
+      "frFR": "{Stat} +{Value} ({Descriptor})"
+    },
+    "FeatureModelId": "100",
+    "Type": "Other",
+    "MaxNotEpic": 6,
+    "Slots": [
+      "Belt"
+    ],
+    "GoldOverrideFormula": "1000 * Value * Value",
+    "PointCostFormula": "Value",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "EnumOnly": [
+          "Strength",
+          "Dexterity",
+          "Constitution"
+        ],
+        "ComponentIndex": -1,
+        "FieldName": "Stat"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Descriptor"
+      },
+      {
+        "Name": "Value",
+        "Max": 20,
+        "ComponentIndex": -1,
+        "FieldName": "Value"
+      }
+    ],
+    "EpicThresholds": {
+      "Value": 6
+    }
+  },
+  {
+    "EnchantId": "004",
+    "BaseName": {
+      "enGB": "Saving Throw Bonus",
+      "frFR": "Bonus aux jets de sauvegarde"
+    },
+    "NameCompleted": {
+      "enGB": "+{Value} bonus to {Stat}",
+      "frFR": "+{Value} aux jets de {Stat}"
+    },
+    "FeatureModelId": "101",
+    "Type": "Other",
+    "MaxNotEpic": 5,
+    "Slots": [
+      "Shoulders"
+    ],
+    "GoldOverrideFormula": "PriceTable.Stat * Value * Value",
+    "PointCostFormula": "Value",
+    "PriceTables": {
+      "Stat": {
+        "SaveAll": 1000,
+        "DEFAULT": 333
+      }
+    },
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": []
+  },
+  {
+    "EnchantId": "005",
+    "BaseName": {
+      "enGB": "Mental Attribute Bonus",
+      "frFR": "Bonus de Caractéristique Mentale"
+    },
+    "NameCompleted": {
+      "enGB": "{Stat} +{Value} ({Descriptor})",
+      "frFR": "{Stat} +{Value} ({Descriptor})"
+    },
+    "FeatureModelId": "100",
+    "Type": "Other",
+    "MaxNotEpic": 6,
+    "Slots": [
+      "Head"
+    ],
+    "GoldOverrideFormula": "1000 * Value * Value",
+    "PointCostFormula": "Value",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "EnumOnly": [
+          "Intelligence",
+          "Wisdom",
+          "Charisma"
+        ],
+        "ComponentIndex": -1,
+        "FieldName": "Stat"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Descriptor"
+      },
+      {
+        "Name": "Value",
+        "Max": 20,
+        "ComponentIndex": -1,
+        "FieldName": "Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "008",
+    "BaseName": {
+      "enGB": "Charged Metamagic",
+      "frFR": "Métamagie à charges"
+    },
+    "NameCompleted": {
+      "enGB": "{Metamagic} Metamagic ({Charges} charges, Max Lvl {MaxLevel})",
+      "frFR": "Métamagie {Metamagic} ({Charges} ch., Niv. Max {MaxLevel})"
+    },
+    "Type": "WeaponEnchantment",
+    "Slots": [
+      "Weapon",
+      "Armor",
+      "Shield",
+      "Neck",
+      "Wrist"
+    ],
+    "FeatureModelId": "107",
+    "GoldOverrideFormula": "2000 * MetamagicCount * MaxLevel * Charges",
+    "PointCostFormula": "MetamagicCount + (MaxLevel / 3)",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "MetamagicCount",
+        "Label": "Nombre de métamagies",
+        "Max": 3,
+        "ComponentIndex": -1,
+        "FieldName": "MetamagicCount"
+      },
+      {
+        "Name": "MaxLevel",
+        "Label": "Niveau max des sorts",
+        "Max": 9,
+        "ComponentIndex": -1,
+        "FieldName": "MaxLevel"
+      },
+      {
+        "Name": "Charges",
+        "Label": "Nombre de charges",
+        "Max": 5,
+        "ComponentIndex": -1,
+        "FieldName": "Charges"
+      },
+      {
+        "Name": "Metamagic",
+        "Label": "Métamagie A",
+        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Metamagic"
+      },
+      {
+        "Name": "Metamagic2",
+        "Label": "Métamagie B",
+        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Metamagic"
+      },
+      {
+        "Name": "Metamagic3",
+        "Label": "Métamagie C",
+        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Metamagic"
+      }
+    ]
+  },
+  {
+    "EnchantId": "010",
+    "BaseName": {
+      "enGB": "Armor Class Bonus",
+      "frFR": "Bonus de Classe d'Armure"
+    },
+    "NameCompleted": {
+      "enGB": "+{Value} {Descriptor} AC",
+      "frFR": "Bonus de CA +{Value} ({Descriptor})"
+    },
+    "FeatureModelId": "100",
+    "Type": "Other",
+    "MaxNotEpic": 5,
+    "Slots": [
+      "Armor",
+      "Shield",
+      "Neck",
+      "Wrist"
+    ],
+    "GoldOverrideFormula": "1000 * Value * Value",
+    "PointCostFormula": "Value",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "EnumOnly": [
+          "AC"
+        ],
+        "ComponentIndex": -1,
+        "FieldName": "Stat"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "EnumOnly": [
+          "Armor",
+          "Shield",
+          "NaturalArmor",
+          "Deflection",
+          "Dodge",
+          "Insight",
+          "Luck",
+          "Morale",
+          "Sacred",
+          "Profane",
+          "Enhancement",
+          "Other"
+        ],
+        "EnumOverrides": {
+          "Armor": {
+            "frFR": "Armure"
+          },
+          "Shield": {
+            "frFR": "Bouclier"
+          },
+          "NaturalArmor": {
+            "frFR": "Armure naturelle"
+          },
+          "Deflection": {
+            "frFR": "Parade"
+          },
+          "Dodge": {
+            "frFR": "Esquive"
+          },
+          "Insight": {
+            "frFR": "Intuition"
+          },
+          "Luck": {
+            "frFR": "Chance"
+          },
+          "Morale": {
+            "frFR": "Moral"
+          },
+          "Sacred": {
+            "frFR": "Sacré"
+          },
+          "Profane": {
+            "frFR": "Profane"
+          },
+          "Enhancement": {
+            "frFR": "Altération"
+          },
+          "Other": {
+            "frFR": "Autre"
+          }
+        },
+        "ComponentIndex": -1,
+        "FieldName": "Descriptor",
+        "EnumThresholdOverrides": {
+          "Armor": 8
+        }
+      },
+      {
+        "Name": "Value",
+        "Max": 20,
+        "ComponentIndex": -1,
+        "FieldName": "Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "011",
+    "BaseName": {
+      "enGB": "Skill Bonus",
+      "frFR": "Bonus de Compétence"
+    },
+    "NameCompleted": {
+      "enGB": "{Stat} +{Value} ({Descriptor})",
+      "frFR": "{Stat} +{Value} ({Descriptor})"
+    },
+    "FeatureModelId": "100",
+    "Type": "Other",
+    "MaxNotEpic": 10,
+    "Slots": [
+      "Head",
+      "Wrist",
+      "Hands",
+      "Neck",
+      "Other"
+    ],
+    "GoldOverrideFormula": "Value * Value * 100",
+    "PointCostFormula": "Value / 5",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "EnumOnly": [
+          "SkillAthletics",
+          "SkillMobility",
+          "SkillThievery",
+          "SkillStealth",
+          "SkillKnowledgeArcana",
+          "SkillKnowledgeWorld",
+          "SkillLoreNature",
+          "SkillLoreReligion",
+          "SkillPerception",
+          "SkillPersuasion",
+          "SkillUseMagicDevice"
+        ],
+        "EnumOverrides": {
+          "SkillAthletics": { "frFR": "Athlétisme" },
+          "SkillMobility": { "frFR": "Mobilité" },
+          "SkillThievery": { "frFR": "Doigts de fée" },
+          "SkillStealth": { "frFR": "Discrétion" },
+          "SkillKnowledgeArcana": { "frFR": "Connaissance (Mystères)" },
+          "SkillKnowledgeWorld": { "frFR": "Connaissance (Monde)" },
+          "SkillLoreNature": { "frFR": "Nature" },
+          "SkillLoreReligion": { "frFR": "Religion" },
+          "SkillPerception": { "frFR": "Perception" },
+          "SkillPersuasion": { "frFR": "Persuasion" },
+          "SkillUseMagicDevice": { "frFR": "Utilisation d'objets magiques" }
+        },
+        "ComponentIndex": -1,
+        "FieldName": "Stat"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "DefaultValue": "Competence",
+        "ComponentIndex": -1,
+        "FieldName": "Descriptor"
+      },
+      {
+        "Name": "Value",
+        "Max": 20,
+        "ComponentIndex": -1,
+        "FieldName": "Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "100",
+    "BaseName": "Model_StatBonus_Feature",
+    "Type": "Feature",
+    "Hidden": true,
+    "Components": [
+      "Comp_AddStatBonus"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Stat"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Descriptor"
+      },
+      {
+        "Name": "Value",
+        "FieldName": "Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "101",
+    "BaseName": "Model_SavingThrows_Feature",
+    "Type": "Feature",
+    "Hidden": true,
+    "Components": [
+      "Comp_AddStatBonus",
+      "Comp_BuffAllSaves"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "EnumOnly": [
+          "SaveFortitude",
+          "SaveReflex",
+          "SaveWill",
+          "SaveAll"
+        ],
+        "EnumOverrides": {
+          "SaveFortitude": {
+            "frFR": "Vigueur",
+            "MaskValue": 1
+          },
+          "SaveReflex": {
+            "frFR": "Réflexes",
+            "MaskValue": 1
+          },
+          "SaveWill": {
+            "frFR": "Volonté",
+            "MaskValue": 1
+          },
+          "SaveAll": {
+            "frFR": "Tous les jets de sauvegarde",
+            "MaskValue": 2,
+            "Value": 255
+          }
+        },
+        "ComponentIndex": 0,
+        "FieldName": "Stat"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Descriptor"
+      },
+      {
+        "Name": "Value",
+        "Max": 20,
+        "ComponentIndex": -1,
+        "FieldName": "Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "102",
+    "BaseName": "Model_Resist_Feature",
+    "Type": "Feature",
+    "Hidden": true,
+    "Components": [
+      "Comp_EnergyResist"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Element",
+        "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Type"
+      },
+      {
+        "Name": "Value",
+        "Type": "Slider",
+        "Min": 5,
+        "Max": 50,
+        "Step": 5,
+        "ComponentIndex": 0,
+        "FieldName": "Value.Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "103",
+    "BaseName": "Model_Metamagic_Ability",
+    "Type": "ActivatableAbility",
+    "Hidden": true,
+    "Components": [],
+    "DynamicParams": []
+  },
+  {
+    "EnchantId": "104",
+    "BaseName": "Model_Metamagic_Buff",
+    "Type": "Buff",
+    "Hidden": true,
+    "Components": [
+      "Comp_MetamagicRod"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Metamagic",
+        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Metamagic"
+      },
+      {
+        "Name": "Metamagic2",
+        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Metamagic"
+      },
+      {
+        "Name": "Metamagic3",
+        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Metamagic"
+      }
+    ]
+  },
+  {
+    "EnchantId": "105",
+    "BaseName": "Model_Metamagic_Resource",
+    "Type": "AbilityResource",
+    "Hidden": true,
+    "Components": [],
+    "DynamicParams": [
+      {
+        "Name": "Charges",
+        "Max": 10,
+        "ComponentIndex": -1,
+        "FieldName": "m_MaxAmount.BaseValue"
+      }
+    ]
+  },
+  {
+    "EnchantId": "106",
+    "BaseName": "Model_Metamagic_Ability_Charged",
+    "Type": "ActivatableAbility",
+    "Hidden": true,
+    "Components": [
+      "Comp_ActivatableResource"
+    ],
+    "DynamicParams": []
+  },
+  {
+    "EnchantId": "107",
+    "BaseName": "Model_Metamagic_Feature_Charged",
+    "Type": "Feature",
+    "Hidden": true,
+    "Components": [
+      "Comp_AddFact"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Charges",
+        "Max": 10,
+        "ComponentIndex": -1,
+        "FieldName": "Charges"
+      }
+    ]
+  },
+  {
+    "EnchantId": "999",
+    "BaseName": {
+      "enGB": "Stat Explorer",
+      "frFR": "Explorateur de Stats"
+    },
+    "NameCompleted": {
+      "enGB": "{Stat} +{Value} ({Descriptor})",
+      "frFR": "{Stat} +{Value} ({Descriptor})"
+    },
+    "FeatureModelId": "100",
+    "Type": "Other",
+    "Hidden": true,
+    "MaxNotEpic": 100,
+    "Slots": [
+      "Neck"
+    ],
+    "GoldOverrideFormula": "1",
+    "PointCostFormula": "0",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Stat"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Descriptor"
+      },
+      {
+        "Name": "Value",
+        "Max": 20,
+        "ComponentIndex": -1,
+        "FieldName": "Value"
+      }
+    ]
+  }
+]

@@ -296,6 +296,13 @@ namespace CraftingSystem
                 try { locale = LocalizationManager.CurrentLocale.ToString(); } catch { }
                 raw = jobj[locale]?.ToString() ?? jobj["enGB"]?.ToString() ?? jobj.Properties().FirstOrDefault()?.Value?.ToString() ?? "";
             }
+            else if (field is EnumOverrideData eod)
+            {
+                string locale = "enGB";
+                try { locale = LocalizationManager.CurrentLocale.ToString(); } catch { }
+                if (locale == "frFR") raw = eod.frFR ?? eod.enGB ?? "";
+                else raw = eod.enGB ?? eod.frFR ?? "";
+            }
             else if (field is Newtonsoft.Json.Linq.JToken token) raw = token.ToString();
             else raw = field.ToString();
 

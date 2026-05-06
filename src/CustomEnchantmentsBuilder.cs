@@ -140,19 +140,37 @@ namespace CraftingSystem
     }
 
     // --- Data Classes for JSON ---
+    public class EnumOverrideData
+    {
+        public string frFR;
+        public string enGB;
+        public int? MaxNotEpic;
+        public int? PriceFactor;
+        public List<string> Slots;
+        public int? Value;
+        public int? MaskValue;
+    }
+
     public class DynamicParam
     {
         public string Name;
         public string Label;
-        public string Type; // Slider, Enum
+        
+        private string _type;
+        public string Type 
+        { 
+            get => !string.IsNullOrEmpty(_type) ? _type : (!string.IsNullOrEmpty(EnumTypeName) ? "Enum" : "Slider");
+            set => _type = value; 
+        }
+
         public string EnumTypeName; // Pour Type == Enum
-        public int Min = 0; // Pour Type == Slider
+        public int Min = 1; // Pour Type == Slider
         public int Max = 100; // Pour Type == Slider
         public int Step = 1;
         public List<string> EnumOnly = null; // Optionnel : ne garder que ces valeurs d'enum
         public List<string> EnumExclude = null; // Optionnel : exclure ces valeurs d'enum
-        public Dictionary<string, object> EnumOverrides = null; // Optionnel : surcharger le texte affiché (localisable)
-        public Dictionary<string, int> EnumThresholdOverrides = null; // Optionnel : surcharger MaxNotEpic selon la valeur choisie
+        public Dictionary<string, object> EnumOverrides = null; // Optionnel : surcharger le texte affiché (localisable) ou données groupées
+        public Dictionary<string, int> EnumThresholdOverrides = null; // Optionnel : surcharger MaxNotEpic selon la valeur choisie (Legacy)
         public object DefaultValue = null; // Optionnel : valeur pré-sélectionnée par défaut (int ou string)
 
         // Cible pour l'injection
@@ -183,6 +201,7 @@ namespace CraftingSystem
         public List<DynamicParam> DynamicParams = new List<DynamicParam>();
         public Dictionary<string, int> EpicParams; // Paramètres à vérifier pour le seuil épique
         public Dictionary<string, Dictionary<string, double>> PriceTables = new Dictionary<string, Dictionary<string, double>>();
+        public bool Hidden = false; // Si vrai, n'apparaît pas dans l'UI de forge
     }
 
     // --- Phase 2.B : The Builder Engine ---
@@ -245,46 +264,45 @@ namespace CraftingSystem
 
         public static void BuildAndInjectAll()
         {
-            // Le fichier semble être à la racine d'après les logs
-            string path = Path.Combine(Main.ModEntry.Path, "CustomEnchants.json");
-            if (!File.Exists(path)) {
-                path = Path.Combine(Main.ModEntry.Path, "ModConfig", "CustomEnchants.json");
-            }
-            Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] STARTING: Searching file at '{path}'");
-            
-            if (!File.Exists(path))
+            // Les fichiers sont copiés à la racine du mod par le script de build
+            string compPath = Path.Combine(Main.ModEntry.Path, "CustomEnchants_Components.json");
+            string modelsPath = Path.Combine(Main.ModEntry.Path, "CustomEnchants_Models.json");
+
+            var settings = new JsonSerializerSettings
             {
-                Main.ModEntry.Logger.Error($"[CUSTOM_ENCHANTS] FATAL: File not found at {path}!");
-                return;
-            }
+                TypeNameHandling = TypeNameHandling.Auto,
+                ContractResolver = new OwlcatContractResolver(),
+                Binder = new WOTRTypeBinder(),
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Formatting.Indented
+            };
+            settings.Converters.Add(new BlueprintReferenceConverter());
+            var serializer = JsonSerializer.Create(settings);
 
             try
             {
-                Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] File read success. Content length: {File.ReadAllText(path).Length} chars.");
-                
-                string json = File.ReadAllText(path, System.Text.Encoding.UTF8);
-                var settings = new JsonSerializerSettings
+                if (File.Exists(compPath) && File.Exists(modelsPath))
                 {
-                    TypeNameHandling = TypeNameHandling.Auto,
-                    ContractResolver = new OwlcatContractResolver(),
-                    Binder = new WOTRTypeBinder(),
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Formatting.Indented
-                };
-                settings.Converters.Add(new BlueprintReferenceConverter());
-
-                var token = Newtonsoft.Json.Linq.JToken.Parse(json);
-                if (token is Newtonsoft.Json.Linq.JArray)
-                {
-                    AllModels = token.ToObject<List<CustomEnchantmentData>>(JsonSerializer.Create(settings));
-                    ComponentLibrary.Clear();
+                    Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Loading from split files: {compPath} and {modelsPath}");
+                    
+                    using (var sr = new StreamReader(compPath))
+                    using (var jr = new JsonTextReader(sr))
+                    {
+                        ComponentLibrary = serializer.Deserialize<Dictionary<string, object>>(jr) ?? new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+                    }
+                    
+                    using (var sr = new StreamReader(modelsPath))
+                    using (var jr = new JsonTextReader(sr))
+                    {
+                        AllModels = serializer.Deserialize<List<CustomEnchantmentData>>(jr) ?? new List<CustomEnchantmentData>();
+                    }
+                    
+                    Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Loaded {ComponentLibrary?.Count ?? 0} components and {AllModels?.Count ?? 0} models.");
                 }
                 else
                 {
-                    var file = token.ToObject<CustomEnchantsFile>(JsonSerializer.Create(settings));
-                    AllModels = file.Models;
-                    ComponentLibrary = file.ComponentDefinitions ?? new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-                    Main.ModEntry.Logger.Log($"[CUSTOM_ENCHANTS] Loaded {ComponentLibrary.Count} component definitions from library.");
+                    Main.ModEntry.Logger.Error($"[CUSTOM_ENCHANTS] FATAL: Missing split configuration files! Expected {compPath} and {modelsPath}");
+                    return;
                 }
                 
                 if (AllModels == null) {
@@ -353,7 +371,7 @@ namespace CraftingSystem
             }
             catch (Exception ex)
             {
-                Main.ModEntry.Logger.Error($"[CUSTOM_ENCHANTS] Global error loading CustomEnchants.json: {ex}");
+                Main.ModEntry.Logger.Error($"[CUSTOM_ENCHANTS] Global error loading configuration files: {ex}");
             }
         }
 
@@ -541,6 +559,12 @@ namespace CraftingSystem
                                                 break;
                                             }
                                         } catch {}
+                                    }
+                                    else if (ovr.Value is EnumOverrideData eod && eod.Value.HasValue) {
+                                        if (eod.Value.Value == val) {
+                                            enumName = ovr.Key;
+                                            break;
+                                        }
                                     }
                                 }
                             }

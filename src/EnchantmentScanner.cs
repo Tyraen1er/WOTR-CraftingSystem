@@ -400,7 +400,7 @@ namespace CraftingSystem
             }
 
             string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
-            string prefix = model.Prefix != null ? Helpers.GetLocalizedString(model.Prefix, replacements) : "";
+                    string prefix = model.Prefix != null ? Helpers.GetLocalizedString(model.Prefix, replacements) : "";
             string suffix = model.Suffix != null ? Helpers.GetLocalizedString(model.Suffix, replacements) : "";
 
             string fullDisplayName = finalName;
@@ -408,7 +408,6 @@ namespace CraftingSystem
             if (!string.IsNullOrEmpty(suffix) && !fullDisplayName.Contains(suffix)) fullDisplayName = fullDisplayName + " " + suffix;
 
             // Détermination si c'est une altération pure (Weapon/Armor Enhancement Bonus)
-            /* first TODO a working enhancement custom
             bool isEnhancement = false;
             for (int i = 0; i < model.Components.Count; i++)
             {
@@ -428,7 +427,47 @@ namespace CraftingSystem
                     break;
                 }
             }
-            */
+
+            int currentMaxNotEpic = model.MaxNotEpic == 0 ? 100 : model.MaxNotEpic;
+            int currentPriceFactor = model.PriceFactor;
+            List<string> currentSlots = new List<string>(model.Slots);
+
+            foreach (var p in model.DynamicParams)
+            {
+                if (formulaVars.TryGetValue(p.Name, out double val))
+                {
+                    int intVal = (int)val;
+                    string enumName = null;
+                    if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
+                    {
+                        try {
+                            var enumType = Type.GetType(p.EnumTypeName);
+                            if (enumType != null) enumName = Enum.GetName(enumType, intVal);
+                        } catch {}
+                    }
+
+                    // 1. Legacy check (Threshold)
+                    if (enumName != null && p.EnumThresholdOverrides != null && p.EnumThresholdOverrides.TryGetValue(enumName, out int overVal))
+                        currentMaxNotEpic = overVal;
+
+                    // 2. New Grouped Overrides check
+                    if (enumName != null && p.EnumOverrides != null && p.EnumOverrides.TryGetValue(enumName, out object ovrObj))
+                    {
+                        if (ovrObj is Newtonsoft.Json.Linq.JObject jo)
+                        {
+                            if (jo["MaxNotEpic"] != null) currentMaxNotEpic = (int)jo["MaxNotEpic"];
+                            if (jo["PriceFactor"] != null) currentPriceFactor = (int)jo["PriceFactor"];
+                            if (jo["Slots"] != null) currentSlots = jo["Slots"].ToObject<List<string>>();
+                        }
+                        else if (ovrObj is EnumOverrideData eod)
+                        {
+                            if (eod.MaxNotEpic.HasValue) currentMaxNotEpic = eod.MaxNotEpic.Value;
+                            if (eod.PriceFactor.HasValue) currentPriceFactor = eod.PriceFactor.Value;
+                            if (eod.Slots != null) currentSlots = eod.Slots;
+                        }
+                    }
+                }
+            }
 
             var dynamicData = new EnchantmentData
             {
@@ -438,43 +477,26 @@ namespace CraftingSystem
                 Source = "Custom",
                 PointString = model.EnchantmentCost.ToString(),
                 IsEnhancement = isEnhancement,
-                PriceFactor = model.PriceFactor,
-                Slots = new List<string>(model.Slots)
+                PriceFactor = currentPriceFactor,
+                Slots = currentSlots
             };
-
-            int currentMaxNotEpic = model.MaxNotEpic == 0 ? 100 : model.MaxNotEpic;
-            foreach (var p in model.DynamicParams)
+            bool isEpic = currentMaxNotEpic > 0 && model.EnchantmentCost > currentMaxNotEpic;
+            if (!isEpic)
             {
-                if (p.EnumThresholdOverrides != null && formulaVars.TryGetValue(p.Name, out double val))
+                foreach (var pDef in model.DynamicParams)
                 {
-                    try
+                    if (formulaVars.TryGetValue(pDef.Name, out double pVal))
                     {
-                        var enumType = Type.GetType(p.EnumTypeName);
-                        if (enumType != null)
+                        if (model.EpicThresholds != null && model.EpicThresholds.TryGetValue(pDef.Name, out int threshold))
                         {
-                            string enumName = Enum.GetName(enumType, (int)val);
-                            if (enumName != null && p.EnumThresholdOverrides.TryGetValue(enumName, out int overVal))
-                                currentMaxNotEpic = overVal;
+                            if (pVal > threshold) { isEpic = true; break; }
                         }
-                    }
-                    catch { }
-                }
-            }
-
-            bool isEpic = false;
-            foreach (var pDef in model.DynamicParams)
-            {
-                if (formulaVars.TryGetValue(pDef.Name, out double pVal))
-                {
-                    if (model.EpicThresholds != null && model.EpicThresholds.TryGetValue(pDef.Name, out int threshold))
-                    {
-                        if (pVal > threshold) { isEpic = true; break; }
-                    }
-                    else
-                    {
-                        if (pDef.Type != "Enum" && pVal > currentMaxNotEpic)
+                        else
                         {
-                            isEpic = true; break;
+                            if (pDef.Type != "Enum" && pVal > currentMaxNotEpic)
+                            {
+                                isEpic = true; break;
+                            }
                         }
                     }
                 }
