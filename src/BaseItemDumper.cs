@@ -28,26 +28,26 @@ namespace CraftingSystem
                     allGuids = ResourcesLibrary.BlueprintsCache.m_LoadedBlueprints.Keys.ToList();
                 }
                 
-                var wilcerShields = new List<BlueprintItem>();
-                var allShields = new List<BlueprintItem>();
+                var wilcerAccessories = new List<BlueprintItem>();
+                var allAccessories = new List<BlueprintItem>();
 
                 foreach (var guid in allGuids)
                 {
                     var bp = ResourcesLibrary.TryGetBlueprint(guid);
                     if (bp == null) continue;
 
-                    if (bp is BlueprintItemShield s)
+                    if (bp is BlueprintItemEquipment acc && 
+                        !(bp is BlueprintItemWeapon) && 
+                        !(bp is BlueprintItemArmor) && 
+                        !(bp is BlueprintItemShield))
                     {
-                        // 1. Filtre Wilcer (pour comparaison)
-                        if (IsWilcerBaseItem(s)) wilcerShields.Add(s);
-                        
-                        // 2. Scan TOTAL (aucun filtre sur le nom)
-                        allShields.Add(s);
+                        if (IsWilcerBaseItem(acc)) wilcerAccessories.Add(acc);
+                        allAccessories.Add(acc);
                     }
                 }
 
-                ExecuteDump(wilcerShields, "WilcerShields.csv");
-                ExecuteDump(allShields, "AllShieldsDump.csv");
+                ExecuteDump(wilcerAccessories, "WilcerAccessories.csv");
+                ExecuteDump(allAccessories, "AllAccessoriesDump.csv");
             }
             catch (Exception ex)
             {
@@ -150,7 +150,17 @@ namespace CraftingSystem
 
                     foreach (var bp in allItems)
                     {
-                        var values = new List<string> { bp is BlueprintItemWeapon ? "Weapon" : (bp is BlueprintItemShield ? "Shield" : "Armor") };
+                        string category = "Accessory";
+                        if (bp is BlueprintItemEquipmentRing) category = "Ring";
+                        else if (bp is BlueprintItemEquipmentNeck) category = "Neck/Amulet";
+                        else if (bp is BlueprintItemEquipmentBelt) category = "Belt";
+                        else if (bp is BlueprintItemEquipmentFeet) category = "Boots";
+                        else if (bp is BlueprintItemEquipmentGloves) category = "Gloves";
+                        else if (bp is BlueprintItemEquipmentHead) category = "Helmet/Headband";
+                        else if (bp is BlueprintItemEquipmentShoulders) category = "Cape";
+                        else if (bp is BlueprintItemEquipmentWrist) category = "Bracers";
+
+                        var values = new List<string> { category };
                         foreach (var member in sortedMembers)
                         {
                             // On vérifie si le membre appartient au type de l'objet (ou un de ses parents)

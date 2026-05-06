@@ -77,98 +77,39 @@ namespace CraftingSystem
             var armorMap = new Dictionary<string, ItemData>();
             var shieldMap = new Dictionary<string, ItemData>();
 
-            // 1. SCAN WEAPONS
+            // 1. SCAN WEAPONS (Désactivé)
+            /*
             foreach (var item in weapons)
             {
-                if (item.bp.Type == null) continue;
-                string typeName = item.bp.Type.name;
-                int level = DetectLevel(item.bp.name, typeName);
-
-                if (level == -1) continue; // Pas un item standard/plus
-
-                if (!weaponMap.TryGetValue(typeName, out var data))
-                {
-                    data = CreateBaseData(item.bp, "Weapon", typeName);
-                    weaponMap[typeName] = data;
-                }
-
-                if (level == 0)
-                {
-                    data.Name = item.bp.Name;
-                    data.Icon = item.bp.Icon;
-                    data.Description = item.bp.Description;
-                    data.BaseCost = (int)item.bp.m_Cost;
-                }
-
-                data.VariantGuids[level] = item.guid.ToString();
-                data.VariantCosts[level] = (int)item.bp.m_Cost;
-                data.VariantIcons[level] = item.bp.Icon;
+                // ...
             }
             Weapons.AddRange(weaponMap.Values.OrderBy(x => x.Name));
+            */
 
-            // 2. SCAN ARMORS
+            // 2. SCAN ARMORS (Désactivé)
+            /*
             foreach (var item in armors)
             {
-                if (item.bp.Type == null) continue;
-                string typeName = item.bp.Type.name;
-                int level = DetectLevel(item.bp.name, typeName);
-
-                if (level == -1) continue;
-
-                // Main.ModEntry.Logger.Log($"[SCAN-ARMOR-OK] Level:{level} | Localized:'{item.bp.Name}' | Internal:'{item.bp.name}' | Type:'{typeName}'");
-
-                if (!armorMap.TryGetValue(typeName, out var data))
-                {
-                    data = CreateBaseData(item.bp, "Armor", typeName);
-                    armorMap[typeName] = data;
-                }
-
-                if (level == 0)
-                {
-                    data.Name = item.bp.Name;
-                    data.Icon = item.bp.Icon;
-                    data.Description = item.bp.Description;
-                    data.BaseCost = (int)item.bp.m_Cost;
-                }
-
-                data.VariantGuids[level] = item.guid.ToString();
-                data.VariantCosts[level] = (int)item.bp.m_Cost;
-                data.VariantIcons[level] = item.bp.Icon;
+                // ...
             }
             Armors.AddRange(armorMap.Values.OrderBy(x => x.Name));
+            */
 
-            // 3. SCAN SHIELDS
+            // 3. SCAN SHIELDS (Désactivé)
+            /*
             foreach (var item in shields)
             {
-                if (item.bp.Type == null) continue;
-                string typeName = item.bp.Type.name;
-                int level = DetectLevel(item.bp.name, typeName, true);
-
-                if (level == -1) continue;
-
-                if (!shieldMap.TryGetValue(typeName, out var data))
-                {
-                    data = CreateBaseData(item.bp, "Shield", typeName);
-                    shieldMap[typeName] = data;
-                }
-
-                if (level == 0)
-                {
-                    data.Name = item.bp.Name;
-                    data.Icon = item.bp.Icon;
-                    data.Description = item.bp.Description;
-                    data.BaseCost = (int)item.bp.m_Cost;
-                }
-
-                data.VariantGuids[level] = item.guid.ToString();
-                data.VariantCosts[level] = (int)item.bp.m_Cost;
-                data.VariantIcons[level] = item.bp.Icon;
+                // ...
             }
+            */
+            // 3. SCAN SHIELDS (Désactivé)
+            /*
             var finalShields = shieldMap.Values.OrderBy(x => x.Name).ToList();
             Shields.AddRange(finalShields);
             // On les rend disponibles dans l'atelier d'armure
             Armors.AddRange(finalShields);
             Armors = Armors.OrderBy(x => x.Name).ToList();
+            */
 
             // 4. SCAN ACCESSORIES (No levels)
             foreach (var item in accessories)
