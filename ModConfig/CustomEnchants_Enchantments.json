@@ -3,11 +3,13 @@
     "EnchantId": "001",
     "BaseName": {
       "enGB": "Energy Resistance",
-      "frFR": "Résistance aux énergies"
+      "frFR": "Résistance aux énergies",
+      "ruRU": "Сопротивление энергии"
     },
     "NameCompleted": {
       "enGB": "{Element} Resistance {Value}",
-      "frFR": "Résistance {Element} {Value}"
+      "frFR": "Résistance {Element} {Value}",
+      "ruRU": "{Element} Сопротивление {Value}"
     },
     "FeatureModelId": "102",
     "Type": "Other",
@@ -42,11 +44,13 @@
     "EnchantId": "002",
     "BaseName": {
       "enGB": "Weapon Enhancement",
-      "frFR": "Altération d'Arme"
+      "frFR": "Altération d'Arme",
+      "ruRU": "Усиление оружия"
     },
     "NameCompleted": {
       "enGB": "+{Bonus} Enhancement",
-      "frFR": "Altération +{Bonus}"
+      "frFR": "Altération +{Bonus}",
+      "ruRU": "+{Bonus} Усиление"
     },
     "Type": "Weapon",
     "MaxNotEpic": 5,
@@ -71,11 +75,13 @@
     "EnchantId": "003",
     "BaseName": {
       "enGB": "Physical Attribute Bonus",
-      "frFR": "Bonus de Caractéristique Physique"
+      "frFR": "Bonus de Caractéristique Physique",
+      "ruRU": "Бонус физической характеристики"
     },
     "NameCompleted": {
       "enGB": "{Stat} +{Value} ({Descriptor})",
-      "frFR": "{Stat} +{Value} ({Descriptor})"
+      "frFR": "{Stat} +{Value} ({Descriptor})",
+      "ruRU": "{Stat} +{Value} ({Descriptor})"
     },
     "FeatureModelId": "100",
     "Type": "Other",
@@ -103,6 +109,36 @@
       {
         "Name": "Descriptor",
         "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "DefaultValue": "Enhancement",
+        "EnumOnly": [
+          "Enhancement",
+          "None",
+          "Morale",
+          "Sacred",
+          "Profane"
+        ],
+        "EnumOverrides": {
+          "Enhancement": {
+            "frFR": "Altération",
+            "ruRU": "Усиление"
+          },
+          "None": {
+            "frFR": "Aucun",
+            "ruRU": "Нет"
+          },
+          "Morale": {
+            "frFR": "Moral",
+            "ruRU": "Боевой дух"
+          },
+          "Sacred": {
+            "frFR": "Sacré",
+            "ruRU": "Священный"
+          },
+          "Profane": {
+            "frFR": "Profane",
+            "ruRU": "Оскверненный"
+          }
+        },
         "ComponentIndex": -1,
         "FieldName": "Descriptor"
       },
@@ -121,11 +157,13 @@
     "EnchantId": "004",
     "BaseName": {
       "enGB": "Saving Throw Bonus",
-      "frFR": "Bonus aux jets de sauvegarde"
+      "frFR": "Bonus aux jets de sauvegarde",
+      "ruRU": "Бонус к спасброскам"
     },
     "NameCompleted": {
       "enGB": "+{Value} bonus to {Stat}",
-      "frFR": "+{Value} aux jets de {Stat}"
+      "frFR": "+{Value} aux jets de {Stat}",
+      "ruRU": "+{Value} бонус к {Stat}"
     },
     "FeatureModelId": "101",
     "Type": "Other",
@@ -150,11 +188,13 @@
     "EnchantId": "005",
     "BaseName": {
       "enGB": "Mental Attribute Bonus",
-      "frFR": "Bonus de Caractéristique Mentale"
+      "frFR": "Bonus de Caractéristique Mentale",
+      "ruRU": "Бонус ментальной характеристики"
     },
     "NameCompleted": {
       "enGB": "{Stat} +{Value} ({Descriptor})",
-      "frFR": "{Stat} +{Value} ({Descriptor})"
+      "frFR": "{Stat} +{Value} ({Descriptor})",
+      "ruRU": "{Stat} +{Value} ({Descriptor})"
     },
     "FeatureModelId": "100",
     "Type": "Other",
@@ -182,6 +222,36 @@
       {
         "Name": "Descriptor",
         "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "DefaultValue": "Enhancement",
+        "EnumOnly": [
+          "Enhancement",
+          "None",
+          "Morale",
+          "Sacred",
+          "Profane"
+        ],
+        "EnumOverrides": {
+          "Enhancement": {
+            "frFR": "Altération",
+            "ruRU": "Усиление"
+          },
+          "None": {
+            "frFR": "Aucun",
+            "ruRU": "Нет"
+          },
+          "Morale": {
+            "frFR": "Moral",
+            "ruRU": "Боевой дух"
+          },
+          "Sacred": {
+            "frFR": "Sacré",
+            "ruRU": "Священный"
+          },
+          "Profane": {
+            "frFR": "Profane",
+            "ruRU": "Оскверненный"
+          }
+        },
         "ComponentIndex": -1,
         "FieldName": "Descriptor"
       },
@@ -197,65 +267,40 @@
     "EnchantId": "008",
     "BaseName": {
       "enGB": "Charged Metamagic",
-      "frFR": "Métamagie à charges"
+      "frFR": "Métamagie à charges",
+      "ruRU": "Метамагия с зарядами"
     },
     "NameCompleted": {
       "enGB": "{Metamagic} Metamagic ({Charges} charges, Max Lvl {MaxLevel})",
-      "frFR": "Métamagie {Metamagic} ({Charges} ch., Niv. Max {MaxLevel})"
+      "frFR": "Métamagie {Metamagic} ({Charges} ch., Niv. Max {MaxLevel})",
+      "ruRU": "Метамагия {Metamagic} ({Charges} зар., Макс. ур. {MaxLevel})"
     },
     "Type": "WeaponEnchantment",
-    "Slots": [
-      "Weapon",
-      "Armor",
-      "Shield",
-      "Neck",
-      "Wrist"
-    ],
+    "Slots": [],
     "FeatureModelId": "107",
-    "GoldOverrideFormula": "2000 * MetamagicCount * MaxLevel * Charges",
-    "PointCostFormula": "MetamagicCount + (MaxLevel / 3)",
+    "GoldOverrideFormula": "2000 * MaxLevel * Charges",
+    "PointCostFormula": "1 + (MaxLevel / 3)",
     "Components": [
       "Comp_EquipmentFeature"
     ],
     "DynamicParams": [
       {
-        "Name": "MetamagicCount",
-        "Label": "Nombre de métamagies",
-        "Max": 3,
-        "ComponentIndex": -1,
-        "FieldName": "MetamagicCount"
-      },
-      {
         "Name": "MaxLevel",
-        "Label": "Niveau max des sorts",
+        "Label": "Max spell level",
         "Max": 9,
         "ComponentIndex": -1,
         "FieldName": "MaxLevel"
       },
       {
         "Name": "Charges",
-        "Label": "Nombre de charges",
+        "Label": "Number of charges",
         "Max": 5,
         "ComponentIndex": -1,
         "FieldName": "Charges"
       },
       {
         "Name": "Metamagic",
-        "Label": "Métamagie A",
-        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-        "ComponentIndex": -1,
-        "FieldName": "Metamagic"
-      },
-      {
-        "Name": "Metamagic2",
-        "Label": "Métamagie B",
-        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-        "ComponentIndex": -1,
-        "FieldName": "Metamagic"
-      },
-      {
-        "Name": "Metamagic3",
-        "Label": "Métamagie C",
+        "Label": "Metamagic",
         "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
         "ComponentIndex": -1,
         "FieldName": "Metamagic"
@@ -266,11 +311,13 @@
     "EnchantId": "010",
     "BaseName": {
       "enGB": "Armor Class Bonus",
-      "frFR": "Bonus de Classe d'Armure"
+      "frFR": "Bonus de Classe d'Armure",
+      "ruRU": "Бонус к классу брони"
     },
     "NameCompleted": {
       "enGB": "+{Value} {Descriptor} AC",
-      "frFR": "Bonus de CA +{Value} ({Descriptor})"
+      "frFR": "Bonus de CA +{Value} ({Descriptor})",
+      "ruRU": "+{Value} {Descriptor} КБ"
     },
     "FeatureModelId": "100",
     "Type": "Other",
@@ -315,40 +362,52 @@
         ],
         "EnumOverrides": {
           "Armor": {
-            "frFR": "Armure"
+            "frFR": "Armure",
+            "ruRU": "Броня"
           },
           "Shield": {
-            "frFR": "Bouclier"
+            "frFR": "Bouclier",
+            "ruRU": "Щит"
           },
           "NaturalArmor": {
-            "frFR": "Armure naturelle"
+            "frFR": "Armure naturelle",
+            "ruRU": "Природная броня"
           },
           "Deflection": {
-            "frFR": "Parade"
+            "frFR": "Parade",
+            "ruRU": "Отражение"
           },
           "Dodge": {
-            "frFR": "Esquive"
+            "frFR": "Esquive",
+            "ruRU": "Уклонение"
           },
           "Insight": {
-            "frFR": "Intuition"
+            "frFR": "Intuition",
+            "ruRU": "Интуиция"
           },
           "Luck": {
-            "frFR": "Chance"
+            "frFR": "Chance",
+            "ruRU": "Удача"
           },
           "Morale": {
-            "frFR": "Moral"
+            "frFR": "Moral",
+            "ruRU": "Боевой дух"
           },
           "Sacred": {
-            "frFR": "Sacré"
+            "frFR": "Sacré",
+            "ruRU": "Священный"
           },
           "Profane": {
-            "frFR": "Profane"
+            "frFR": "Profane",
+            "ruRU": "Оскверненный"
           },
           "Enhancement": {
-            "frFR": "Altération"
+            "frFR": "Altération",
+            "ruRU": "Усиление"
           },
           "Other": {
-            "frFR": "Autre"
+            "frFR": "Autre",
+            "ruRU": "Прочее"
           }
         },
         "ComponentIndex": -1,
@@ -369,11 +428,13 @@
     "EnchantId": "011",
     "BaseName": {
       "enGB": "Skill Bonus",
-      "frFR": "Bonus de Compétence"
+      "frFR": "Bonus de Compétence",
+      "ruRU": "Бонус к навыку"
     },
     "NameCompleted": {
       "enGB": "{Stat} +{Value} ({Descriptor})",
-      "frFR": "{Stat} +{Value} ({Descriptor})"
+      "frFR": "{Stat} +{Value} ({Descriptor})",
+      "ruRU": "{Stat} +{Value} ({Descriptor})"
     },
     "FeatureModelId": "100",
     "Type": "Other",
@@ -409,37 +470,48 @@
         ],
         "EnumOverrides": {
           "SkillAthletics": {
-            "frFR": "Athlétisme"
+            "frFR": "Athlétisme",
+            "ruRU": "Атлетика"
           },
           "SkillMobility": {
-            "frFR": "Mobilité"
+            "frFR": "Mobilité",
+            "ruRU": "Подвижность"
           },
           "SkillThievery": {
-            "frFR": "Doigts de fée"
+            "frFR": "Doigts de fée",
+            "ruRU": "Плутовство"
           },
           "SkillStealth": {
-            "frFR": "Discrétion"
+            "frFR": "Discrétion",
+            "ruRU": "Скрытность"
           },
           "SkillKnowledgeArcana": {
-            "frFR": "Connaissance (Mystères)"
+            "frFR": "Érudition (Mystères)",
+            "ruRU": "Знание (магия)"
           },
           "SkillKnowledgeWorld": {
-            "frFR": "Connaissance (Monde)"
+            "frFR": "Érudition (Monde)",
+            "ruRU": "Знание (мир)"
           },
           "SkillLoreNature": {
-            "frFR": "Nature"
+            "frFR": "Connaissance (Nature)",
+            "ruRU": "Знание (природа)"
           },
           "SkillLoreReligion": {
-            "frFR": "Religion"
+            "frFR": "Connaissance (Sacré)",
+            "ruRU": "Знание (религия)"
           },
           "SkillPerception": {
-            "frFR": "Perception"
+            "frFR": "Perception",
+            "ruRU": "Внимание"
           },
           "SkillPersuasion": {
-            "frFR": "Persuasion"
+            "frFR": "Persuasion",
+            "ruRU": "Убеждение"
           },
           "SkillUseMagicDevice": {
-            "frFR": "Utilisation d'objets magiques"
+            "frFR": "Utilisation d'objets magiques",
+            "ruRU": "Использование маг. устройств"
           }
         },
         "ComponentIndex": -1,
@@ -449,6 +521,45 @@
         "Name": "Descriptor",
         "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
         "DefaultValue": "Competence",
+        "EnumOnly": [
+          "None",
+          "Competence",
+          "Luck",
+          "Morale",
+          "Sacred",
+          "Circumstance",
+          "Insight"
+        ],
+        "EnumOverrides": {
+          "None": {
+            "frFR": "Aucun",
+            "ruRU": "Нет"
+          },
+          "Competence": {
+            "frFR": "Compétence",
+            "ruRU": "Мастерство"
+          },
+          "Luck": {
+            "frFR": "Chance",
+            "ruRU": "Удача"
+          },
+          "Morale": {
+            "frFR": "Moral",
+            "ruRU": "Боевой дух"
+          },
+          "Sacred": {
+            "frFR": "Sacré",
+            "ruRU": "Священный"
+          },
+          "Circumstance": {
+            "frFR": "Circonstance",
+            "ruRU": "Ситуативный"
+          },
+          "Insight": {
+            "frFR": "Intuition",
+            "ruRU": "Интуиция"
+          }
+        },
         "ComponentIndex": -1,
         "FieldName": "Descriptor"
       },
@@ -464,11 +575,13 @@
     "EnchantId": "006",
     "BaseName": {
       "enGB": "Permanent Metamagic",
-      "frFR": "Métamagie permanente"
+      "frFR": "Métamagie permanente",
+      "ruRU": "Постоянная метамагия"
     },
     "NameCompleted": {
       "enGB": "Permanent {Metamagic} {Metamagic2} {Metamagic3}",
-      "frFR": "{Metamagic} {Metamagic2} {Metamagic3} permanente"
+      "frFR": "{Metamagic} {Metamagic2} {Metamagic3} permanente",
+      "ruRU": "Постоянная {Metamagic} {Metamagic2} {Metamagic3}"
     },
     "Type": "WeaponEnchantment",
     "Slots": [
@@ -499,17 +612,20 @@
         "ComponentIndex": -1,
         "FieldName": "Metamagic"
       }
-    ]
+    ],
+    "Hidden": true
   },
   {
     "EnchantId": "007",
     "BaseName": {
       "enGB": "Metamagic Rod (Charges)",
-      "frFR": "Sceptre métamagique (Charges)"
+      "frFR": "Sceptre métamagique (Charges)",
+      "ruRU": "Метамагический скипетр (Заряды)"
     },
     "NameCompleted": {
       "enGB": "{Grade} {Metamagic} Rod ({Charges} charges)",
-      "frFR": "Sceptre métamagique de {Metamagic} ({Grade}, {Charges} charges)"
+      "frFR": "Sceptre métamagique de {Metamagic} ({Grade}, {Charges} charges)",
+      "ruRU": "Метамагический скипетр {Metamagic} ({Grade}, {Charges} зар.)"
     },
     "Type": "UsableItem",
     "Slots": [
@@ -554,14 +670,17 @@
         "EnumOverrides": {
           "Other": {
             "frFR": "Mineur (Niv. 1-3)",
+            "ruRU": "Малый (Ур. 1-3)",
             "Value": 0
           },
           "Shield": {
             "frFR": "Normal (Niv. 1-6)",
+            "ruRU": "Обычный (Ур. 1-6)",
             "Value": 1
           },
           "Armor": {
             "frFR": "Supérieur (Niv. 1-9)",
+            "ruRU": "Большой (Ур. 1-9)",
             "Value": 2
           }
         },
@@ -576,6 +695,7 @@
         "ComponentIndex": -1,
         "FieldName": "Charges"
       }
-    ]
+    ],
+    "Hidden": true
   }
 ]

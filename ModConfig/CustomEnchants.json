@@ -354,7 +354,8 @@
           "ComponentIndex": -1,
           "FieldName": "Metamagic"
         }
-      ]
+      ],
+      "Hidden": true
     },
     {
       "EnchantId": "007",
@@ -434,7 +435,8 @@
           "ComponentIndex": -1,
           "FieldName": "Charges"
         }
-      ]
+      ],
+      "Hidden": true
     },
     {
       "EnchantId": "008",

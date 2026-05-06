@@ -656,7 +656,7 @@ namespace CraftingSystem
             GUILayout.Space(10 * scale);
             DrawMenuButton(new GUIContent("<b>🛡 " + Helpers.GetString("ui_menu_create_armor", "Create Armor") + "</b>"), btnStyle, CraftingPage.CreateArmor, forgeTint, GUILayout.Width(colWidth3));
             GUILayout.Space(10 * scale);
-            DrawMenuButton(new GUIContent("<b>💍 " + Helpers.GetString("ui_menu_create_accessory", "Create Accessory") + " <color=red>TODO</color></b>"), btnStyle, CraftingPage.CreateAccessory, forgeTint, GUILayout.Width(colWidth3));
+            DrawMenuButton(new GUIContent("<b>💍 " + Helpers.GetString("ui_menu_create_accessory", "Create Accessory") + "</b>"), btnStyle, CraftingPage.CreateAccessory, forgeTint, GUILayout.Width(colWidth3));
             GUILayout.EndHorizontal();
 
             GUILayout.Space(40 * scale);

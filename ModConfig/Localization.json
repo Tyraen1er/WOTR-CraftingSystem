@@ -241,9 +241,9 @@
             "ruRU": " Доспехи"
         },
         "ui_filter_others": {
-            "enGB": " Others",
-            "frFR": " Autres",
-            "ruRU": " Прочее"
+            "enGB": " Wondrous",
+            "frFR": " Merveilleux",
+            "ruRU": " Диковинки"
         },
         "ui_time_done": {
             "enGB": "Done",
@@ -490,6 +490,26 @@
             "frFR": "Auto",
             "ruRU": "Авто"
         },
+        "ui_btn_change_icon": {
+            "enGB": "Change Icon",
+            "frFR": "Changer l'icône",
+            "ruRU": "Изменить иконку"
+        },
+        "ui_btn_reset_icon": {
+            "enGB": "Reset",
+            "frFR": "Réinitialiser",
+            "ruRU": "Сбросить"
+        },
+        "ui_icon_browser_title": {
+            "enGB": "Select a new icon",
+            "frFR": "Choisir une nouvelle icône",
+            "ruRU": "Выберите новую иконку"
+        },
+        "ui_btn_select": {
+            "enGB": "Select",
+            "frFR": "Sélectionner",
+            "ruRU": "Выбрать"
+        },
         "ui_applied_enchants": {
             "enGB": "Applied Enchantments:",
             "frFR": "Enchantements appliqués :",
@@ -521,9 +541,9 @@
             "ruRU": "Броня"
         },
         "ui_filter_others": {
-            "enGB": " Others",
-            "frFR": " Autres",
-            "ruRU": "Прочее"
+            "enGB": " Wondrous",
+            "frFR": " Merveilleux",
+            "ruRU": " Диковинки"
         },
         "ui_search_label": {
             "enGB": "Search: ",
@@ -1026,14 +1046,14 @@
             "ruRU": "Конфигурация:"
         },
         "ui_school": {
-            "enGB": "School: {0}",
-            "frFR": "École : {0}",
-            "ruRU": "Школа: {0}"
+            "enGB": "School",
+            "frFR": "École",
+            "ruRU": "Школа"
         },
         "ui_classes": {
-            "enGB": "Classes: {0}",
-            "frFR": "Classes : {0}",
-            "ruRU": "Классы: {0}"
+            "enGB": "Classes",
+            "frFR": "Classes",
+            "ruRU": "Классы"
         },
         "ui_btn_craft_scroll": {
             "enGB": "CRAFT SCROLL",
@@ -1155,6 +1175,9 @@
         },
         "ui_epic_tag": { "enGB": " (Epic)", "frFR": " (Épique)", "ruRU": " (Эпик)" },
         "ui_settings_models_loaded": { "enGB": "Custom Models Loaded: {0}", "frFR": "Modèles personnalisés chargés : {0}", "ruRU": "Загружено пользовательских моделей: {0}" },
-        "ui_err_generate_item": { "enGB": "Error: Could not generate item data.", "frFR": "Erreur : Impossible de générer les données de l'objet.", "ruRU": "Ошибка: не удалось сгенерировать данные предмета." }
+        "ui_err_generate_item": { "enGB": "Error: Could not generate item data.", "frFR": "Erreur : Impossible de générer les données de l'objet.", "ruRU": "Ошибка: не удалось сгенерировать данные предмета." },
+        "ui_param_maxlevel": { "enGB": "Max Spell Level", "frFR": "Niveau sort max.", "ruRU": "Макс. уровень закл." },
+        "ui_param_charges": { "enGB": "Charges", "frFR": "Charges", "ruRU": "Заряды" },
+        "ui_param_metamagic": { "enGB": "Metamagic", "frFR": "Métamagie", "ruRU": "Метамагия" }
     }
 }

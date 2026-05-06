@@ -218,6 +218,7 @@ namespace CraftingSystem
                 else item.Ensure<ItemPartCustomName>().CustomName = name;
                 
                 item.Identify();
+                UpdateStackability(item);
                 Main.ModEntry.Logger.Log($"[ATELIER] Renommé : {(string.IsNullOrEmpty(name) ? "Original" : name)}");
             }
             catch (Exception ex) { Main.ModEntry.Logger.Error($"Erreur renommage : {ex}"); }
@@ -231,9 +232,27 @@ namespace CraftingSystem
                 if (string.IsNullOrEmpty(blueprintGuid)) item.Remove<ItemPartCustomIcon>();
                 else item.Ensure<ItemPartCustomIcon>().IconBlueprintGuid = blueprintGuid;
                 
+                UpdateStackability(item);
                 Main.ModEntry.Logger.Log($"[ATELIER] Icône changée : {(string.IsNullOrEmpty(blueprintGuid) ? "Originale" : blueprintGuid)}");
             }
             catch (Exception ex) { Main.ModEntry.Logger.Error($"Erreur changement icône : {ex}"); }
+        }
+
+        private static void UpdateStackability(ItemEntity item)
+        {
+            if (item == null) return;
+            
+            bool isCustomized = item.Get<ItemPartCustomName>() != null || item.Get<ItemPartCustomIcon>() != null;
+            
+            if (isCustomized)
+            {
+                item.ForceStackable = false;
+            }
+            else
+            {
+                // Reset to default (null uses IsMayBeStackable logic)
+                item.ForceStackable = null;
+            }
         }
     }
 }
