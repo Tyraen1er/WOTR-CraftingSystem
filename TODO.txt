@@ -1,4 +1,3 @@
-- Vérifier intégrité du calcul du prix des enchantements customs.
 
 A ignorer pour le moment :
 - Service d'Achat d'équipement non enchanté

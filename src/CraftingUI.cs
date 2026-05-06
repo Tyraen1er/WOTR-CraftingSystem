@@ -1620,7 +1620,7 @@ namespace CraftingSystem
                 try
                 {
                     var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
-                    if (workshop != null)
+                    if (workshop != null && workshop.ActiveProjects.Count > 0)
                     {
                         workshop.CheckAndFinishProjects();
                         feedbackMessage = Helpers.GetString("ui_feedback_all_forges_done", "All active forging projects have been completed instantly!");

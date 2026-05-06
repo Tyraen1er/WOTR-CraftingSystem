@@ -176,7 +176,7 @@ namespace CraftingSystem
 
             IsSyncing = true;
             LastSyncMessage = Helpers.GetString("ui_sync_in_progress", "Synchronization in progress...");
-            
+
             // On délègue au scanner unifié
             _ = UnifiedScanner.RunFullScan();
         }
@@ -190,7 +190,7 @@ namespace CraftingSystem
             try
             {
                 var syncedList = new List<EnchantmentData>();
-                
+
                 // 1. Chargement des Overrides (Chargement du fichier JSON pour lier vos modifications)
                 var overrides = new Dictionary<string, EnchantmentData>(StringComparer.OrdinalIgnoreCase);
                 string path = Path.Combine(Main.ModEntry.Path, "Enchantments.json");
@@ -300,7 +300,7 @@ namespace CraftingSystem
         public static EnchantmentData ResolveDynamicEnchantment(string guid)
         {
             if (string.IsNullOrEmpty(guid)) return null;
-            if (!DynamicGuidHelper.TryDecodeGuid(BlueprintGuid.Parse(guid), out string modelId, out List<int> values)) return null;
+            if (!DynamicGuidHelper.TryDecodeGuid(BlueprintGuid.Parse(guid), out string modelId, out List<int> values, out int mask)) return null;
 
             // On cherche le modèle (vals[0] == 1 signifie Feature)
             bool isFeature = values.Count > 0 && values[0] == 1;
@@ -312,14 +312,14 @@ namespace CraftingSystem
             // Préparation des variables pour les formules et remplacements de texte
             var formulaVars = new Dictionary<string, double>();
             var replacements = new Dictionary<string, string>();
-            
+
             if (modelId == "007")
             {
                 // Format 007 : [0:isFeature] [1:Grade] [2:Charges] [3:Count] [4+:Metamagics...]
                 int grade = values.Count > 1 ? values[1] : 0;
                 int charges = values.Count > 2 ? values[2] : 3;
                 int mCount = values.Count > 3 ? values[3] : 0;
-                
+
                 formulaVars["Grade"] = grade;
                 formulaVars["Charges"] = charges;
                 formulaVars["MetamagicCount"] = mCount;
@@ -334,7 +334,7 @@ namespace CraftingSystem
 
                     int cost = GetMetamagicLevelCost(val);
                     mCosts.Add(cost);
-                    
+
                     string mName = Enum.GetName(typeof(Kingmaker.UnitLogic.Abilities.Metamagic), val) ?? val.ToString();
                     mNames.Add(Helpers.GetString("ui_enum_" + mName, mName));
                 }
@@ -346,7 +346,7 @@ namespace CraftingSystem
                 var sortedCosts = mCosts.OrderByDescending(c => c).ToList();
                 double[] resolvedCosts = new double[3] { 0, 0, 0 };
                 string gradeKey = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
-                
+
                 if (model.PriceTables != null && model.PriceTables.TryGetValue("Rod", out var rodTable))
                 {
                     for (int i = 0; i < Math.Min(3, sortedCosts.Count); i++)
@@ -376,9 +376,11 @@ namespace CraftingSystem
 
                         if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
                         {
-                            try {
+                            try
+                            {
                                 var enumType = Type.GetType(p.EnumTypeName);
-                                if (enumType != null) {
+                                if (enumType != null)
+                                {
                                     string enumName = Enum.GetName(enumType, val);
                                     if (!string.IsNullOrEmpty(enumName))
                                     {
@@ -388,7 +390,8 @@ namespace CraftingSystem
                                             resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
                                     }
                                 }
-                            } catch { }
+                            }
+                            catch { }
                         }
                         replacements[p.Name] = resolvedVal;
                         formulaVars[p.Name] = val;
@@ -404,6 +407,29 @@ namespace CraftingSystem
             if (!string.IsNullOrEmpty(prefix) && !fullDisplayName.StartsWith(prefix)) fullDisplayName = prefix + " " + fullDisplayName;
             if (!string.IsNullOrEmpty(suffix) && !fullDisplayName.Contains(suffix)) fullDisplayName = fullDisplayName + " " + suffix;
 
+            // Détermination si c'est une altération pure (Weapon/Armor Enhancement Bonus)
+            /* first TODO a working enhancement custom
+            bool isEnhancement = false;
+            for (int i = 0; i < model.Components.Count; i++)
+            {
+                if ((mask & (1 << i)) == 0) continue;
+
+                object compObj = model.Components[i];
+                string compTypeName = "";
+
+                if (compObj is string compId && CustomEnchantmentsBuilder.ComponentLibrary.TryGetValue(compId, out object libComp))
+                    compTypeName = libComp?.GetType().Name ?? "";
+                else
+                    compTypeName = compObj?.GetType().Name ?? "";
+
+                if (compTypeName == "WeaponEnhancementBonus" || compTypeName == "ArmorEnhancementBonus")
+                {
+                    isEnhancement = true;
+                    break;
+                }
+            }
+            */
+
             var dynamicData = new EnchantmentData
             {
                 Guid = guid,
@@ -411,7 +437,7 @@ namespace CraftingSystem
                 Type = model.Type.Replace("Enchantment", ""),
                 Source = "Custom",
                 PointString = model.EnchantmentCost.ToString(),
-                IsEnhancement = model.Components.Any(c => c.GetType().Name == "WeaponEnhancementBonus" || c.GetType().Name == "ArmorEnhancementBonus"),
+                IsEnhancement = isEnhancement,
                 PriceFactor = model.PriceFactor,
                 Slots = new List<string>(model.Slots)
             };
@@ -421,14 +447,17 @@ namespace CraftingSystem
             {
                 if (p.EnumThresholdOverrides != null && formulaVars.TryGetValue(p.Name, out double val))
                 {
-                    try {
+                    try
+                    {
                         var enumType = Type.GetType(p.EnumTypeName);
-                        if (enumType != null) {
+                        if (enumType != null)
+                        {
                             string enumName = Enum.GetName(enumType, (int)val);
                             if (enumName != null && p.EnumThresholdOverrides.TryGetValue(enumName, out int overVal))
                                 currentMaxNotEpic = overVal;
                         }
-                    } catch {}
+                    }
+                    catch { }
                 }
             }
 
@@ -441,7 +470,7 @@ namespace CraftingSystem
                     {
                         if (pVal > threshold) { isEpic = true; break; }
                     }
-                    else 
+                    else
                     {
                         if (pDef.Type != "Enum" && pVal > currentMaxNotEpic)
                         {
@@ -525,7 +554,7 @@ namespace CraftingSystem
             }
 
             string key = ((int)val).ToString();
-            
+
             // Mapping spécial pour Grade
             if (pDef.Name == "Grade")
             {
@@ -565,7 +594,7 @@ namespace CraftingSystem
             if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Maximize)) return 3;
             if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Empower)) return 2;
             if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Persistent)) return 2;
-            
+
             // Quintessence : On pourrait utiliser une valeur dynamique, mais par défaut on met 1 
             // car le prix est déjà capé par le Grade du sceptre (Mineur/Normal/Supérieur)
             if (metamagic.HasFlag(Kingmaker.UnitLogic.Abilities.Metamagic.Heighten)) return 1;

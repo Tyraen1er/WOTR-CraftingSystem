@@ -152,8 +152,14 @@ namespace CraftingSystem
                     return total;
                 }
 
-                // Pour une création, on utilise soit l'override, soit un prix par défaut
-                long basePrice = nextEnchant.GoldOverride >= 0 ? nextEnchant.GoldOverride : (nextEnchant.PointCost * nextEnchant.PointCost * 1000); 
+                // Pour une création, on détermine le facteur approprié (Weapon=2000, Armor=1000 par défaut)
+                int creationFactor = 1000;
+                if (nextEnchant.PriceFactor > 0) creationFactor = nextEnchant.PriceFactor;
+                else if (string.Equals(nextEnchant.Type, "Weapon", StringComparison.OrdinalIgnoreCase)) creationFactor = WEAPON_BASE_FACTOR;
+                else if (string.Equals(nextEnchant.Type, "Armor", StringComparison.OrdinalIgnoreCase)) creationFactor = ARMOR_BASE_FACTOR;
+
+                // On utilise soit l'override, soit le calcul par points
+                long basePrice = nextEnchant.GoldOverride >= 0 ? nextEnchant.GoldOverride : (nextEnchant.PointCost * nextEnchant.PointCost * (long)creationFactor); 
                 long finalPrice = (long)(basePrice * costMultiplier);
                 
                 if (CraftingSettings.Instance.EnableEpicCosts && nextEnchant.IsEpic) finalPrice = (long)(finalPrice * CraftingSettings.Instance.EpicCostMultiplier);
