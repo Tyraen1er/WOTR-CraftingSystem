@@ -2595,6 +2595,14 @@ namespace CraftingSystem
                 GUILayout.FlexibleSpace();
 
                 string btnLabel = selectedModel.Type == "UsableItem" ? Helpers.GetString("ui_btn_create_item", "Craft this item") : Helpers.GetString("ui_btn_add_to_selection", "Add to selection");
+                
+                bool canCraft = totalCost >= 0 && totalPoints >= 0;
+                if (!canCraft)
+                {
+                    GUI.enabled = false;
+                    btnLabel = Helpers.GetString("ui_err_invalid_formula", "Invalid Formula (Cost -1)");
+                }
+
                 if (CButton(btnLabel, GUILayout.Width(250 * scale), GUILayout.Height(40 * scale)))
                 {
                     try
@@ -2629,6 +2637,7 @@ namespace CraftingSystem
                     }
                     catch (Exception ex) { Main.ModEntry.Logger.Error($"Error finalizing custom: {ex}"); }
                 }
+                GUI.enabled = true; // IMPORTANT: Restore GUI state
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndVertical();

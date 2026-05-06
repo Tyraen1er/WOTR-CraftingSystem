@@ -505,7 +505,12 @@ namespace CraftingSystem
 
             if (!string.IsNullOrEmpty(model.PointCostFormula))
             {
-                dynamicData.PointString = FormulaEvaluator.EvaluateInt(model.PointCostFormula, formulaVars).ToString();
+                try {
+                    dynamicData.PointString = FormulaEvaluator.EvaluateInt(model.PointCostFormula, formulaVars).ToString();
+                } catch (Exception ex) {
+                    Main.ModEntry.Logger.Error($"[SCANNER] Erreur de formule (Points) pour {model.EnchantId}: {ex.Message}");
+                    dynamicData.PointString = "-1";
+                }
             }
 
             if (model.PriceTables != null)
@@ -562,7 +567,12 @@ namespace CraftingSystem
 
             if (!string.IsNullOrEmpty(model.GoldOverrideFormula))
             {
-                dynamicData.GoldOverride = (int)FormulaEvaluator.EvaluateLong(model.GoldOverrideFormula, formulaVars);
+                try {
+                    dynamicData.GoldOverride = (int)FormulaEvaluator.EvaluateLong(model.GoldOverrideFormula, formulaVars);
+                } catch (Exception ex) {
+                    Main.ModEntry.Logger.Error($"[SCANNER] Erreur de formule (Or) pour {model.EnchantId}: {ex.Message}");
+                    dynamicData.GoldOverride = -1;
+                }
             }
 
             return dynamicData;

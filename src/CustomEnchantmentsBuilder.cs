@@ -815,7 +815,18 @@ namespace CraftingSystem
                     Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Field path not found: {fieldName} in {current.GetType().Name}");
                     return;
                 }
-                current = field.GetValue(current);
+                object parent = current;
+                current = field.GetValue(parent);
+                if (current == null)
+                {
+                    try {
+                        current = Activator.CreateInstance(field.FieldType);
+                        field.SetValue(parent, current);
+                    } catch {
+                        Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Null intermediate value and could not instantiate: {fieldName}");
+                        return;
+                    }
+                }
             }
             var lastFieldName = parts.Last();
             var lastField = current.GetType().GetField(lastFieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)

@@ -110,7 +110,7 @@ namespace CraftingSystem
         public static int EvaluateInt(string formula, Dictionary<string, double> variables)
         {
             double res = Evaluate(formula, variables);
-            if (double.IsNaN(res) || double.IsInfinity(res)) return 0;
+            if (double.IsNaN(res) || double.IsInfinity(res)) return -1;
             if (res > int.MaxValue) return int.MaxValue;
             if (res < int.MinValue) return int.MinValue;
             return (int)Math.Round(res);
@@ -119,7 +119,7 @@ namespace CraftingSystem
         public static long EvaluateLong(string formula, Dictionary<string, double> variables)
         {
             double res = Evaluate(formula, variables);
-            if (double.IsNaN(res) || double.IsInfinity(res)) return 0;
+            if (double.IsNaN(res) || double.IsInfinity(res)) return -1;
             if (res > long.MaxValue) return long.MaxValue;
             if (res < long.MinValue) return long.MinValue;
             return (long)Math.Round(res);
@@ -196,7 +196,9 @@ namespace CraftingSystem
             }
 
             NextChar();
-            return ParseExpressionInternal();
+            double result = ParseExpressionInternal();
+            if (pos < expression.Length) throw new Exception($"Unexpected character at end of expression: {(char)ch} (pos: {pos})");
+            return result;
         }
     }
 }
