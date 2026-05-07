@@ -1127,6 +1127,8 @@ namespace CraftingSystem
                 
                 itemType.GetField("m_Icon", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.SetValue(item, template.m_Icon);
                 itemType.GetField("m_InventoryEquipSound", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.SetValue(item, template.m_InventoryEquipSound);
+                itemType.GetField("m_Weight", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, template.m_Weight);
+                itemType.GetField("m_Cost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, template.m_Cost);
                 
                 var visual = equipmentType.GetField("m_EquipmentEntity", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(template);
                 equipmentType.GetField("m_EquipmentEntity", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, visual);
@@ -1141,7 +1143,7 @@ namespace CraftingSystem
             for (int i = 0; i < mCount; i++) {
                 int val = paramValues[3 + i];
                 string n = Enum.GetName(typeof(Kingmaker.UnitLogic.Abilities.Metamagic), val) ?? "None";
-                mNames.Add(n);
+                mNames.Add(Helpers.GetString("ui_enum_" + n, n));
             }
             replacements["Metamagic"] = string.Join(", ", mNames);
  
