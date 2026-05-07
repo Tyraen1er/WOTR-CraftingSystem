@@ -960,6 +960,16 @@
             "frFR": "Abadar, dieu des lois, du commerce et des cités, vous regarde avec sévérité.\n\nÊtes-vous certain de vouloir accéder à ce menu ?\n\n\nCela risque de provoquer de graves déséquilibres dans l'économie globale de votre aventure.",
             "ruRU": "Абадар, бог законов, торговли и городов, сурово взирает на вас.\n\nВы уверены, что хотите войти в это меню?\n\n\nЭто может привести к серьезному дисбалансу в общей экономике вашего приключения."
         },
+        "ui_btn_yes_proceed": {
+            "enGB": "Yes, Proceed",
+            "frFR": "Oui, continuer",
+            "ruRU": "Да, продолжить"
+        },
+        "ui_btn_no_cancel": {
+            "enGB": "No, Go Back",
+            "frFR": "Non, revenir en arrière",
+            "ruRU": "Нет, вернуться"
+        },
         "ui_header_name": {
             "enGB": "Name",
             "frFR": "Nom",
