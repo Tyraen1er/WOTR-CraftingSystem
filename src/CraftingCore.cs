@@ -46,7 +46,7 @@ namespace CraftingSystem
             // Redirection pour les boucliers : les enchantements d'arme vont sur l'arme du bouclier
             if (item != null && item.Blueprint is Kingmaker.Blueprints.Items.Shields.BlueprintItemShield && data.Type == "Weapon")
             {
-                var weaponProp = item.GetType().GetProperty("Weapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                var weaponProp = item.GetType().GetProperty("WeaponComponent", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
                 if (weaponProp != null)
                 {
                     var subWeapon = weaponProp.GetValue(item) as ItemEntityWeapon;
@@ -56,18 +56,18 @@ namespace CraftingSystem
                         Main.ModEntry.Logger.Log($"[ATELIER] Redirection (via réflexion) vers l'arme du bouclier : {item.Name}");
                     }
                 }
-                else
+            }
+            // Redirection pour les boucliers : les enchantements d'armure vont sur l'armure du bouclier
+            else if (item != null && item.Blueprint is Kingmaker.Blueprints.Items.Shields.BlueprintItemShield && data.Type == "Armor")
+            {
+                var armorProp = item.GetType().GetProperty("ArmorComponent", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                if (armorProp != null)
                 {
-                    // Tentative via le champ privé m_Weapon si la propriété n'existe pas
-                    var weaponField = item.GetType().GetField("m_Weapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    if (weaponField != null)
+                    var subArmor = armorProp.GetValue(item) as ItemEntityArmor;
+                    if (subArmor != null)
                     {
-                        var subWeapon = weaponField.GetValue(item) as ItemEntityWeapon;
-                        if (subWeapon != null)
-                        {
-                            item = subWeapon;
-                            Main.ModEntry.Logger.Log($"[ATELIER] Redirection (via champ m_Weapon) vers l'arme du bouclier : {item.Name}");
-                        }
+                        item = subArmor;
+                        Main.ModEntry.Logger.Log($"[ATELIER] Redirection (via réflexion) vers l'armure du bouclier : {item.Name}");
                     }
                 }
             }
