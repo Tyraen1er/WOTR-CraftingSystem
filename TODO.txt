@@ -1,2 +1,3 @@
+- Personnaliser description item
 - Service d'Achat d'équipement non enchanté (ne pas implémenter pour l'instant)
     - Accessoires : Bijoux - Vêtements - sceptres - baguettes

@@ -1304,7 +1304,18 @@ namespace CraftingSystem
                         activeDescriptionPopup = appliedDesc;
                     }
 
-                    if (CButton(Helpers.GetString("ui_btn_remove", "Remove"), GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
+                    bool isNative = (selectedItem.Blueprint.Enchantments?.Any(bp => bp == ench.Blueprint) ?? false);
+
+                    if (isNative)
+                    {
+                        GUIStyle cantStyle = new GUIStyle(GUI.skin.label) { 
+                            fontSize = (int)(FONT_NORMAL * scale), 
+                            alignment = TextAnchor.MiddleCenter,
+                            normal = { textColor = new Color(0.7f, 0.7f, 0.7f, 0.8f) }
+                        };
+                        GUILayout.Label(Helpers.GetString("ui_btn_cant_remove", "Can't remove"), cantStyle, GUILayout.Width(100 * scale), GUILayout.Height(20 * scale));
+                    }
+                    else if (CButton(Helpers.GetString("ui_btn_remove", "Remove"), GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
                     {
                         selectedItem.RemoveEnchantment(ench);
                         selectedItem.Identify();

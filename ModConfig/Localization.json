@@ -540,6 +540,11 @@
             "frFR": "Retirer",
             "ruRU": "Снять"
         },
+        "ui_btn_cant_remove": {
+            "enGB": "Can't remove",
+            "frFR": "Obligatoire",
+            "ruRU": "Нельзя снять"
+        },
         "ui_available_enchants": {
             "enGB": "Available Enchantments:",
             "frFR": "Enchantements disponibles :",
