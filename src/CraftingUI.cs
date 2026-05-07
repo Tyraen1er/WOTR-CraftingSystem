@@ -2683,18 +2683,20 @@ namespace CraftingSystem
                 GUILayout.Space(30 * scale);
 
                 // --- CALCUL DU RÉSULTAT ET PRIX (BARRE DU BAS) ---
-                int[] orderedValues = selectedModel.DynamicParams.Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0).ToArray();
+                int[] orderedValues = new int[0];
                 int mask = 0;
                 bool hasMaskControl = false;
 
-                if (selectedModel.EnchantId == "007")
+                string currentId = selectedModel.EnchantId?.Trim() ?? "";
+                if (currentId == "007" || currentId == "7")
                 {
-                    int count = dynamicParamValues.ContainsKey("MetamagicCount") ? dynamicParamValues["MetamagicCount"] : 1;
+                    int mCount = dynamicParamValues.ContainsKey("MetamagicCount") ? dynamicParamValues["MetamagicCount"] : 0;
                     List<int> vals = new List<int>();
                     vals.Add(dynamicParamValues.ContainsKey("Grade") ? dynamicParamValues["Grade"] : 0);
                     vals.Add(dynamicParamValues.ContainsKey("Charges") ? dynamicParamValues["Charges"] : 3);
-                    vals.Add(count);
-                    for (int i = 0; i < count; i++)
+                    vals.Add(mCount);
+                    mask = 0; // On recalcule le masque proprement
+                    for (int i = 0; i < mCount; i++)
                     {
                         int m = dynamicParamValues.ContainsKey("Metamagic_" + i) ? dynamicParamValues["Metamagic_" + i] : 0;
                         vals.Add(m);
@@ -2785,6 +2787,9 @@ namespace CraftingSystem
                                 CraftingActions.StartCraftingProject(null, finalEnch, (int)totalCost, 0);
                                 feedbackMessage = "<color=green>" + string.Format(Helpers.GetString("ui_success_created_chest", "Success! Item created and delivered to the <b>Workshop Chest</b>.")) + "</color>";
                                 selectedModel = null;
+                                // CORRECTION : retour au menu principal pour éviter une NullReferenceException
+                                // au frame suivant (DrawCustomEnchantmentGUI_Content accèderait à selectedModel.BaseName)
+                                currentPageType = CraftingPage.MainMenu;
                             }
                             else
                             {

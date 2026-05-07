@@ -442,6 +442,7 @@ namespace CraftingSystem
 
         private static BlueprintScriptableObject CreateDynamicBlueprint(CustomEnchantmentData model, BlueprintGuid guid, List<int> paramValues, int mask)
         {
+            if (model.EnchantId == "007") return BuildComplexMetamagicRod(model, null, guid, paramValues, mask) as BlueprintScriptableObject;
             Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Starting creation of {Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted)} for GUID {guid} (Mask: 0x{mask:X3})");
             BlueprintScriptableObject bp = null;
             try {
@@ -465,11 +466,7 @@ namespace CraftingSystem
                     return null;
                 }
  
-                // --- CAS SPÉCIAL : SCEPTRE MÉTAMAGIQUE DYNAMIQUE (007) ---
-                if (model.EnchantId == "007")
-                {
-                    return BuildComplexMetamagicRod(model, (BlueprintItemEquipmentUsable)bp, guid, paramValues);
-                }
+                // (Le cas 007 est déjà géré au début de la fonction)
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Blueprint instantiation failed: {ex}");
                 return null;
@@ -1068,96 +1065,133 @@ namespace CraftingSystem
             return bp;
         }
 
-        private static BlueprintScriptableObject BuildComplexMetamagicRod(CustomEnchantmentData model, BlueprintItemEquipmentUsable item, BlueprintGuid guid, List<int> paramValues)
+        private static BlueprintScriptableObject BuildComplexMetamagicRod(CustomEnchantmentData model, BlueprintItemEquipmentUsable dummy, BlueprintGuid guid, List<int> paramValues, int mask)
         {
-            // [0:Grade] [1:Charges] [2:Count] [3+:Metamagics]
-            int grade = paramValues.Count > 0 ? paramValues[0] : 0;
-            int charges = paramValues.Count > 1 ? paramValues[1] : 3;
-            int mCount = paramValues.Count > 2 ? paramValues[2] : 0;
-            int mask = 0;
-            for (int i = 0; i < mCount; i++) mask |= (paramValues.Count > (3 + i) ? paramValues[3 + i] : 0);
- 
+            // Format : [0:isFeature] [1:Grade] [2:Charges] [3:Count] [4+:Metamagics]
+            int grade   = paramValues.Count > 1 ? Math.Max(0, Math.Min(2, paramValues[1])) : 0;
+            int charges = paramValues.Count > 2 ? paramValues[2] : 3;
+
             string baseName = $"Rod_{guid}";
-            
-            // 1. BUFF
-            var buff = Helpers.CreateBlueprint<BlueprintBuff>(CreateGuidFromSeed(baseName + "_Buff").ToString(), baseName + "_Buff");
-            // StayOnDeath (8) | HiddenInUi (2) = 10
-            var flagsField = typeof(BlueprintBuff).GetField("m_Flags", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (flagsField != null) {
-                flagsField.SetValue(buff, Enum.ToObject(flagsField.FieldType, 10));
+
+            // GUIDs avec signature c2af
+            int[] subParams = paramValues.ToArray();
+            var abilityGuid = DynamicGuidHelper.GenerateGuid("103", subParams, false, mask);
+            var buffGuid    = DynamicGuidHelper.GenerateGuid("106", subParams, false, mask);
+
+            // Solution Radicale SaveError : On clone TOUT (Item, Ability, Buff)
+            const string vanillaRodItemGuid    = "6f5d788ee7384e47895bc58a291eec7f"; // Sceptre Perçage Mineur (Item)
+            const string vanillaRodAbilityGuid = "fc7bd8b05d6147aab2d8b4378801db05"; // Ability
+            const string vanillaRodBuffGuid    = "41a7f08a27e04909aea1c43cd1895260"; // Buff
+
+            var templateItem    = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(vanillaRodItemGuid))    as BlueprintItemEquipmentUsable;
+            var templateAbility = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(vanillaRodAbilityGuid)) as BlueprintActivatableAbility;
+            var templateBuff    = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(vanillaRodBuffGuid))    as BlueprintBuff;
+
+            if (templateItem == null || templateAbility == null || templateBuff == null)
+            {
+                Main.ModEntry.Logger.Error("[DYNAMIC_ROD] FATAL: Could not load vanilla templates.");
+                return null;
             }
-            
-            var mechanics = new Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics();
-            mechanics.Metamagic = (Kingmaker.UnitLogic.Abilities.Metamagic)mask;
+
+            // Clonage JSON du Buff et de l'Ability (pour préserver la logique complexe)
+            var cloneSettings = new Newtonsoft.Json.JsonSerializerSettings { 
+                TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All, 
+                ContractResolver = new OwlcatContractResolver() 
+            };
+            cloneSettings.Converters.Add(new BlueprintReferenceConverter());
+
+            BlueprintBuff buff;
+            BlueprintActivatableAbility ability;
+
+            try {
+                buff    = Newtonsoft.Json.JsonConvert.DeserializeObject<BlueprintBuff>(Newtonsoft.Json.JsonConvert.SerializeObject(templateBuff, cloneSettings), cloneSettings);
+                ability = Newtonsoft.Json.JsonConvert.DeserializeObject<BlueprintActivatableAbility>(Newtonsoft.Json.JsonConvert.SerializeObject(templateAbility, cloneSettings), cloneSettings);
+            } catch (Exception ex) {
+                Main.ModEntry.Logger.Error($"[DYNAMIC_ROD] Clone failed: {ex.Message}");
+                return null;
+            }
+
+            // CRITIQUE : Fix SaveError (Value cannot be null key)
+            // On s'assure que TOUS les composants ont un nom pour éviter le crash du dictionnaire Owlcat
+            if (buff.ComponentsArray != null) {
+                for (int i = 0; i < buff.ComponentsArray.Length; i++) 
+                    if (buff.ComponentsArray[i] != null) buff.ComponentsArray[i].name = $"$RodBuffComp${i}";
+            }
+            if (ability.ComponentsArray != null) {
+                for (int i = 0; i < ability.ComponentsArray.Length; i++) 
+                    if (ability.ComponentsArray[i] != null) ability.ComponentsArray[i].name = $"$RodAbilComp${i}";
+            }
+
+            // Réassignation des Identités
+            buff.name = baseName + "_Buff"; buff.AssetGuid = buffGuid;
+            ability.name = baseName + "_Ability"; ability.AssetGuid = abilityGuid;
+
+            // Injection des paramètres mécaniques
+            var mechanics = buff.ComponentsArray?.OfType<Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics>().FirstOrDefault();
+            if (mechanics == null) {
+                mechanics = new Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics();
+                mechanics.name = "$MetamagicRodMechanics$";
+                buff.ComponentsArray = (buff.ComponentsArray ?? new Kingmaker.Blueprints.BlueprintComponent[0]).Concat(new[] { mechanics }).ToArray();
+            }
+            mechanics.Metamagic     = (Kingmaker.UnitLogic.Abilities.Metamagic)mask;
             mechanics.MaxSpellLevel = (grade == 0 ? 3 : (grade == 1 ? 6 : 9));
-            buff.ComponentsArray = new BlueprintComponent[] { mechanics };
- 
-            // 2. ACTIVATABLE ABILITY
-            var ability = Helpers.CreateBlueprint<BlueprintActivatableAbility>(CreateGuidFromSeed(baseName + "_Ability").ToString(), baseName + "_Ability");
+            typeof(Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics).GetField("m_RodAbility", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(mechanics, ability.ToReference<BlueprintActivatableAbilityReference>());
+
             ability.m_Buff = buff.ToReference<BlueprintBuffReference>();
             ability.Group = ActivatableAbilityGroup.MetamagicRod;
-            ability.DeactivateImmediately = true;
             
-            // Important: ResourceLogic must be present but SpendType = None for rods in WotR
-            var resLogic = new ActivatableAbilityResourceLogic();
+            var resLogic = ability.ComponentsArray?.OfType<ActivatableAbilityResourceLogic>().FirstOrDefault();
+            if (resLogic == null) {
+                resLogic = new ActivatableAbilityResourceLogic();
+                resLogic.name = "$ActivatableAbilityResourceLogic$";
+                ability.ComponentsArray = (ability.ComponentsArray ?? new Kingmaker.Blueprints.BlueprintComponent[0]).Concat(new[] { resLogic }).ToArray();
+            }
             resLogic.SpendType = ActivatableAbilityResourceLogic.ResourceSpendType.None;
-            ability.ComponentsArray = new BlueprintComponent[] { resLogic };
- 
-            // Link back mechanics to ability (required for charge consumption tracking)
-            typeof(Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics).GetField("m_RodAbility", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(mechanics, ability.ToReference<BlueprintActivatableAbilityReference>());
- 
-            // 3. ITEM configuration
-            item.name = baseName;
-            item.AssetGuid = guid;
+
+            // CRÉATION DE L'ITEM (via Helpers pour la stabilité du fichier de sauvegarde)
+            var item = Helpers.CreateBlueprint<BlueprintItemEquipmentUsable>(guid.ToString(), baseName);
             item.Type = UsableItemType.Other;
             item.Charges = charges;
             item.SpendCharges = true;
             item.RestoreChargesOnRest = true;
             item.m_Ability = null;
-            
-            // Critical link: m_ActivatableAbility is on BlueprintItemEquipment
+            item.m_InventoryEquipSound = templateItem.m_InventoryEquipSound;
+            item.m_Icon = templateItem.m_Icon;
+            item.m_Weight = templateItem.m_Weight;
+            item.m_Cost = templateItem.m_Cost;
+
             typeof(BlueprintItemEquipment).GetField("m_ActivatableAbility", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.SetValue(item, ability.ToReference<BlueprintActivatableAbilityReference>());
-            
-            // Visuals & Icon from a vanilla rod
-            var templateGuid = BlueprintGuid.Parse("6f5d788ee7384e47895bc58a291eec7f");
-            var template = ResourcesLibrary.TryGetBlueprint(templateGuid) as BlueprintItemEquipmentUsable;
-            if (template != null) {
-                var equipmentType = typeof(BlueprintItemEquipment);
-                var itemType = typeof(BlueprintItem);
-                
-                itemType.GetField("m_Icon", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.SetValue(item, template.m_Icon);
-                itemType.GetField("m_InventoryEquipSound", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.SetValue(item, template.m_InventoryEquipSound);
-                itemType.GetField("m_Weight", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, template.m_Weight);
-                itemType.GetField("m_Cost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, template.m_Cost);
-                
-                var visual = equipmentType.GetField("m_EquipmentEntity", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(template);
-                equipmentType.GetField("m_EquipmentEntity", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, visual);
-            }
+            typeof(BlueprintItemEquipment).GetField("m_EquipmentEntity", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, templateItem.m_EquipmentEntity);
 
             // Injection des textes
+            int mCount = paramValues.Count > 3 ? paramValues[3] : 0;
             var replacements = new Dictionary<string, string>();
-            replacements["Grade"] = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
+            replacements["Grade"]   = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
             replacements["Charges"] = charges.ToString();
-            
             var mNames = new List<string>();
             for (int i = 0; i < mCount; i++) {
-                int val = paramValues[3 + i];
+                int index = 4 + i;
+                if (index >= paramValues.Count) break;
+                int val = paramValues[index];
+                if (val == 0) continue;
                 string n = Enum.GetName(typeof(Kingmaker.UnitLogic.Abilities.Metamagic), val) ?? "None";
                 mNames.Add(Helpers.GetString("ui_enum_" + n, n));
             }
             replacements["Metamagic"] = string.Join(", ", mNames);
- 
-            string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
-            typeof(BlueprintItem).GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, Helpers.CreateString($"{item.name}.Name", finalName));
 
-            // Register all
+            string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
+            typeof(BlueprintItem).GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)
+                ?.SetValue(item, Helpers.CreateString($"{item.name}.Name", finalName));
+
+            // Enregistrement — les GUIDs portent tous la signature c2af, la sauvegarde fonctionnera
             ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(buff.AssetGuid, buff);
             ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(ability.AssetGuid, ability);
             ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(item.AssetGuid, item);
- 
-            Main.ModEntry.Logger.Log($"[DYNAMIC_ROD] Created complex rod chain for {finalName}");
+
+            Main.ModEntry.Logger.Log($"[DYNAMIC_ROD] Created rod '{finalName}' (item={guid}, ability={abilityGuid}, buff={buffGuid})");
             return item;
         }
+
  
         private static BlueprintGuid CreateGuidFromSeed(string seed)
         {
