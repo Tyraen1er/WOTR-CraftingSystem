@@ -55,7 +55,7 @@ namespace CraftingSystem
             _initialized = true;
             Main.ModEntry.Logger.Log($"[SCROLL-SCAN] Scan unifié terminé. {AvailableSpells.Count} sorts uniques trouvés.");
             
-            DumpToFile();
+            // DumpToFile();
         }
 
         private static void ProcessSpellList(BlueprintSpellList list, string className)

@@ -1,828 +1,230 @@
-{
-  "ComponentDefinitions": {
-    "Comp_AddStatBonus": {
-      "$type": "Kingmaker.UnitLogic.FactLogic.AddStatBonus, Assembly-CSharp",
-      "Stat": "Strength",
-      "Value": 0,
-      "Descriptor": "Enhancement"
-    },
-    "Comp_BuffAllSaves": {
-      "$type": "Kingmaker.Designers.Mechanics.Buffs.BuffAllSavesBonus, Assembly-CSharp",
-      "Descriptor": "Resistance",
-      "Value": 0
-    },
-    "Comp_EnergyResist": {
-      "$type": "Kingmaker.UnitLogic.FactLogic.AddDamageResistanceEnergy, Assembly-CSharp",
-      "Value": {
-        "Value": 0
+[
+  {
+    "EnchantId": "001",
+    "BaseName": "Model_EnergyResistance",
+    "Type": "Other",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Element",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Element"
       },
-      "Type": "Acid"
-    },
-    "Comp_EquipmentFeature": {
-      "$type": "Kingmaker.Designers.Mechanics.EquipmentEnchants.AddUnitFeatureEquipment, Assembly-CSharp",
-      "m_Feature": "!bp_c2af1010100000000000000000000000"
-    },
-    "Comp_WeaponEnhancement": {
-      "$type": "Kingmaker.Designers.Mechanics.WeaponEnchants.WeaponEnhancementBonus, Assembly-CSharp",
-      "EnhancementBonus": 0
-    },
-    "Comp_ArmorEnhancement": {
-      "$type": "Kingmaker.Designers.Mechanics.ArmorEnchants.ArmorEnhancementBonus, Assembly-CSharp",
-      "EnhancementBonus": 0
-    },
-    "Comp_AutoMetamagic": {
-      "$type": "Kingmaker.Designers.Mechanics.Facts.AutoMetamagic, Assembly-CSharp",
-      "Metamagic": "Maximize",
-      "MaxSpellLevel": 0
-    },
-    "Comp_ActivatableResource": {
-      "$type": "Kingmaker.UnitLogic.ActivatableAbilities.ActivatableAbilityResourceLogic, Assembly-CSharp",
-      "m_RequiredResource": "!bp_e60057ae395368a44955b24467ec6a0f",
-      "SpendType": "TurnOn"
-    },
-    "Comp_MetamagicRod": {
-      "$type": "Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics, Assembly-CSharp",
-      "Metamagic": 0,
-      "MaxSpellLevel": 3
-    },
-    "Comp_AddFact": {
-      "$type": "Kingmaker.UnitLogic.FactLogic.AddFacts, Assembly-CSharp",
-      "m_Facts": [
-        "!bp_c2af1030100000000000000000000000"
-      ],
-      "CasterLevel": 0,
-      "DoNotRestoreDirectly": false,
-      "HasDifficultyRequirements": false,
-      "InvertDifficultyRequirements": false,
-      "MinDifficulty": "Story"
-    }
-  },
-  "Models": [
-    {
-      "EnchantId": "001",
-      "BaseName": {
-        "enGB": "Energy Resistance",
-        "frFR": "Résistance aux énergies"
-      },
-      "NameCompleted": {
-        "enGB": "{Element} Resistance {Value}",
-        "frFR": "Résistance {Element} {Value}"
-      },
-      "FeatureModelId": "102",
-      "Type": "Other",
-      "MaxNotEpic": 30,
-      "Slots": [
-        "Body",
-        "Ring"
-      ],
-      "GoldOverrideFormula": "1600 * Value - 4000",
-      "PointCostFormula": "0",
-      "Components": [
-        "Comp_EquipmentFeature"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Element",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Element"
-        },
-        {
-          "Name": "Value",
-          "Type": "Slider",
-          "Min": 5,
-          "Max": 50,
-          "Step": 5,
-          "ComponentIndex": -1,
-          "FieldName": "Value"
-        }
-      ]
-    },
-    {
-      "EnchantId": "002",
-      "BaseName": {
-        "enGB": "Weapon Enhancement",
-        "frFR": "Altération d'Arme"
-      },
-      "NameCompleted": {
-        "enGB": "+{Bonus} Enhancement",
-        "frFR": "Altération +{Bonus}"
-      },
-      "Type": "Weapon",
-      "MaxNotEpic": 5,
-      "Slots": [
-        "Weapon"
-      ],
-      "GoldOverrideFormula": "2000 * Bonus * Bonus",
-      "PointCostFormula": "Bonus",
-      "Components": [
-        "Comp_WeaponEnhancement"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Bonus",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 10,
-          "ComponentIndex": 0,
-          "FieldName": "EnhancementBonus"
-        }
-      ]
-    },
-    {
-      "EnchantId": "003",
-      "BaseName": {
-        "enGB": "Physical Attribute Bonus",
-        "frFR": "Bonus de Caractéristique Physique"
-      },
-      "NameCompleted": {
-        "enGB": "{Stat} +{Value} ({Descriptor})",
-        "frFR": "{Stat} +{Value} ({Descriptor})"
-      },
-      "FeatureModelId": "100",
-      "Type": "Other",
-      "MaxNotEpic": 6,
-      "Slots": [
-        "Belt"
-      ],
-      "GoldOverrideFormula": "1000 * Value * Value",
-      "PointCostFormula": "Value",
-      "Components": [
-        "Comp_EquipmentFeature"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Stat",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
-          "EnumOnly": [
-            "Strength",
-            "Dexterity",
-            "Constitution"
-          ],
-          "ComponentIndex": -1,
-          "FieldName": "Stat"
-        },
-        {
-          "Name": "Descriptor",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Descriptor"
-        },
-        {
-          "Name": "Value",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 20,
-          "ComponentIndex": -1,
-          "FieldName": "Value"
-        }
-      ],
-      "EpicThresholds": {
-        "Value": 6
+      {
+        "Name": "Value",
+        "Type": "Slider",
+        "Min": 5,
+        "Max": 50,
+        "ComponentIndex": 0,
+        "FieldName": "Value"
       }
-    },
-    {
-      "EnchantId": "004",
-      "BaseName": {
-        "enGB": "Saving Throw Bonus",
-        "frFR": "Bonus aux jets de sauvegarde"
+    ]
+  },
+  {
+    "EnchantId": "100",
+    "BaseName": "Model_StatBonus_Feature",
+    "Type": "Feature",
+    "Components": [
+      "Comp_AddStatBonus"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Stat"
       },
-      "NameCompleted": {
-        "enGB": "+{Value} bonus to {Stat}",
-        "frFR": "+{Value} aux jets de {Stat}"
+      {
+        "Name": "Descriptor",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Descriptor"
       },
-      "FeatureModelId": "101",
-      "Type": "Other",
-      "MaxNotEpic": 5,
-      "Slots": [
-        "Shoulders"
-      ],
-      "GoldOverrideFormula": "PriceTable.Stat * Value * Value",
-      "PointCostFormula": "Value",
-      "PriceTables": {
-        "Stat": {
-          "SaveAll": 1000,
-          "DEFAULT": 333
-        }
+      {
+        "Name": "Value",
+        "Type": "Slider",
+        "Min": 1,
+        "Max": 20,
+        "ComponentIndex": 0,
+        "FieldName": "Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "101",
+    "BaseName": "Model_SaveBonus_Feature",
+    "Type": "Feature",
+    "Components": [
+      "Comp_AddStatBonus",
+      "Comp_AddStatBonus",
+      "Comp_AddStatBonus"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "ComponentIndex": -2
       },
-      "Components": [
-        "Comp_EquipmentFeature"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Stat",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
-          "EnumOnly": [
-            "SaveFortitude",
-            "SaveReflex",
-            "SaveWill",
-            "SaveAll"
-          ],
-          "EnumOverrides": {
-            "SaveFortitude": {
-              "frFR": "vigueur",
-              "MaskValue": 1
-            },
-            "SaveReflex": {
-              "frFR": "réflexes",
-              "MaskValue": 1
-            },
-            "SaveWill": {
-              "frFR": "volonté",
-              "MaskValue": 1
-            },
-            "SaveAll": {
-              "frFR": "sauvegarde",
-              "Value": 255,
-              "MaskValue": 2
-            }
-          },
-          "ComponentIndex": -1,
-          "FieldName": "Stat"
-        },
-        {
-          "Name": "Descriptor",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Descriptor"
-        },
-        {
-          "Name": "Value",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 20,
-          "ComponentIndex": -1,
-          "FieldName": "Value"
-        }
-      ]
-    },
-    {
-      "EnchantId": "005",
-      "BaseName": {
-        "enGB": "Mental Attribute Bonus",
-        "frFR": "Bonus de Caractéristique Mentale"
+      {
+        "Name": "Descriptor",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "ComponentIndex": -1,
+        "FieldName": "Descriptor"
       },
-      "NameCompleted": {
-        "enGB": "{Stat} +{Value} ({Descriptor})",
-        "frFR": "{Stat} +{Value} ({Descriptor})"
+      {
+        "Name": "Value",
+        "Type": "Slider",
+        "Min": 1,
+        "Max": 20,
+        "ComponentIndex": -2
+      }
+    ]
+  },
+  {
+    "EnchantId": "102",
+    "BaseName": "Model_EnergyResistance_Feature",
+    "Type": "Feature",
+    "Components": [
+      "Comp_EnergyResistance"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Element",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Type"
       },
-      "FeatureModelId": "100",
-      "Type": "Other",
-      "MaxNotEpic": 6,
-      "Slots": [
-        "Head"
-      ],
-      "GoldOverrideFormula": "1000 * Value * Value",
-      "PointCostFormula": "Value",
-      "Components": [
-        "Comp_EquipmentFeature"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Stat",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
-          "EnumOnly": [
-            "Intelligence",
-            "Wisdom",
-            "Charisma"
-          ],
-          "ComponentIndex": -1,
-          "FieldName": "Stat"
-        },
-        {
-          "Name": "Descriptor",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Descriptor"
-        },
-        {
-          "Name": "Value",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 20,
-          "ComponentIndex": -1,
-          "FieldName": "Value"
-        }
-      ]
-    },
-    {
-      "EnchantId": "006",
-      "BaseName": {
-        "enGB": "Permanent Metamagic",
-        "frFR": "Métamagie permanente"
+      {
+        "Name": "Value",
+        "Type": "Slider",
+        "Min": 5,
+        "Max": 50,
+        "ComponentIndex": 0,
+        "FieldName": "Value"
+      }
+    ]
+  },
+  {
+    "EnchantId": "103",
+    "BaseName": "Model_Metamagic_Ability",
+    "Type": "ActivatableAbility",
+    "Components": [],
+    "DynamicParams": [
+      { "Name": "MaxLevel", "Type": "Slider" },
+      { "Name": "Charges", "Type": "Slider" },
+      { "Name": "Metamagic", "Type": "Enum", "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp" }
+    ]
+  },
+  {
+    "EnchantId": "104",
+    "BaseName": "Model_Metamagic_Buff",
+    "Type": "Buff",
+    "Components": [
+      "Comp_MetamagicRod"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "MaxLevel",
+        "Type": "Slider",
+        "ComponentIndex": 0,
+        "FieldName": "MaxSpellLevel"
       },
-      "NameCompleted": {
-        "enGB": "Permanent {Metamagic} {Metamagic2} {Metamagic3}",
-        "frFR": "{Metamagic} {Metamagic2} {Metamagic3} permanente"
+      {
+        "Name": "Charges",
+        "Type": "Slider"
       },
-      "Type": "WeaponEnchantment",
-      "Slots": [
-        "Weapon",
-        "Armor",
-        "Shield"
-      ],
-      "FeatureModelId": "108",
-      "Components": [
-        "Comp_EquipmentFeature"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Metamagic",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Metamagic"
-        },
-        {
-          "Name": "Metamagic2",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Metamagic"
-        },
-        {
-          "Name": "Metamagic3",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Metamagic"
-        }
-      ],
-      "Hidden": true
-    },
-    {
-      "EnchantId": "007",
-      "BaseName": {
-        "enGB": "Metamagic Rod (Charges)",
-        "frFR": "Sceptre métamagique (Charges)"
+      {
+        "Name": "Metamagic",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Metamagic"
+      }
+    ]
+  },
+  {
+    "EnchantId": "105",
+    "BaseName": "Métamagie à charges",
+    "Type": "AbilityResource",
+    "Components": [],
+    "DynamicParams": [
+      { "Name": "MaxLevel", "Type": "Slider" },
+      {
+        "Name": "Charges",
+        "Type": "Slider",
+        "ComponentIndex": -1,
+        "FieldName": "m_MaxAmount.BaseValue"
       },
-      "NameCompleted": {
-        "enGB": "{Grade} {Metamagic} Rod ({Charges} charges)",
-        "frFR": "Sceptre métamagique de {Metamagic} ({Grade}, {Charges} charges)"
+      { "Name": "Metamagic", "Type": "Enum", "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp" }
+    ]
+  },
+  {
+    "EnchantId": "106",
+    "BaseName": "Métamagie à charges",
+    "Type": "ActivatableAbility",
+    "Components": [
+      "Comp_ActivatableResource"
+    ],
+    "DynamicParams": [
+      { "Name": "MaxLevel", "Type": "Slider" },
+      { "Name": "Charges", "Type": "Slider" },
+      { "Name": "Metamagic", "Type": "Enum", "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp" }
+    ]
+  },
+  {
+    "EnchantId": "107",
+    "BaseName": "Métamagie à charges",
+    "Type": "Feature",
+    "Components": [
+      "Comp_AddFact"
+    ],
+    "DynamicParams": [
+      { "Name": "MaxLevel", "Type": "Slider" },
+      { "Name": "Charges", "Type": "Slider" },
+      { "Name": "Metamagic", "Type": "Enum", "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp" }
+    ]
+  },
+  {
+    "EnchantId": "108",
+    "BaseName": "Model_Metamagic_Feature",
+    "Type": "Feature",
+    "Components": [
+      "Comp_AutoMetamagic"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Metamagic",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Metamagic"
       },
-      "Type": "UsableItem",
-      "Slots": [
-        "Other"
-      ],
-      "GoldOverrideFormula": "(MAX(RodPrice1, RodPrice2, RodPrice3) + (RodPrice1 + RodPrice2 + RodPrice3 - MAX(RodPrice1, RodPrice2, RodPrice3)) * 1.5) * (Charges / 3.0)",
-      "Components": [],
-      "PriceTables": {
-        "Rod": {
-          "Lesser_1": 3000,
-          "Normal_1": 11000,
-          "Greater_1": 24500,
-          "Lesser_2": 9000,
-          "Normal_2": 32500,
-          "Greater_2": 73000,
-          "Lesser_3": 14000,
-          "Normal_3": 54000,
-          "Greater_3": 121500,
-          "Lesser_4": 35000,
-          "Normal_4": 75500,
-          "Greater_4": 170000,
-          "DEFAULT": 0
-        }
+      {
+        "Name": "Grade",
+        "Type": "Slider",
+        "Min": 0,
+        "Max": 2,
+        "ComponentIndex": -1,
+        "FieldName": "Grade"
       },
-      "DynamicParams": [
-        {
-          "Name": "Metamagic",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "DefaultValue": "Empower",
-          "ComponentIndex": -1,
-          "FieldName": "Metamagic"
-        },
-        {
-          "Name": "Grade",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UI.Common.ItemsFilter+ItemType, Assembly-CSharp",
-          "DefaultValue": "Other",
-          "EnumOnly": [
-            "Other",
-            "Shield",
-            "Armor"
-          ],
-          "EnumOverrides": {
-            "Other": {
-              "frFR": "Mineur (Niv. 1-3)",
-              "Value": 0
-            },
-            "Shield": {
-              "frFR": "Normal (Niv. 1-6)",
-              "Value": 1
-            },
-            "Armor": {
-              "frFR": "Supérieur (Niv. 1-9)",
-              "Value": 2
-            }
-          },
-          "ComponentIndex": -1,
-          "FieldName": "Grade"
-        },
-        {
-          "Name": "Charges",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 10,
-          "DefaultValue": 3,
-          "ComponentIndex": -1,
-          "FieldName": "Charges"
-        }
-      ],
-      "Hidden": true
-    },
-    {
-      "EnchantId": "008",
-      "BaseName": {
-        "enGB": "Charged Metamagic Enchantment",
-        "frFR": "Enchantement métamagique à charges"
-      },
-      "NameCompleted": {
-        "enGB": "Charged {Metamagic} {Metamagic2} {Metamagic3}",
-        "frFR": "{Metamagic} {Metamagic2} {Metamagic3} (Charges)"
-      },
-      "Type": "WeaponEnchantment",
-      "Slots": [
-        "Weapon",
-        "Armor"
-      ],
-      "FeatureModelId": "107",
-      "Components": [
-        "Comp_EquipmentFeature"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Metamagic",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Metamagic"
-        },
-        {
-          "Name": "Metamagic2",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Metamagic"
-        },
-        {
-          "Name": "Metamagic3",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Metamagic"
-        },
-        {
-          "Name": "Charges",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 10,
-          "ComponentIndex": -1,
-          "FieldName": "Charges"
-        }
-      ]
-    },
-    {
-      "EnchantId": "010",
-      "BaseName": {
-        "enGB": "Armor Class Bonus",
-        "frFR": "Bonus de Classe d'Armure"
-      },
-      "NameCompleted": {
-        "enGB": "+{Value} {Descriptor} AC",
-        "frFR": "Bonus de CA +{Value} ({Descriptor})"
-      },
-      "FeatureModelId": "100",
-      "Type": "Other",
-      "MaxNotEpic": 8,
-      "Slots": [
-        "Armor",
-        "Shield",
-        "Neck",
-        "Wrist"
-      ],
-      "GoldOverrideFormula": "1000 * Value * Value",
-      "PointCostFormula": "Value",
-      "Components": [
-        "Comp_EquipmentFeature"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Stat",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
-          "EnumOnly": [
-            "AC"
-          ],
-          "ComponentIndex": -1,
-          "FieldName": "Stat"
-        },
-        {
-          "Name": "Descriptor",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
-          "EnumOnly": [
-            "Armor",
-            "Shield",
-            "NaturalArmor",
-            "Deflection",
-            "Dodge",
-            "Insight",
-            "Luck",
-            "Morale",
-            "Sacred",
-            "Profane",
-            "Enhancement",
-            "Other"
-          ],
-          "EnumOverrides": {
-            "Armor": {
-              "frFR": "Armure"
-            },
-            "Shield": {
-              "frFR": "Bouclier"
-            },
-            "NaturalArmor": {
-              "frFR": "Armure naturelle"
-            },
-            "Deflection": {
-              "frFR": "Parade"
-            },
-            "Dodge": {
-              "frFR": "Esquive"
-            },
-            "Insight": {
-              "frFR": "Intuition"
-            },
-            "Luck": {
-              "frFR": "Chance"
-            },
-            "Morale": {
-              "frFR": "Moral"
-            },
-            "Sacred": {
-              "frFR": "Sacré"
-            },
-            "Profane": {
-              "frFR": "Profane"
-            },
-            "Enhancement": {
-              "frFR": "Altération"
-            },
-            "Other": {
-              "frFR": "Autre"
-            }
-          },
-          "ComponentIndex": -1,
-          "FieldName": "Descriptor"
-        },
-        {
-          "Name": "Value",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 20,
-          "ComponentIndex": -1,
-          "FieldName": "Value"
-        }
-      ]
-    },
-    {
-      "EnchantId": "100",
-      "BaseName": "Model_StatBonus_Feature",
-      "Type": "Feature",
-      "Components": [
-        "Comp_AddStatBonus"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Stat",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
-          "ComponentIndex": 0,
-          "FieldName": "Stat"
-        },
-        {
-          "Name": "Descriptor",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
-          "ComponentIndex": 0,
-          "FieldName": "Descriptor"
-        },
-        {
-          "Name": "Value",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 100,
-          "ComponentIndex": 0,
-          "FieldName": "Value"
-        }
-      ]
-    },
-    {
-      "EnchantId": "101",
-      "BaseName": "Model_SavingThrows_Feature",
-      "Type": "Feature",
-      "Components": [
-        "Comp_AddStatBonus",
-        "Comp_BuffAllSaves"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Stat",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
-          "EnumOnly": [
-            "SaveFortitude",
-            "SaveReflex",
-            "SaveWill",
-            "SaveAll"
-          ],
-          "EnumOverrides": {
-            "SaveFortitude": {
-              "frFR": "Vigueur",
-              "MaskValue": 1
-            },
-            "SaveReflex": {
-              "frFR": "Réflexes",
-              "MaskValue": 1
-            },
-            "SaveWill": {
-              "frFR": "Volonté",
-              "MaskValue": 1
-            },
-            "SaveAll": {
-              "frFR": "Tous les jets de sauvegarde",
-              "MaskValue": 2,
-              "Value": 255
-            }
-          },
-          "ComponentIndex": 0,
-          "FieldName": "Stat"
-        },
-        {
-          "Name": "Descriptor",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
-          "ComponentIndex": -1,
-          "FieldName": "Descriptor"
-        },
-        {
-          "Name": "Value",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 20,
-          "ComponentIndex": -1,
-          "FieldName": "Value"
-        }
-      ]
-    },
-    {
-      "EnchantId": "102",
-      "BaseName": "Model_Resist_Feature",
-      "Type": "Feature",
-      "Components": [
-        "Comp_EnergyResist"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Element",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
-          "ComponentIndex": 0,
-          "FieldName": "Type"
-        },
-        {
-          "Name": "Value",
-          "Type": "Slider",
-          "Min": 5,
-          "Max": 50,
-          "Step": 5,
-          "ComponentIndex": 0,
-          "FieldName": "Value.Value"
-        }
-      ]
-    },
-    {
-      "EnchantId": "103",
-      "BaseName": "Model_Metamagic_Ability",
-      "Type": "ActivatableAbility",
-      "Components": [],
-      "DynamicParams": []
-    },
-    {
-      "EnchantId": "104",
-      "BaseName": "Model_Metamagic_Buff",
-      "Type": "Buff",
-      "Components": [
-        "Comp_MetamagicRod"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Metamagic",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": 0,
-          "FieldName": "Metamagic"
-        },
-        {
-          "Name": "Metamagic2",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": 0,
-          "FieldName": "Metamagic"
-        },
-        {
-          "Name": "Metamagic3",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": 0,
-          "FieldName": "Metamagic"
-        }
-      ]
-    },
-    {
-      "EnchantId": "105",
-      "BaseName": "Model_Metamagic_Resource",
-      "Type": "AbilityResource",
-      "Components": [],
-      "DynamicParams": [
-        {
-          "Name": "Charges",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 10,
-          "ComponentIndex": -1,
-          "FieldName": "m_MaxAmount.BaseValue"
-        }
-      ]
-    },
-    {
-      "EnchantId": "106",
-      "BaseName": "Model_Metamagic_Ability_Charged",
-      "Type": "ActivatableAbility",
-      "Components": [
-        "Comp_ActivatableResource"
-      ],
-      "DynamicParams": []
-    },
-    {
-      "EnchantId": "107",
-      "BaseName": "Model_Metamagic_Feature_Charged",
-      "Type": "Feature",
-      "Components": [
-        "Comp_AddFact"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Charges",
-          "Type": "Slider",
-          "Min": 1,
-          "Max": 10,
-          "ComponentIndex": -1,
-          "FieldName": "Charges"
-        }
-      ]
-    },
-    {
-      "EnchantId": "108",
-      "BaseName": "Model_Metamagic_Feature",
-      "Type": "Feature",
-      "Components": [
-        "Comp_AutoMetamagic"
-      ],
-      "DynamicParams": [
-        {
-          "Name": "Metamagic",
-          "Type": "Enum",
-          "EnumTypeName": "Kingmaker.UnitLogic.Abilities.Metamagic, Assembly-CSharp",
-          "ComponentIndex": 0,
-          "FieldName": "Metamagic"
-        },
-        {
-          "Name": "Grade",
-          "Type": "Slider",
-          "Min": 0,
-          "Max": 2,
-          "ComponentIndex": -1,
-          "FieldName": "Grade"
-        },
-        {
-          "Name": "MaxSpellLevel",
-          "Type": "Slider",
-          "Min": 0,
-          "Max": 9,
-          "ComponentIndex": 0,
-          "FieldName": "MaxSpellLevel"
-        }
-      ],
-      "PointCostFormula": "Grade * 3 + 3"
-    }
-  ]
-}
+      {
+        "Name": "MaxSpellLevel",
+        "Type": "Slider",
+        "Min": 0,
+        "Max": 9,
+        "ComponentIndex": 0,
+        "FieldName": "MaxSpellLevel"
+      }
+    ],
+    "PointCostFormula": "Grade * 3 + 3"
+  }
+]

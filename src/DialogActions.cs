@@ -33,10 +33,10 @@ namespace CraftingSystem
     public class DebugLogAction : Kingmaker.ElementsSystem.GameAction
     {
         public string Message;
-        public override string GetCaption() => $"[Debug_storyteller] {Message}";
+        public override string GetCaption() => Message; // $"[Debug_storyteller] {Message}";
         public override void RunAction()
         {
-            Main.ModEntry.Logger.Log($"[Debug_storyteller] Action Executed: {Message}");
+            // Main.ModEntry.Logger.Log($"[Debug_storyteller] Action Executed: {Message}");
         }
     }
     */

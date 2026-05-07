@@ -212,7 +212,7 @@ namespace CraftingSystem
                 if (field != null) {
                     field.SetValue(cue, dialogRef);
                 } else {
-                    Main.ModEntry.Logger.Warning($"[Debug_storyteller] Could not find m_Dialog field on BlueprintCue via reflection.");
+                    // Main.ModEntry.Logger.Warning($"[Debug_storyteller] Could not find m_Dialog field on BlueprintCue via reflection.");
                 }
             }
 
@@ -277,7 +277,7 @@ namespace CraftingSystem
                 // --- DEBUG LOG ---
                 /*
                 if (bp.name.Contains("CraftingSystem")) {
-                    Main.ModEntry.Logger.Log($"[Debug_storyteller] Registered Blueprint: {bp.name} (Guid: {bp.AssetGuid})");
+                    // Main.ModEntry.Logger.Log($"[Debug_storyteller] Registered Blueprint: {bp.name} (Guid: {bp.AssetGuid})");
                 }
                 */
             }

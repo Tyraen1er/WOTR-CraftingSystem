@@ -182,7 +182,49 @@
     "Components": [
       "Comp_EquipmentFeature"
     ],
-    "DynamicParams": []
+    "DynamicParams": [
+      {
+        "Name": "Stat",
+        "EnumTypeName": "Kingmaker.EntitySystem.Stats.StatType, Assembly-CSharp",
+        "EnumOnly": [
+          "SaveFortitude",
+          "SaveReflex",
+          "SaveWill",
+          "SaveAll"
+        ],
+        "EnumOverrides": {
+          "SaveFortitude": {
+            "enGB": "Fortitude",
+            "frFR": "Vigueur",
+            "ruRU": "Стойкость"
+          },
+          "SaveReflex": {
+            "enGB": "Reflex",
+            "frFR": "Réflexes",
+            "ruRU": "Реакция"
+          },
+          "SaveWill": {
+            "enGB": "Will",
+            "frFR": "Volonté",
+            "ruRU": "Воля"
+          },
+          "SaveAll": {
+            "enGB": "All Saves",
+            "frFR": "sauvegarde (tous)",
+            "ruRU": "спасброски (все)",
+            "Value": 99
+          }
+        },
+        "ComponentIndex": -1,
+        "FieldName": "Stat"
+      },
+      {
+        "Name": "Value",
+        "Max": 20,
+        "ComponentIndex": -1,
+        "FieldName": "Value"
+      }
+    ]
   },
   {
     "EnchantId": "005",
@@ -265,6 +307,7 @@
   },
   {
     "EnchantId": "008",
+    "Hidden": true,
     "BaseName": {
       "enGB": "Charged Metamagic",
       "frFR": "Métamagie à charges",

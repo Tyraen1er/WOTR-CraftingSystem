@@ -46,8 +46,8 @@ namespace CraftingSystem
                     }
                 }
 
-                ExecuteDump(wilcerAccessories, "WilcerAccessories.csv");
-                ExecuteDump(allAccessories, "AllAccessoriesDump.csv");
+                // ExecuteDump(wilcerAccessories, "WilcerAccessories.csv");
+                // ExecuteDump(allAccessories, "AllAccessoriesDump.csv");
             }
             catch (Exception ex)
             {

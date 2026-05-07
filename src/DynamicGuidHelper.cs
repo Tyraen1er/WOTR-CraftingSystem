@@ -77,11 +77,11 @@ namespace CraftingSystem
 
             // On se base sur la version string pour plus de fiabilité vis-à-vis de l'endianness
             string s = guid.ToString().Replace("-", "").ToUpper();
-            Main.ModEntry.Logger.Log($"[DEBUG_GUID] Deciphering: {s}"); 
+            // Main.ModEntry.Logger.Log($"[DEBUG_GUID] Deciphering: {s}"); 
             
             if (s.Length != 32 || !s.StartsWith(Signature))
             {
-                Main.ModEntry.Logger.Warning($"[DEBUG_GUID] Signature mismatch or length error: {s}");
+                // Main.ModEntry.Logger.Warning($"[DEBUG_GUID] Signature mismatch or length error: {s}");
                 return false;
             }
 

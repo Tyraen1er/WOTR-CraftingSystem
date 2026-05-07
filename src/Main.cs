@@ -150,7 +150,7 @@ namespace CraftingSystem
         [HarmonyPostfix]
         public static void Postfix()
         {
-            Main.ModEntry.Logger.Log("[DEBUG] BlueprintsCache.Init Postfix started.");
+            // Main.ModEntry.Logger.Log("[DEBUG] BlueprintsCache.Init Postfix started.");
             try {
                 string locale = "enGB";
                 try {
@@ -174,7 +174,7 @@ namespace CraftingSystem
                 CustomEnchantmentsBuilder.BuildAndInjectAll();
 
                 // --- SCAN DES SORTS POUR LES PARCHEMINS ---
-                SpellScanner.ScanAll();
+                // SpellScanner.ScanAll();
 
                 // DEBUG TEMPORAIRE (Après injection pour être sûr que le cache est prêt)
                 //EnchantmentDebug.DumpBlueprint("d42fc23b92c640846ac137dc26e000d4"); // Enhancement1
@@ -182,7 +182,7 @@ namespace CraftingSystem
                 //EnchantmentDebug.DumpBlueprint("dd0e096412423d646929d9b945fd6d4c"); // AcidResistance10Enchant
 
                 // --- DUMP DES ITEMS DE BASE ---
-                BaseItemDumper.DumpAll();
+                // BaseItemDumper.DumpAll();
                 
             } catch (Exception ex) {
                 Main.ModEntry.Logger.Error($"Error in BlueprintsCache.Init: {ex}");

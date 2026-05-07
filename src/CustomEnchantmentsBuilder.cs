@@ -22,6 +22,7 @@ using Kingmaker.UnitLogic.Alignments;
 using Kingmaker.UnitLogic.Mechanics.Actions;
 using Kingmaker.Utility;
 using Kingmaker.Localization;
+using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Items;
 using Kingmaker.Blueprints.Items.Equipment;
@@ -110,7 +111,7 @@ namespace CraftingSystem
                 var reference = Activator.CreateInstance(objectType) as BlueprintReferenceBase;
                 if (reference == null)
                 {
-                    Main.ModEntry.Logger.Warning($"[DEBUG_REF] Activator.CreateInstance returned null for {objectType.Name}");
+                    // Main.ModEntry.Logger.Warning($"[DEBUG_REF] Activator.CreateInstance returned null for {objectType.Name}");
                     return null;
                 }
 
@@ -126,7 +127,7 @@ namespace CraftingSystem
             }
             catch (Exception ex)
             {
-                Main.ModEntry.Logger.Error($"[DEBUG_REF] Error reading reference {objectType.Name}: {ex}");
+                // Main.ModEntry.Logger.Error($"[DEBUG_REF] Error reading reference {objectType.Name}: {ex}");
                 return null;
             }
         }
@@ -181,6 +182,7 @@ namespace CraftingSystem
     public class CustomEnchantmentData
     {
         public string Guid;
+        public bool Hidden;
         public string EnchantId; // ID à 3 chiffres (ex: 001) pour le générateur dynamique
         public object BaseName;
         public object NameCompleted;
@@ -201,7 +203,6 @@ namespace CraftingSystem
         public List<DynamicParam> DynamicParams = new List<DynamicParam>();
         public Dictionary<string, int> EpicParams; // Paramètres à vérifier pour le seuil épique
         public Dictionary<string, Dictionary<string, double>> PriceTables = new Dictionary<string, Dictionary<string, double>>();
-        public bool Hidden = false; // Si vrai, n'apparaît pas dans l'UI de forge
     }
 
     // --- Phase 2.B : The Builder Engine ---
@@ -399,7 +400,7 @@ namespace CraftingSystem
                 _currentlyBuilding.Add(guidStr);
                 try
                 {
-                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Requesting blueprint for GUID: {guidStr}");
+                    // Log supprimé car trop verbeux
                     var guid = BlueprintGuid.Parse(guidStr);
 
                     // On vérifie si par hasard il n'a pas été injecté entre temps
@@ -566,19 +567,14 @@ namespace CraftingSystem
                             // Support des noms virtuels (SaveAll...)
                             if (string.IsNullOrEmpty(enumName) && p.EnumOverrides != null) {
                                 foreach (var ovr in p.EnumOverrides) {
-                                    if (ovr.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null) {
-                                        try {
-                                            if (Convert.ToInt32(jo["Value"]) == val) {
-                                                enumName = ovr.Key;
-                                                break;
-                                            }
-                                        } catch {}
-                                    }
-                                    else if (ovr.Value is EnumOverrideData eod && eod.Value.HasValue) {
-                                        if (eod.Value.Value == val) {
-                                            enumName = ovr.Key;
-                                            break;
-                                        }
+                                    int? ovrValue = null;
+                                    if (ovr.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null) ovrValue = (int)jo["Value"];
+                                    else if (ovr.Value is EnumOverrideData eod) ovrValue = eod.Value;
+                                    else if (ovr.Value is Dictionary<string, object> dict && dict.TryGetValue("Value", out object v)) ovrValue = Convert.ToInt32(v);
+
+                                    if (ovrValue.HasValue && ovrValue.Value == val) {
+                                        enumName = ovr.Key;
+                                        break;
                                     }
                                 }
                             }
@@ -703,6 +699,31 @@ namespace CraftingSystem
 
             if (bp is BlueprintFeature featComp)
             {
+                // --- CAS SPÉCIAL : BONUS AUX JETS DE SAUVEGARDE (101) ---
+                if (model.EnchantId == "101")
+                {
+                    var statVal = paramValues.Count > 0 ? paramValues[0] : 0;
+                    var valueVal = paramValues.Count > 2 ? paramValues[2] : 0;
+                    var saveComps = featComp.ComponentsArray.OfType<AddStatBonus>().ToArray();
+                    if (saveComps.Length >= 3)
+                    {
+                        if (statVal == 99) // TOUS (99 pour éviter le débordement à 255)
+                        {
+                            saveComps[0].Stat = StatType.SaveFortitude; saveComps[0].Value = valueVal;
+                            saveComps[1].Stat = StatType.SaveReflex; saveComps[1].Value = valueVal;
+                            saveComps[2].Stat = StatType.SaveWill; saveComps[2].Value = valueVal;
+                            Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Applied ALL SAVES bonus (+{valueVal})");
+                        }
+                        else
+                        {
+                            saveComps[0].Stat = (StatType)statVal; saveComps[0].Value = valueVal;
+                            saveComps[1].Value = 0;
+                            saveComps[2].Value = 0;
+                            Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Applied SINGLE SAVE bonus (Stat={(StatType)statVal}, Value={valueVal})");
+                        }
+                    }
+                }
+
                 var addFacts = featComp.ComponentsArray.OfType<AddFacts>().FirstOrDefault();
                 if (addFacts != null)
                 {
@@ -804,6 +825,13 @@ namespace CraftingSystem
         {
             var parts = fieldPath.Split('.');
             object current = target;
+            
+            // On garde une trace des parents et des champs pour pouvoir "remonter" les modifications si on croise des structs
+            var parents = new List<object>();
+            var fields = new List<FieldInfo>();
+            
+            parents.Add(target);
+
             for (int i = 0; i < parts.Length - 1; i++)
             {
                 var fieldName = parts[i];
@@ -812,22 +840,28 @@ namespace CraftingSystem
                 
                 if (field == null)
                 {
-                    Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Field path not found: {fieldName} in {current.GetType().Name}");
+                    Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] Field path not found: {fieldName} in {current.GetType().Name} (skipping)");
                     return;
                 }
-                object parent = current;
-                current = field.GetValue(parent);
-                if (current == null)
+
+                fields.Add(field);
+                object next = field.GetValue(current);
+                
+                if (next == null)
                 {
                     try {
-                        current = Activator.CreateInstance(field.FieldType);
-                        field.SetValue(parent, current);
+                        next = Activator.CreateInstance(field.FieldType);
+                        field.SetValue(current, next);
                     } catch {
                         Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Null intermediate value and could not instantiate: {fieldName}");
                         return;
                     }
                 }
+                
+                current = next;
+                parents.Add(current);
             }
+
             var lastFieldName = parts.Last();
             var lastField = current.GetType().GetField(lastFieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                          ?? current.GetType().GetField("m_" + lastFieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -838,11 +872,8 @@ namespace CraftingSystem
                 {
                     if (Attribute.IsDefined(lastField.FieldType, typeof(FlagsAttribute)))
                     {
-                        // Pour les enums [Flags], on combine (OR) au lieu d'écraser
                         int currentVal = 0;
-                        try {
-                            currentVal = Convert.ToInt32(lastField.GetValue(current));
-                        } catch { }
+                        try { currentVal = Convert.ToInt32(lastField.GetValue(current)); } catch { }
                         lastField.SetValue(current, Enum.ToObject(lastField.FieldType, currentVal | value));
                     }
                     else
@@ -854,11 +885,28 @@ namespace CraftingSystem
                 {
                     lastField.SetValue(current, Convert.ChangeType(value, lastField.FieldType));
                 }
-                Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Successfully set/combined {lastField.Name} with {value}");
+
+                // --- CRITIQUE : Remontée des modifications pour les structs ---
+                // Si 'current' est un struct, il a été modifié dans sa version "boxée". 
+                // On doit le ré-assigner à son parent, et ainsi de suite.
+                for (int i = parents.Count - 2; i >= 0; i--)
+                {
+                    var p = parents[i];
+                    var f = fields[i];
+                    var child = parents[i + 1];
+                    
+                    if (p.GetType().IsValueType || child.GetType().IsValueType)
+                    {
+                        f.SetValue(p, child);
+                    }
+                    else break; // Si on arrive sur une classe, plus besoin de remonter
+                }
+
+                Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Successfully set {lastField.Name} to {value}");
             }
             else
             {
-                Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] Final field not found: {lastFieldName} (also tried m_{lastFieldName}) in {current.GetType().Name}");
+                Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] Field not found: {lastFieldName} in {current.GetType().Name} (skipping)");
             }
         }
         public static BlueprintItemEquipmentUsable GetOrBuildScroll(SpellData spellData, int cl, int sl)

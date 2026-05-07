@@ -78,7 +78,7 @@ namespace CraftingSystem
                         var featureRef = featureField?.GetValue(comp) as BlueprintReferenceBase;
                         var feature = featureRef != null ? ResourcesLibrary.TryGetBlueprint(featureRef.deserializedGuid) as BlueprintScriptableObject : null;
                         
-                        Main.ModEntry.Logger.Log($"[DEBUG] AddUnitFeatureEquipment: Feature found: {feature != null} ({feature?.name})");
+                        // Main.ModEntry.Logger.Log($"[DEBUG] AddUnitFeatureEquipment: Feature found: {feature != null} ({feature?.name})");
 
                         if (feature != null && feature.ComponentsArray != null) {
                             var subDescriptions = new List<string>();
@@ -89,7 +89,7 @@ namespace CraftingSystem
                             if (subDescriptions.Count > 0) resolved = string.Join(", ", subDescriptions);
                         }
                     } catch (Exception ex) {
-                        Main.ModEntry.Logger.Log($"[DEBUG] AddUnitFeatureEquipment Error: {ex}");
+                        // Main.ModEntry.Logger.Log($"[DEBUG] AddUnitFeatureEquipment Error: {ex}");
                     }
                 }
                 
