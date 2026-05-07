@@ -25,6 +25,7 @@ namespace CraftingSystem
         public SourceFilter CurrentSourceFilter = SourceFilter.TTRPG;
         public bool HasOpenedCheats = false;
         public int ItemsPerPage = 15;
+        public bool ApplyPotionRestrictions = false;
 
         // Raccourcis clavier
         public KeyBinding ShortcutInventory = new KeyBinding();

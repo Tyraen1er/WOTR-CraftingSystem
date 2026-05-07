@@ -1787,6 +1787,7 @@ namespace CraftingSystem
             bool prevEnableEpic = CraftingSettings.Instance.EnableEpicCosts;
             float prevEpicMult = CraftingSettings.Instance.EpicCostMultiplier;
             SourceFilter prevSourceFilter = CraftingSettings.Instance.CurrentSourceFilter;
+            bool prevPotionRestr = CraftingSettings.Instance.ApplyPotionRestrictions;
 
             Color oldBG = GUI.backgroundColor;
             GUI.backgroundColor = new Color(0.4f, 0.4f, 0.4f, 1.0f); // Sous-menu plus clair
@@ -1805,6 +1806,10 @@ namespace CraftingSystem
 
             bool previousInstantCrafting = CraftingSettings.Instance.InstantCrafting;
             CraftingSettings.Instance.InstantCrafting = CToggle(CraftingSettings.Instance.InstantCrafting, Helpers.GetString("ui_settings_instant_craft", "Instant Crafting"));
+            
+            GUILayout.Space(5);
+            CraftingSettings.Instance.ApplyPotionRestrictions = CToggle(CraftingSettings.Instance.ApplyPotionRestrictions, Helpers.GetString("ui_settings_potion_restrictions", " Apply TTRPG restrictions on potions"));
+            GUILayout.Space(5);
 
             if (CraftingSettings.Instance.InstantCrafting && !previousInstantCrafting)
             {
@@ -1923,7 +1928,8 @@ namespace CraftingSystem
                 || prevMaxEnh != CraftingSettings.Instance.MaxEnhancementBonus || prevMaxTotal != CraftingSettings.Instance.MaxTotalBonus || prevRequirePlus != CraftingSettings.Instance.RequirePlusOneFirst
                 || prevSlotPenalty != CraftingSettings.Instance.ApplySlotPenalty || prevEnableEpic != CraftingSettings.Instance.EnableEpicCosts
                 || prevEpicMult != CraftingSettings.Instance.EpicCostMultiplier
-                || prevSourceFilter != CraftingSettings.Instance.CurrentSourceFilter)
+                || prevSourceFilter != CraftingSettings.Instance.CurrentSourceFilter
+                || prevPotionRestr != CraftingSettings.Instance.ApplyPotionRestrictions)
             {
                 CraftingSettings.Instance.Save(Main.ModEntry);
                 filtersDirty = true;

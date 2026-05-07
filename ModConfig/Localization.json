@@ -660,6 +660,11 @@
             "frFR": "Fabrication Instantanée",
             "ruRU": "Мгновенное создание"
         },
+        "ui_settings_potion_restrictions": {
+            "enGB": " Apply TTRPG restrictions on potions",
+            "frFR": " Appliquer les restrictions TTRPG sur les potions",
+            "ruRU": " Применять ограничения TTRPG для зелий"
+        },
         "ui_feedback_all_forges_done": {
             "enGB": "All active forging projects have been completed instantly!",
             "frFR": "Toutes les forges en cours ont été terminées instantanément !",
