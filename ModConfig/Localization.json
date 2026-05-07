@@ -510,6 +510,31 @@
             "frFR": "Changer l'icône",
             "ruRU": "Изменить иконку"
         },
+        "ui_btn_change_description": {
+            "enGB": "Edit Description",
+            "frFR": "Éditer Description",
+            "ruRU": "Изменить описание"
+        },
+        "ui_title_edit_description": {
+            "enGB": "Edit Item Description",
+            "frFR": "Éditer la description de l'objet",
+            "ruRU": "Изменить описание предмета"
+        },
+        "ui_btn_save": {
+            "enGB": "Save",
+            "frFR": "Sauvegarder",
+            "ruRU": "Сохранить"
+        },
+        "ui_btn_cancel": {
+            "enGB": "Cancel",
+            "frFR": "Annuler",
+            "ruRU": "Отмена"
+        },
+        "ui_feedback_description_changed": {
+            "enGB": "Description updated!",
+            "frFR": "Description mise à jour !",
+            "ruRU": "Описание обновлено!"
+        },
         "ui_btn_reset_icon": {
             "enGB": "Reset",
             "frFR": "Réinitialiser",

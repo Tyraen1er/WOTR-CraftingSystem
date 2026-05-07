@@ -64,6 +64,8 @@ namespace CraftingSystem
                     activeTypes.Clear();
                     showCategoryFilter = false;
                     showIconBrowser = false;
+                    showDescriptionEditor = false;
+                    editedDescription = "";
                     scrollPosition = Vector2.zero;
                     titleScrollPosition = Vector2.zero;
                     descriptionScrollPosition = Vector2.zero;
@@ -92,6 +94,10 @@ namespace CraftingSystem
         private bool showAbadarWarning = false;
         private bool showCustomEnchantPage = false;
         private List<EnchantmentData> customEnchantments = new List<EnchantmentData>();
+
+        // Description Editor State
+        private bool showDescriptionEditor = false;
+        private string editedDescription = "";
 
         // Scroll Creation State
         private string scrollSearch = "";
@@ -267,7 +273,8 @@ namespace CraftingSystem
 
             if (inputCancelDown)
             {
-                if (!string.IsNullOrEmpty(activeDescriptionPopup)) activeDescriptionPopup = "";
+                if (showDescriptionEditor) showDescriptionEditor = false;
+                else if (!string.IsNullOrEmpty(activeDescriptionPopup)) activeDescriptionPopup = "";
                 else if (selectedItem != null)
                 {
                     selectedItem = null;
@@ -361,12 +368,29 @@ namespace CraftingSystem
                 GUI.BringWindowToFront(998);
             }
 
+            // --- FENÊTRE D'ÉDITION DE DESCRIPTION (POPUP) ---
+            if (showDescriptionEditor)
+            {
+                float pW = 800f * scale;
+                float pH = 600f * scale;
+                Rect popupRect = new Rect((Screen.width - pW) / 2f, (Screen.height - pH) / 2f, pW, pH);
+
+                GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
+                GUI.DrawTexture(popupRect, Texture2D.whiteTexture);
+                GUI.color = oldGUIColor;
+
+                GUI.Window(997, popupRect, DrawDescriptionEditor, "");
+                DrawBorder(popupRect, 2f, Color.gray);
+                GUI.BringWindowToFront(997);
+            }
+
             GUI.backgroundColor = oldColor;
 
-            GUI.FocusWindow(string.IsNullOrEmpty(activeDescriptionPopup) ? 999 : 998);
-
-            GUI.Window(999, windowRect, DrawWindowContent, "");
-            DrawBorder(windowRect, 2f, Color.gray);
+            int focusId = 999;
+            if (showDescriptionEditor) focusId = 997;
+            else if (!string.IsNullOrEmpty(activeDescriptionPopup)) focusId = 998;
+            
+            GUI.FocusWindow(focusId);
         }
 
         void DrawDoubleWeaponChoice(int id)
@@ -1216,6 +1240,21 @@ namespace CraftingSystem
             {
                 ItemRenamer.ChangeIcon(selectedItem, null);
                 feedbackMessage = Helpers.GetString("ui_feedback_icon_reset", "Icon reset to default.");
+            }
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(10 * scale);
+
+            // --- SECTION DESCRIPTION ---
+            GUILayout.Label(Helpers.GetString("ui_btn_change_description", "Edit Description"), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
+            GUILayout.BeginHorizontal();
+
+            if (CButton(Helpers.GetString("ui_btn_change_description", "Edit Description"), GUILayout.Width(200 * scale), GUILayout.Height(40 * scale)))
+            {
+                editedDescription = selectedItem.Description;
+                showDescriptionEditor = true;
             }
 
             GUILayout.FlexibleSpace();
@@ -3035,6 +3074,50 @@ namespace CraftingSystem
             GUI.DrawTexture(new Rect(rect.x, rect.y, thickness, rect.height), Texture2D.whiteTexture); // Gauche
             GUI.DrawTexture(new Rect(rect.x + rect.width - thickness, rect.y, thickness, rect.height), Texture2D.whiteTexture); // Droite
             GUI.color = oldColor;
+        }
+        void DrawDescriptionEditor(int id)
+        {
+            float scale = CraftingSettings.Instance.ScalePercent / 100f;
+            GUILayout.BeginVertical(GUI.skin.box);
+
+            GUIStyle titleStyle = new GUIStyle(GUI.skin.label)
+            {
+                fontSize = (int)(FONT_LARGE * scale),
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter
+            };
+            GUILayout.Label(Helpers.GetString("ui_title_edit_description", "Edit Item Description"), titleStyle);
+            GUILayout.Space(10 * scale);
+
+            GUIStyle areaStyle = new GUIStyle(GUI.skin.textArea)
+            {
+                fontSize = (int)(FONT_NORMAL * scale),
+                wordWrap = true
+            };
+
+            descriptionScrollPosition = GUILayout.BeginScrollView(descriptionScrollPosition, GUILayout.ExpandHeight(true));
+            editedDescription = GUILayout.TextArea(editedDescription, areaStyle, GUILayout.ExpandHeight(true));
+            GUILayout.EndScrollView();
+
+            GUILayout.Space(10 * scale);
+            GUILayout.BeginHorizontal();
+
+            if (CButton(Helpers.GetString("ui_btn_save", "Save"), GUILayout.Height(40 * scale)))
+            {
+                ItemRenamer.ChangeDescription(selectedItem, editedDescription);
+                showDescriptionEditor = false;
+                feedbackMessage = Helpers.GetString("ui_feedback_description_changed", "Description updated!");
+            }
+
+            GUILayout.Space(10 * scale);
+
+            if (CButton(Helpers.GetString("ui_btn_cancel", "Cancel"), GUILayout.Height(40 * scale)))
+            {
+                showDescriptionEditor = false;
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
         }
     }
 }

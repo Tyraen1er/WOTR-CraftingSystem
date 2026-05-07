@@ -37,6 +37,12 @@ namespace CraftingSystem
         public string IconBlueprintGuid;
     }
 
+    public class ItemPartCustomDescription : EntityPart
+    {
+        [JsonProperty]
+        public string CustomDescription;
+    }
+
 
     // =====================================================================
     // MÉTHODES D'EXTENSION POUR L'EXTRACTION DES TEXTES
@@ -135,6 +141,18 @@ namespace CraftingSystem
             } catch { }
         }
 
+        [HarmonyPatch("get_Description"), HarmonyPostfix]
+        public static void DescriptionPostfix(ItemEntity __instance, ref string __result)
+        {
+            try {
+                var part = __instance.Get<ItemPartCustomDescription>();
+                if (part != null && !string.IsNullOrEmpty(part.CustomDescription))
+                {
+                    __result = part.CustomDescription;
+                }
+            } catch { }
+        }
+
         [HarmonyPatch("get_Icon"), HarmonyPostfix]
         public static void IconPostfix(ItemEntity __instance, ref Sprite __result)
         {
@@ -170,6 +188,13 @@ namespace CraftingSystem
             {
                 var newPart = __result.Ensure<ItemPartCustomIcon>();
                 newPart.IconBlueprintGuid = originalIconPart.IconBlueprintGuid;
+            }
+
+            var originalDescPart = __instance.Get<ItemPartCustomDescription>();
+            if (originalDescPart != null)
+            {
+                var newPart = __result.Ensure<ItemPartCustomDescription>();
+                newPart.CustomDescription = originalDescPart.CustomDescription;
             }
         }
     }
@@ -238,11 +263,27 @@ namespace CraftingSystem
             catch (Exception ex) { Main.ModEntry.Logger.Error($"Erreur changement icône : {ex}"); }
         }
 
+        public static void ChangeDescription(ItemEntity item, string description)
+        {
+            if (item == null) return;
+            try
+            {
+                if (string.IsNullOrEmpty(description)) item.Remove<ItemPartCustomDescription>();
+                else item.Ensure<ItemPartCustomDescription>().CustomDescription = description;
+                
+                UpdateStackability(item);
+                Main.ModEntry.Logger.Log($"[ATELIER] Description changée : {(string.IsNullOrEmpty(description) ? "Originale" : "Personnalisée")}");
+            }
+            catch (Exception ex) { Main.ModEntry.Logger.Error($"Erreur changement description : {ex}"); }
+        }
+
         private static void UpdateStackability(ItemEntity item)
         {
             if (item == null) return;
             
-            bool isCustomized = item.Get<ItemPartCustomName>() != null || item.Get<ItemPartCustomIcon>() != null;
+            bool isCustomized = item.Get<ItemPartCustomName>() != null 
+                || item.Get<ItemPartCustomIcon>() != null
+                || item.Get<ItemPartCustomDescription>() != null;
             
             if (isCustomized)
             {
