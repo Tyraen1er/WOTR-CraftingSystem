@@ -95,7 +95,7 @@ namespace CraftingSystem
                             CanTargetSelf = spell.CanTargetSelf,
                             CanTargetPoint = spell.CanTargetPoint,
                             ActionType = spell.ActionType,
-                            IsFullRound = spell.m_IsFullRoundAction
+                            IsFullRound = spell.IsFullRoundAction
                         };
                         AvailableSpells[guid] = data;
                     }

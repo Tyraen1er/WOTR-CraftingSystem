@@ -843,7 +843,7 @@ namespace CraftingSystem
 
         void DrawCreateWandGUI(float scale) 
         {
-            DrawMagicItemGUI(scale, Helpers.GetString("ui_menu_wand_workshop", "Wand Workshop"), 750, 50, (s, cl, sl) => CustomEnchantmentsBuilder.GetOrBuildWand(s, cl, sl));
+            DrawMagicItemGUI(scale, Helpers.GetString("ui_menu_wand_workshop", "Wand Workshop"), 750, 50, (s, cl, sl) => CustomEnchantmentsBuilder.GetOrBuildWand(s, cl, sl), WandFilter, CraftingSettings.Instance.ApplyWandRestrictions ? 4 : 9);
         }
 
         private bool PotionFilter(SpellData s)
@@ -859,6 +859,26 @@ namespace CraftingSystem
             // Règle JDR : Doit pouvoir cibler une créature (soi-même ou un allié)
             // Dans WOTR, les potions sont bues, donc elles doivent pouvoir affecter le buveur.
             if (!s.CanTargetFriends && !s.CanTargetSelf) return false;
+
+            return true;
+        }
+
+        private bool ScrollFilter(SpellData s)
+        {
+            if (!CraftingSettings.Instance.ApplyScrollRestrictions) return true;
+
+            // Règle JDR : Niveau 0 à 9
+            if (s.MinLevel > 9) return false;
+
+            return true;
+        }
+
+        private bool WandFilter(SpellData s)
+        {
+            if (!CraftingSettings.Instance.ApplyWandRestrictions) return true;
+
+            // Règle JDR : Niveau 0 à 4
+            if (s.MinLevel > 4) return false;
 
             return true;
         }
@@ -932,6 +952,10 @@ namespace CraftingSystem
             if (selectedScrollSpell != null)
             {
                 GUILayout.Label($"<b>{selectedScrollSpell.Name}</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
+                if (charges > 1)
+                {
+                    GUILayout.Label($"{Helpers.GetString("ui_charges", "Charges")}: {charges}", new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_SMALL * scale) });
+                }
                 
                 GUIStyle infoStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_SMALL * scale), richText = true };
                 if (!string.IsNullOrEmpty(selectedScrollSpell.School))
@@ -959,8 +983,7 @@ namespace CraftingSystem
 
                 GUILayout.Space(20 * scale);
 
-                int cost = basePrice * scrollCasterLevel * Math.Max(1, scrollSpellLevel);
-                if (scrollSpellLevel == 0) cost = basePrice / 2;
+                int cost = (int)Math.Ceiling(basePrice * scrollCasterLevel * Math.Max(0.5f, scrollSpellLevel) * CraftingSettings.Instance.CostMultiplier);
                 
                 GUILayout.BeginVertical(GUI.skin.box);
                 GUILayout.Label($"{Helpers.GetString("ui_total_cost", "Total Cost")}:", new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
@@ -1035,7 +1058,7 @@ namespace CraftingSystem
         }
         void DrawCreateScrollGUI(float scale)
         {
-            DrawMagicItemGUI(scale, Helpers.GetString("ui_menu_scroll_workshop", "Scroll Workshop"), 25, 1, (s, cl, sl) => CustomEnchantmentsBuilder.GetOrBuildScroll(s, cl, sl));
+            DrawMagicItemGUI(scale, Helpers.GetString("ui_menu_scroll_workshop", "Scroll Workshop"), 25, 1, (s, cl, sl) => CustomEnchantmentsBuilder.GetOrBuildScroll(s, cl, sl), ScrollFilter, CraftingSettings.Instance.ApplyScrollRestrictions ? 9 : 10);
         }
 
 
@@ -1805,6 +1828,8 @@ namespace CraftingSystem
             float prevEpicMult = CraftingSettings.Instance.EpicCostMultiplier;
             SourceFilter prevSourceFilter = CraftingSettings.Instance.CurrentSourceFilter;
             bool prevPotionRestr = CraftingSettings.Instance.ApplyPotionRestrictions;
+            bool prevScrollRestr = CraftingSettings.Instance.ApplyScrollRestrictions;
+            bool prevWandRestr = CraftingSettings.Instance.ApplyWandRestrictions;
 
             Color oldBG = GUI.backgroundColor;
             GUI.backgroundColor = new Color(0.4f, 0.4f, 0.4f, 1.0f); // Sous-menu plus clair
@@ -1826,6 +1851,10 @@ namespace CraftingSystem
             
             GUILayout.Space(5);
             CraftingSettings.Instance.ApplyPotionRestrictions = CToggle(CraftingSettings.Instance.ApplyPotionRestrictions, Helpers.GetString("ui_settings_potion_restrictions", " Apply TTRPG restrictions on potions"));
+            GUILayout.Space(5);
+            CraftingSettings.Instance.ApplyScrollRestrictions = CToggle(CraftingSettings.Instance.ApplyScrollRestrictions, Helpers.GetString("ui_settings_scroll_restrictions", " Apply TTRPG restrictions on scrolls"));
+            GUILayout.Space(5);
+            CraftingSettings.Instance.ApplyWandRestrictions = CToggle(CraftingSettings.Instance.ApplyWandRestrictions, Helpers.GetString("ui_settings_wand_restrictions", " Apply TTRPG restrictions on wands"));
             GUILayout.Space(5);
 
             if (CraftingSettings.Instance.InstantCrafting && !previousInstantCrafting)
@@ -1946,7 +1975,9 @@ namespace CraftingSystem
                 || prevSlotPenalty != CraftingSettings.Instance.ApplySlotPenalty || prevEnableEpic != CraftingSettings.Instance.EnableEpicCosts
                 || prevEpicMult != CraftingSettings.Instance.EpicCostMultiplier
                 || prevSourceFilter != CraftingSettings.Instance.CurrentSourceFilter
-                || prevPotionRestr != CraftingSettings.Instance.ApplyPotionRestrictions)
+                || prevPotionRestr != CraftingSettings.Instance.ApplyPotionRestrictions
+                || prevScrollRestr != CraftingSettings.Instance.ApplyScrollRestrictions
+                || prevWandRestr != CraftingSettings.Instance.ApplyWandRestrictions)
             {
                 CraftingSettings.Instance.Save(Main.ModEntry);
                 filtersDirty = true;

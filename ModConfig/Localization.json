@@ -665,6 +665,16 @@
             "frFR": " Appliquer les restrictions TTRPG sur les potions",
             "ruRU": " Применять ограничения TTRPG для зелий"
         },
+        "ui_settings_scroll_restrictions": {
+            "enGB": " Apply TTRPG restrictions on scrolls",
+            "frFR": " Appliquer les restrictions TTRPG sur les parchemins",
+            "ruRU": " Применять ограничения TTRPG для свитков"
+        },
+        "ui_settings_wand_restrictions": {
+            "enGB": " Apply TTRPG restrictions on wands",
+            "frFR": " Appliquer les restrictions TTRPG sur les baguettes",
+            "ruRU": " Применять ограничения TTRPG для палочек"
+        },
         "ui_feedback_all_forges_done": {
             "enGB": "All active forging projects have been completed instantly!",
             "frFR": "Toutes les forges en cours ont été terminées instantanément !",
@@ -1388,17 +1398,17 @@
         "ui_param_maxlevel": {
             "enGB": "Max Spell Level",
             "frFR": "Niveau sort max.",
-            "ruRU": "Макс. уровень закл."
-        },
-        "ui_param_charges": {
-            "enGB": "Charges",
-            "frFR": "Charges",
-            "ruRU": "Заряды"
+            "ruRU": "Макс. уровень заклинания"
         },
         "ui_param_metamagic": {
             "enGB": "Metamagic",
             "frFR": "Métamagie",
             "ruRU": "Метамагия"
+        },
+        "ui_charges": {
+            "enGB": "Charges",
+            "frFR": "Charges",
+            "ruRU": "Заряды"
         }
     }
 }
