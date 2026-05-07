@@ -1,9 +1,6 @@
-Condition	Valide pour une Potion
-Niveau du sort	0, 1, 2, 3
-Temps d'incantation	< 1 minute
-Portée	Tout SAUF "Personnelle"
-Cible	Créature ou Objet
 
+
+- Sceptre metamagique ne fonctionnent pas.
 - Personnaliser description item
 - Service d'Achat d'équipement non enchanté (ne pas implémenter pour l'instant)
     - Accessoires : Bijoux - Vêtements - sceptres - baguettes

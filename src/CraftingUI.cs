@@ -846,12 +846,29 @@ namespace CraftingSystem
             DrawMagicItemGUI(scale, Helpers.GetString("ui_menu_wand_workshop", "Wand Workshop"), 750, 50, (s, cl, sl) => CustomEnchantmentsBuilder.GetOrBuildWand(s, cl, sl));
         }
 
-        void DrawCreatePotionGUI(float scale)
+        private bool PotionFilter(SpellData s)
         {
-            DrawMagicItemGUI(scale, Helpers.GetString("ui_menu_potion_workshop", "Potion Workshop"), 50, 1, (s, cl, sl) => CustomEnchantmentsBuilder.GetOrBuildPotion(s, cl, sl));
+            if (!CraftingSettings.Instance.ApplyPotionRestrictions) return true;
+
+            // Règle JDR : Niveau 0 à 3
+            if (s.MinLevel > 3) return false;
+
+            // Règle JDR : Portée non Personnelle
+            if (s.Range == Kingmaker.UnitLogic.Abilities.Blueprints.AbilityRange.Personal) return false;
+
+            // Règle JDR : Doit pouvoir cibler une créature (soi-même ou un allié)
+            // Dans WOTR, les potions sont bues, donc elles doivent pouvoir affecter le buveur.
+            if (!s.CanTargetFriends && !s.CanTargetSelf) return false;
+
+            return true;
         }
 
-        private void DrawMagicItemGUI(float scale, string title, int basePrice, int charges, Func<SpellData, int, int, BlueprintItemEquipmentUsable> builder)
+        void DrawCreatePotionGUI(float scale)
+        {
+            DrawMagicItemGUI(scale, Helpers.GetString("ui_menu_potion_workshop", "Potion Workshop"), 50, 1, (s, cl, sl) => CustomEnchantmentsBuilder.GetOrBuildPotion(s, cl, sl), PotionFilter, CraftingSettings.Instance.ApplyPotionRestrictions ? 3 : 9);
+        }
+
+        private void DrawMagicItemGUI(float scale, string title, int basePrice, int charges, Func<SpellData, int, int, BlueprintItemEquipmentUsable> builder, Predicate<SpellData> filter = null, int maxLevel = 9)
         {
             float windowWidth = 1000f * scale;
             float contentWidth = windowWidth - (120f * scale);
@@ -882,7 +899,7 @@ namespace CraftingSystem
             scrollListPos = GUILayout.BeginScrollView(scrollListPos, "box", GUILayout.Height(400 * scale));
             
             var filteredSpells = SpellScanner.AvailableSpells.Values
-                .Where(s => string.IsNullOrEmpty(scrollSearch) || s.Name.IndexOf(scrollSearch, StringComparison.OrdinalIgnoreCase) >= 0)
+                .Where(s => (string.IsNullOrEmpty(scrollSearch) || s.Name.IndexOf(scrollSearch, StringComparison.OrdinalIgnoreCase) >= 0) && (filter == null || filter(s)))
                 .OrderBy(s => s.MinLevel).ThenBy(s => s.Name);
 
             foreach (var spell in filteredSpells)
@@ -927,7 +944,7 @@ namespace CraftingSystem
 
                 // Spell Level
                 GUILayout.Label($"{Helpers.GetString("ui_spell_level", "Spell Level")}: {scrollSpellLevel}", new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
-                int nextSL = (int)GUILayout.HorizontalSlider(scrollSpellLevel, selectedScrollSpell.MinLevel, 9);
+                int nextSL = (int)GUILayout.HorizontalSlider(scrollSpellLevel, selectedScrollSpell.MinLevel, maxLevel);
                 if (nextSL != scrollSpellLevel)
                 {
                     scrollSpellLevel = nextSL;

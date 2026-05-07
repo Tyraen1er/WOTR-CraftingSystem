@@ -17,6 +17,14 @@ namespace CraftingSystem
         public string School;
         public List<string> Classes = new List<string>();
         public bool IsFromMod = false;
+
+        // TTRPG Restrictions Data
+        public Kingmaker.UnitLogic.Abilities.Blueprints.AbilityRange Range;
+        public bool CanTargetFriends;
+        public bool CanTargetSelf;
+        public bool CanTargetPoint;
+        public Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType ActionType;
+        public bool IsFullRound;
     }
 
     public static class SpellScanner
@@ -79,7 +87,15 @@ namespace CraftingSystem
                             Guid = guid,
                             Name = spell.Name,
                             School = spell.GetComponent<SpellComponent>()?.School.ToString() ?? "None",
-                            IsFromMod = !guid.StartsWith("0") && !guid.StartsWith("1") && !guid.StartsWith("2") // Heuristique simple pour les GUIDs vanilla
+                            IsFromMod = !guid.StartsWith("0") && !guid.StartsWith("1") && !guid.StartsWith("2"), // Heuristique simple pour les GUIDs vanilla
+                            
+                            // TTRPG Data
+                            Range = spell.Range,
+                            CanTargetFriends = spell.CanTargetFriends,
+                            CanTargetSelf = spell.CanTargetSelf,
+                            CanTargetPoint = spell.CanTargetPoint,
+                            ActionType = spell.ActionType,
+                            IsFullRound = spell.m_IsFullRoundAction
                         };
                         AvailableSpells[guid] = data;
                     }
