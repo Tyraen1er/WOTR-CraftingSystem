@@ -982,6 +982,54 @@ namespace CraftingSystem
             itemType.GetField("m_Weight", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, 1.0f);
             itemType.GetField("m_Cost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, 100);
 
+            // Fetch a vanilla wand to copy its vital components and visuals
+            try
+            {
+                var bpCache = ResourcesLibrary.BlueprintsCache;
+                var cacheType = bpCache.GetType();
+                var loadedField = cacheType.GetField("m_LoadedBlueprints", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                if (loadedField != null)
+                {
+                    var loadedDict = loadedField.GetValue(bpCache) as System.Collections.IDictionary;
+                    BlueprintItemEquipmentUsable template = null;
+                    if (loadedDict != null)
+                    {
+                        foreach (System.Collections.DictionaryEntry entry in loadedDict)
+                        {
+                            // Entry value is typically a BlueprintCacheEntry or directly the Blueprint
+                            object val = entry.Value;
+                            var bpProp = val?.GetType().GetProperty("Blueprint", BindingFlags.Public | BindingFlags.Instance);
+                            object actualBp = bpProp != null ? bpProp.GetValue(val) : val;
+
+                            if (actualBp is BlueprintItemEquipmentUsable wand && wand.Type == UsableItemType.Wand && wand.AssetGuid.ToString() != guid.ToString())
+                            {
+                                template = wand;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (template != null)
+                    {
+                        if (template.ComponentsArray != null)
+                        {
+                            bp.ComponentsArray = template.ComponentsArray.ToArray();
+                        }
+                        
+                        var equipmentType = typeof(Kingmaker.Blueprints.Items.Equipment.BlueprintItemEquipment);
+                        var visual = equipmentType.GetField("m_EquipmentEntity", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(template);
+                        equipmentType.GetField("m_EquipmentEntity", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, visual);
+
+                        var visualAlt = equipmentType.GetField("m_EquipmentEntityAlternatives", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(template);
+                        equipmentType.GetField("m_EquipmentEntityAlternatives", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, visualAlt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"[WAND-BUILD] Failed to copy vanilla wand template: {ex.Message}");
+            }
+
             ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(guid, bp);
             return bp;
         }
@@ -1070,6 +1118,9 @@ namespace CraftingSystem
             item.AssetGuid = guid;
             item.Type = UsableItemType.Other; // Les sceptres sont "Other" dans WOTR pour le toggle
             item.m_Ability = null; // Pas d'ability directe, c'est l'activatable qui compte
+            
+            var itemUsableType = typeof(BlueprintItemEquipmentUsable);
+            itemUsableType.GetField("m_ActivatableAbility", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.SetValue(item, ability.ToReference<BlueprintActivatableAbilityReference>());
             
             var addFact = new AddFacts();
             addFact.m_Facts = new BlueprintUnitFactReference[] { ability.ToReference<BlueprintUnitFactReference>(), resource.ToReference<BlueprintUnitFactReference>() };
