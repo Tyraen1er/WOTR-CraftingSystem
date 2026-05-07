@@ -93,11 +93,11 @@ ArmorBonus8,Grants a +8 armor bonus to AC.,+8,1000,,,,Other,Armor,Owlcat+,eff702
 ArmorBonus9,Grants a +9 armor bonus to AC.,+9,1000,,TRUE,,Other,Armor,TTRPG,9f8aaff68c574f5d8770a64db6102006
 ArmorChainshirtEvilEnchantment,,+1,1000,,,,Armor,,Owlcat+,6e87e3b4629664443a8614a8f02f02d4
 ArmorEnhancementBonus1,This armor provides a +1 enhancement bonus to Armor Class. The armor check penalty of magic armor is lessened by 1 compared to ordinary armor of its type.,+1,1000,,,"AC, Defensive",Armor,Armor,TTRPG,a9ea95c5e02f9b7468447bc1010fe152
-ArmorEnhancementBonus2,,+2,2000,,,,Armor,Armor,Owlcat+,758b77a97640fd747abf149f5bf538d0
-ArmorEnhancementBonus3,,+3,2000,,,,Armor,Armor,Owlcat+,9448d3026111d6d49b31fc85e7f3745a
-ArmorEnhancementBonus4,,+4,2000,,,,Armor,Armor,Owlcat+,eaeb89df5be2b784c96181552414ae5a
-ArmorEnhancementBonus5,,+5,2000,,,,Armor,Armor,Owlcat+,6628f9d77fd07b54c911cd8930c0d531
-ArmorEnhancementBonus6,This armor provides a +6 enhancement bonus to Armor Class. The armor check penalty of magic armor is decreased by 1 compared to ordinary armor of its type.,+6,1000,,TRUE,AC,Armor,Armor,TTRPG,de15272d1f4eb7244aa3af47dbb754ef
+ArmorEnhancementBonus2,,+2,1000,,,"AC, Defensive",Armor,Armor,TTRPG,758b77a97640fd747abf149f5bf538d0
+ArmorEnhancementBonus3,,+3,1000,,,"AC, Defensive",Armor,Armor,TTRPG,9448d3026111d6d49b31fc85e7f3745a
+ArmorEnhancementBonus4,,+4,1000,,,"AC, Defensive",Armor,Armor,TTRPG,eaeb89df5be2b784c96181552414ae5a
+ArmorEnhancementBonus5,,+5,1000,,,"AC, Defensive",Armor,Armor,TTRPG,6628f9d77fd07b54c911cd8930c0d531
+ArmorEnhancementBonus6,This armor provides a +6 enhancement bonus to Armor Class. The armor check penalty of magic armor is decreased by 1 compared to ordinary armor of its type.,+6,1000,,TRUE,"AC, Defensive",Armor,Armor,TTRPG,de15272d1f4eb7244aa3af47dbb754ef
 ArmorEnhancementRusty,Broken armor gives half as much AC as it usually would. Its armor check penalty is doubled.,0,,0,,"PenaltiesAndCursed, AC",Armor,Armor,Owlcat,d18d9f4e2caf4a79ba597036b5e21aca
 ArmorOfDispersionEnchantment,,+1,1000,,,,Armor,,Owlcat+,41f845800dde4b04e98d21340e265fb4
 ArmorOfVigilanceEnchantment,,+1,1000,,,,Armor,,Owlcat+,c150bcd4036abc3429b2f66b99aa0d8e
@@ -1285,7 +1285,7 @@ RedSalamandraEnchantment,,+1,,,,,Other,,Owlcat+,5c23114d69a33a24bb994a525a8b9eea
 ReekingHeartOfArcaneEnchantment,,+1,2000,,,,Weapon,,Owlcat+,5cd1d37cfb12488d8b03a16c096cc5be
 Reflex1,Grants a +1 resistance bonus on Reflex saving throws.,+1,333,,,,Other,Shoulders,TTRPG,29533240be528e841b4031997d13a09f
 Reflex2,Grants a +2 resistance bonus on Reflex saving throws.,+2,333,,,,Other,Shoulders,TTRPG,2a582cf8ca7c66b4d9c0eb663e0ad6f2
-Reflex3,Grants a +3 resistance bonus on Reflex saving throws.,+3,333,,,,Other,Other,TTRPG,c5893606996032f47862fa81651c2f31
+Reflex3,Grants a +3 resistance bonus on Reflex saving throws.,+3,333,,,,Other,Shoulders,TTRPG,c5893606996032f47862fa81651c2f31
 Reflex4,Grants a +4 resistance bonus on Reflex saving throws.,+4,333,,,,Other,Shoulders,TTRPG,9877142638b54bc4483dbaa86f38cbc5
 Reflex5,Grants a +5 resistance bonus on Reflex saving throws.,+5,333,,,,Other,Shoulders,TTRPG,94e4b540fbee6e54b9c7b99352a2cd50
 Reflex6,Grants a +6 resistance bonus on Reflex saving throws.,+6,333,,,,Other,Shoulders,Owlcat+,1f193be35f047ec478f7025d29c4268a
@@ -1293,12 +1293,12 @@ RelentlessAssaultEnchantment,,+1,2000,,,,Weapon,,Owlcat+,c13a9d829a31f7c4d9d242d
 RemnantEnchantment,,+1,2000,,,,Weapon,,Owlcat+,0f5e45295d88d264a83459d776d36a1a
 RepellingBracersEnchantment,,+1,,,,,Other,,Owlcat+,49aff3a4d41ffd94288104207296901d
 Resistance1,Grants a +1 resistance bonus on all saving throws.,+1,1000,,,,Other,Shoulders,TTRPG,5d72c31d28d049a48800d8b9b47cf690
-Resistance2,Grants a +2 resistance bonus on all saving throws.,+2,1000,,,,Other,Neck,TTRPG,59a36d69ac57b674bb38f77335228e55
-Resistance3,Grants a +3 resistance bonus on all saving throws.,+3,1000,,,,Other,Neck,TTRPG,9d6f77c05099caf4eab25228632fdf64
-Resistance4,Grants a +4 resistance bonus on all saving throws.,+4,1000,,,,Other,Neck,TTRPG,cdba7ef2a02a2b9499059bd558e5354d
-Resistance5,Grants a +5 resistance bonus on all saving throws.,+5,1000,,,,Other,Neck,TTRPG,86748e27c9e3b414a97330ea74858994
-Resistance6,Grants a +6 resistance bonus on all saving throws.,+6,1000,,,,Other,Neck,Owlcat,c67c2306707c3284db43c1ea35a03715
-Resistance7,Grants a +7 resistance bonus on all saving throws.,+7,1000,,,,Other,Neck,Owlcat,d676ddee41bb4bf091e735a02dbdb8d4
+Resistance2,Grants a +2 resistance bonus on all saving throws.,+2,1000,,,,Other,Shoulders,TTRPG,59a36d69ac57b674bb38f77335228e55
+Resistance3,Grants a +3 resistance bonus on all saving throws.,+3,1000,,,,Other,Shoulders,TTRPG,9d6f77c05099caf4eab25228632fdf64
+Resistance4,Grants a +4 resistance bonus on all saving throws.,+4,1000,,,,Other,Shoulders,TTRPG,cdba7ef2a02a2b9499059bd558e5354d
+Resistance5,Grants a +5 resistance bonus on all saving throws.,+5,1000,,,,Other,Shoulders,TTRPG,86748e27c9e3b414a97330ea74858994
+Resistance6,Grants a +6 resistance bonus on all saving throws.,+6,1000,,,,Other,Shoulders,Owlcat,c67c2306707c3284db43c1ea35a03715
+Resistance7,Grants a +7 resistance bonus on all saving throws.,+7,1000,,,,Other,Shoulders,Owlcat,d676ddee41bb4bf091e735a02dbdb8d4
 RetributionGreataxeFlame2d6,,+1,2000,,,,Weapon,,Owlcat+,30095e3e0abf4924a84fe875f11774ba
 RicochetingHeavyCrosbowEnchantment,,+1,2000,,,,Weapon,,Owlcat+,ebea1d73c0ad052408b60fe302c02d58
 RiftcarverEnchantment,,+1,2000,,,,Weapon,,Owlcat+,48eb1f9f58fb4d6781c2424600773bfd
@@ -1457,10 +1457,10 @@ ShadowArmor,This armor grants its wearer a +5 competence bonus to Stealth skill 
 ShadyLongbowStealth5,,+1,2000,,,,Weapon,,Owlcat+,4f28bd4d9373645468871bd15a559eef
 ShapeshiftersHelmEnchantment,,+1,,,,,Other,,Owlcat+,03fd4efccdae270419c560549a97cfd0
 ShieldEnhancementBonus1,Grants +1 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.,+1,1000,,,"AC, Defensive",Armor,Shield,TTRPG,e90c252e08035294eba39bafce76c119
-ShieldEnhancementBonus2,Grants +2 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.,+2,1000,,,"Defensive, AC",Armor,Shield,Owlcat,7b9f2f78a83577d49927c78be0f7fbc1
+ShieldEnhancementBonus2,Grants +2 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.,+2,1000,,,"Defensive, AC",Armor,Shield,TTRPG,7b9f2f78a83577d49927c78be0f7fbc1
 ShieldEnhancementBonus3,Grants +3 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.,+3,1000,,,AC,Armor,Shield,TTRPG,ac2e3a582b5faa74aab66e0a31c935a9
-ShieldEnhancementBonus4,Grants +4 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.,+4,1000,,,"AC, Defensive",Armor,Shield,Owlcat,a5d27d73859bd19469a6dde3b49750ff
-ShieldEnhancementBonus5,Grants +5 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.,+5,1000,,,"AC, Defensive",Armor,Shield,Owlcat,84d191a748edef84ba30c13b8ab83bd9
+ShieldEnhancementBonus4,Grants +4 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.,+4,1000,,,"AC, Defensive",Armor,Shield,TTRPG,a5d27d73859bd19469a6dde3b49750ff
+ShieldEnhancementBonus5,Grants +5 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.,+5,1000,,,"AC, Defensive",Armor,Shield,TTRPG,84d191a748edef84ba30c13b8ab83bd9
 ShieldEnhancementBonus6,Grants +6 enhancement bonus to Armor Class. The armor check penalty of magic shield is lessened by 1 compared to ordinary shield of its type.,+5,1000,,TRUE,"AC, Defensive",Armor,Shield,TTRPG,70c26c66adb96d74baec38fc8d20c139
 ShieldOfChastiseEnchantment,,+1,,,,,Other,,Owlcat+,4a6bd678dfcc4ce686e99e0acc098a4e
 ShieldOfMagicalRetributionArmorEnchantment,,+1,,,,,Other,,Owlcat+,5bd6315804bde494aa7dc33b47ab7924

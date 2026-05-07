@@ -97,8 +97,9 @@ namespace CraftingSystem
             foreach (var item in weapons)
             {
                 if (item.bp == null) continue;
-                
+
                 string typeName = item.bp.Type?.name ?? "";
+                if (typeName == "GnomeHookedHammerHead") typeName = "GnomeHookedHammer"; // exception pour le marteau gnome
                 int level = DetectLevel(item.bp.name, typeName);
                 if (level < 0) continue;
 
@@ -111,9 +112,9 @@ namespace CraftingSystem
                 data.VariantGuids[level] = item.guid.ToString();
                 data.VariantCosts[level] = (int)item.bp.m_Cost;
                 data.VariantIcons[level] = item.bp.Icon;
-                
+
                 // On garde le nom du +0 comme nom de référence s'il existe
-                if (level == 0) data.Name = item.bp.Name; 
+                if (level == 0) data.Name = item.bp.Name;
 
                 if (item.bp.Icon != null && uniqueWeaponIcons.Add(item.bp.Icon)) IconCache[ItemsFilter.ItemType.Weapon].Add(item.bp);
             }
