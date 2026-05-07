@@ -1137,17 +1137,39 @@ namespace CraftingSystem
             buff.name = baseName + "_Buff"; buff.AssetGuid = buffGuid;
             ability.name = baseName + "_Ability"; ability.AssetGuid = abilityGuid;
 
-            // Injection des paramètres mécaniques
-            var mechanics = buff.ComponentsArray?.OfType<Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics>().FirstOrDefault();
-            if (mechanics == null) {
-                mechanics = new Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics();
-                mechanics.name = "$MetamagicRodMechanics$";
-                buff.ComponentsArray = (buff.ComponentsArray ?? new Kingmaker.Blueprints.BlueprintComponent[0]).Concat(new[] { mechanics }).ToArray();
+            // 3. INJECTION DES MÉCANIQUES (Multi-Métamagie)
+            // Le composant vanilla ne gère bien qu'une seule métamagie à la fois.
+            // Pour supporter le cumul (ex: Empower + Extend), on injecte un composant par effet.
+            
+            // On nettoie d'abord les composants de mécanique d'origine du clone
+            var components = buff.ComponentsArray.ToList();
+            components.RemoveAll(c => c is Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics);
+            
+            // On ajoute un composant pour chaque bit de métamagie présent dans le masque
+            foreach (Kingmaker.UnitLogic.Abilities.Metamagic m in Enum.GetValues(typeof(Kingmaker.UnitLogic.Abilities.Metamagic)))
+            {
+                if ((int)m == 0) continue;
+                if ((mask & (int)m) != 0)
+                {
+                    var mComp = new Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics();
+                    mComp.name = $"$MetamagicRodMechanics${m}";
+                    mComp.Metamagic = m;
+                    mComp.MaxSpellLevel = (grade == 0 ? 3 : (grade == 1 ? 6 : 9));
+                    
+                    // Liaison à l'Ability
+                    typeof(Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics)
+                        .GetField("m_RodAbility", BindingFlags.Instance | BindingFlags.NonPublic)
+                        ?.SetValue(mComp, ability.ToReference<BlueprintActivatableAbilityReference>());
+                    
+                    components.Add(mComp);
+                    Main.ModEntry.Logger.Log($"[DYNAMIC_ROD] Added mechanics component for: {m} (MaxLevel={mComp.MaxSpellLevel})");
+                }
             }
-            mechanics.Metamagic     = (Kingmaker.UnitLogic.Abilities.Metamagic)mask;
-            mechanics.MaxSpellLevel = (grade == 0 ? 3 : (grade == 1 ? 6 : 9));
-            typeof(Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics).GetField("m_RodAbility", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(mechanics, ability.ToReference<BlueprintActivatableAbilityReference>());
+            buff.ComponentsArray = components.ToArray();
 
+            // Liaison Identités et Buff
+            buff.name = baseName + "_Buff"; buff.AssetGuid = buffGuid;
+            ability.name = baseName + "_Ability"; ability.AssetGuid = abilityGuid;
             ability.m_Buff = buff.ToReference<BlueprintBuffReference>();
             ability.Group = ActivatableAbilityGroup.MetamagicRod;
 
