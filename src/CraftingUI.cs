@@ -817,7 +817,7 @@ namespace CraftingSystem
                     }
 
                     GUILayout.BeginVertical();
-                    GUILayout.Label($"<b>{item.GetDisplayName(selectedAlteration)}</b>", new GUIStyle(GUI.skin.label) { richText = true });
+                    GUILayout.Label($"<b>{item.GetDisplayName(selectedAlteration)}</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_NORMAL * scale) });
                     GUILayout.Label(string.Format(Helpers.GetString("ui_item_cost", "Cost: {0} GP"), item.GetCost(selectedAlteration)), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_SMALL * scale) });
                     GUILayout.EndVertical();
 
