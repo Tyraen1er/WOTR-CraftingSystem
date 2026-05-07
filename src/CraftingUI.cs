@@ -2755,10 +2755,17 @@ namespace CraftingSystem
                 string btnLabel = selectedModel.Type == "UsableItem" ? Helpers.GetString("ui_btn_create_item", "Craft this item") : Helpers.GetString("ui_btn_add_to_selection", "Add to selection");
 
                 bool canCraft = totalCost >= 0 && totalPoints >= 0;
+                bool hasMoney = selectedModel.Type != "UsableItem" || Game.Instance.Player.Money >= totalCost;
+
                 if (!canCraft)
                 {
                     GUI.enabled = false;
                     btnLabel = Helpers.GetString("ui_err_invalid_formula", "Invalid Formula (Cost -1)");
+                }
+                else if (!hasMoney)
+                {
+                    GUI.enabled = false;
+                    btnLabel = string.Format(Helpers.GetString("ui_err_no_gold_button", "Not enough gold ({0} GP)"), totalCost);
                 }
 
                 if (CButton(btnLabel, GUILayout.Width(250 * scale), GUILayout.Height(40 * scale)))

@@ -72,7 +72,12 @@ namespace CraftingSystem
                 }
             }
 
-            // 1. Paiement immédiat
+            // 1. Paiement immédiat (avec vérification de sécurité)
+            if (Game.Instance.Player.Money < cost)
+            {
+                Main.ModEntry.Logger.Error($"[ATELIER] Erreur critique: Tentative de retrait de {cost} PO alors que le joueur n'en a que {Game.Instance.Player.Money}.");
+                return;
+            }
             Game.Instance.Player.Money -= cost;
 
             BlueprintScriptableObject bp = data.Blueprint;
