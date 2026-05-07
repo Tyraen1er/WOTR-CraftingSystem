@@ -3070,9 +3070,14 @@ namespace CraftingSystem
                 var availableValues = new List<int>();
                 for (int j = 0; j < allNames.Length; j++)
                 {
+                    string name = allNames[j];
                     int val = allValues[j];
+                    
+                    // Exclusion de Completely Normal Spell et Heighten
+                    if (name == "CompletelyNormalSpell" || name == "Heighten") continue;
+
                     if (val != 0 && val != currentVal && selectedMetamagics.Contains(val)) continue;
-                    availableNames.Add(allNames[j]);
+                    availableNames.Add(name);
                     availableValues.Add(val);
                 }
 
