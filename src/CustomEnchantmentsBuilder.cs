@@ -1067,9 +1067,16 @@ namespace CraftingSystem
 
         private static BlueprintScriptableObject BuildComplexMetamagicRod(CustomEnchantmentData model, BlueprintItemEquipmentUsable dummy, BlueprintGuid guid, List<int> paramValues, int mask)
         {
-            // Format : [0:isFeature] [1:Grade] [2:Charges] [3:Count] [4+:Metamagics]
-            int grade   = paramValues.Count > 1 ? Math.Max(0, Math.Min(2, paramValues[1])) : 0;
-            int charges = paramValues.Count > 2 ? paramValues[2] : 3;
+            // Debugging des paramètres reçus
+            string pstr = string.Join(", ", paramValues);
+            Main.ModEntry.Logger.Log($"[DYNAMIC_ROD] Raw Params received: {pstr}");
+
+            // Format RÉEL reçu : [0:Grade] [1:Charges] [2:Count] [3+:Metamagics]
+            int grade      = paramValues.Count > 0 ? Math.Max(0, Math.Min(2, paramValues[0])) : 0;
+            int charges    = paramValues.Count > 1 ? paramValues[1] : 3;
+            int mCount     = paramValues.Count > 2 ? paramValues[2] : 0;
+
+            Main.ModEntry.Logger.Log($"[DYNAMIC_ROD] Extracted: Grade={grade}, Charges={charges}, mCount={mCount}, Mask=0x{mask:X}");
 
             string baseName = $"Rod_{guid}";
 
@@ -1078,10 +1085,13 @@ namespace CraftingSystem
             var abilityGuid = DynamicGuidHelper.GenerateGuid("103", subParams, false, mask);
             var buffGuid    = DynamicGuidHelper.GenerateGuid("106", subParams, false, mask);
 
-            // Solution Radicale SaveError : On clone TOUT (Item, Ability, Buff)
-            const string vanillaRodItemGuid    = "6f5d788ee7384e47895bc58a291eec7f"; // Sceptre Perçage Mineur (Item)
-            const string vanillaRodAbilityGuid = "fc7bd8b05d6147aab2d8b4378801db05"; // Ability
-            const string vanillaRodBuffGuid    = "41a7f08a27e04909aea1c43cd1895260"; // Buff
+            // --- DOCUMENTATION DES PIÈGES (Gotchas) ---
+            // 1. CLONAGE JSON : Créer des blueprints "from-scratch" via new() ou Helpers.CreateBlueprint
+            // provoque des SaveError car il manque des structures internes (m_Context, Ranks, etc.).
+            // On clone donc des templates stables via JSON pour garantir l'intégrité de l'objet.
+            const string vanillaRodItemGuid    = "6f5d788ee7384e47895bc58a291eec7f"; 
+            const string vanillaRodAbilityGuid = "fc7bd8b05d6147aab2d8b4378801db05"; 
+            const string vanillaRodBuffGuid    = "41a7f08a27e04909aea1c43cd1895260"; 
 
             var templateItem    = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(vanillaRodItemGuid))    as BlueprintItemEquipmentUsable;
             var templateAbility = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(vanillaRodAbilityGuid)) as BlueprintActivatableAbility;
@@ -1093,7 +1103,6 @@ namespace CraftingSystem
                 return null;
             }
 
-            // Clonage JSON du Buff et de l'Ability (pour préserver la logique complexe)
             var cloneSettings = new Newtonsoft.Json.JsonSerializerSettings { 
                 TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All, 
                 ContractResolver = new OwlcatContractResolver() 
@@ -1111,8 +1120,9 @@ namespace CraftingSystem
                 return null;
             }
 
-            // CRITIQUE : Fix SaveError (Value cannot be null key)
-            // On s'assure que TOUS les composants ont un nom pour éviter le crash du dictionnaire Owlcat
+            // 2. FIX SAVE-ERROR (Value cannot be null key) :
+            // Lors de la sérialisation, Owlcat crée un ComponentsDictionary. Si un composant cloné
+            // a son champ 'name' nul, le dictionnaire crash. On force donc un nom sur chaque composant.
             if (buff.ComponentsArray != null) {
                 for (int i = 0; i < buff.ComponentsArray.Length; i++) 
                     if (buff.ComponentsArray[i] != null) buff.ComponentsArray[i].name = $"$RodBuffComp${i}";
@@ -1122,7 +1132,8 @@ namespace CraftingSystem
                     if (ability.ComponentsArray[i] != null) ability.ComponentsArray[i].name = $"$RodAbilComp${i}";
             }
 
-            // Réassignation des Identités
+            // 3. SIGNATURE c2af : Les GUIDs dynamiques doivent commencer par 'c2af' pour que notre 
+            // BlueprintConverter personnalisé puisse les intercepter et les reconstruire au chargement.
             buff.name = baseName + "_Buff"; buff.AssetGuid = buffGuid;
             ability.name = baseName + "_Ability"; ability.AssetGuid = abilityGuid;
 
@@ -1139,7 +1150,9 @@ namespace CraftingSystem
 
             ability.m_Buff = buff.ToReference<BlueprintBuffReference>();
             ability.Group = ActivatableAbilityGroup.MetamagicRod;
-            
+
+            // 4. RESSOURCE : On désactive la consommation de ressource globale (MetamagicRodLesserResource)
+            // pour que le sceptre utilise ses propres charges d'item.
             var resLogic = ability.ComponentsArray?.OfType<ActivatableAbilityResourceLogic>().FirstOrDefault();
             if (resLogic == null) {
                 resLogic = new ActivatableAbilityResourceLogic();
@@ -1148,10 +1161,16 @@ namespace CraftingSystem
             }
             resLogic.SpendType = ActivatableAbilityResourceLogic.ResourceSpendType.None;
 
-            // CRÉATION DE L'ITEM (via Helpers pour la stabilité du fichier de sauvegarde)
+            // 5. ITEM STABILITÉ : On utilise Helpers.CreateBlueprint pour l'item car le clonage JSON 
+            // intégral de l'item causait des instabilités. On copie juste les visuels.
             var item = Helpers.CreateBlueprint<BlueprintItemEquipmentUsable>(guid.ToString(), baseName);
             item.Type = UsableItemType.Other;
+            
+            // 6. CHARGES : Le champ 'Charges' public ne suffit pas toujours pour l'affichage/usage, 
+            // il faut forcer le champ interne 'm_Charges' via réflexion.
             item.Charges = charges;
+            typeof(BlueprintItemEquipmentUsable).GetField("m_Charges", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, charges);
+            
             item.SpendCharges = true;
             item.RestoreChargesOnRest = true;
             item.m_Ability = null;
@@ -1160,17 +1179,17 @@ namespace CraftingSystem
             item.m_Weight = templateItem.m_Weight;
             item.m_Cost = templateItem.m_Cost;
 
+            // Liaison Item -> Ability
             typeof(BlueprintItemEquipment).GetField("m_ActivatableAbility", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.SetValue(item, ability.ToReference<BlueprintActivatableAbilityReference>());
             typeof(BlueprintItemEquipment).GetField("m_EquipmentEntity", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, templateItem.m_EquipmentEntity);
 
             // Injection des textes
-            int mCount = paramValues.Count > 3 ? paramValues[3] : 0;
             var replacements = new Dictionary<string, string>();
             replacements["Grade"]   = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
             replacements["Charges"] = charges.ToString();
             var mNames = new List<string>();
             for (int i = 0; i < mCount; i++) {
-                int index = 4 + i;
+                int index = 3 + i;
                 if (index >= paramValues.Count) break;
                 int val = paramValues[index];
                 if (val == 0) continue;
