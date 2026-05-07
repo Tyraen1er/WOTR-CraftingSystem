@@ -298,6 +298,7 @@ namespace CraftingSystem
                 string locale = "enGB";
                 try { locale = LocalizationManager.CurrentLocale.ToString(); } catch { }
                 raw = jobj[locale]?.ToString() ?? jobj["enGB"]?.ToString() ?? jobj.Properties().FirstOrDefault()?.Value?.ToString() ?? "";
+                if (raw.StartsWith("ui_")) raw = GetString(raw, raw);
             }
             else if (field is EnumOverrideData eod)
             {
@@ -305,6 +306,7 @@ namespace CraftingSystem
                 try { locale = LocalizationManager.CurrentLocale.ToString(); } catch { }
                 if (locale == "frFR") raw = eod.frFR ?? eod.enGB ?? "";
                 else raw = eod.enGB ?? eod.frFR ?? "";
+                if (raw.StartsWith("ui_")) raw = GetString(raw, raw);
             }
             else if (field is Newtonsoft.Json.Linq.JToken token) raw = token.ToString();
             else raw = field.ToString();

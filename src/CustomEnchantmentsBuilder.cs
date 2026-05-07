@@ -1064,9 +1064,7 @@ namespace CraftingSystem
             itemType.GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, Helpers.CreateString($"{bp.name}.Name", $"Potion of {spell.Name}"));
             itemType.GetField("m_DescriptionText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, spell.m_Description);
             itemType.GetField("m_Weight", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, 0.5f);
-            itemType.GetField("m_Cost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, 50);
-
-            ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(guid, bp);
+                    ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(guid, bp);
             return bp;
         }
 
@@ -1083,9 +1081,8 @@ namespace CraftingSystem
             
             // 1. BUFF
             var buff = Helpers.CreateBlueprint<BlueprintBuff>(CreateGuidFromSeed(baseName + "_Buff").ToString(), baseName + "_Buff");
-            // m_Flags est privé ainsi que l'enum Flags. StayOnDeath (8) | HiddenInUi (2) = 10
-            var buffType = typeof(BlueprintBuff);
-            var flagsField = buffType.GetField("m_Flags", BindingFlags.Instance | BindingFlags.NonPublic);
+            // StayOnDeath (8) | HiddenInUi (2) = 10
+            var flagsField = typeof(BlueprintBuff).GetField("m_Flags", BindingFlags.Instance | BindingFlags.NonPublic);
             if (flagsField != null) {
                 flagsField.SetValue(buff, Enum.ToObject(flagsField.FieldType, 10));
             }
@@ -1095,43 +1092,47 @@ namespace CraftingSystem
             mechanics.MaxSpellLevel = (grade == 0 ? 3 : (grade == 1 ? 6 : 9));
             buff.ComponentsArray = new BlueprintComponent[] { mechanics };
  
-            // 2. RESOURCE
-            var resource = Helpers.CreateBlueprint<BlueprintAbilityResource>(CreateGuidFromSeed(baseName + "_Resource").ToString(), baseName + "_Resource");
-            resource.m_MaxAmount = new BlueprintAbilityResource.Amount { BaseValue = charges };
-            
-            // 3. ACTIVATABLE ABILITY
+            // 2. ACTIVATABLE ABILITY
             var ability = Helpers.CreateBlueprint<BlueprintActivatableAbility>(CreateGuidFromSeed(baseName + "_Ability").ToString(), baseName + "_Ability");
             ability.m_Buff = buff.ToReference<BlueprintBuffReference>();
             ability.Group = ActivatableAbilityGroup.MetamagicRod;
             ability.DeactivateImmediately = true;
             
-            var resourceLogic = new ActivatableAbilityResourceLogic();
-            resourceLogic.m_RequiredResource = resource.ToReference<BlueprintAbilityResourceReference>();
-            resourceLogic.SpendType = ActivatableAbilityResourceLogic.ResourceSpendType.TurnOn;
-            ability.ComponentsArray = new BlueprintComponent[] { resourceLogic };
+            // Important: ResourceLogic must be present but SpendType = None for rods in WotR
+            var resLogic = new ActivatableAbilityResourceLogic();
+            resLogic.SpendType = ActivatableAbilityResourceLogic.ResourceSpendType.None;
+            ability.ComponentsArray = new BlueprintComponent[] { resLogic };
  
-            // Link back mechanics to ability (required for ManualSpendResource)
+            // Link back mechanics to ability (required for charge consumption tracking)
             typeof(Kingmaker.Designers.Mechanics.Facts.MetamagicRodMechanics).GetField("m_RodAbility", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(mechanics, ability.ToReference<BlueprintActivatableAbilityReference>());
  
-            // 4. ITEM
+            // 3. ITEM configuration
             item.name = baseName;
             item.AssetGuid = guid;
-            item.Type = UsableItemType.Other; // Les sceptres sont "Other" dans WOTR pour le toggle
-            item.m_Ability = null; // Pas d'ability directe, c'est l'activatable qui compte
+            item.Type = UsableItemType.Other;
+            item.Charges = charges;
+            item.SpendCharges = true;
+            item.RestoreChargesOnRest = true;
+            item.m_Ability = null;
             
-            var itemUsableType = typeof(BlueprintItemEquipmentUsable);
-            itemUsableType.GetField("m_ActivatableAbility", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.SetValue(item, ability.ToReference<BlueprintActivatableAbilityReference>());
+            // Critical link: m_ActivatableAbility is on BlueprintItemEquipment
+            typeof(BlueprintItemEquipment).GetField("m_ActivatableAbility", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.SetValue(item, ability.ToReference<BlueprintActivatableAbilityReference>());
             
-            var addFact = new AddFacts();
-            addFact.m_Facts = new BlueprintUnitFactReference[] { ability.ToReference<BlueprintUnitFactReference>(), resource.ToReference<BlueprintUnitFactReference>() };
-            item.ComponentsArray = new BlueprintComponent[] { addFact };
- 
-            // Visuals
-            var itemType = typeof(BlueprintItem);
-            itemType.GetField("m_Weight", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, 1.0f);
-            itemType.GetField("m_Cost", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, 100);
- 
-            // Injection des textes (Resolving names)
+            // Visuals & Icon from a vanilla rod
+            var templateGuid = BlueprintGuid.Parse("6f5d788ee7384e47895bc58a291eec7f");
+            var template = ResourcesLibrary.TryGetBlueprint(templateGuid) as BlueprintItemEquipmentUsable;
+            if (template != null) {
+                var equipmentType = typeof(BlueprintItemEquipment);
+                var itemType = typeof(BlueprintItem);
+                
+                itemType.GetField("m_Icon", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.SetValue(item, template.m_Icon);
+                itemType.GetField("m_InventoryEquipSound", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.SetValue(item, template.m_InventoryEquipSound);
+                
+                var visual = equipmentType.GetField("m_EquipmentEntity", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(template);
+                equipmentType.GetField("m_EquipmentEntity", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, visual);
+            }
+
+            // Injection des textes
             var replacements = new Dictionary<string, string>();
             replacements["Grade"] = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
             replacements["Charges"] = charges.ToString();
@@ -1140,16 +1141,15 @@ namespace CraftingSystem
             for (int i = 0; i < mCount; i++) {
                 int val = paramValues[3 + i];
                 string n = Enum.GetName(typeof(Kingmaker.UnitLogic.Abilities.Metamagic), val) ?? "None";
-                mNames.Add(Helpers.GetString("ui_enum_" + n, n));
+                mNames.Add(n);
             }
             replacements["Metamagic"] = string.Join(", ", mNames);
  
             string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
-            itemType.GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, Helpers.CreateString($"{item.name}.Name", finalName));
- 
+            typeof(BlueprintItem).GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(item, Helpers.CreateString($"{item.name}.Name", finalName));
+
             // Register all
             ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(buff.AssetGuid, buff);
-            ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(resource.AssetGuid, resource);
             ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(ability.AssetGuid, ability);
             ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(item.AssetGuid, item);
  

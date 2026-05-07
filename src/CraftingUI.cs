@@ -317,7 +317,8 @@ namespace CraftingSystem
             processIndex = 0;
             inputSubmitDown = false;
 
-            if (Event.current.type == EventType.Layout) {
+            if (Event.current.type == EventType.Layout)
+            {
                 EnchantmentScanner.StartSync();
             }
 
@@ -389,7 +390,7 @@ namespace CraftingSystem
             int focusId = 999;
             if (showDescriptionEditor) focusId = 997;
             else if (!string.IsNullOrEmpty(activeDescriptionPopup)) focusId = 998;
-            
+
             GUI.FocusWindow(focusId);
         }
 
@@ -397,17 +398,18 @@ namespace CraftingSystem
         {
             float scale = CraftingSettings.Instance.ScalePercent / 100f;
             GUILayout.BeginVertical();
-            
-            GUIStyle textStyle = new GUIStyle(GUI.skin.label) { 
-                wordWrap = true, 
-                alignment = TextAnchor.MiddleCenter, 
+
+            GUIStyle textStyle = new GUIStyle(GUI.skin.label)
+            {
+                wordWrap = true,
+                alignment = TextAnchor.MiddleCenter,
                 fontSize = (int)(FONT_LARGE * scale),
                 richText = true
             };
-            
+
             GUILayout.Label(Helpers.GetString("ui_double_weapon_choice", "Le jeu considère que les armes doubles sont 2 armes distinctes, choisissez quelle partie souhaitez vous enchanter"), textStyle);
             GUILayout.Space(30 * scale);
-            
+
             GUILayout.BeginHorizontal();
             if (CButton(Helpers.GetString("ui_btn_primary_weapon", "Arme principale"), GUILayout.Height(60 * scale)))
             {
@@ -424,9 +426,9 @@ namespace CraftingSystem
                 var type = doubleWeaponCandidate.GetType();
                 var secondField = type.GetField("Second", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
                 var secondProp = type.GetProperty("SecondWeapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
-                
+
                 var secondWeapon = (secondField?.GetValue(doubleWeaponCandidate) ?? secondProp?.GetValue(doubleWeaponCandidate)) as ItemEntity;
-                
+
                 Main.ModEntry.Logger.Log($"[UI] Double weapon: selecting secondary part {secondWeapon?.Name ?? "null"}");
                 FinalizeSelection(secondWeapon ?? doubleWeaponCandidate);
                 showDoubleWeaponChoice = false;
@@ -434,14 +436,14 @@ namespace CraftingSystem
                 GUI.FocusWindow(999);
             }
             GUILayout.EndHorizontal();
-            
+
             GUILayout.Space(20 * scale);
             if (CButton(Helpers.GetString("ui_btn_cancel", "Annuler"), GUILayout.Height(30 * scale)))
             {
                 showDoubleWeaponChoice = false;
                 doubleWeaponCandidate = null;
             }
-            
+
             GUILayout.EndVertical();
         }
 
@@ -454,7 +456,7 @@ namespace CraftingSystem
             queuedEnchantGuids.Clear();
             activeCategories.Clear();
             showCategoryFilter = false;
-            
+
             activeTypes.Clear();
             if (it.Blueprint is BlueprintItemWeapon) activeTypes.Add("Weapon");
             else if (it.Blueprint is BlueprintItemShield) { activeTypes.Add("Armor"); activeTypes.Add("Weapon"); }
@@ -494,7 +496,7 @@ namespace CraftingSystem
                 float popupWidth = 600f * scale;
                 float popupHeight = 220f * scale;
                 Rect feedbackRect = new Rect((windowWidth - popupWidth) / 2f, (windowHeight - popupHeight) / 2f, popupWidth, popupHeight);
-                
+
                 // Fond du popup (Gris très sombre dégradé simulé)
                 DrawRectBorder(feedbackRect, 2, new Color(0.6f, 0.5f, 0.2f, 1f)); // Bordure dorée/bronze
                 GUI.color = new Color(0.12f, 0.12f, 0.12f, 1.0f);
@@ -503,30 +505,31 @@ namespace CraftingSystem
 
                 GUILayout.BeginArea(feedbackRect);
                 GUILayout.Space(35 * scale);
-                
-                GUIStyle msgStyle = new GUIStyle(GUI.skin.label) { 
-                    alignment = TextAnchor.MiddleCenter, 
-                    wordWrap = true, 
+
+                GUIStyle msgStyle = new GUIStyle(GUI.skin.label)
+                {
+                    alignment = TextAnchor.MiddleCenter,
+                    wordWrap = true,
                     fontSize = (int)(FONT_HUGE * scale),
                     richText = true,
                     fontStyle = FontStyle.Normal,
                     normal = { textColor = new Color(0.9f, 0.9f, 0.9f) }
                 };
                 GUILayout.Label(feedbackMessage, msgStyle);
-                
+
                 GUILayout.FlexibleSpace();
-                
+
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
                 // Bouton OK stylisé
-                if (CButton(Helpers.GetString("ui_btn_ok", "OK"), GUILayout.Width(140 * scale), GUILayout.Height(45 * scale))) 
+                if (CButton(Helpers.GetString("ui_btn_ok", "OK"), GUILayout.Width(140 * scale), GUILayout.Height(45 * scale)))
                     feedbackMessage = "";
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
-                
+
                 GUILayout.Space(25 * scale);
                 GUILayout.EndArea();
-                
+
                 return;
             }
 
@@ -536,8 +539,10 @@ namespace CraftingSystem
             string title = Helpers.GetString("ui_title_workshop", "Workshop");
             if (ShowSettings) title = Helpers.GetString("ui_title_config", "Configuration");
             else if (selectedItem != null) title = Helpers.GetString("ui_title_details", "Details: ") + selectedItem.Name;
-            else {
-                switch(currentPageType) {
+            else
+            {
+                switch (currentPageType)
+                {
                     case CraftingPage.MainMenu: title = Helpers.GetString("ui_title_main_menu", "Main Menu"); break;
                     case CraftingPage.WorkshopInventory: title = Helpers.GetString("ui_title_select", "Item Selection"); break;
                     case CraftingPage.CreateWeapon: title = Helpers.GetString("ui_menu_create_weapon", "Create Weapon"); break;
@@ -568,10 +573,14 @@ namespace CraftingSystem
             {
                 if (CButtonStyled(new GUIContent(Helpers.GetString("ui_btn_back", "<< BACK")), navStyle, GUILayout.Width(130 * scale), GUILayout.Height(35 * scale)))
                 {
-                    if (selectedItem != null) {
-                        if (showIconBrowser) {
+                    if (selectedItem != null)
+                    {
+                        if (showIconBrowser)
+                        {
                             showIconBrowser = false;
-                        } else {
+                        }
+                        else
+                        {
                             selectedItem = null;
                             showCustomEnchantPage = false;
                             newNameDraft = "";
@@ -580,7 +589,9 @@ namespace CraftingSystem
                             activeTypes.Clear();
                             showCategoryFilter = false;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         currentPageType = CraftingPage.MainMenu;
                     }
                 }
@@ -612,8 +623,10 @@ namespace CraftingSystem
             if (showAbadarWarning) DrawAbadarWarningGUI(scale);
             else if (ShowSettings) DrawSettingsGUI(scale);
             else if (selectedItem != null) DrawItemModificationGUI(scale);
-            else {
-                switch(currentPageType) {
+            else
+            {
+                switch (currentPageType)
+                {
                     case CraftingPage.MainMenu: DrawMainMenuGUI(scale); break;
                     case CraftingPage.WorkshopInventory: DrawInventoryGUI(scale); break;
                     case CraftingPage.CreateWeapon: DrawCreateWeaponGUI(scale); break;
@@ -630,19 +643,21 @@ namespace CraftingSystem
         void DrawMainMenuGUI(float scale)
         {
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
-            
-            float windowWidth = 1000f * scale;
-            float contentWidth = windowWidth - (120f * scale); 
 
-            GUIStyle sectionHeaderStyle = new GUIStyle(GUI.skin.label) {
+            float windowWidth = 1000f * scale;
+            float contentWidth = windowWidth - (120f * scale);
+
+            GUIStyle sectionHeaderStyle = new GUIStyle(GUI.skin.label)
+            {
                 fontSize = (int)(FONT_LARGE * scale),
                 fontStyle = FontStyle.Bold,
                 alignment = TextAnchor.MiddleCenter, // Centré
                 normal = { textColor = new Color(0.9f, 0.8f, 0.4f) }
             };
 
-            GUIStyle btnStyle = new GUIStyle(GUI.skin.button) { 
-                fontSize = (int)(FONT_NORMAL * scale), 
+            GUIStyle btnStyle = new GUIStyle(GUI.skin.button)
+            {
+                fontSize = (int)(FONT_NORMAL * scale),
                 fixedHeight = 75 * scale,
                 wordWrap = true,
                 padding = new RectOffset(20, 20, 10, 10),
@@ -661,8 +676,8 @@ namespace CraftingSystem
             DrawSeparator(contentWidth, new Color(0.3f, 0.5f, 0.7f, 0.8f));
             GUILayout.Space(12 * scale);
 
-            DrawMenuButton(new GUIContent("<b><size=" + (int)(FONT_LARGE * scale) + ">📦 " + Helpers.GetString("ui_menu_inventory", "Workshop Inventory") + "</size></b>\n" + 
-                                        "<color=#aaaaaa>" + Helpers.GetString("ui_desc_inventory", "Modify and upgrade your existing items") + "</color>"), 
+            DrawMenuButton(new GUIContent("<b><size=" + (int)(FONT_LARGE * scale) + ">📦 " + Helpers.GetString("ui_menu_inventory", "Workshop Inventory") + "</size></b>\n" +
+                                        "<color=#aaaaaa>" + Helpers.GetString("ui_desc_inventory", "Modify and upgrade your existing items") + "</color>"),
                            btnStyle, CraftingPage.WorkshopInventory, new Color(0.2f, 0.3f, 0.5f), GUILayout.Height(85 * scale));
 
             GUILayout.Space(40 * scale);
@@ -749,7 +764,7 @@ namespace CraftingSystem
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             GUILayout.BeginVertical(GUILayout.Width(contentWidth));
-            
+
             GUILayout.Space(20 * scale);
             GUIStyle headerStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_HUGE * scale), fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
             GUILayout.Label(string.Format(Helpers.GetString("ui_page_forge_title", "{0}"), title), headerStyle);
@@ -800,7 +815,7 @@ namespace CraftingSystem
                     {
                         DrawSprite(item.GetIcon(selectedAlteration), 40 * scale);
                     }
-                    
+
                     GUILayout.BeginVertical();
                     GUILayout.Label($"<b>{item.GetDisplayName(selectedAlteration)}</b>", new GUIStyle(GUI.skin.label) { richText = true });
                     GUILayout.Label(string.Format(Helpers.GetString("ui_item_cost", "Cost: {0} GP"), item.GetCost(selectedAlteration)), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_SMALL * scale) });
@@ -814,7 +829,7 @@ namespace CraftingSystem
                     int currentCost = item.GetCost(selectedAlteration);
 
                     GUI.enabled = canBuy;
-                    
+
                     // Bouton 1 : Vers l'établi (Workshop)
                     if (CButton(Helpers.GetString("ui_btn_buy_workshop", "WORKSHOP"), GUILayout.Width(100 * scale), GUILayout.Height(40 * scale)))
                     {
@@ -841,7 +856,7 @@ namespace CraftingSystem
             GUILayout.EndHorizontal();
         }
 
-        void DrawCreateWandGUI(float scale) 
+        void DrawCreateWandGUI(float scale)
         {
             DrawMagicItemGUI(scale, Helpers.GetString("ui_menu_wand_workshop", "Wand Workshop"), 750, 50, (s, cl, sl) => CustomEnchantmentsBuilder.GetOrBuildWand(s, cl, sl), WandFilter, CraftingSettings.Instance.ApplyWandRestrictions ? 4 : 9);
         }
@@ -917,7 +932,7 @@ namespace CraftingSystem
             // LEFT: Spell List
             GUILayout.BeginVertical(GUILayout.Width(contentWidth * 0.6f));
             scrollListPos = GUILayout.BeginScrollView(scrollListPos, "box", GUILayout.Height(400 * scale));
-            
+
             var filteredSpells = SpellScanner.AvailableSpells.Values
                 .Where(s => (string.IsNullOrEmpty(scrollSearch) || s.Name.IndexOf(scrollSearch, StringComparison.OrdinalIgnoreCase) >= 0) && (filter == null || filter(s)))
                 .OrderBy(s => s.MinLevel).ThenBy(s => s.Name);
@@ -930,10 +945,10 @@ namespace CraftingSystem
                     itemStyle.normal.background = itemStyle.active.background;
                     itemStyle.normal.textColor = Color.cyan;
                 }
-                
+
                 string modTag = spell.IsFromMod ? "<color=#88BBFF>[MOD]</color> " : "";
                 string btnText = $"{modTag}{string.Format(Helpers.GetString("ui_lvl_format", "Lvl {0} - {1}"), spell.MinLevel, spell.Name)}";
-                
+
                 if (CButtonStyled(new GUIContent(btnText), itemStyle, GUILayout.Height(35 * scale)))
                 {
                     selectedScrollSpell = spell;
@@ -956,11 +971,11 @@ namespace CraftingSystem
                 {
                     GUILayout.Label($"{Helpers.GetString("ui_charges", "Charges")}: {charges}", new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_SMALL * scale) });
                 }
-                
+
                 GUIStyle infoStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_SMALL * scale), richText = true };
                 if (!string.IsNullOrEmpty(selectedScrollSpell.School))
                     GUILayout.Label($"<color=#CCCCCC>{Helpers.GetString("ui_school", "School")}:</color> {selectedScrollSpell.School}", infoStyle);
-                
+
                 if (selectedScrollSpell.Classes != null && selectedScrollSpell.Classes.Count > 0)
                     GUILayout.Label($"<color=#CCCCCC>{Helpers.GetString("ui_classes", "Classes")}:</color> {string.Join(", ", selectedScrollSpell.Classes.Take(3))}", infoStyle);
 
@@ -984,7 +999,7 @@ namespace CraftingSystem
                 GUILayout.Space(20 * scale);
 
                 int cost = (int)Math.Ceiling(basePrice * scrollCasterLevel * Math.Max(0.5f, scrollSpellLevel) * CraftingSettings.Instance.CostMultiplier);
-                
+
                 GUILayout.BeginVertical(GUI.skin.box);
                 GUILayout.Label($"{Helpers.GetString("ui_total_cost", "Total Cost")}:", new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
                 GUILayout.Label(string.Format(Helpers.GetString("ui_gp_format", "<color=yellow>{0} GP</color>"), cost), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_LARGE * scale), richText = true });
@@ -1018,8 +1033,8 @@ namespace CraftingSystem
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
-        void DrawCreateMetamagicRodGUI(float scale) 
-        { 
+        void DrawCreateMetamagicRodGUI(float scale)
+        {
             if (selectedModel == null || selectedModel.EnchantId != "007")
             {
                 selectedModel = CustomEnchantmentsBuilder.GetModelById("007");
@@ -1034,26 +1049,29 @@ namespace CraftingSystem
                             if (p.DefaultValue is long || p.DefaultValue is int) defVal = Convert.ToInt32(p.DefaultValue);
                             else if (p.DefaultValue is string defStr && p.Type == "Enum")
                             {
-                                try {
+                                try
+                                {
                                     var enumType = Type.GetType(p.EnumTypeName);
                                     if (enumType != null) defVal = (int)Enum.Parse(enumType, defStr, true);
-                                } catch {}
+                                }
+                                catch { }
                             }
                         }
                         dynamicParamValues[p.Name] = defVal;
                     }
-                    
+
                     dynamicParamValues["MetamagicCount"] = 1;
                     int initialMetamagic = dynamicParamValues.ContainsKey("Metamagic") ? dynamicParamValues["Metamagic"] : 1;
                     dynamicParamValues["Metamagic_0"] = initialMetamagic;
                 }
-                else {
+                else
+                {
                     Main.ModEntry.Logger.Error("[ATELIER] CRITICAL: Metamagic Rod model (007) not found in CustomEnchantmentsBuilder.AllModels!");
                     currentPageType = CraftingPage.MainMenu;
                     return;
                 }
             }
-            
+
             DrawCustomEnchantmentGUI_Content(scale);
         }
         void DrawCreateScrollGUI(float scale)
@@ -1088,26 +1106,26 @@ namespace CraftingSystem
 
             GUILayout.BeginHorizontal();
             GUIStyle filterBtnStyle = new GUIStyle(GUI.skin.button) { fontSize = (int)(FONT_SMALL * scale), fixedHeight = 30 * scale };
-            
+
             bool filterAll = activeTypes.Count == 0 || activeTypes.Count == 3;
-            if (CButtonStyled(new GUIContent(Helpers.GetString("ui_filter_all", "Show All")), filterAll ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale))) 
+            if (CButtonStyled(new GUIContent(Helpers.GetString("ui_filter_all", "Show All")), filterAll ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale)))
                 activeTypes.Clear();
-            
+
             GUILayout.Space(5 * scale);
             bool filterWep = activeTypes.Contains("Weapon") && activeTypes.Count == 1;
-            if (CButtonStyled(new GUIContent("⚔ " + Helpers.GetString("ui_type_weapon", "Weapon")), filterWep ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale))) 
-                { activeTypes.Clear(); activeTypes.Add("Weapon"); }
+            if (CButtonStyled(new GUIContent("⚔ " + Helpers.GetString("ui_type_weapon", "Weapon")), filterWep ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale)))
+            { activeTypes.Clear(); activeTypes.Add("Weapon"); }
 
             GUILayout.Space(5 * scale);
             bool filterArm = activeTypes.Contains("Armor") && activeTypes.Count == 1;
-            if (CButtonStyled(new GUIContent("🛡 " + Helpers.GetString("ui_type_armor", "Armor")), filterArm ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale))) 
-                { activeTypes.Clear(); activeTypes.Add("Armor"); }
+            if (CButtonStyled(new GUIContent("🛡 " + Helpers.GetString("ui_type_armor", "Armor")), filterArm ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale)))
+            { activeTypes.Clear(); activeTypes.Add("Armor"); }
 
             GUILayout.Space(5 * scale);
             bool filterAcc = activeTypes.Contains("Other") && activeTypes.Count == 1;
-            if (CButtonStyled(new GUIContent("💍 " + Helpers.GetString("ui_type_other", "Accessory")), filterAcc ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale))) 
-                { activeTypes.Clear(); activeTypes.Add("Other"); }
-            
+            if (CButtonStyled(new GUIContent("💍 " + Helpers.GetString("ui_type_other", "Accessory")), filterAcc ? new GUIStyle(filterBtnStyle) { normal = { textColor = Color.yellow } } : filterBtnStyle, GUILayout.Width(120 * scale)))
+            { activeTypes.Clear(); activeTypes.Add("Other"); }
+
             GUILayout.EndHorizontal();
 
             GUILayout.Space(15 * scale);
@@ -1117,10 +1135,12 @@ namespace CraftingSystem
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
 
             // Filtrage des items
-            var filteredItems = allItems.Where(it => {
+            var filteredItems = allItems.Where(it =>
+            {
                 if (it.Blueprint is BlueprintItemEquipmentUsable) return false;
                 if (!string.IsNullOrEmpty(inventorySearch) && !it.Name.ToLower().Contains(inventorySearch.ToLower())) return false;
-                if (activeTypes.Count > 0 && activeTypes.Count < 3) {
+                if (activeTypes.Count > 0 && activeTypes.Count < 3)
+                {
                     if (activeTypes.Contains("Weapon") && it.Blueprint is BlueprintItemWeapon) return true;
                     if (activeTypes.Contains("Armor") && (it.Blueprint is BlueprintItemArmor || it.Blueprint is BlueprintItemShield)) return true;
                     if (activeTypes.Contains("Other") && !(it.Blueprint is BlueprintItemWeapon) && !(it.Blueprint is BlueprintItemArmor) && !(it.Blueprint is BlueprintItemShield)) return true;
@@ -1136,7 +1156,8 @@ namespace CraftingSystem
             }
             else
             {
-                GUIStyle entryStyle = new GUIStyle(GUI.skin.button) {
+                GUIStyle entryStyle = new GUIStyle(GUI.skin.button)
+                {
                     wordWrap = true,
                     alignment = TextAnchor.MiddleCenter,
                     fontSize = (int)(FONT_NORMAL * scale),
@@ -1154,7 +1175,7 @@ namespace CraftingSystem
                     {
                         var it = filteredItems[i + j];
                         var project = workshop?.ActiveProjects.FirstOrDefault(p => p.Item == it);
-                        
+
                         string typePrefix = "";
                         Color typeColor = new Color(0.4f, 0.4f, 0.4f); // Gris par défaut
 
@@ -1387,8 +1408,9 @@ namespace CraftingSystem
 
                     if (isNative)
                     {
-                        GUIStyle cantStyle = new GUIStyle(GUI.skin.label) { 
-                            fontSize = (int)(FONT_NORMAL * scale), 
+                        GUIStyle cantStyle = new GUIStyle(GUI.skin.label)
+                        {
+                            fontSize = (int)(FONT_NORMAL * scale),
                             alignment = TextAnchor.MiddleCenter,
                             normal = { textColor = new Color(0.7f, 0.7f, 0.7f, 0.8f) }
                         };
@@ -1766,17 +1788,17 @@ namespace CraftingSystem
             }
 
             iconScrollPos = GUILayout.BeginScrollView(iconScrollPos, false, true, GUILayout.ExpandHeight(true));
-            
+
             int cols = (int)Mathf.Max(1, (800f * scale) / (120f * scale));
             int currentCol = 0;
             float iconSize = 80 * scale;
-            
+
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace(); // Centrage de la grille
             foreach (var bp in icons)
             {
                 GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(iconSize + 20 * scale), GUILayout.Height(iconSize + 50 * scale));
-                
+
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
                 DrawSprite(bp.Icon, iconSize);
@@ -1791,9 +1813,9 @@ namespace CraftingSystem
                     feedbackMessage = Helpers.GetString("ui_feedback_icon_changed", "Icon changed successfully.");
                     showIconBrowser = false;
                 }
-                
+
                 GUILayout.EndVertical();
-                
+
                 currentCol++;
                 if (currentCol >= cols)
                 {
@@ -1811,7 +1833,7 @@ namespace CraftingSystem
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            
+
             GUILayout.EndScrollView();
         }
 
@@ -1848,7 +1870,7 @@ namespace CraftingSystem
 
             bool previousInstantCrafting = CraftingSettings.Instance.InstantCrafting;
             CraftingSettings.Instance.InstantCrafting = CToggle(CraftingSettings.Instance.InstantCrafting, Helpers.GetString("ui_settings_instant_craft", "Instant Crafting"));
-            
+
             GUILayout.Space(5);
             CraftingSettings.Instance.ApplyPotionRestrictions = CToggle(CraftingSettings.Instance.ApplyPotionRestrictions, Helpers.GetString("ui_settings_potion_restrictions", " Apply TTRPG restrictions on potions"));
             GUILayout.Space(5);
@@ -2141,7 +2163,7 @@ namespace CraftingSystem
                         if (v.y > maxY) maxY = v.y;
                     }
                     Rect uvRect = new Rect(minX, minY, maxX - minX, maxY - minY);
-                    
+
                     GUI.DrawTextureWithTexCoords(rect, tex, uvRect);
                 }
             }
@@ -2241,11 +2263,11 @@ namespace CraftingSystem
             return newValue;
         }
 
-        private string CTextField(string text, params GUILayoutOption[] options) 
-        { 
+        private string CTextField(string text, params GUILayoutOption[] options)
+        {
             float scale = CraftingSettings.Instance.ScalePercent / 100f;
             GUIStyle style = new GUIStyle(GUI.skin.textField) { fontSize = (int)(FONT_NORMAL * scale) };
-            return CTextFieldStyled(text, style, options); 
+            return CTextFieldStyled(text, style, options);
         }
         private string CTextFieldStyled(string text, GUIStyle style, params GUILayoutOption[] options)
         {
@@ -2346,7 +2368,7 @@ namespace CraftingSystem
                     string displayName = Helpers.GetString("ui_custom_enchantment_placeholder", "Custom Enchantment");
                     EnchantmentData data = EnchantmentScanner.GetByGuid(g);
                     BlueprintScriptableObject bp = null;
- 
+
                     if (data != null)
                     {
                         displayName = data.Name;
@@ -2447,9 +2469,9 @@ namespace CraftingSystem
                     {
                         bool isWeapon = m.Slots != null && m.Slots.Any(s => string.Equals(s, "Weapon", StringComparison.OrdinalIgnoreCase));
                         bool isArmor = m.Slots != null && m.Slots.Any(s => string.Equals(s, "Armor", StringComparison.OrdinalIgnoreCase) || string.Equals(s, "Shield", StringComparison.OrdinalIgnoreCase));
-                        bool isOther = (m.Slots == null || m.Slots.Count == 0) || m.Slots.Any(s => 
-                            !string.Equals(s, "Weapon", StringComparison.OrdinalIgnoreCase) && 
-                            !string.Equals(s, "Armor", StringComparison.OrdinalIgnoreCase) && 
+                        bool isOther = (m.Slots == null || m.Slots.Count == 0) || m.Slots.Any(s =>
+                            !string.Equals(s, "Weapon", StringComparison.OrdinalIgnoreCase) &&
+                            !string.Equals(s, "Armor", StringComparison.OrdinalIgnoreCase) &&
                             !string.Equals(s, "Shield", StringComparison.OrdinalIgnoreCase));
 
                         if (activeTypes.Contains("Weapon") && isWeapon) return true;
@@ -2492,7 +2514,7 @@ namespace CraftingSystem
                             foreach (var p in model.DynamicParams)
                             {
                                 int defVal = p.Min;
-                                if (p.DefaultValue != null) 
+                                if (p.DefaultValue != null)
                                 {
                                     if (p.DefaultValue is long || p.DefaultValue is int)
                                     {
@@ -2500,12 +2522,16 @@ namespace CraftingSystem
                                     }
                                     else if (p.DefaultValue is string defStr && p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
                                     {
-                                        try {
+                                        try
+                                        {
                                             var enumType = Type.GetType(p.EnumTypeName);
-                                            if (enumType != null) {
+                                            if (enumType != null)
+                                            {
                                                 defVal = (int)Enum.Parse(enumType, defStr, true);
                                             }
-                                        } catch {
+                                        }
+                                        catch
+                                        {
                                             Main.ModEntry.Logger.Error($"[ATELIER] Failed to parse DefaultValue '{defStr}' as enum '{p.EnumTypeName}'");
                                         }
                                     }
@@ -2513,41 +2539,45 @@ namespace CraftingSystem
                                 else if (p.Type == "Enum")
                                 {
                                     // Sélection intelligente du défaut : première valeur valide après filtrage
-                                    try {
+                                    try
+                                    {
                                         var enumType = Type.GetType(p.EnumTypeName);
-                                        if (enumType != null) {
+                                        if (enumType != null)
+                                        {
                                             var allNames = Enum.GetNames(enumType);
                                             var allValues = Enum.GetValues(enumType);
-                                                for (int i = 0; i < allNames.Length; i++) {
-                                                    string n = allNames[i];
-                                                    if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(n, StringComparison.OrdinalIgnoreCase))) continue;
-                                                    if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Any(ee => ee.Equals(n, StringComparison.OrdinalIgnoreCase))) continue;
-                                                    
-                                                    defVal = (int)allValues.GetValue(i);
-                                                    break;
-                                                }
-                                        }
-                                    } catch {}
-                                }
-                            dynamicParamValues[p.Name] = defVal;
-                            filtersDirty = true;
-                        }
-                    }
-                    GUILayout.EndHorizontal();
+                                            for (int i = 0; i < allNames.Length; i++)
+                                            {
+                                                string n = allNames[i];
+                                                if (p.EnumOnly != null && p.EnumOnly.Count > 0 && !p.EnumOnly.Any(eo => eo.Equals(n, StringComparison.OrdinalIgnoreCase))) continue;
+                                                if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Any(ee => ee.Equals(n, StringComparison.OrdinalIgnoreCase))) continue;
 
-                    if (Event.current.type == EventType.Repaint && modelIdx % 2 == 0)
-                    {
-                        Rect lastRect = GUILayoutUtility.GetLastRect();
-                        Color oldC = GUI.color;
-                        GUI.color = new Color(1f, 1f, 1f, 0.06f);
-                        GUI.DrawTexture(lastRect, Texture2D.whiteTexture);
-                        GUI.color = oldC;
+                                                defVal = (int)allValues.GetValue(i);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    catch { }
+                                }
+                                dynamicParamValues[p.Name] = defVal;
+                                filtersDirty = true;
+                            }
+                        }
+                        GUILayout.EndHorizontal();
+
+                        if (Event.current.type == EventType.Repaint && modelIdx % 2 == 0)
+                        {
+                            Rect lastRect = GUILayoutUtility.GetLastRect();
+                            Color oldC = GUI.color;
+                            GUI.color = new Color(1f, 1f, 1f, 0.06f);
+                            GUI.DrawTexture(lastRect, Texture2D.whiteTexture);
+                            GUI.color = oldC;
+                        }
                     }
                 }
             }
-        }
-        else
-        {
+            else
+            {
                 // --- MODE CONFIGURATION ---
                 GUILayout.BeginHorizontal();
                 if (CButton(Helpers.GetString("ui_btn_back", "Back"), GUILayout.Width(100 * scale), GUILayout.Height(30 * scale)))
@@ -2563,7 +2593,7 @@ namespace CraftingSystem
                 // En-tête stylisé
                 GUIStyle titleStyle = new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_HUGE * scale), fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
                 GUILayout.Label(string.Format(Helpers.GetString("ui_configuring_model", "Configuring: <color=#E2C675>{0}</color>"), Helpers.GetLocalizedString(selectedModel.BaseName ?? selectedModel.NameCompleted)), titleStyle);
-                
+
                 GUILayout.Space(20 * scale);
 
                 string currentlyOpenParam = openDropdownParam;
@@ -2572,7 +2602,7 @@ namespace CraftingSystem
                 {
                     // --- LAYOUT SPÉCIFIQUE SCEPTRES (2 COLONNES) ---
                     GUILayout.BeginHorizontal();
-                    
+
                     // COLONNE GAUCHE : Paramètres techniques
                     GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(450 * scale));
                     GUILayout.Label($"<b>{Helpers.GetString("ui_section_basics", "Basic Parameters")}</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
@@ -2607,18 +2637,18 @@ namespace CraftingSystem
                     }
 
                     GUILayout.EndVertical();
-                    
+
                     GUILayout.Space(20 * scale);
 
                     // COLONNE DROITE : Métamagie
                     GUILayout.BeginVertical(GUI.skin.box);
                     GUILayout.Label($"<b>{Helpers.GetString("ui_section_metamagic", "Metamagic Configuration")}</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) });
                     GUILayout.Space(10 * scale);
-                    
+
                     metamagicScrollPos = GUILayout.BeginScrollView(metamagicScrollPos, GUILayout.ExpandHeight(true));
                     DrawDynamicMetamagicList(scale, currentlyOpenParam);
                     GUILayout.EndScrollView();
-                    
+
                     GUILayout.EndVertical();
                     GUILayout.EndHorizontal();
                 }
@@ -2656,7 +2686,7 @@ namespace CraftingSystem
                 int[] orderedValues = selectedModel.DynamicParams.Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0).ToArray();
                 int mask = 0;
                 bool hasMaskControl = false;
- 
+
                 if (selectedModel.EnchantId == "007")
                 {
                     int count = dynamicParamValues.ContainsKey("MetamagicCount") ? dynamicParamValues["MetamagicCount"] : 1;
@@ -2680,9 +2710,11 @@ namespace CraftingSystem
                         if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName) && p.EnumOverrides != null)
                         {
                             int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
-                            try {
+                            try
+                            {
                                 var enumType = Type.GetType(p.EnumTypeName);
-                                if (enumType != null) {
+                                if (enumType != null)
+                                {
                                     string enumName = Enum.GetName(enumType, val);
                                     string keyToUse = enumName;
                                     if (string.IsNullOrEmpty(keyToUse))
@@ -2692,11 +2724,13 @@ namespace CraftingSystem
                                             if (kvp.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null && (int)jo["Value"] == val) { keyToUse = kvp.Key; break; }
                                         }
                                     }
-                                    if (!string.IsNullOrEmpty(keyToUse) && p.EnumOverrides.TryGetValue(keyToUse, out object ovr)) {
+                                    if (!string.IsNullOrEmpty(keyToUse) && p.EnumOverrides.TryGetValue(keyToUse, out object ovr))
+                                    {
                                         if (ovr is Newtonsoft.Json.Linq.JObject jo && jo["MaskValue"] != null) { mask |= (int)jo["MaskValue"]; hasMaskControl = true; }
                                     }
                                 }
-                            } catch {}
+                            }
+                            catch { }
                         }
                     }
                 }
@@ -2719,7 +2753,7 @@ namespace CraftingSystem
                 GUILayout.FlexibleSpace();
 
                 string btnLabel = selectedModel.Type == "UsableItem" ? Helpers.GetString("ui_btn_create_item", "Craft this item") : Helpers.GetString("ui_btn_add_to_selection", "Add to selection");
-                
+
                 bool canCraft = totalCost >= 0 && totalPoints >= 0;
                 if (!canCraft)
                 {
@@ -2736,11 +2770,13 @@ namespace CraftingSystem
                         if (selectedModel.Type == "UsableItem")
                         {
                             var builtBp = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(finalGuidStr);
-                            var finalEnch = EnchantmentScanner.GetByGuid(finalGuidStr); // On rafraîchit pour avoir les données à jour
-                            
+                            var finalEnch = EnchantmentScanner.GetByGuid(finalGuidStr);
+
                             if (finalEnch != null)
                             {
-                                CraftingActions.StartCraftingProject(null, finalEnch, (int)totalCost, totalDays);
+                                // Les sceptres sont des services (instantané)
+                                CraftingActions.StartCraftingProject(null, finalEnch, (int)totalCost, 0);
+                                feedbackMessage = "<color=green>" + string.Format(Helpers.GetString("ui_success_created_chest", "Success! Item created and delivered to the <b>Workshop Chest</b>.")) + "</color>";
                                 selectedModel = null;
                             }
                             else
@@ -2808,7 +2844,8 @@ namespace CraftingSystem
 
             // 3. Tri final par valeur numérique pour garantir l'ordre (ex: Mineur -> Normal -> Supérieur)
             var combined = filteredNames.Zip(filteredValues, (n, v) => new { Name = n, Value = v })
-                            .OrderBy(x => {
+                            .OrderBy(x =>
+                            {
                                 // Si une override de valeur existe pour ce nom, on l'utilise pour le tri
                                 if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(x.Name, out object ovr) && ovr is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null)
                                     return (int)jo["Value"];
@@ -2993,16 +3030,16 @@ namespace CraftingSystem
                 GUI.color = oldC;
             }
         }
- 
+
         private void DrawDynamicMetamagicList(float scale, string currentlyOpenParam)
         {
             int count = dynamicParamValues.ContainsKey("MetamagicCount") ? dynamicParamValues["MetamagicCount"] : 1;
             GUIStyle paramLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) };
-            
+
             var enumType = typeof(Kingmaker.UnitLogic.Abilities.Metamagic);
             var allNames = Enum.GetNames(enumType);
             var allValues = (int[])Enum.GetValues(enumType);
- 
+
             List<int> selectedMetamagics = new List<int>();
             for (int i = 0; i < count; i++)
             {
@@ -3010,7 +3047,7 @@ namespace CraftingSystem
                 if (dynamicParamValues.ContainsKey(key)) selectedMetamagics.Add(dynamicParamValues[key]);
                 else { dynamicParamValues[key] = 0; selectedMetamagics.Add(0); }
             }
- 
+
             for (int i = 0; i < count; i++)
             {
                 string key = "Metamagic_" + i;
@@ -3033,9 +3070,9 @@ namespace CraftingSystem
                 // --- RENDU DU SLOT DANS UNE BOX ---
                 GUILayout.BeginVertical(GUI.skin.box);
                 GUILayout.BeginHorizontal();
-                
+
                 GUILayout.Label($"{Helpers.GetString("ui_metamagic_slot", "Slot")} {i + 1}", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.Width(100 * scale));
-                
+
                 if (CButton(displayName, GUILayout.ExpandWidth(true)))
                 {
                     openDropdownParam = (openDropdownParam == key) ? null : key;
@@ -3069,7 +3106,7 @@ namespace CraftingSystem
                 GUILayout.EndVertical();
                 GUILayout.Space(10 * scale);
             }
- 
+
             var allMetamagics = Enum.GetValues(typeof(Kingmaker.UnitLogic.Abilities.Metamagic)).Cast<int>().Where(v => v != 0).ToList();
             int maxPossibleMetamagics = allMetamagics.Count;
 
@@ -3077,7 +3114,7 @@ namespace CraftingSystem
             {
                 // Trouver la première métamagie non déjà utilisée
                 int nextValidMetamagic = 1; // Empower par défaut
-                
+
                 foreach (var v in allMetamagics)
                 {
                     if (!selectedMetamagics.Contains(v))
@@ -3100,7 +3137,7 @@ namespace CraftingSystem
                 {
                     Game.Instance.Player.Money -= cost;
                     var entity = bp.CreateEntity();
-                    
+
                     if (toInventory)
                     {
                         Game.Instance.Player.Inventory.Add(entity);

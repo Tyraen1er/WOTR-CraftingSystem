@@ -100,6 +100,11 @@
             "frFR": "Atelier",
             "ruRU": "Мастерская"
         },
+        "ui_success_created_chest": {
+            "enGB": "Success! Item created and delivered to the <b>Workshop Chest</b>.",
+            "frFR": "Succès ! Objet créé et livré dans le <b>Coffre de l'Atelier</b>.",
+            "ruRU": "Успех! Предмет создан и доставлен в <b>Сундук мастерской</b>."
+        },
         "ui_loot_enchantment_subtitle": {
             "enGB": "Enchantment",
             "frFR": "Enchantement",
