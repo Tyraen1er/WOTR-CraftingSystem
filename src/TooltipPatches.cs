@@ -38,6 +38,9 @@ namespace CraftingSystem
                 bool addedAny = false;
                 foreach (var ench in Enchantments)
                 {
+                    // On ignore les enchantements natifs (déjà décrits par le jeu ou faisant partie de l'identité de l'objet)
+                    if (item.Blueprint.Enchantments != null && item.Blueprint.Enchantments.Any(bp => bp == ench.Blueprint)) continue;
+
                     DescriptionSource source;
                     string desc = DescriptionManager.GetLocalizedDescription(ench.Blueprint, null, out source);
 
