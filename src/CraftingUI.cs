@@ -1633,7 +1633,7 @@ namespace CraftingSystem
             GUILayout.BeginVertical(GUI.skin.box);
             GUILayout.Label(Helpers.GetString("ui_abadar_warning_title", "<b><color=red>WARNING: CHEATS & EXPERIMENTAL OPTIONS</color></b>"), new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale), alignment = TextAnchor.MiddleCenter });
             GUILayout.Space(20);
-            GUILayout.Label(Helpers.GetString("ui_abadar_warning_desc", "You are about to enter a zone strictly monitored by Abadar.\n\nModifying these options may disrupt the intended balance of the game, break the economy, or cause unexpected behaviors.\n\nAre you sure you want to proceed?"), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), alignment = TextAnchor.MiddleCenter });
+            GUILayout.Label(Helpers.GetString("ui_abadar_warning", "Abadar is watching you..."), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), alignment = TextAnchor.MiddleCenter });
             GUILayout.Space(40);
 
             GUILayout.BeginHorizontal();
@@ -2272,10 +2272,30 @@ namespace CraftingSystem
                         DescriptionSource descSource = DescriptionSource.None;
                         string desc = DescriptionManager.GetLocalizedDescription(bp, data, out descSource);
 
-                        GUIStyle infoStyle = new GUIStyle(GUI.skin.button);
-                        infoStyle.fontSize = (int)(12 * scale);
-                        string color = descSource == DescriptionSource.Generated ? "#88BBFF" : "#E2C675";
+                        string color;
+                        if (!string.IsNullOrEmpty(desc) && descSource == DescriptionSource.Official)
+                        {
+                            color = "#3498db"; // Bleu (Official)
+                        }
+                        else if (!string.IsNullOrEmpty(desc) && descSource == DescriptionSource.Generated)
+                        {
+                            color = "#f1c40f"; // Jaune (Généré)
+                        }
+                        else
+                        {
+                            color = "#e74c3c"; // Rouge (Fallback / TODO)
+                            if (string.IsNullOrEmpty(desc)) desc = Helpers.GetString("ui_desc_needed", "TODO: Description needed for this enchantment.");
+                        }
+
                         GUIContent infoContent = new GUIContent($"<color={color}>{Helpers.GetString("ui_btn_description", "Description")}</color>");
+                        GUIStyle infoStyle = new GUIStyle(GUI.skin.button)
+                        {
+                            richText = true,
+                            fontStyle = FontStyle.Bold,
+                            fontSize = (int)(FONT_TINY * scale),
+                            alignment = TextAnchor.MiddleCenter,
+                            padding = new RectOffset(2, 2, 0, 0)
+                        };
 
                         if (CButtonStyled(infoContent, infoStyle, GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
                         {

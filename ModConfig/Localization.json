@@ -65,6 +65,21 @@
             "frFR": "Créer un Sceptre Métamagique",
             "ruRU": "Создать метамагический жезл"
         },
+        "ui_grade_lesser": {
+            "enGB": "Lesser (Lvl 1-3)",
+            "frFR": "Mineur (Niv. 1-3)",
+            "ruRU": "Малый (Ур. 1-3)"
+        },
+        "ui_grade_normal": {
+            "enGB": "Normal (Lvl 1-6)",
+            "frFR": "Normal (Niv. 1-6)",
+            "ruRU": "Обычный (Ур. 1-6)"
+        },
+        "ui_grade_greater": {
+            "enGB": "Greater (Lvl 1-9)",
+            "frFR": "Supérieur (Niv. 1-9)",
+            "ruRU": "Большой (Ур. 1-9)"
+        },
         "ui_menu_create_wand": {
             "enGB": "Create Wand",
             "frFR": "Créer une Baguette",
@@ -905,10 +920,15 @@
             "frFR": "Pouvoirs magiques :",
             "ruRU": "Магические свойства:"
         },
+        "ui_abadar_warning_title": {
+            "enGB": "<b><color=red>WARNING: CHEATS & EXPERIMENTAL OPTIONS</color></b>",
+            "frFR": "<b><color=red>ATTENTION : OPTIONS DE TRICHE ET EXPÉRIMENTALES</color></b>",
+            "ruRU": "<b><color=red>ВНИМАНИЕ: ЧИТЫ И ЭКСПЕРИМЕНТАЛЬНЫЕ ОПЦИИ</color></b>"
+        },
         "ui_abadar_warning": {
-            "enGB": "Abadar, god of law, commerce, and cities, watches you with severity.\n\nAre you sure you want to access this menu?",
-            "frFR": "Abadar, dieu des lois, du commerce et des cités, vous regarde avec sévérité.\n\nÊtes-vous certain de vouloir accéder à ce menu ?",
-            "ruRU": "Абадар, бог законов, торговли и городов, сурово взирает на вас.\n\nВы уверены, что хотите войти в это меню?"
+            "enGB": "Abadar, god of law, commerce, and cities, watches you with severity.\n\nAre you sure you want to access this menu?\n\n\nSuch an action may cause severe imbalances in the global economy of your adventure.",
+            "frFR": "Abadar, dieu des lois, du commerce et des cités, vous regarde avec sévérité.\n\nÊtes-vous certain de vouloir accéder à ce menu ?\n\n\nCela risque de provoquer de graves déséquilibres dans l'économie globale de votre aventure.",
+            "ruRU": "Абадар, бог законов, торговли и городов, сурово взирает на вас.\n\nВы уверены, что хотите войти в это меню?\n\n\nЭто может привести к серьезному дисбалансу в общей экономике вашего приключения."
         },
         "ui_header_name": {
             "enGB": "Name",

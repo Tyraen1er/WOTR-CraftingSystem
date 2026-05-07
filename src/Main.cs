@@ -174,7 +174,7 @@ namespace CraftingSystem
                 CustomEnchantmentsBuilder.BuildAndInjectAll();
 
                 // --- SCAN DES SORTS POUR LES PARCHEMINS ---
-                // SpellScanner.ScanAll();
+                SpellScanner.ScanAll();
 
                 // DEBUG TEMPORAIRE (Après injection pour être sûr que le cache est prêt)
                 //EnchantmentDebug.DumpBlueprint("d42fc23b92c640846ac137dc26e000d4"); // Enhancement1

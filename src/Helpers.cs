@@ -289,7 +289,10 @@ namespace CraftingSystem
         {
             if (field == null) return null;
             string raw = "";
-            if (field is string s) raw = s;
+            if (field is string s) {
+                if (s.StartsWith("ui_")) raw = GetString(s, s);
+                else raw = s;
+            }
             else if (field is JObject jobj)
             {
                 string locale = "enGB";

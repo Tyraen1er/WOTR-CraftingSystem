@@ -712,18 +712,21 @@
         ],
         "EnumOverrides": {
           "Other": {
-            "frFR": "Mineur (Niv. 1-3)",
-            "ruRU": "Малый (Ур. 1-3)",
+            "enGB": "ui_grade_lesser",
+            "frFR": "ui_grade_lesser",
+            "ruRU": "ui_grade_lesser",
             "Value": 0
           },
           "Shield": {
-            "frFR": "Normal (Niv. 1-6)",
-            "ruRU": "Обычный (Ур. 1-6)",
+            "enGB": "ui_grade_normal",
+            "frFR": "ui_grade_normal",
+            "ruRU": "ui_grade_normal",
             "Value": 1
           },
           "Armor": {
-            "frFR": "Supérieur (Niv. 1-9)",
-            "ruRU": "Большой (Ур. 1-9)",
+            "enGB": "ui_grade_greater",
+            "frFR": "ui_grade_greater",
+            "ruRU": "ui_grade_greater",
             "Value": 2
           }
         },
