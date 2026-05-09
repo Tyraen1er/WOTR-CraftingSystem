@@ -1,6 +1,6 @@
 
 
-- Sceptre metamagique ne fonctionnent pas.
-- Personnaliser description item
+- Issue of "freezing" character cartoons in the inventory when the metamagic staff on the belt is active been resolved?
+
 - Service d'Achat d'équipement non enchanté (ne pas implémenter pour l'instant)
     - Accessoires : Bijoux - Vêtements - sceptres - baguettes
