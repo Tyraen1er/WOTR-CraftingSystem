@@ -30,6 +30,7 @@ namespace CraftingSystem
     public static class SpellScanner
     {
         public static Dictionary<string, SpellData> AvailableSpells = new Dictionary<string, SpellData>();
+        public static Dictionary<uint, string> HashToGuid = new Dictionary<uint, string>();
         private static bool _initialized = false;
 
         public static void ScanAll()
@@ -45,6 +46,7 @@ namespace CraftingSystem
         public static void FinalizeScan(IEnumerable<(BlueprintSpellbook sb, BlueprintGuid guid)> spellbooks, IEnumerable<(BlueprintSpellList sl, BlueprintGuid guid)> spellLists)
         {
             AvailableSpells.Clear();
+            HashToGuid.Clear();
 
             // 1. Traitement des Spellbooks (Classes)
             foreach (var item in spellbooks)
@@ -98,6 +100,13 @@ namespace CraftingSystem
                             IsFullRound = spell.IsFullRoundAction
                         };
                         AvailableSpells[guid] = data;
+
+                        // On enregistre le hash pour la recherche rapide (WOTR - Persistence)
+                        try {
+                            byte[] bytes = spell.AssetGuid.ToByteArray();
+                            uint hash = BitConverter.ToUInt32(bytes, 0);
+                            if (!HashToGuid.ContainsKey(hash)) HashToGuid[hash] = guid;
+                        } catch {}
                     }
 
                     if (level < data.MinLevel) data.MinLevel = level;

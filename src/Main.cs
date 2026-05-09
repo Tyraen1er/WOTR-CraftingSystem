@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace CraftingSystem
 {
-    static class Main 
+    static class Main
     {
         public static UnityModManager.ModEntry ModEntry;
         public static Harmony HarmonyInstance;
@@ -24,28 +24,31 @@ namespace CraftingSystem
 
         static bool Load(UnityModManager.ModEntry modEntry)
         {
-            try {
+            try
+            {
                 ModEntry = modEntry;
                 CraftingSettings.Load(modEntry);
-                
+
                 modEntry.OnGUI = OnGUI;
                 modEntry.OnSaveGUI = OnSaveGUI;
                 modEntry.OnUpdate = OnUpdate;
 
                 HarmonyInstance = new Harmony(modEntry.Info.Id);
                 HarmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
-                
+
                 Helpers.LoadLocalization(modEntry.Path);
                 DeferredInventoryOpener.Initialize();
 
                 ModEntry.Logger.Log("!!! CRAFTING SYSTEM - DYNAMIC VERSION 1.7.2 - CHECKPOINT !!!");
                 ModEntry.Logger.Log("Crafting System: Mod loaded with Dynamic Persistence Patch.");
-                
+
                 modEntry.OnGUI = OnGUI;
                 modEntry.OnSaveGUI = OnSaveGUI;
                 modEntry.OnUpdate = OnUpdate;
                 return true;
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 modEntry.Logger.Error($"Crafting System: Failed to load: {e}");
                 return false;
             }
@@ -54,7 +57,7 @@ namespace CraftingSystem
         static void OnGUI(UnityModManager.ModEntry modEntry)
         {
             UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_title"));
-            
+
             UnityEngine.GUILayout.BeginHorizontal();
             UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_vanilla"), UnityEngine.GUILayout.Width(250));
             if (UnityEngine.GUILayout.Button(Helpers.GetString("ui_umm_open_now"), UnityEngine.GUILayout.Width(250)))
@@ -103,7 +106,7 @@ namespace CraftingSystem
                 }
             }
 
-            if (Game.Instance.CurrentMode == Kingmaker.GameModes.GameModeType.FullScreenUi 
+            if (Game.Instance.CurrentMode == Kingmaker.GameModes.GameModeType.FullScreenUi
                 || Game.Instance.CurrentMode == Kingmaker.GameModes.GameModeType.EscMode
                 || Game.Instance.CurrentMode == Kingmaker.GameModes.GameModeType.Dialog
                 || Game.Instance.CurrentMode == Kingmaker.GameModes.GameModeType.Cutscene)
@@ -113,7 +116,7 @@ namespace CraftingSystem
 
             // Sécurité avancée : Détection de la saisie (Jeu, UMM, IMGUI)
             bool isTyping = UnityEngine.GUIUtility.keyboardControl != 0;
-            
+
             // On vérifie aussi les InputFields de TextMeshPro (utilisés par le jeu et certains mods) via Réflexion
             try
             {
@@ -151,25 +154,30 @@ namespace CraftingSystem
         public static void Postfix()
         {
             // Main.ModEntry.Logger.Log("[DEBUG] BlueprintsCache.Init Postfix started.");
-            try {
+            try
+            {
                 string locale = "enGB";
-                try {
+                try
+                {
                     locale = Kingmaker.Localization.LocalizationManager.CurrentLocale.ToString();
-                } catch {
+                }
+                catch
+                {
                     Main.ModEntry.Logger.Log("LocalizationManager not fully initialized yet.");
                 }
 
                 Helpers.ApplyLocalization(locale);
-                
-                if (Kingmaker.Localization.LocalizationManager.CurrentPack != null) {
+
+                if (Kingmaker.Localization.LocalizationManager.CurrentPack != null)
+                {
                     Helpers.InjectStringsIntoPack(Kingmaker.Localization.LocalizationManager.CurrentPack);
                 }
 
                 DialogInjector.RegisterDialogChanges();
-                
+
                 // --- CHARGEMENT SIMPLE JSON AU DÉMARRAGE ---
                 EnchantmentScanner.Load();
-                
+
                 // --- INJECTION DES ENCHANTEMENTS CUSTOM (JSON COMPLEXE) ---
                 CustomEnchantmentsBuilder.BuildAndInjectAll();
 
@@ -183,76 +191,78 @@ namespace CraftingSystem
 
                 // --- DUMP DES ITEMS DE BASE ---
                 // BaseItemDumper.DumpAll();
-                
-            } catch (Exception ex) {
+
+            }
+            catch (Exception ex)
+            {
                 Main.ModEntry.Logger.Error($"Error in BlueprintsCache.Init: {ex}");
             }
         }
     }
 
     [HarmonyPatch(typeof(Kingmaker.EntitySystem.Persistence.JsonUtility.BlueprintConverter), "ReadJson")]
-    public static class BlueprintConverter_ReadJson_Patch
-    {
-        [HarmonyPrefix]
-        public static bool Prefix(Newtonsoft.Json.JsonReader reader, ref object __result)
+        public static class BlueprintConverter_ReadJson_Patch
         {
-            // 1. Inversion de la condition (Early Exit) pour éviter l'indentation profonde
-            if (reader.TokenType != Newtonsoft.Json.JsonToken.String) 
-                return true;
-
-            // 2. Cast direct : puisqu'on a vérifié le TokenType, le cast explicite est plus rapide que 'as'
-            string guidStr = (string)reader.Value;
-            
-            if (string.IsNullOrEmpty(guidStr) || guidStr.Length < 8) 
-                return true;
-
-            // 3. Recherche de la signature
-            int signatureIdx = guidStr.IndexOf("c2af", StringComparison.OrdinalIgnoreCase);
-            
-            // On ne traite que si la signature est au début (0) ou juste après le préfixe "!bp_" (4)
-            if (signatureIdx == 0 || (signatureIdx == 4 && guidStr.StartsWith("!bp_", StringComparison.OrdinalIgnoreCase)))
+            [HarmonyPrefix]
+            public static bool Prefix(Newtonsoft.Json.JsonReader reader, ref object __result)
             {
-                string finalGuid;
-                int remainingLength = guidStr.Length - signatureIdx;
+                // 1. Inversion de la condition (Early Exit) pour éviter l'indentation profonde
+                if (reader.TokenType != Newtonsoft.Json.JsonToken.String)
+                    return true;
 
-                // 4. Réduction drastique des allocations (Zéro Substring inutile)
-                if (remainingLength >= 32)
+                // 2. Cast direct : puisqu'on a vérifié le TokenType, le cast explicite est plus rapide que 'as'
+                string guidStr = (string)reader.Value;
+                if (string.IsNullOrEmpty(guidStr) || guidStr.Length < 8) return true;
+
+                // Optimisation : recherche rapide de la signature au début (0) ou après !bp_ (4)
+                int signatureIdx = -1;
+                if (guidStr.StartsWith("c2af", StringComparison.OrdinalIgnoreCase)) signatureIdx = 0;
+                else if (guidStr.Length > 8 && guidStr.StartsWith("!bp_c2af", StringComparison.OrdinalIgnoreCase)) signatureIdx = 4;
+
+                if (signatureIdx != -1)
                 {
-                    // Cas idéal : on extrait directement les 32 caractères (1 seule allocation)
-                    finalGuid = guidStr.Substring(signatureIdx, 32);
-                }
-                else
-                {
-                    // --- RÉPARATION DES GUIDS TRONQUÉS ---
-                    // Cas de secours : on extrait le reste et on pad directement
-                    finalGuid = guidStr.Substring(signatureIdx).PadRight(32, '0');
+                    string finalGuid;
+                    int remainingLength = guidStr.Length - signatureIdx;
+
+                    // 4. Réduction drastique des allocations (Zéro Substring inutile)
+                    if (remainingLength >= 32)
+                    {
+                        // Cas idéal : on extrait directement les 32 caractères (1 seule allocation)
+                        finalGuid = guidStr.Substring(signatureIdx, 32);
+                    }
+                    else
+                    {
+                        // --- RÉPARATION DES GUIDS TRONQUÉS ---
+                        // Cas de secours : on extrait le reste et on pad directement
+                        finalGuid = guidStr.Substring(signatureIdx).PadRight(32, '0');
 
 #if DEBUG
-                    // Ne JAMAIS logger dans ReadJson en production (génère des strings et ralentit le jeu)
-                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Repairing truncated GUID: {finalGuid}");
+                        // Ne JAMAIS logger dans ReadJson en production (génère des strings et ralentit le jeu)
+                        Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Repairing truncated GUID: {finalGuid}");
 #endif
+                    }
+
+                    // On tente la résolution dynamique
+                    __result = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(finalGuid);
+
+                    if (__result != null)
+                        return false; // Blueprint trouvé, on court-circuite la méthode originale
                 }
 
-                // On tente la résolution dynamique
-                __result = CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(finalGuid);
-                
-                if (__result != null) 
-                    return false; // Blueprint trouvé, on court-circuite la méthode originale
+                return true;
             }
-
-            return true;
         }
-    }
 
-    [HarmonyPatch(typeof(LocalizationManager), "OnLocaleChanged")]
-    public static class LocalizationManager_OnLocaleChanged_Patch
-    {
-        public static void Postfix()
+        [HarmonyPatch(typeof(LocalizationManager), "OnLocaleChanged")]
+        public static class LocalizationManager_OnLocaleChanged_Patch
         {
-            if (LocalizationManager.CurrentPack != null) {
-                Helpers.ApplyLocalization(LocalizationManager.CurrentLocale.ToString());
-                Helpers.InjectStringsIntoPack(LocalizationManager.CurrentPack);
+            public static void Postfix()
+            {
+                if (LocalizationManager.CurrentPack != null)
+                {
+                    Helpers.ApplyLocalization(LocalizationManager.CurrentLocale.ToString());
+                    Helpers.InjectStringsIntoPack(LocalizationManager.CurrentPack);
+                }
             }
         }
     }
-}

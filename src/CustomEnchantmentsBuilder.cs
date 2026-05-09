@@ -255,6 +255,7 @@ namespace CraftingSystem
         
         private static Dictionary<string, CustomEnchantmentData> _customModels = new Dictionary<string, CustomEnchantmentData>();
         private static HashSet<string> _currentlyBuilding = new HashSet<string>();
+        private static Dictionary<string, BlueprintScriptableObject> _dynamicCache = new Dictionary<string, BlueprintScriptableObject>();
         private static readonly object _lock = new object();
 
         public static CustomEnchantmentData GetModelById(string id, bool isFeature = false)
@@ -396,47 +397,71 @@ namespace CraftingSystem
         {
             lock (_lock)
             {
+                // 1. Cache local rapide
+                if (_dynamicCache.TryGetValue(guidStr, out var cached)) return cached;
+
                 if (_currentlyBuilding.Contains(guidStr)) return null;
                 _currentlyBuilding.Add(guidStr);
+                
+                BlueprintScriptableObject result = null;
                 try
                 {
-                    // Log supprimé car trop verbeux
                     var guid = BlueprintGuid.Parse(guidStr);
 
-                    // On vérifie si par hasard il n'a pas été injecté entre temps
-                    var existing = (BlueprintScriptableObject)ResourcesLibrary.TryGetBlueprint(guid);
-                    if (existing != null) return existing;
+                    // 2. Cache du jeu
+                    result = (BlueprintScriptableObject)ResourcesLibrary.TryGetBlueprint(guid);
+                    if (result != null) 
+                    {
+                        _dynamicCache[guidStr] = result;
+                        return result;
+                    }
 
                     // Décodage du GUID
                     if (!DynamicGuidHelper.TryDecodeGuid(guid, out string enchantId, out List<int> vals, out int mask))
-                    {
-                        Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] Failed to decode GUID: {guidStr}");
                         return null;
-                    }
 
-                    // Trouver le modèle
                     bool isFeature = vals.Count > 0 && vals[0] == 1;
-                    var model = GetModelById(enchantId, isFeature);
-                    
-                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Decoded: ID={enchantId}, isFeature={isFeature}, Mask=0x{mask:X3}, Params={string.Join(",", vals)}");
 
-                    if (model == null)
+                    // Support spécial pour les objets magiques (Baguettes 901, Potions 902, Parchemins 903)
+                    if (enchantId == "901" || enchantId == "902" || enchantId == "903")
                     {
-                        Main.ModEntry.Logger.Warning($"[DYNAMIC_ENCHANT] No model found for EnchantId {enchantId} (isFeature: {isFeature}). AllModels count: {AllModels?.Count ?? 0}");
-                        return null;
+                        string spellGuid = GetSpellGuidByHash(vals.Skip(1).ToList());
+                        if (string.IsNullOrEmpty(spellGuid)) return null;
+                        
+                        int cl = vals.Count > 5 ? vals[5] : 1;
+                        int sl = vals.Count > 6 ? vals[6] : 1;
+                        
+                        if (!SpellScanner.AvailableSpells.TryGetValue(spellGuid, out var spellData))
+                            spellData = new SpellData { Guid = spellGuid, Name = "Unknown Spell" };
+
+                        if (enchantId == "901") result = GetOrBuildWand(spellData, cl, sl);
+                        else if (enchantId == "902") result = GetOrBuildPotion(spellData, cl, sl);
+                        else if (enchantId == "903") result = GetOrBuildScroll(spellData, cl, sl);
                     }
 
-                    return CreateDynamicBlueprint(model, guid, vals.Skip(1).ToList(), mask);
+                    if (result == null)
+                    {
+                        var model = GetModelById(enchantId, isFeature);
+                        if (model != null)
+                        {
+                            result = CreateDynamicBlueprint(model, guid, vals.Skip(1).ToList(), mask);
+                        }
+                    }
+
+                    if (result != null) 
+                    {
+                        _dynamicCache[guidStr] = result;
+                    }
                 }
                 catch (Exception ex)
                 {
                     Main.ModEntry.Logger.Error($"[DYNAMIC_ENCHANT] EXCEPTION in GetOrBuildDynamicBlueprint for {guidStr}: {ex}");
-                    return null;
                 }
                 finally
                 {
                     _currentlyBuilding.Remove(guidStr);
                 }
+                return result;
             }
         }
 
@@ -814,6 +839,7 @@ namespace CraftingSystem
             InjectedGuids.Add(bp.AssetGuid);
             Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] SUCCESSFULLY CREATED AND INJECTED: {bp.name} ({bp.AssetGuid})");
 
+            _dynamicCache[guid.ToString()] = bp;
             return bp;
         }
 
@@ -908,8 +934,9 @@ namespace CraftingSystem
         }
         public static BlueprintItemEquipmentUsable GetOrBuildScroll(SpellData spellData, int cl, int sl)
         {
-            string seed = $"Scroll_{spellData.Guid}_{cl}_{sl}";
-            BlueprintGuid guid = CreateGuidFromSeed(seed);
+            int[] hash = GetSpellHash(spellData.Guid);
+            int[] parameters = new int[] { hash[0], hash[1], hash[2], hash[3], cl, sl };
+            BlueprintGuid guid = DynamicGuidHelper.GenerateGuid("903", parameters);
             
             var existing = ResourcesLibrary.TryGetBlueprint(guid) as BlueprintItemEquipmentUsable;
             if (existing != null) return existing;
@@ -949,8 +976,9 @@ namespace CraftingSystem
 
         public static BlueprintItemEquipmentUsable GetOrBuildWand(SpellData spellData, int cl, int sl)
         {
-            string seed = $"Wand_{spellData.Guid}_{cl}_{sl}";
-            BlueprintGuid guid = CreateGuidFromSeed(seed);
+            int[] hash = GetSpellHash(spellData.Guid);
+            int[] parameters = new int[] { hash[0], hash[1], hash[2], hash[3], cl, sl };
+            BlueprintGuid guid = DynamicGuidHelper.GenerateGuid("901", parameters);
             
             var existing = ResourcesLibrary.TryGetBlueprint(guid) as BlueprintItemEquipmentUsable;
             if (existing != null) return existing;
@@ -1033,8 +1061,9 @@ namespace CraftingSystem
 
         public static BlueprintItemEquipmentUsable GetOrBuildPotion(SpellData spellData, int cl, int sl)
         {
-            string seed = $"Potion_{spellData.Guid}_{cl}_{sl}";
-            BlueprintGuid guid = CreateGuidFromSeed(seed);
+            int[] hash = GetSpellHash(spellData.Guid);
+            int[] parameters = new int[] { hash[0], hash[1], hash[2], hash[3], cl, sl };
+            BlueprintGuid guid = DynamicGuidHelper.GenerateGuid("902", parameters);
             
             var existing = ResourcesLibrary.TryGetBlueprint(guid) as BlueprintItemEquipmentUsable;
             if (existing != null) return existing;
@@ -1234,16 +1263,29 @@ namespace CraftingSystem
         }
 
  
-        private static BlueprintGuid CreateGuidFromSeed(string seed)
+        private static int[] GetSpellHash(string spellGuid)
         {
-            using (MD5 md5 = MD5.Create())
-            {
-                byte[] hash = md5.ComputeHash(Encoding.UTF8.GetBytes(seed));
-                // On injecte notre signature "c2af" au début du GUID pour l'identifier
-                hash[0] = 0xC2;
-                hash[1] = 0xAF;
-                return new BlueprintGuid(new Guid(hash));
+            if (string.IsNullOrEmpty(spellGuid)) return new int[] { 0, 0, 0, 0 };
+            try {
+                var guid = BlueprintGuid.Parse(spellGuid);
+                byte[] bytes = guid.ToByteArray();
+                return new int[] { bytes[0], bytes[1], bytes[2], bytes[3] };
+            } catch {
+                return new int[] { 0, 0, 0, 0 };
             }
+        }
+
+        private static string GetSpellGuidByHash(List<int> vals)
+        {
+            if (vals.Count < 4) return null;
+            try {
+                byte[] target = new byte[] { (byte)vals[0], (byte)vals[1], (byte)vals[2], (byte)vals[3] };
+                uint hash = BitConverter.ToUInt32(target, 0);
+                
+                if (SpellScanner.HashToGuid.TryGetValue(hash, out string guid)) return guid;
+            } catch {}
+            
+            return null;
         }
     }
 }
