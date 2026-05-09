@@ -49,3 +49,8 @@ Settings can be modified within the mod menu:
 - **Cost Multiplier:** Adjusts the global cost (Default is 0.5 for creation cost).
 - **Apply Slot Penalty:** Enables or disables the 50% surcharge.
 - **Enable Epic Costs:** Enables or disables the x10 multiplier.
+
+## Thanks
+- **Cabarius** For the scanner logic and the renaming system utilized from ToyBox.
+- **Paladingineer** For the Woljif Romance Mod, which provided the framework for the dialogue management system.
+- **Tyrtyt21** For the help with the report of bugs, the russian translation and the suggestions of features.
