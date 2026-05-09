@@ -80,6 +80,26 @@
             "frFR": "Supérieur (Niv. 1-9)",
             "ruRU": "Большой (Ур. 1-9)"
         },
+        "ui_grade_lesser_desc": {
+            "enGB": "This rod can be used with spells of 3rd level or lower.",
+            "frFR": "Ce sceptre peut être utilisé avec des sorts de niveau 3 ou moins.",
+            "ruRU": "Этот скипетр можно использовать с заклинаниями 3-го уровня или ниже."
+        },
+        "ui_grade_normal_desc": {
+            "enGB": "This rod can be used with spells of 6th level or lower.",
+            "frFR": "Ce sceptre peut être utilisé avec des sorts de niveau 6 ou moins.",
+            "ruRU": "Этот скипетр можно использовать с заклинаниями 6-го уровня или ниже."
+        },
+        "ui_grade_greater_desc": {
+            "enGB": "This rod can be used with spells of 9th level or lower.",
+            "frFR": "Ce sceptre peut être utilisé avec des sorts de niveau 9 ou moins.",
+            "ruRU": "Этот скипетр можно использовать с заклинаниями 9-го уровня или ниже."
+        },
+        "ui_desc_metamagic_rod": {
+            "enGB": "This rod grants its wielder the ability to apply the following metamagic effects to spells: <b>{Metamagic}</b>. It can be used <b>{Charges}</b> times per day. {GradeDesc}",
+            "frFR": "Ce sceptre permet à son porteur d'appliquer les effets de métamagie suivants à ses sorts : <b>{Metamagic}</b>. Il peut être utilisé <b>{Charges}</b> fois par jour. {GradeDesc}",
+            "ruRU": "Этот скипетр позволяет владельцу применять к заклинаниям следующие эффекты метамагии: <b>{Metamagic}</b>. Его можно использовать <b>{Charges}</b> раз в день. {GradeDesc}"
+        },
         "ui_menu_create_wand": {
             "enGB": "Create Wand",
             "frFR": "Créer une Baguette",
@@ -230,6 +250,23 @@
             "frFR": "Non",
             "ruRU": "Нет"
         },
+        "ui_none": {
+            "enGB": "None",
+            "frFR": "Aucun",
+            "ruRU": "Нет"
+        },
+        "ui_enum_Empower": { "enGB": "Empower", "frFR": "Quintessence", "ruRU": "Усиление" },
+        "ui_enum_Maximize": { "enGB": "Maximize", "frFR": "Maximisation", "ruRU": "Максимизация" },
+        "ui_enum_Quicken": { "enGB": "Quicken", "frFR": "Action rapide", "ruRU": "Ускорение" },
+        "ui_enum_Extend": { "enGB": "Extend", "frFR": "Extension de durée", "ruRU": "Продление" },
+        "ui_enum_Reach": { "enGB": "Reach", "frFR": "Extension de portée", "ruRU": "Дальнобойность" },
+        "ui_enum_Persistent": { "enGB": "Persistent", "frFR": "Persistant", "ruRU": "Настойчивость" },
+        "ui_enum_Selective": { "enGB": "Selective", "frFR": "Sélectif", "ruRU": "Избирательность" },
+        "ui_enum_Bolstered": { "enGB": "Bolstered", "frFR": "Renforcé", "ruRU": "Укрепление" },
+        "ui_enum_Piercing": { "enGB": "Piercing", "frFR": "Perçant", "ruRU": "Пробивание" },
+        "ui_enum_Intensified": { "enGB": "Intensified", "frFR": "Intensifié", "ruRU": "Интенсификация" },
+        "ui_enum_CompletelyNormal": { "enGB": "Completely Normal", "frFR": "Totalement normal", "ruRU": "Совершенно обычный" },
+        "ui_enum_Heighten": { "enGB": "Heighten", "frFR": "Augmentation", "ruRU": "Повышение" },
         "ui_type_weapon": {
             "enGB": "Weapon",
             "frFR": "Arme",

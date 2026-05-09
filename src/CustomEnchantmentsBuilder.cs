@@ -1236,22 +1236,50 @@ namespace CraftingSystem
 
             // Injection des textes
             var replacements = new Dictionary<string, string>();
-            replacements["Grade"]   = (grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
-            replacements["Charges"] = charges.ToString();
+            
+            // Grade localisé
+            string gradeKey = (grade == 0 ? "ui_grade_lesser" : (grade == 1 ? "ui_grade_normal" : "ui_grade_greater"));
+            replacements["Grade"]     = Helpers.GetString(gradeKey, grade == 0 ? "Lesser" : (grade == 1 ? "Normal" : "Greater"));
+            replacements["GradeDesc"] = Helpers.GetString(gradeKey + "_desc", "");
+            replacements["Charges"]   = charges.ToString();
+            
             var mNames = new List<string>();
-            for (int i = 0; i < mCount; i++) {
-                int index = 3 + i;
-                if (index >= paramValues.Count) break;
-                int val = paramValues[index];
-                if (val == 0) continue;
-                string n = Enum.GetName(typeof(Kingmaker.UnitLogic.Abilities.Metamagic), val) ?? "None";
-                mNames.Add(Helpers.GetString("ui_enum_" + n, n));
+            // On récupère les noms de métamagie soit via le masque (multi-effet) soit via paramValues
+            if (mask != 0)
+            {
+                foreach (Kingmaker.UnitLogic.Abilities.Metamagic m in Enum.GetValues(typeof(Kingmaker.UnitLogic.Abilities.Metamagic)))
+                {
+                    if ((int)m != 0 && (mask & (int)m) != 0)
+                    {
+                        string n = m.ToString();
+                        mNames.Add(Helpers.GetString("ui_enum_" + n, n));
+                    }
+                }
             }
+            else
+            {
+                for (int i = 0; i < mCount; i++) {
+                    int index = 3 + i;
+                    if (index >= paramValues.Count) break;
+                    int val = paramValues[index];
+                    if (val == 0) continue;
+                    string n = Enum.GetName(typeof(Kingmaker.UnitLogic.Abilities.Metamagic), val) ?? "None";
+                    mNames.Add(Helpers.GetString("ui_enum_" + n, n));
+                }
+            }
+
+            if (mNames.Count == 0) mNames.Add(Helpers.GetString("ui_none", "None"));
             replacements["Metamagic"] = string.Join(", ", mNames);
 
+            // Nom de l'item
             string finalName = Helpers.GetLocalizedString(model.NameCompleted ?? model.BaseName, replacements);
             typeof(BlueprintItem).GetField("m_DisplayNameText", BindingFlags.Instance | BindingFlags.NonPublic)
                 ?.SetValue(item, Helpers.CreateString($"{item.name}.Name", finalName));
+
+            // Description de l'item (FIX: <null> description)
+            string finalDesc = Helpers.GetLocalizedString("ui_desc_metamagic_rod", replacements);
+            typeof(BlueprintItem).GetField("m_DescriptionText", BindingFlags.Instance | BindingFlags.NonPublic)
+                ?.SetValue(item, Helpers.CreateString($"{item.name}.Description", finalDesc));
 
             // Enregistrement — les GUIDs portent tous la signature c2af, la sauvegarde fonctionnera
             ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(buff.AssetGuid, buff);
