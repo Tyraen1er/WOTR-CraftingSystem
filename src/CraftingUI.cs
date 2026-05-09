@@ -3074,7 +3074,7 @@ namespace CraftingSystem
                     int val = allValues[j];
                     
                     // Exclusion de Completely Normal Spell et Heighten
-                    if (name == "CompletelyNormalSpell" || name == "Heighten") continue;
+                    if (name == "CompletelyNormal" || name == "Heighten") continue;
 
                     if (val != 0 && val != currentVal && selectedMetamagics.Contains(val)) continue;
                     availableNames.Add(name);
