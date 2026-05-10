@@ -226,5 +226,39 @@
       }
     ],
     "PointCostFormula": "Grade * 3 + 3"
+  },
+  {
+    "EnchantId": "109",
+    "BaseName": "Model_AdditionalDamage",
+    "Type": "WeaponEnchantment",
+    "Components": [
+      "Comp_AdditionalDamage"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Element",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Element"
+      },
+      {
+        "Name": "DiceCount",
+        "Type": "Slider",
+        "Min": 1,
+        "Max": 5,
+        "ComponentIndex": 0,
+        "FieldName": "EnergyDamageDice.m_Rolls"
+      },
+      {
+        "Name": "DiceType",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.RuleSystem.DiceType, Assembly-CSharp",
+        "EnumOnly": [ "D6" ],
+        "ComponentIndex": 0,
+        "FieldName": "EnergyDamageDice.m_Dice"
+      }
+    ],
+    "PointCostFormula": "DiceCount"
   }
 ]

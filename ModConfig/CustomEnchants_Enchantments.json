@@ -283,7 +283,7 @@
           },
           "Morale": {
             "frFR": "Moral",
-            "ruRU": "Боевой дух"
+            "ruRU": "Боевой dur"
           },
           "Sacred": {
             "frFR": "Sacré",
@@ -588,7 +588,7 @@
           },
           "Morale": {
             "frFR": "Moral",
-            "ruRU": "Боевой дух"
+            "ruRU": "Боевой dur"
           },
           "Sacred": {
             "frFR": "Sacré",
@@ -743,5 +743,64 @@
       }
     ],
     "Hidden": true
+  },
+  {
+    "EnchantId": "109",
+    "BaseName": {
+      "enGB": "Additional Elemental Damage",
+      "frFR": "Dégâts élémentaires additionnels",
+      "ruRU": "Дополнительный стихийный урон"
+    },
+    "NameCompleted": {
+      "enGB": "+{DiceCount}{DiceType} {Element} Damage",
+      "frFR": "+{DiceCount}{DiceType} de dégâts de {Element}",
+      "ruRU": "+{DiceCount}{DiceType} урона {Element}"
+    },
+    "Type": "Weapon",
+    "Slots": [
+      "Weapon"
+    ],
+    "GoldOverrideFormula": "2000 * DiceCount * DiceCount",
+    "PointCostFormula": "DiceCount",
+    "Components": [
+      "Comp_AdditionalDamage"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Element",
+        "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
+        "EnumOverrides": {
+          "Fire": { "enGB": "Fire", "frFR": "Feu", "ruRU": "Огонь" },
+          "Cold": { "enGB": "Cold", "frFR": "Froid", "ruRU": "Холод" },
+          "Electricity": { "enGB": "Electricity", "frFR": "Électricité", "ruRU": "Éлектричество" },
+          "Acid": { "enGB": "Acid", "frFR": "Acide", "ruRU": "Кислота" },
+          "Sonic": { "enGB": "Sonic", "frFR": "Sonique", "ruRU": "Звук" },
+          "Divine": { "enGB": "Divine", "frFR": "Divin", "ruRU": "Божественный" },
+          "Unholy": { "enGB": "Unholy", "frFR": "Impie", "ruRU": "Неcheстивый" },
+          "Holy": { "enGB": "Holy", "frFR": "Sacré", "ruRU": "Святой" },
+          "PositiveEnergy": { "enGB": "Positive", "frFR": "Positif", "ruRU": "Позитивная энергия" },
+          "NegativeEnergy": { "enGB": "Negative", "frFR": "Négatif", "ruRU": "Негативная энергия" }
+        },
+        "ComponentIndex": -1,
+        "FieldName": "Element"
+      },
+      {
+        "Name": "DiceCount",
+        "Min": 1,
+        "Max": 5,
+        "ComponentIndex": -1,
+        "FieldName": "EnergyDamageDice.m_Rolls"
+      },
+      {
+        "Name": "DiceType",
+        "EnumTypeName": "Kingmaker.RuleSystem.DiceType, Assembly-CSharp",
+        "EnumOnly": [ "D6" ],
+        "EnumOverrides": {
+          "D6": { "enGB": "d6", "frFR": "d6", "ruRU": "d6" }
+        },
+        "ComponentIndex": -1,
+        "FieldName": "EnergyDamageDice.m_Dice"
+      }
+    ]
   }
 ]

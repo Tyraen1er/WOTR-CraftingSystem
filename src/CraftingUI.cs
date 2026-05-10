@@ -2707,6 +2707,7 @@ namespace CraftingSystem
                 }
                 else
                 {
+                    orderedValues = selectedModel.DynamicParams.Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min).ToArray();
                     foreach (var p in selectedModel.DynamicParams)
                     {
                         if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName) && p.EnumOverrides != null)

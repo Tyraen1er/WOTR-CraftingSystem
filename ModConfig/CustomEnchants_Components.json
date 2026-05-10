@@ -54,5 +54,13 @@
     "HasDifficultyRequirements": false,
     "InvertDifficultyRequirements": false,
     "MinDifficulty": "Story"
+  },
+  "Comp_AdditionalDamage": {
+    "$type": "Kingmaker.Designers.Mechanics.Facts.WeaponEnergyDamageDice, Assembly-CSharp",
+    "EnergyDamageDice": {
+      "m_Rolls": 0,
+      "m_Dice": "D6"
+    },
+    "Element": "Fire"
   }
 }
