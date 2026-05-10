@@ -148,6 +148,7 @@ namespace CraftingSystem
         public int? MaxNotEpic;
         public int? PriceFactor;
         public List<string> Slots;
+        public string PointCostFormula;
         public int? Value;
         public int? MaskValue;
     }

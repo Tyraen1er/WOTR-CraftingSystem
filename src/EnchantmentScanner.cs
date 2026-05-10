@@ -431,6 +431,7 @@ namespace CraftingSystem
             int currentMaxNotEpic = model.MaxNotEpic == 0 ? 100 : model.MaxNotEpic;
             int currentPriceFactor = model.PriceFactor;
             List<string> currentSlots = new List<string>(model.Slots);
+            string currentPointFormula = model.PointCostFormula;
 
             foreach (var p in model.DynamicParams)
             {
@@ -458,12 +459,14 @@ namespace CraftingSystem
                             if (jo["MaxNotEpic"] != null) currentMaxNotEpic = (int)jo["MaxNotEpic"];
                             if (jo["PriceFactor"] != null) currentPriceFactor = (int)jo["PriceFactor"];
                             if (jo["Slots"] != null) currentSlots = jo["Slots"].ToObject<List<string>>();
+                            if (jo["PointCostFormula"] != null) currentPointFormula = (string)jo["PointCostFormula"];
                         }
                         else if (ovrObj is EnumOverrideData eod)
                         {
                             if (eod.MaxNotEpic.HasValue) currentMaxNotEpic = eod.MaxNotEpic.Value;
                             if (eod.PriceFactor.HasValue) currentPriceFactor = eod.PriceFactor.Value;
                             if (eod.Slots != null) currentSlots = eod.Slots;
+                            if (!string.IsNullOrEmpty(eod.PointCostFormula)) currentPointFormula = eod.PointCostFormula;
                         }
                     }
                 }
@@ -503,10 +506,10 @@ namespace CraftingSystem
             }
             dynamicData.IsEpic = isEpic;
 
-            if (!string.IsNullOrEmpty(model.PointCostFormula))
+            if (!string.IsNullOrEmpty(currentPointFormula))
             {
                 try {
-                    dynamicData.PointString = FormulaEvaluator.EvaluateInt(model.PointCostFormula, formulaVars).ToString();
+                    dynamicData.PointString = FormulaEvaluator.EvaluateInt(currentPointFormula, formulaVars).ToString();
                 } catch (Exception ex) {
                     Main.ModEntry.Logger.Error($"[SCANNER] Erreur de formule (Points) pour {model.EnchantId}: {ex.Message}");
                     dynamicData.PointString = "-1";
