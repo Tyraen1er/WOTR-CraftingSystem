@@ -52,6 +52,10 @@ namespace CraftingSystem
                 {
                     resolved = SummarizeAddStatBonus(comp, bp);
                 }
+                else if (typeName == "WeaponEnergyDamageDice")
+                {
+                    resolved = SummarizeWeaponEnergyDamageDice(comp, bp);
+                }
                 else if (typeName == "AddDamageResistanceEnergy")
                 {
                     try {
@@ -249,6 +253,10 @@ namespace CraftingSystem
             if (type.Name == "ContextDiceValue")
             {
                 return SummarizeDiceValue(val, parentBp);
+            }
+            if (type.Name == "DiceFormula")
+            {
+                return SummarizeDiceFormula(val);
             }
             if (type.Name == "DamageTypeDescription")
             {
@@ -936,6 +944,7 @@ namespace CraftingSystem
             // 1. Priorité aux handlers spécifiques si on est appelé directement
             if (type.Name == "AdditionalDiceOnAttack") return SummarizeAdditionalDiceOnAttack(comp, parentBp as BlueprintItemEnchantment);
             if (type.Name == "AddStatBonusEquipment") return SummarizeAddStatBonus(comp, parentBp as BlueprintItemEnchantment);
+            if (type.Name == "WeaponEnergyDamageDice") return SummarizeWeaponEnergyDamageDice(comp, parentBp);
             
             if (type.Name == "AddDamageResistanceEnergy")
             {
@@ -1044,6 +1053,55 @@ namespace CraftingSystem
                 return string.Join($" {uiAnd} ", summaries);
             }
             catch { return ""; }
+        }
+
+        private static string SummarizeWeaponEnergyDamageDice(object comp, BlueprintScriptableObject parentBp)
+        {
+            try
+            {
+                var type = comp.GetType();
+                var diceField = GetFieldRecursive(type, "EnergyDamageDice") ?? GetFieldRecursive(type, "m_EnergyDamageDice");
+                var elementField = GetFieldRecursive(type, "Element") ?? GetFieldRecursive(type, "m_Element");
+
+                if (diceField == null || elementField == null) return null;
+
+                object diceObj = diceField.GetValue(comp);
+                object elementObj = elementField.GetValue(comp);
+
+                string diceStr = SummarizeDiceFormula(diceObj);
+                string elementStr = FormatValue(elementObj, parentBp);
+
+                string template = Helpers.GetString("template_WeaponEnergyDamageDice", "Adds {0} {1} damage");
+                return string.Format(template, diceStr, elementStr);
+            }
+            catch { return null; }
+        }
+
+        private static string SummarizeDiceFormula(object diceObj)
+        {
+            if (diceObj == null) return "0";
+            try
+            {
+                var type = diceObj.GetType();
+                var rollsField = GetFieldRecursive(type, "Rolls") ?? GetFieldRecursive(type, "m_Rolls");
+                var diceField = GetFieldRecursive(type, "Dice") ?? GetFieldRecursive(type, "m_Dice");
+
+                int rolls = (int)(rollsField?.GetValue(diceObj) ?? 0);
+                object diceVal = diceField?.GetValue(diceObj);
+                string diceType = diceVal?.ToString() ?? "Zero";
+
+                if (diceType == "Zero" || rolls == 0) return "0";
+
+                int diceSides = 0;
+                if (diceType.StartsWith("D")) int.TryParse(diceType.Substring(1), out diceSides);
+                else if (diceType == "One") diceSides = 1;
+
+                if (diceSides <= 1) return rolls.ToString();
+
+                string format = Helpers.GetString("ui_dice_format", "{0}d{1}");
+                return string.Format(format, rolls, diceSides);
+            }
+            catch { return "0"; }
         }
 
         private static object GetFieldValueRecursive(object obj, string fieldName)

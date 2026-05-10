@@ -200,6 +200,7 @@
         "Reach": { "enGB": "Reach", "frFR": "Allonge", "ruRU": "Досягаемость" },
         "ui_weapon_damage": { "enGB": "weapon damage", "frFR": "dégâts de l'arme", "ruRU": "урон оружия" },
         "template_AdditionalDiceOnAttack": { "enGB": "Adds {0} {1}", "frFR": "Ajoute {0} {1}", "ruRU": "Добавляет {0} {1}" },
+        "template_WeaponEnergyDamageDice": { "enGB": "Adds {0} {1} damage", "frFR": "Ajoute {0} dégâts de {1}", "ruRU": "Добавляет {0} урона {1}" },
         "cond_HasFact_Generic": { "enGB": "has a specific fact", "frFR": "possède une capacité spécifique", "ruRU": "обладает способностью" },
         "CasterHasFact": { "enGB": "caster has a fact", "frFR": "le lanceur possède une capacité", "ruRU": "заклинатель обладает особенностью" },
         "descriptor_Hex": { "enGB": "Hex", "frFR": "Maléfice", "ruRU": "Проклятие" },
