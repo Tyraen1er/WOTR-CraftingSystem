@@ -839,15 +839,15 @@
             "ruRU": "Все школы",
             "PointCostFormula": "Value * 2"
           },
-          "Abjuration": { "frFR": "Abjuration" },
-          "Conjuration": { "frFR": "Invocation" },
-          "Divination": { "frFR": "Divination" },
-          "Enchantment": { "frFR": "Enchantement" },
-          "Evocation": { "frFR": "Évocation" },
-          "Illusion": { "frFR": "Illusion" },
-          "Necromancy": { "frFR": "Nécromancie" },
-          "Transmutation": { "frFR": "Transmutation" },
-          "Universalist": { "frFR": "Universaliste" }
+          "Abjuration": { "frFR": "Abjuration", "ruRU": "Ограждение" },
+          "Conjuration": { "frFR": "Invocation", "ruRU": "Вызов" },
+          "Divination": { "frFR": "Divination", "ruRU": "Прорицание" },
+          "Enchantment": { "frFR": "Enchantement", "ruRU": "Очарование" },
+          "Evocation": { "frFR": "Évocation", "ruRU": "Воплощение" },
+          "Illusion": { "frFR": "Illusion", "ruRU": "Иллюзия" },
+          "Necromancy": { "frFR": "Nécromancie", "ruRU": "Некромантия" },
+          "Transmutation": { "frFR": "Transmutation", "ruRU": "Превращение" },
+          "Universalist": { "frFR": "Universaliste", "ruRU": "Универсальная" }
         },
         "ComponentIndex": -1,
         "FieldName": "School"
@@ -872,7 +872,7 @@
           "Insight"
         ],
         "EnumOverrides": {
-          "UntypedStackable": { "frFR": "Cumulable" }
+          "UntypedStackable": { "frFR": "Cumulable", "ruRU": "Без типа" }
         },
         "ComponentIndex": -1,
         "FieldName": "Descriptor"
