@@ -30,6 +30,8 @@ namespace CraftingSystem
         [JsonProperty]
         public ItemEntity Item; 
         [JsonProperty]
+        public string ItemId;
+        [JsonProperty]
         public string EnchantmentGuid;
         [JsonProperty]
         public long FinishTimeTicks; 
@@ -108,6 +110,7 @@ namespace CraftingSystem
             var project = new CraftingProject
             {
                 Item = item,
+                ItemId = item?.UniqueId,
                 EnchantmentGuid = data.Guid,
                 FinishTimeTicks = finishTime,
                 GoldPaid = cost
@@ -162,8 +165,13 @@ namespace CraftingSystem
                 {
                     if (currentTime >= project.FinishTimeTicks || CraftingSettings.Instance.InstantCrafting)
                     {
-                        // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Tentative de finition pour : {itemName} avec l'enchantement {project.EnchantmentGuid}");
-                        
+                        // Résolution de l'item si la référence a été perdue au chargement (restart game)
+                        if (project.Item == null && !string.IsNullOrEmpty(project.ItemId))
+                        {
+                            project.Item = StashedItems.FirstOrDefault(i => i != null && i.UniqueId == project.ItemId);
+                            if (project.Item != null) Main.ModEntry.Logger.Log($"[ATELIER] Récupération de l'item {project.Item.Name} via UniqueId après chargement.");
+                        }
+
                         var bp = (project.EnchantmentGuid.Replace("-", "").ToLower().StartsWith("c2af") 
                             ? CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(project.EnchantmentGuid) 
                             : ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(project.EnchantmentGuid)));

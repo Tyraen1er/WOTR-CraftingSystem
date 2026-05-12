@@ -128,7 +128,7 @@
           },
           "Morale": {
             "frFR": "Moral",
-            "ruRU": "Боевой дух"
+            "ruRU": "Боевой dur"
           },
           "Sacred": {
             "frFR": "Sacré",
@@ -434,7 +434,7 @@
           },
           "Morale": {
             "frFR": "Moral",
-            "ruRU": "Боевой дух"
+            "ruRU": "Боевой du"
           },
           "Sacred": {
             "frFR": "Sacré",
@@ -588,7 +588,7 @@
           },
           "Morale": {
             "frFR": "Moral",
-            "ruRU": "Боевой dur"
+            "ruRU": "Боевой du"
           },
           "Sacred": {
             "frFR": "Sacré",
@@ -800,6 +800,82 @@
         },
         "ComponentIndex": -1,
         "FieldName": "EnergyDamageDice.m_Dice"
+      }
+    ]
+  },
+  {
+    "EnchantId": "110",
+    "BaseName": {
+      "enGB": "Spell DC Bonus",
+      "frFR": "Bonus au DD des sorts",
+      "ruRU": "Бонус к СЛ заклинаний"
+    },
+    "NameCompleted": {
+      "enGB": "+{Value} to {School} DC ({Descriptor})",
+      "frFR": "+{Value} au DD ({School}, {Descriptor})",
+      "ruRU": "+{Value} к СЛ ({School}, {Descriptor})"
+    },
+    "Type": "Other",
+    "MaxNotEpic": 5,
+    "Slots": [
+      "Head",
+      "Neck",
+      "Wrist",
+      "Weapon"
+    ],
+    "GoldOverrideFormula": "2000 * Value * Value",
+    "PointCostFormula": "Value",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "School",
+        "EnumTypeName": "Kingmaker.Blueprints.Classes.Spells.SpellSchool, Assembly-CSharp",
+        "EnumOverrides": {
+          "None": {
+            "enGB": "All Schools",
+            "frFR": "Toutes les écoles",
+            "ruRU": "Все школы",
+            "PointCostFormula": "Value * 2"
+          },
+          "Abjuration": { "frFR": "Abjuration" },
+          "Conjuration": { "frFR": "Invocation" },
+          "Divination": { "frFR": "Divination" },
+          "Enchantment": { "frFR": "Enchantement" },
+          "Evocation": { "frFR": "Évocation" },
+          "Illusion": { "frFR": "Illusion" },
+          "Necromancy": { "frFR": "Nécromancie" },
+          "Transmutation": { "frFR": "Transmutation" },
+          "Universalist": { "frFR": "Universaliste" }
+        },
+        "ComponentIndex": -1,
+        "FieldName": "School"
+      },
+      {
+        "Name": "Value",
+        "Min": 1,
+        "Max": 10,
+        "ComponentIndex": -1,
+        "FieldName": "BonusDC"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "DefaultValue": "UntypedStackable",
+        "EnumOnly": [
+          "UntypedStackable",
+          "Enhancement",
+          "Sacred",
+          "Profane",
+          "Morale",
+          "Insight"
+        ],
+        "EnumOverrides": {
+          "UntypedStackable": { "frFR": "Cumulable" }
+        },
+        "ComponentIndex": -1,
+        "FieldName": "Descriptor"
       }
     ]
   }

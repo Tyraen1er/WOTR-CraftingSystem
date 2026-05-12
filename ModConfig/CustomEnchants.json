@@ -260,5 +260,39 @@
       }
     ],
     "PointCostFormula": "DiceCount"
+  },
+  {
+    "EnchantId": "110",
+    "BaseName": "Model_SpellDC",
+    "Type": "Feature",
+    "Components": [
+      "Comp_SpellSchoolDC"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "School",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.Blueprints.Classes.Spells.SpellSchool, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "School"
+      },
+      {
+        "Name": "Value",
+        "Type": "Slider",
+        "Min": 1,
+        "Max": 5,
+        "ComponentIndex": 0,
+        "FieldName": "BonusDC"
+      },
+      {
+        "Name": "Descriptor",
+        "Type": "Enum",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "DefaultValue": "UntypedStackable",
+        "ComponentIndex": 0,
+        "FieldName": "Descriptor"
+      }
+    ],
+    "PointCostFormula": "Value"
   }
 ]

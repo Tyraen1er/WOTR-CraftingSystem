@@ -272,14 +272,14 @@ namespace CraftingSystem
                 if (workshop != null)
                 {
                     bool isBusy = workshop.ActiveProjects.Any(p => {
-                        if (p.Item == item) return true;
+                        if (p.ItemId == item.UniqueId) return true;
                         
                         // Cas du bouclier
                         if (item.Blueprint is Kingmaker.Blueprints.Items.Shields.BlueprintItemShield)
                         {
                             var weaponProp = item.GetType().GetProperty("Weapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
                             var subWeapon = weaponProp?.GetValue(item) as ItemEntity;
-                            if (subWeapon != null && p.Item == subWeapon) return true;
+                            if (subWeapon != null && p.ItemId == subWeapon.UniqueId) return true;
                         }
                         
                         // Cas de l'arme double
@@ -287,7 +287,7 @@ namespace CraftingSystem
                         {
                             var secondProp = weapon.GetType().GetProperty("SecondWeapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
                             var secondWeapon = secondProp?.GetValue(weapon) as ItemEntity;
-                            if (secondWeapon != null && p.Item == secondWeapon) return true;
+                            if (secondWeapon != null && p.ItemId == secondWeapon.UniqueId) return true;
                         }
                         
                         return false;
