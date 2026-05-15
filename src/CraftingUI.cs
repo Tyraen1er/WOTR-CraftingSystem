@@ -761,6 +761,38 @@ namespace CraftingSystem
             float windowWidth = 1000f * scale;
             float contentWidth = windowWidth - (120f * scale);
 
+            // Déclenchement automatique du scan si nécessaire
+            if (items != null && items.Count == 0 && !UnifiedScanner.IsScanning)
+            {
+                // Note: On vérifie AvailableSpells.Count == 0 pour savoir si un scan global a déjà eu lieu
+                if (SpellScanner.AvailableSpells.Count == 0)
+                {
+                    SpellScanner.ScanAll();
+                }
+            }
+
+            if (UnifiedScanner.IsScanning)
+            {
+                GUILayout.BeginVertical(GUILayout.Width(contentWidth));
+                GUILayout.Space(50 * scale);
+                GUIStyle scanStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(24 * scale), alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
+                GUILayout.Label(Helpers.GetString("ui_scan_in_progress", "Scanning blueprints..."), scanStyle);
+                GUILayout.Space(20 * scale);
+                
+                Rect progressRect = GUILayoutUtility.GetRect(contentWidth, 30 * scale);
+                GUI.Box(progressRect, "");
+                float progressWidth = progressRect.width * UnifiedScanner.Progress;
+                GUI.Box(new Rect(progressRect.x, progressRect.y, progressWidth, progressRect.height), "", GUI.skin.box);
+                
+                GUIStyle progressTextStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_SMALL * scale) };
+                GUI.Label(progressRect, string.Format("{0:P0} - {1}", UnifiedScanner.Progress, UnifiedScanner.StatusMessage), progressTextStyle);
+                
+                GUILayout.Space(20 * scale);
+                GUILayout.Label(Helpers.GetString("ui_scan_warning", "This scan only happens once per session."), progressTextStyle);
+                GUILayout.EndVertical();
+                return;
+            }
+
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             GUILayout.BeginVertical(GUILayout.Width(contentWidth));
@@ -907,6 +939,35 @@ namespace CraftingSystem
         {
             float windowWidth = 1000f * scale;
             float contentWidth = windowWidth - (120f * scale);
+
+            // Déclenchement automatique du scan si nécessaire
+            if (SpellScanner.AvailableSpells.Count == 0 && !UnifiedScanner.IsScanning)
+            {
+                SpellScanner.ScanAll();
+            }
+
+            if (UnifiedScanner.IsScanning)
+            {
+                GUILayout.BeginVertical(GUILayout.Width(contentWidth));
+                GUILayout.Space(50 * scale);
+                GUIStyle scanStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(24 * scale), alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
+                GUILayout.Label(Helpers.GetString("ui_scan_in_progress", "Scanning blueprints for spells..."), scanStyle);
+                GUILayout.Space(20 * scale);
+                
+                // Barre de progression simulée
+                Rect progressRect = GUILayoutUtility.GetRect(contentWidth, 30 * scale);
+                GUI.Box(progressRect, "");
+                float progressWidth = progressRect.width * UnifiedScanner.Progress;
+                GUI.Box(new Rect(progressRect.x, progressRect.y, progressWidth, progressRect.height), "", GUI.skin.box);
+                
+                GUIStyle progressTextStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_SMALL * scale) };
+                GUI.Label(progressRect, string.Format("{0:P0} - {1}", UnifiedScanner.Progress, UnifiedScanner.StatusMessage), progressTextStyle);
+                
+                GUILayout.Space(20 * scale);
+                GUILayout.Label(Helpers.GetString("ui_scan_warning", "This scan only happens once per session."), progressTextStyle);
+                GUILayout.EndVertical();
+                return;
+            }
 
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
