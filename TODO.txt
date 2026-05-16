@@ -4,3 +4,62 @@
 
 - Service d'Achat d'équipement non enchanté (ne pas implémenter pour l'instant)
     - Accessoires : Bijoux - Vêtements - sceptres - baguettes
+
+tests : 
+Ran command: `git diff 3b9f772c26772bd57e68e20abca7ddedaf8f1632 --stat`
+Ran command: `git diff 3b9f772c26772bd57e68e20abca7ddedaf8f1632 > diff.txt`
+Ran command: `git diff 3b9f772c26772bd57e68e20abca7ddedaf8f1632`
+Ran command: `Get-Content diff.txt | Set-Content -Encoding utf8 diff_utf8.txt`
+Viewed diff_utf8.txt:1-637
+
+J'ai examiné l'ensemble des modifications apportées depuis le commit `3b9f772c26772bd57e68e20abca7ddedaf8f1632`.
+
+### Résumé des changements effectués :
+1. **Correction de la persistance des objets (Le bug de corruption)** : 
+   - Les fichiers `CraftingCore.cs` et `InventoryHandler.cs` ont été mis à jour pour utiliser l'ID unique des objets (`UniqueId`) au lieu de leur référence en mémoire. 
+   - Désormais, le mod garde la trace de l'ID, et au chargement d'une sauvegarde, le système recherche et relie automatiquement l'objet via son ID, évitant ainsi que les objets "en cours de craft" perdent leurs propriétés ou soient réinitialisés en cas de redémarrage.
+2. **Optimisation des performances au lancement (Lazy Loading du Scanner)** :
+   - L'appel très lourd à `SpellScanner.ScanAll()` a été retiré du lancement du jeu (`Main.cs`). 
+   - À la place, le scan se déclenche désormais à l'ouverture de l'interface (`CraftingUI.cs`) avec une belle barre de progression simulée pour avertir le joueur.
+3. **Ajout de nouveaux enchantements complexes (JSON)** :
+   - Ajout de l'enchantement **Dégâts élémentaires additionnels** (`Model_AdditionalDamage`) permettant d'ajouter des dés de dégâts (ex: 1d6 Feu).
+   - Ajout de l'enchantement **Bonus au DD des sorts** (`Model_SpellDC`) pour augmenter la difficulté de vos sorts (avec possibilité de cibler une école en particulier ou toutes, modifiant ainsi le coût dynamiquement).
+4. **Moteur d'interface (UI) et Formules** :
+   - `EnchantmentDescriptionGenerator.cs` sait désormais générer la description de vos nouveaux types d'enchantements (affichera correctement les dés et les éléments ajoutés).
+   - `EnchantmentScanner.cs` prend maintenant en compte les surcharges de `PointCostFormula` (notamment utilisé par l'enchantement de DD des sorts pour coûter le double si on sélectionne "Toutes les écoles").
+5. **Confort de test** : Le paramètre `InstantCrafting` a été passé à `true` par défaut.
+
+---
+
+### Série de tests proposée pour valider la stabilité
+
+Voici les tests ciblés que je te conseille de faire pour confirmer que tout fonctionne à merveille :
+
+#### Test 1 : Vérification de la persistance (Le test critique)
+1. Lance le jeu, prends une arme (ex: Épée longue) et lance un enchantement dessus.
+2. Sauvegarde la partie immédiatement et **quitte complètement le jeu** (retour Windows).
+3. Relance le jeu, charge la sauvegarde.
+4. **Résultat attendu :** L'arme doit toujours être dans l'inventaire avec ses statistiques d'origine (non corrompue) et le craft doit soit se finaliser instantanément (si *InstantCrafting* est actif), soit reprendre là où il en était, sans créer d'erreur.
+
+#### Test 2 : Les "Sous-Armes" (Boucliers et Armes Doubles)
+1. Prends un bouclier ou une arme double.
+2. Lance un craft dessus.
+3. **Résultat attendu :** Essaie de relancer un autre craft sur la partie secondaire de l'arme (ou le bouclier). L'interface doit correctement reconnaître que l'objet est "Occupé" (`Busy`) grâce à la nouvelle détection par `UniqueId`.
+
+#### Test 3 : L'interface de scan différé
+1. Lance le jeu (tu devrais remarquer un lancement légèrement plus rapide).
+2. Ouvre l'interface de l'atelier de craft pour la toute première fois.
+3. **Résultat attendu :** L'interface doit afficher "Scanning blueprints for spells..." avec la barre de progression. Une fois terminé, l'atelier classique doit s'ouvrir. Fermer et rouvrir l'atelier ne devrait plus relancer le scan.
+
+#### Test 4 : Test des Dégâts Élémentaires (Nouveau Modèle)
+1. Sélectionne une arme dans l'atelier et choisis "Dégâts élémentaires additionnels".
+2. Alterne entre le nombre de dés et l'élément choisi.
+3. **Résultats attendus :**
+   - Le résumé de l'enchantement dans l'interface doit afficher correctement le texte (ex: "+2d6 de dégâts de Feu").
+   - Une fois l'enchantement validé et l'arme équipée, vérifie que les dégâts de l'arme affichent bien les +2d6 dans l'inventaire et dans les logs de combat lors d'une attaque.
+
+#### Test 5 : Coût dynamique du DD des sorts (Surcharge de Formule)
+1. Sélectionne un casque, collier ou arme et choisis le "Bonus au DD des sorts".
+2. Règle le bonus sur +1 et choisis l'école "Évocation". Note le coût en Points.
+3. Règle ensuite l'école sur "Toutes les écoles".
+4. **Résultat attendu :** Le coût en points de l'enchantement doit avoir **doublé** (grâce à la formule dynamique `Value * 2` définie dans le JSON) et la description doit être correcte (ex: "+1 au DD (Toutes les écoles, Cumulable)").

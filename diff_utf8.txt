@@ -1,0 +1,636 @@
+﻿diff --git a/ModConfig/CustomEnchants.json b/ModConfig/CustomEnchants.json
+index 3ee9588..9583490 100644
+--- a/ModConfig/CustomEnchants.json
++++ b/ModConfig/CustomEnchants.json
+@@ -226,5 +226,73 @@
+       }
+     ],
+     "PointCostFormula": "Grade * 3 + 3"
++  },
++  {
++    "EnchantId": "109",
++    "BaseName": "Model_AdditionalDamage",
++    "Type": "WeaponEnchantment",
++    "Components": [
++      "Comp_AdditionalDamage"
++    ],
++    "DynamicParams": [
++      {
++        "Name": "Element",
++        "Type": "Enum",
++        "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
++        "ComponentIndex": 0,
++        "FieldName": "Element"
++      },
++      {
++        "Name": "DiceCount",
++        "Type": "Slider",
++        "Min": 1,
++        "Max": 5,
++        "ComponentIndex": 0,
++        "FieldName": "EnergyDamageDice.m_Rolls"
++      },
++      {
++        "Name": "DiceType",
++        "Type": "Enum",
++        "EnumTypeName": "Kingmaker.RuleSystem.DiceType, Assembly-CSharp",
++        "EnumOnly": [ "D6" ],
++        "ComponentIndex": 0,
++        "FieldName": "EnergyDamageDice.m_Dice"
++      }
++    ],
++    "PointCostFormula": "DiceCount"
++  },
++  {
++    "EnchantId": "110",
++    "BaseName": "Model_SpellDC",
++    "Type": "Feature",
++    "Components": [
++      "Comp_SpellSchoolDC"
++    ],
++    "DynamicParams": [
++      {
++        "Name": "School",
++        "Type": "Enum",
++        "EnumTypeName": "Kingmaker.Blueprints.Classes.Spells.SpellSchool, Assembly-CSharp",
++        "ComponentIndex": 0,
++        "FieldName": "School"
++      },
++      {
++        "Name": "Value",
++        "Type": "Slider",
++        "Min": 1,
++        "Max": 5,
++        "ComponentIndex": 0,
++        "FieldName": "BonusDC"
++      },
++      {
++        "Name": "Descriptor",
++        "Type": "Enum",
++        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
++        "DefaultValue": "UntypedStackable",
++        "ComponentIndex": 0,
++        "FieldName": "Descriptor"
++      }
++    ],
++    "PointCostFormula": "Value"
+   }
+ ]
+\ No newline at end of file
+diff --git a/ModConfig/CustomEnchants_Components.json b/ModConfig/CustomEnchants_Components.json
+index a7dfec5..e65cafa 100644
+--- a/ModConfig/CustomEnchants_Components.json
++++ b/ModConfig/CustomEnchants_Components.json
+@@ -54,5 +54,19 @@
+     "HasDifficultyRequirements": false,
+     "InvertDifficultyRequirements": false,
+     "MinDifficulty": "Story"
++  },
++  "Comp_AdditionalDamage": {
++    "$type": "Kingmaker.Designers.Mechanics.Facts.WeaponEnergyDamageDice, Assembly-CSharp",
++    "EnergyDamageDice": {
++      "m_Rolls": 0,
++      "m_Dice": "D6"
++    },
++    "Element": "Fire"
++  },
++  "Comp_SpellSchoolDC": {
++    "$type": "Kingmaker.Designers.Mechanics.Facts.IncreaseSpellSchoolDC, Assembly-CSharp",
++    "School": "None",
++    "BonusDC": 0,
++    "Descriptor": "UntypedStackable"
+   }
+ }
+\ No newline at end of file
+diff --git a/ModConfig/CustomEnchants_Enchantments.json b/ModConfig/CustomEnchants_Enchantments.json
+index 9a4d243..d88bd02 100644
+--- a/ModConfig/CustomEnchants_Enchantments.json
++++ b/ModConfig/CustomEnchants_Enchantments.json
+@@ -128,7 +128,7 @@
+           },
+           "Morale": {
+             "frFR": "Moral",
+-            "ruRU": "ðæð¥ðÁð▓ð¥ð╣ ð┤ÐâÐà"
++            "ruRU": "ðæð¥ðÁð▓ð¥ð╣ dur"
+           },
+           "Sacred": {
+             "frFR": "Sacr├®",
+@@ -283,7 +283,7 @@
+           },
+           "Morale": {
+             "frFR": "Moral",
+-            "ruRU": "ðæð¥ðÁð▓ð¥ð╣ ð┤ÐâÐà"
++            "ruRU": "ðæð¥ðÁð▓ð¥ð╣ dur"
+           },
+           "Sacred": {
+             "frFR": "Sacr├®",
+@@ -434,7 +434,7 @@
+           },
+           "Morale": {
+             "frFR": "Moral",
+-            "ruRU": "ðæð¥ðÁð▓ð¥ð╣ ð┤ÐâÐà"
++            "ruRU": "ðæð¥ðÁð▓ð¥ð╣ du"
+           },
+           "Sacred": {
+             "frFR": "Sacr├®",
+@@ -588,7 +588,7 @@
+           },
+           "Morale": {
+             "frFR": "Moral",
+-            "ruRU": "ðæð¥ðÁð▓ð¥ð╣ ð┤ÐâÐà"
++            "ruRU": "ðæð¥ðÁð▓ð¥ð╣ du"
+           },
+           "Sacred": {
+             "frFR": "Sacr├®",
+@@ -743,5 +743,140 @@
+       }
+     ],
+     "Hidden": true
++  },
++  {
++    "EnchantId": "109",
++    "BaseName": {
++      "enGB": "Additional Elemental Damage",
++      "frFR": "D├®g├óts ├®l├®mentaires additionnels",
++      "ruRU": "ðöð¥ð┐ð¥ð╗ð¢ð©ÐéðÁð╗Ðîð¢Ðïð╣ ÐüÐéð©Ðàð©ð╣ð¢Ðïð╣ ÐâÐÇð¥ð¢"
++    },
++    "NameCompleted": {
++      "enGB": "+{DiceCount}{DiceType} {Element} Damage",
++      "frFR": "+{DiceCount}{DiceType} de d├®g├óts de {Element}",
++      "ruRU": "+{DiceCount}{DiceType} ÐâÐÇð¥ð¢ð░ {Element}"
++    },
++    "Type": "Weapon",
++    "Slots": [
++      "Weapon"
++    ],
++    "GoldOverrideFormula": "2000 * DiceCount * DiceCount",
++    "PointCostFormula": "DiceCount",
++    "Components": [
++      "Comp_AdditionalDamage"
++    ],
++    "DynamicParams": [
++      {
++        "Name": "Element",
++        "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
++        "EnumOverrides": {
++          "Fire": { "enGB": "Fire", "frFR": "Feu", "ruRU": "ð×ð│ð¥ð¢Ðî" },
++          "Cold": { "enGB": "Cold", "frFR": "Froid", "ruRU": "ðÑð¥ð╗ð¥ð┤" },
++          "Electricity": { "enGB": "Electricity", "frFR": "├ëlectricit├®", "ruRU": "├ëð╗ðÁð║ÐéÐÇð©ÐçðÁÐüÐéð▓ð¥" },
++          "Acid": { "enGB": "Acid", "frFR": "Acide", "ruRU": "ðÜð©Ðüð╗ð¥Ðéð░" },
++          "Sonic": { "enGB": "Sonic", "frFR": "Sonique", "ruRU": "ðùð▓Ðâð║" },
++          "Divine": { "enGB": "Divine", "frFR": "Divin", "ruRU": "ðæð¥ðÂðÁÐüÐéð▓ðÁð¢ð¢Ðïð╣" },
++          "Unholy": { "enGB": "Unholy", "frFR": "Impie", "ruRU": "ðØðÁcheÐüÐéð©ð▓Ðïð╣" },
++          "Holy": { "enGB": "Holy", "frFR": "Sacr├®", "ruRU": "ðíð▓ÐÅÐéð¥ð╣" },
++          "PositiveEnergy": { "enGB": "Positive", "frFR": "Positif", "ruRU": "ðƒð¥ðÀð©Ðéð©ð▓ð¢ð░ÐÅ Ðìð¢ðÁÐÇð│ð©ÐÅ" },
++          "NegativeEnergy": { "enGB": "Negative", "frFR": "N├®gatif", "ruRU": "ðØðÁð│ð░Ðéð©ð▓ð¢ð░ÐÅ Ðìð¢ðÁÐÇð│ð©ÐÅ" }
++        },
++        "ComponentIndex": -1,
++        "FieldName": "Element"
++      },
++      {
++        "Name": "DiceCount",
++        "Min": 1,
++        "Max": 5,
++        "ComponentIndex": -1,
++        "FieldName": "EnergyDamageDice.m_Rolls"
++      },
++      {
++        "Name": "DiceType",
++        "EnumTypeName": "Kingmaker.RuleSystem.DiceType, Assembly-CSharp",
++        "EnumOnly": [ "D6" ],
++        "EnumOverrides": {
++          "D6": { "enGB": "d6", "frFR": "d6", "ruRU": "d6" }
++        },
++        "ComponentIndex": -1,
++        "FieldName": "EnergyDamageDice.m_Dice"
++      }
++    ]
++  },
++  {
++    "EnchantId": "110",
++    "BaseName": {
++      "enGB": "Spell DC Bonus",
++      "frFR": "Bonus au DD des sorts",
++      "ruRU": "ðæð¥ð¢ÐâÐü ð║ ðíðø ðÀð░ð║ð╗ð©ð¢ð░ð¢ð©ð╣"
++    },
++    "NameCompleted": {
++      "enGB": "+{Value} to {School} DC ({Descriptor})",
++      "frFR": "+{Value} au DD ({School}, {Descriptor})",
++      "ruRU": "+{Value} ð║ ðíðø ({School}, {Descriptor})"
++    },
++    "Type": "Other",
++    "MaxNotEpic": 5,
++    "Slots": [
++      "Head",
++      "Neck",
++      "Wrist",
++      "Weapon"
++    ],
++    "GoldOverrideFormula": "2000 * Value * Value",
++    "PointCostFormula": "Value",
++    "Components": [
++      "Comp_EquipmentFeature"
++    ],
++    "DynamicParams": [
++      {
++        "Name": "School",
++        "EnumTypeName": "Kingmaker.Blueprints.Classes.Spells.SpellSchool, Assembly-CSharp",
++        "EnumOverrides": {
++          "None": {
++            "enGB": "All Schools",
++            "frFR": "Toutes les ├®coles",
++            "ruRU": "ðÆÐüðÁ Ðêð║ð¥ð╗Ðï",
++            "PointCostFormula": "Value * 2"
++          },
++          "Abjuration": { "frFR": "Abjuration", "ruRU": "ð×ð│ÐÇð░ðÂð┤ðÁð¢ð©ðÁ" },
++          "Conjuration": { "frFR": "Invocation", "ruRU": "ðÆÐïðÀð¥ð▓" },
++          "Divination": { "frFR": "Divination", "ruRU": "ðƒÐÇð¥ÐÇð©Ðåð░ð¢ð©ðÁ" },
++          "Enchantment": { "frFR": "Enchantement", "ruRU": "ð×Ðçð░ÐÇð¥ð▓ð░ð¢ð©ðÁ" },
++          "Evocation": { "frFR": "├ëvocation", "ruRU": "ðÆð¥ð┐ð╗ð¥ÐëðÁð¢ð©ðÁ" },
++          "Illusion": { "frFR": "Illusion", "ruRU": "ðÿð╗ð╗ÐÄðÀð©ÐÅ" },
++          "Necromancy": { "frFR": "N├®cromancie", "ruRU": "ðØðÁð║ÐÇð¥ð╝ð░ð¢Ðéð©ÐÅ" },
++          "Transmutation": { "frFR": "Transmutation", "ruRU": "ðƒÐÇðÁð▓ÐÇð░ÐëðÁð¢ð©ðÁ" },
++          "Universalist": { "frFR": "Universaliste", "ruRU": "ðúð¢ð©ð▓ðÁÐÇÐüð░ð╗Ðîð¢ð░ÐÅ" }
++        },
++        "ComponentIndex": -1,
++        "FieldName": "School"
++      },
++      {
++        "Name": "Value",
++        "Min": 1,
++        "Max": 10,
++        "ComponentIndex": -1,
++        "FieldName": "BonusDC"
++      },
++      {
++        "Name": "Descriptor",
++        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
++        "DefaultValue": "UntypedStackable",
++        "EnumOnly": [
++          "UntypedStackable",
++          "Enhancement",
++          "Sacred",
++          "Profane",
++          "Morale",
++          "Insight"
++        ],
++        "EnumOverrides": {
++          "UntypedStackable": { "frFR": "Cumulable", "ruRU": "ðæðÁðÀ Ðéð©ð┐ð░" }
++        },
++        "ComponentIndex": -1,
++        "FieldName": "Descriptor"
++      }
++    ]
+   }
+ ]
+\ No newline at end of file
+diff --git a/ModConfig/EnchantmentDescriptionGlossary.json b/ModConfig/EnchantmentDescriptionGlossary.json
+index 3517b63..9f1a787 100644
+--- a/ModConfig/EnchantmentDescriptionGlossary.json
++++ b/ModConfig/EnchantmentDescriptionGlossary.json
+@@ -200,6 +200,7 @@
+         "Reach": { "enGB": "Reach", "frFR": "Allonge", "ruRU": "ðöð¥ÐüÐÅð│ð░ðÁð╝ð¥ÐüÐéÐî" },
+         "ui_weapon_damage": { "enGB": "weapon damage", "frFR": "d├®g├óts de l'arme", "ruRU": "ÐâÐÇð¥ð¢ ð¥ÐÇÐâðÂð©ÐÅ" },
+         "template_AdditionalDiceOnAttack": { "enGB": "Adds {0} {1}", "frFR": "Ajoute {0} {1}", "ruRU": "ðöð¥ð▒ð░ð▓ð╗ÐÅðÁÐé {0} {1}" },
++        "template_WeaponEnergyDamageDice": { "enGB": "Adds {0} {1} damage", "frFR": "Ajoute {0} d├®g├óts de {1}", "ruRU": "ðöð¥ð▒ð░ð▓ð╗ÐÅðÁÐé {0} ÐâÐÇð¥ð¢ð░ {1}" },
+         "cond_HasFact_Generic": { "enGB": "has a specific fact", "frFR": "poss├¿de une capacit├® sp├®cifique", "ruRU": "ð¥ð▒ð╗ð░ð┤ð░ðÁÐé Ðüð┐ð¥Ðüð¥ð▒ð¢ð¥ÐüÐéÐîÐÄ" },
+         "CasterHasFact": { "enGB": "caster has a fact", "frFR": "le lanceur poss├¿de une capacit├®", "ruRU": "ðÀð░ð║ð╗ð©ð¢ð░ÐéðÁð╗Ðî ð¥ð▒ð╗ð░ð┤ð░ðÁÐé ð¥Ðüð¥ð▒ðÁð¢ð¢ð¥ÐüÐéÐîÐÄ" },
+         "descriptor_Hex": { "enGB": "Hex", "frFR": "Mal├®fice", "ruRU": "ðƒÐÇð¥ð║ð╗ÐÅÐéð©ðÁ" },
+diff --git a/TODO.txt b/TODO.txt
+index 9b9b67d..6df2b4b 100644
+--- a/TODO.txt
++++ b/TODO.txt
+@@ -1,6 +1,6 @@
+ 
+ 
+-- Sceptre metamagique ne fonctionnent pas.
+-- Personnaliser description item
++- Issue of "freezing" character cartoons in the inventory when the metamagic staff on the belt is active been resolved?
++
+ - Service d'Achat d'├®quipement non enchant├® (ne pas impl├®menter pour l'instant)
+-    - Accessoires : Bijoux - V├¬tements - sceptres - baguettes
+\ No newline at end of file
++    - Accessoires : Bijoux - V├¬tements - sceptres - baguettes
+diff --git a/src/CraftingCore.cs b/src/CraftingCore.cs
+index 9e8cc67..1d7465b 100644
+--- a/src/CraftingCore.cs
++++ b/src/CraftingCore.cs
+@@ -30,6 +30,8 @@ namespace CraftingSystem
+         [JsonProperty]
+         public ItemEntity Item; 
+         [JsonProperty]
++        public string ItemId;
++        [JsonProperty]
+         public string EnchantmentGuid;
+         [JsonProperty]
+         public long FinishTimeTicks; 
+@@ -108,6 +110,7 @@ namespace CraftingSystem
+             var project = new CraftingProject
+             {
+                 Item = item,
++                ItemId = item?.UniqueId,
+                 EnchantmentGuid = data.Guid,
+                 FinishTimeTicks = finishTime,
+                 GoldPaid = cost
+@@ -162,8 +165,13 @@ namespace CraftingSystem
+                 {
+                     if (currentTime >= project.FinishTimeTicks || CraftingSettings.Instance.InstantCrafting)
+                     {
+-                        // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Tentative de finition pour : {itemName} avec l'enchantement {project.EnchantmentGuid}");
+-                        
++                        // R├®solution de l'item si la r├®f├®rence a ├®t├® perdue au chargement (restart game)
++                        if (project.Item == null && !string.IsNullOrEmpty(project.ItemId))
++                        {
++                            project.Item = StashedItems.FirstOrDefault(i => i != null && i.UniqueId == project.ItemId);
++                            if (project.Item != null) Main.ModEntry.Logger.Log($"[ATELIER] R├®cup├®ration de l'item {project.Item.Name} via UniqueId apr├¿s chargement.");
++                        }
++
+                         var bp = (project.EnchantmentGuid.Replace("-", "").ToLower().StartsWith("c2af") 
+                             ? CustomEnchantmentsBuilder.GetOrBuildDynamicBlueprint(project.EnchantmentGuid) 
+                             : ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(project.EnchantmentGuid)));
+diff --git a/src/CraftingSettings.cs b/src/CraftingSettings.cs
+index 7412ba0..bed2529 100644
+--- a/src/CraftingSettings.cs
++++ b/src/CraftingSettings.cs
+@@ -14,7 +14,7 @@ namespace CraftingSystem
+         public float EpicCostMultiplier = 10.0f;
+ 
+         public float CostMultiplier = 1.0f;
+-        public bool InstantCrafting = false;
++        public bool InstantCrafting = true;
+         public bool EnforcePointsLimit = true;
+         public int MaxTotalBonus = 10;
+         public int MaxEnhancementBonus = 5;
+diff --git a/src/CraftingUI.cs b/src/CraftingUI.cs
+index 589c3f8..61ad377 100644
+--- a/src/CraftingUI.cs
++++ b/src/CraftingUI.cs
+@@ -761,6 +761,38 @@ namespace CraftingSystem
+             float windowWidth = 1000f * scale;
+             float contentWidth = windowWidth - (120f * scale);
+ 
++            // D├®clenchement automatique du scan si n├®cessaire
++            if (items != null && items.Count == 0 && !UnifiedScanner.IsScanning)
++            {
++                // Note: On v├®rifie AvailableSpells.Count == 0 pour savoir si un scan global a d├®j├á eu lieu
++                if (SpellScanner.AvailableSpells.Count == 0)
++                {
++                    SpellScanner.ScanAll();
++                }
++            }
++
++            if (UnifiedScanner.IsScanning)
++            {
++                GUILayout.BeginVertical(GUILayout.Width(contentWidth));
++                GUILayout.Space(50 * scale);
++                GUIStyle scanStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(24 * scale), alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
++                GUILayout.Label(Helpers.GetString("ui_scan_in_progress", "Scanning blueprints..."), scanStyle);
++                GUILayout.Space(20 * scale);
++                
++                Rect progressRect = GUILayoutUtility.GetRect(contentWidth, 30 * scale);
++                GUI.Box(progressRect, "");
++                float progressWidth = progressRect.width * UnifiedScanner.Progress;
++                GUI.Box(new Rect(progressRect.x, progressRect.y, progressWidth, progressRect.height), "", GUI.skin.box);
++                
++                GUIStyle progressTextStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_SMALL * scale) };
++                GUI.Label(progressRect, string.Format("{0:P0} - {1}", UnifiedScanner.Progress, UnifiedScanner.StatusMessage), progressTextStyle);
++                
++                GUILayout.Space(20 * scale);
++                GUILayout.Label(Helpers.GetString("ui_scan_warning", "This scan only happens once per session."), progressTextStyle);
++                GUILayout.EndVertical();
++                return;
++            }
++
+             GUILayout.BeginHorizontal();
+             GUILayout.FlexibleSpace();
+             GUILayout.BeginVertical(GUILayout.Width(contentWidth));
+@@ -908,6 +940,35 @@ namespace CraftingSystem
+             float windowWidth = 1000f * scale;
+             float contentWidth = windowWidth - (120f * scale);
+ 
++            // D├®clenchement automatique du scan si n├®cessaire
++            if (SpellScanner.AvailableSpells.Count == 0 && !UnifiedScanner.IsScanning)
++            {
++                SpellScanner.ScanAll();
++            }
++
++            if (UnifiedScanner.IsScanning)
++            {
++                GUILayout.BeginVertical(GUILayout.Width(contentWidth));
++                GUILayout.Space(50 * scale);
++                GUIStyle scanStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(24 * scale), alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
++                GUILayout.Label(Helpers.GetString("ui_scan_in_progress", "Scanning blueprints for spells..."), scanStyle);
++                GUILayout.Space(20 * scale);
++                
++                // Barre de progression simul├®e
++                Rect progressRect = GUILayoutUtility.GetRect(contentWidth, 30 * scale);
++                GUI.Box(progressRect, "");
++                float progressWidth = progressRect.width * UnifiedScanner.Progress;
++                GUI.Box(new Rect(progressRect.x, progressRect.y, progressWidth, progressRect.height), "", GUI.skin.box);
++                
++                GUIStyle progressTextStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = (int)(FONT_SMALL * scale) };
++                GUI.Label(progressRect, string.Format("{0:P0} - {1}", UnifiedScanner.Progress, UnifiedScanner.StatusMessage), progressTextStyle);
++                
++                GUILayout.Space(20 * scale);
++                GUILayout.Label(Helpers.GetString("ui_scan_warning", "This scan only happens once per session."), progressTextStyle);
++                GUILayout.EndVertical();
++                return;
++            }
++
+             GUILayout.BeginHorizontal();
+             GUILayout.FlexibleSpace();
+             GUILayout.BeginVertical(GUILayout.Width(contentWidth));
+@@ -2707,6 +2768,7 @@ namespace CraftingSystem
+                 }
+                 else
+                 {
++                    orderedValues = selectedModel.DynamicParams.Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min).ToArray();
+                     foreach (var p in selectedModel.DynamicParams)
+                     {
+                         if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName) && p.EnumOverrides != null)
+diff --git a/src/CustomEnchantmentsBuilder.cs b/src/CustomEnchantmentsBuilder.cs
+index b98c7f7..4b664ba 100644
+--- a/src/CustomEnchantmentsBuilder.cs
++++ b/src/CustomEnchantmentsBuilder.cs
+@@ -148,6 +148,7 @@ namespace CraftingSystem
+         public int? MaxNotEpic;
+         public int? PriceFactor;
+         public List<string> Slots;
++        public string PointCostFormula;
+         public int? Value;
+         public int? MaskValue;
+     }
+diff --git a/src/EnchantmentDescriptionGenerator.cs b/src/EnchantmentDescriptionGenerator.cs
+index c615c92..1f1d1b4 100644
+--- a/src/EnchantmentDescriptionGenerator.cs
++++ b/src/EnchantmentDescriptionGenerator.cs
+@@ -52,6 +52,10 @@ namespace CraftingSystem
+                 {
+                     resolved = SummarizeAddStatBonus(comp, bp);
+                 }
++                else if (typeName == "WeaponEnergyDamageDice")
++                {
++                    resolved = SummarizeWeaponEnergyDamageDice(comp, bp);
++                }
+                 else if (typeName == "AddDamageResistanceEnergy")
+                 {
+                     try {
+@@ -250,6 +254,10 @@ namespace CraftingSystem
+             {
+                 return SummarizeDiceValue(val, parentBp);
+             }
++            if (type.Name == "DiceFormula")
++            {
++                return SummarizeDiceFormula(val);
++            }
+             if (type.Name == "DamageTypeDescription")
+             {
+                 return SummarizeDamageType(val);
+@@ -936,6 +944,7 @@ namespace CraftingSystem
+             // 1. Priorit├® aux handlers sp├®cifiques si on est appel├® directement
+             if (type.Name == "AdditionalDiceOnAttack") return SummarizeAdditionalDiceOnAttack(comp, parentBp as BlueprintItemEnchantment);
+             if (type.Name == "AddStatBonusEquipment") return SummarizeAddStatBonus(comp, parentBp as BlueprintItemEnchantment);
++            if (type.Name == "WeaponEnergyDamageDice") return SummarizeWeaponEnergyDamageDice(comp, parentBp);
+             
+             if (type.Name == "AddDamageResistanceEnergy")
+             {
+@@ -1046,6 +1055,55 @@ namespace CraftingSystem
+             catch { return ""; }
+         }
+ 
++        private static string SummarizeWeaponEnergyDamageDice(object comp, BlueprintScriptableObject parentBp)
++        {
++            try
++            {
++                var type = comp.GetType();
++                var diceField = GetFieldRecursive(type, "EnergyDamageDice") ?? GetFieldRecursive(type, "m_EnergyDamageDice");
++                var elementField = GetFieldRecursive(type, "Element") ?? GetFieldRecursive(type, "m_Element");
++
++                if (diceField == null || elementField == null) return null;
++
++                object diceObj = diceField.GetValue(comp);
++                object elementObj = elementField.GetValue(comp);
++
++                string diceStr = SummarizeDiceFormula(diceObj);
++                string elementStr = FormatValue(elementObj, parentBp);
++
++                string template = Helpers.GetString("template_WeaponEnergyDamageDice", "Adds {0} {1} damage");
++                return string.Format(template, diceStr, elementStr);
++            }
++            catch { return null; }
++        }
++
++        private static string SummarizeDiceFormula(object diceObj)
++        {
++            if (diceObj == null) return "0";
++            try
++            {
++                var type = diceObj.GetType();
++                var rollsField = GetFieldRecursive(type, "Rolls") ?? GetFieldRecursive(type, "m_Rolls");
++                var diceField = GetFieldRecursive(type, "Dice") ?? GetFieldRecursive(type, "m_Dice");
++
++                int rolls = (int)(rollsField?.GetValue(diceObj) ?? 0);
++                object diceVal = diceField?.GetValue(diceObj);
++                string diceType = diceVal?.ToString() ?? "Zero";
++
++                if (diceType == "Zero" || rolls == 0) return "0";
++
++                int diceSides = 0;
++                if (diceType.StartsWith("D")) int.TryParse(diceType.Substring(1), out diceSides);
++                else if (diceType == "One") diceSides = 1;
++
++                if (diceSides <= 1) return rolls.ToString();
++
++                string format = Helpers.GetString("ui_dice_format", "{0}d{1}");
++                return string.Format(format, rolls, diceSides);
++            }
++            catch { return "0"; }
++        }
++
+         private static object GetFieldValueRecursive(object obj, string fieldName)
+         {
+             if (obj == null) return null;
+diff --git a/src/EnchantmentScanner.cs b/src/EnchantmentScanner.cs
+index 652615b..138ea55 100644
+--- a/src/EnchantmentScanner.cs
++++ b/src/EnchantmentScanner.cs
+@@ -431,6 +431,7 @@ namespace CraftingSystem
+             int currentMaxNotEpic = model.MaxNotEpic == 0 ? 100 : model.MaxNotEpic;
+             int currentPriceFactor = model.PriceFactor;
+             List<string> currentSlots = new List<string>(model.Slots);
++            string currentPointFormula = model.PointCostFormula;
+ 
+             foreach (var p in model.DynamicParams)
+             {
+@@ -458,12 +459,14 @@ namespace CraftingSystem
+                             if (jo["MaxNotEpic"] != null) currentMaxNotEpic = (int)jo["MaxNotEpic"];
+                             if (jo["PriceFactor"] != null) currentPriceFactor = (int)jo["PriceFactor"];
+                             if (jo["Slots"] != null) currentSlots = jo["Slots"].ToObject<List<string>>();
++                            if (jo["PointCostFormula"] != null) currentPointFormula = (string)jo["PointCostFormula"];
+                         }
+                         else if (ovrObj is EnumOverrideData eod)
+                         {
+                             if (eod.MaxNotEpic.HasValue) currentMaxNotEpic = eod.MaxNotEpic.Value;
+                             if (eod.PriceFactor.HasValue) currentPriceFactor = eod.PriceFactor.Value;
+                             if (eod.Slots != null) currentSlots = eod.Slots;
++                            if (!string.IsNullOrEmpty(eod.PointCostFormula)) currentPointFormula = eod.PointCostFormula;
+                         }
+                     }
+                 }
+@@ -503,10 +506,10 @@ namespace CraftingSystem
+             }
+             dynamicData.IsEpic = isEpic;
+ 
+-            if (!string.IsNullOrEmpty(model.PointCostFormula))
++            if (!string.IsNullOrEmpty(currentPointFormula))
+             {
+                 try {
+-                    dynamicData.PointString = FormulaEvaluator.EvaluateInt(model.PointCostFormula, formulaVars).ToString();
++                    dynamicData.PointString = FormulaEvaluator.EvaluateInt(currentPointFormula, formulaVars).ToString();
+                 } catch (Exception ex) {
+                     Main.ModEntry.Logger.Error($"[SCANNER] Erreur de formule (Points) pour {model.EnchantId}: {ex.Message}");
+                     dynamicData.PointString = "-1";
+diff --git a/src/InventoryHandler.cs b/src/InventoryHandler.cs
+index ba49835..21140c4 100644
+--- a/src/InventoryHandler.cs
++++ b/src/InventoryHandler.cs
+@@ -272,14 +272,14 @@ namespace CraftingSystem
+                 if (workshop != null)
+                 {
+                     bool isBusy = workshop.ActiveProjects.Any(p => {
+-                        if (p.Item == item) return true;
++                        if (p.ItemId == item.UniqueId) return true;
+                         
+                         // Cas du bouclier
+                         if (item.Blueprint is Kingmaker.Blueprints.Items.Shields.BlueprintItemShield)
+                         {
+                             var weaponProp = item.GetType().GetProperty("Weapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                             var subWeapon = weaponProp?.GetValue(item) as ItemEntity;
+-                            if (subWeapon != null && p.Item == subWeapon) return true;
++                            if (subWeapon != null && p.ItemId == subWeapon.UniqueId) return true;
+                         }
+                         
+                         // Cas de l'arme double
+@@ -287,7 +287,7 @@ namespace CraftingSystem
+                         {
+                             var secondProp = weapon.GetType().GetProperty("SecondWeapon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                             var secondWeapon = secondProp?.GetValue(weapon) as ItemEntity;
+-                            if (secondWeapon != null && p.Item == secondWeapon) return true;
++                            if (secondWeapon != null && p.ItemId == secondWeapon.UniqueId) return true;
+                         }
+                         
+                         return false;
+diff --git a/src/Main.cs b/src/Main.cs
+index 5394ca3..5c1932a 100644
+--- a/src/Main.cs
++++ b/src/Main.cs
+@@ -181,9 +181,6 @@ namespace CraftingSystem
+                 // --- INJECTION DES ENCHANTEMENTS CUSTOM (JSON COMPLEXE) ---
+                 CustomEnchantmentsBuilder.BuildAndInjectAll();
+ 
+-                // --- SCAN DES SORTS POUR LES PARCHEMINS ---
+-                SpellScanner.ScanAll();
+-
+                 // DEBUG TEMPORAIRE (Apr├¿s injection pour ├¬tre s├╗r que le cache est pr├¬t)
+                 //EnchantmentDebug.DumpBlueprint("d42fc23b92c640846ac137dc26e000d4"); // Enhancement1
+                 //EnchantmentDebug.DumpBlueprint("f8125dcb57d3463a9a039e4631204cbe"); // Enhancement7
