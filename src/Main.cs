@@ -56,6 +56,17 @@ namespace CraftingSystem
 
         static void OnGUI(UnityModManager.ModEntry modEntry)
         {
+            if (CraftingSettings.Instance.WindowWidth <= 0f)
+            {
+                CraftingSettings.Instance.WindowWidth = CraftingSettings.GetDefaultWidth();
+                CraftingSettings.Instance.Save(modEntry);
+            }
+            if (CraftingSettings.Instance.WindowHeight <= 0f)
+            {
+                CraftingSettings.Instance.WindowHeight = CraftingSettings.GetDefaultHeight();
+                CraftingSettings.Instance.Save(modEntry);
+            }
+
             UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_title"));
 
             UnityEngine.GUILayout.BeginHorizontal();
@@ -91,7 +102,13 @@ namespace CraftingSystem
 
             // Largeur de la fenêtre
             UnityEngine.GUILayout.BeginHorizontal();
-            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_window_width") + " : ", UnityEngine.GUILayout.Width(250));
+            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_window_width") + " : ", UnityEngine.GUILayout.Width(180));
+            if (UnityEngine.GUILayout.Button("Reset", UnityEngine.GUILayout.Width(100)))
+            {
+                CraftingSettings.Instance.WindowWidth = CraftingSettings.GetDefaultWidth();
+                CraftingSettings.Instance.Save(modEntry);
+            }
+            UnityEngine.GUILayout.Space(10);
             float oldWidth = CraftingSettings.Instance.WindowWidth;
             float newWidth = UnityEngine.GUILayout.HorizontalSlider(oldWidth, 800f, 2000f, UnityEngine.GUILayout.Width(200));
             newWidth = (float)Math.Round(newWidth);
@@ -106,7 +123,13 @@ namespace CraftingSystem
 
             // Hauteur de la fenêtre
             UnityEngine.GUILayout.BeginHorizontal();
-            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_window_height") + " : ", UnityEngine.GUILayout.Width(250));
+            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_window_height") + " : ", UnityEngine.GUILayout.Width(180));
+            if (UnityEngine.GUILayout.Button("Reset", UnityEngine.GUILayout.Width(100)))
+            {
+                CraftingSettings.Instance.WindowHeight = CraftingSettings.GetDefaultHeight();
+                CraftingSettings.Instance.Save(modEntry);
+            }
+            UnityEngine.GUILayout.Space(10);
             float oldHeight = CraftingSettings.Instance.WindowHeight;
             float newHeight = UnityEngine.GUILayout.HorizontalSlider(oldHeight, 600f, 1600f, UnityEngine.GUILayout.Width(200));
             newHeight = (float)Math.Round(newHeight);
@@ -121,7 +144,13 @@ namespace CraftingSystem
 
             // Modificateur de scale
             UnityEngine.GUILayout.BeginHorizontal();
-            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_scale_modifier") + " : ", UnityEngine.GUILayout.Width(250));
+            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_scale_modifier") + " : ", UnityEngine.GUILayout.Width(180));
+            if (UnityEngine.GUILayout.Button("Reset", UnityEngine.GUILayout.Width(100)))
+            {
+                CraftingSettings.Instance.ScaleModifier = 1.0f;
+                CraftingSettings.Instance.Save(modEntry);
+            }
+            UnityEngine.GUILayout.Space(10);
             float oldScaleMod = CraftingSettings.Instance.ScaleModifier;
             float newScaleMod = UnityEngine.GUILayout.HorizontalSlider(oldScaleMod, 0.5f, 2.0f, UnityEngine.GUILayout.Width(200));
             newScaleMod = (float)Math.Round(newScaleMod, 2);

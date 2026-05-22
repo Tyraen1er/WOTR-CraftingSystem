@@ -181,9 +181,9 @@
             "ruRU": "Настроить"
         },
         "ui_configuring_model": {
-            "enGB": "Configuring: <b>{0}</b>",
-            "frFR": "Configuration : <b>{0}</b>",
-            "ruRU": "Настройка: <b>{0}</b>"
+            "enGB": "Cheats: <b>{0}</b>",
+            "frFR": "Triches : <b>{0}</b>",
+            "ruRU": "Читы: <b>{0}</b>"
         },
         "ui_selection_total_custom": {
             "enGB": "Selection: +{0} \u2014 Service Cost: {1} gp / ~{2} d",

@@ -30,9 +30,33 @@ namespace CraftingSystem
         public bool ApplyWandRestrictions = true;
 
         // Configuration de la fenêtre IMGUI
-        public float WindowWidth = 1000f;
-        public float WindowHeight = 900f;
+        public float WindowWidth = 0f;
+        public float WindowHeight = 0f;
         public float ScaleModifier = 1.0f;
+
+        public static float GetDefaultScale()
+        {
+            float REFERENCE_WIDTH = 2560f;
+            float REFERENCE_HEIGHT = 1440f;
+            float resScale = Math.Min(UnityEngine.Screen.width / REFERENCE_WIDTH, UnityEngine.Screen.height / REFERENCE_HEIGHT);
+            float dpiScale = 1f;
+            try { if (UnityEngine.Screen.dpi > 0) dpiScale = UnityEngine.Screen.dpi / 96f; } catch { dpiScale = 1f; }
+            return UnityEngine.Mathf.Clamp(resScale * dpiScale * 1.5f, 0.75f, 3.0f);
+        }
+
+        public static float GetDefaultWidth()
+        {
+            float scale = GetDefaultScale();
+            float virtualScreenWidth = UnityEngine.Screen.width / scale;
+            return UnityEngine.Mathf.Clamp((float)Math.Round(virtualScreenWidth * 0.72f), 960f, 1920f);
+        }
+
+        public static float GetDefaultHeight()
+        {
+            float scale = GetDefaultScale();
+            float virtualScreenHeight = UnityEngine.Screen.height / scale;
+            return UnityEngine.Mathf.Clamp((float)Math.Round(virtualScreenHeight * 0.85f), 600f, 1200f);
+        }
 
         // Raccourcis clavier
         public KeyBinding ShortcutInventory = new KeyBinding();

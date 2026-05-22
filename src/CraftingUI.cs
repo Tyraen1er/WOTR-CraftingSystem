@@ -124,6 +124,7 @@ namespace CraftingSystem
         private int selectedAlteration = 0;
         private bool showIconBrowser = false;
         private Vector2 iconScrollPos = Vector2.zero;
+        private Vector2 settingsScrollPos = Vector2.zero;
 
         // Paging & Optimization
         private List<EnchantmentData> cachedFilteredEnchantments = new List<EnchantmentData>();
@@ -230,8 +231,8 @@ namespace CraftingSystem
 
                     if (oldIndex != currentFocusIndex && focusedRect != Rect.zero)
                     {
-                        float estimatedViewHeight = CraftingSettings.Instance.WindowHeight * (CraftingSettings.Instance.ScalePercent / 100f) * 0.5f; // Rough estimate of scrollview
-                        float padding = 50f * (CraftingSettings.Instance.ScalePercent / 100f);
+                        float estimatedViewHeight = CraftingSettings.Instance.WindowHeight * 0.5f; // Rough estimate of scrollview
+                        float padding = 50f;
 
                         if (focusedRect.yMax > scrollPosition.y + estimatedViewHeight)
                         {
@@ -328,6 +329,17 @@ namespace CraftingSystem
                 lastOpenState = true;
             }
 
+            if (CraftingSettings.Instance.WindowWidth <= 0f)
+            {
+                CraftingSettings.Instance.WindowWidth = CraftingSettings.GetDefaultWidth();
+                CraftingSettings.Instance.Save(Main.ModEntry);
+            }
+            if (CraftingSettings.Instance.WindowHeight <= 0f)
+            {
+                CraftingSettings.Instance.WindowHeight = CraftingSettings.GetDefaultHeight();
+                CraftingSettings.Instance.Save(Main.ModEntry);
+            }
+
             UpdateAutoScale();
             processIndex = 0;
             inputSubmitDown = false;
@@ -341,11 +353,39 @@ namespace CraftingSystem
             // workshop?.CheckAndFinishProjects(); // Defer to enchant button as requested
 
             float scale = CraftingSettings.Instance.ScalePercent / 100f;
-            float width = CraftingSettings.Instance.WindowWidth * scale;
-            float height = Mathf.Min(CraftingSettings.Instance.WindowHeight * scale, Screen.height * 0.9f);
-            Rect windowRect = new Rect((Screen.width - width) / 2f, (Screen.height - height) / 2f, width, height);
+            if (scale <= 0.05f) scale = 1f;
+            float virtualScreenWidth = Screen.width / scale;
+            float virtualScreenHeight = Screen.height / scale;
 
-            if (Event.current != null && !windowRect.Contains(Event.current.mousePosition))
+            float virtualWidth = CraftingSettings.Instance.WindowWidth;
+            float virtualHeight = Mathf.Min(CraftingSettings.Instance.WindowHeight, virtualScreenHeight * 0.9f);
+            Rect virtualWindowRect = new Rect((virtualScreenWidth - virtualWidth) / 2f, (virtualScreenHeight - virtualHeight) / 2f, virtualWidth, virtualHeight);
+
+            Rect screenWindowRect = new Rect(virtualWindowRect.x * scale, virtualWindowRect.y * scale, virtualWindowRect.width * scale, virtualWindowRect.height * scale);
+
+            Rect? screenPopupRect = null;
+            if (showDescriptionEditor)
+            {
+                float pW = 800f;
+                float pH = 600f;
+                Rect virtualPopupRect = new Rect((virtualScreenWidth - pW) / 2f, (virtualScreenHeight - pH) / 2f, pW, pH);
+                screenPopupRect = new Rect(virtualPopupRect.x * scale, virtualPopupRect.y * scale, virtualPopupRect.width * scale, virtualPopupRect.height * scale);
+            }
+            else if (!string.IsNullOrEmpty(activeDescriptionPopup))
+            {
+                float pW = 650f;
+                float pH = 500f;
+                Rect virtualPopupRect = new Rect((virtualScreenWidth - pW) / 2f, (virtualScreenHeight - pH) / 2f, pW, pH);
+                screenPopupRect = new Rect(virtualPopupRect.x * scale, virtualPopupRect.y * scale, virtualPopupRect.width * scale, virtualPopupRect.height * scale);
+            }
+
+            bool mouseInside = screenWindowRect.Contains(Event.current.mousePosition);
+            if (screenPopupRect.HasValue && screenPopupRect.Value.Contains(Event.current.mousePosition))
+            {
+                mouseInside = true;
+            }
+
+            if (Event.current != null && !mouseInside)
             {
                 if (Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseUp || Event.current.type == EventType.ScrollWheel)
                 {
@@ -358,46 +398,57 @@ namespace CraftingSystem
 
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
 
-            // On force l'opacité par un DrawTexture gris derrière la fenêtre
+            // Wrap inside GUI.matrix
+            Matrix4x4 oldMatrix = GUI.matrix;
+            GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(scale, scale, 1f));
+
             Color oldGUIColor = GUI.color;
-            GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f); // Gris principal
-            GUI.DrawTexture(windowRect, Texture2D.whiteTexture);
-            GUI.color = oldGUIColor;
-
-            GUI.Window(999, windowRect, DrawWindowContent, "");
-            DrawBorder(windowRect, 2f, Color.gray);
-
-            // --- FENÊTRE DE DESCRIPTION (POPUP) ---
-            if (!string.IsNullOrEmpty(activeDescriptionPopup))
+            try
             {
-                float pW = 650f * scale;
-                float pH = 500f * scale;
-                Rect popupRect = new Rect((Screen.width - pW) / 2f, (Screen.height - pH) / 2f, pW, pH);
-
-                // Force l'opacité de la popup
-                GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
-                GUI.DrawTexture(popupRect, Texture2D.whiteTexture);
+                // On force l'opacité par un DrawTexture gris derrière la fenêtre
+                GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f); // Gris principal
+                GUI.DrawTexture(virtualWindowRect, Texture2D.whiteTexture);
                 GUI.color = oldGUIColor;
 
-                GUI.Window(998, popupRect, DrawDescriptionPopup, "");
-                DrawBorder(popupRect, 2f, Color.gray);
-                GUI.BringWindowToFront(998);
+                GUI.Window(999, virtualWindowRect, DrawWindowContent, "");
+                DrawBorder(virtualWindowRect, 2f, Color.gray);
+
+                // --- FENÊTRE DE DESCRIPTION (POPUP) ---
+                if (!string.IsNullOrEmpty(activeDescriptionPopup))
+                {
+                    float pW = 650f;
+                    float pH = 500f;
+                    Rect popupRect = new Rect((virtualScreenWidth - pW) / 2f, (virtualScreenHeight - pH) / 2f, pW, pH);
+
+                    // Force l'opacité de la popup
+                    GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
+                    GUI.DrawTexture(popupRect, Texture2D.whiteTexture);
+                    GUI.color = oldGUIColor;
+
+                    GUI.Window(998, popupRect, DrawDescriptionPopup, "");
+                    DrawBorder(popupRect, 2f, Color.gray);
+                    GUI.BringWindowToFront(998);
+                }
+
+                // --- FENÊTRE D'ÉDITION DE DESCRIPTION (POPUP) ---
+                if (showDescriptionEditor)
+                {
+                    float pW = 800f;
+                    float pH = 600f;
+                    Rect popupRect = new Rect((virtualScreenWidth - pW) / 2f, (virtualScreenHeight - pH) / 2f, pW, pH);
+
+                    GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
+                    GUI.DrawTexture(popupRect, Texture2D.whiteTexture);
+                    GUI.color = oldGUIColor;
+
+                    GUI.Window(997, popupRect, DrawDescriptionEditor, "");
+                    DrawBorder(popupRect, 2f, Color.gray);
+                    GUI.BringWindowToFront(997);
+                }
             }
-
-            // --- FENÊTRE D'ÉDITION DE DESCRIPTION (POPUP) ---
-            if (showDescriptionEditor)
+            finally
             {
-                float pW = 800f * scale;
-                float pH = 600f * scale;
-                Rect popupRect = new Rect((Screen.width - pW) / 2f, (Screen.height - pH) / 2f, pW, pH);
-
-                GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
-                GUI.DrawTexture(popupRect, Texture2D.whiteTexture);
-                GUI.color = oldGUIColor;
-
-                GUI.Window(997, popupRect, DrawDescriptionEditor, "");
-                DrawBorder(popupRect, 2f, Color.gray);
-                GUI.BringWindowToFront(997);
+                GUI.matrix = oldMatrix;
             }
 
             GUI.backgroundColor = oldColor;
@@ -411,7 +462,13 @@ namespace CraftingSystem
 
         void DrawDoubleWeaponChoice(int id)
         {
-            float scale = CraftingSettings.Instance.ScalePercent / 100f;
+            float scale = 1f;
+            float windowWidth = CraftingSettings.Instance.WindowWidth;
+            float realScale = CraftingSettings.Instance.ScalePercent / 100f;
+            if (realScale <= 0.05f) realScale = 1f;
+            float windowHeight = Mathf.Min(CraftingSettings.Instance.WindowHeight, (Screen.height / realScale) * 0.9f);
+
+            GUILayout.BeginArea(new Rect(15, 15, windowWidth - 30, windowHeight - 30));
             GUILayout.BeginVertical();
 
             GUIStyle textStyle = new GUIStyle(GUI.skin.label)
@@ -460,6 +517,7 @@ namespace CraftingSystem
             }
 
             GUILayout.EndVertical();
+            GUILayout.EndArea();
         }
 
         void FinalizeSelection(ItemEntity it)
@@ -484,9 +542,11 @@ namespace CraftingSystem
 
         void DrawWindowContent(int windowID)
         {
-            float scale = CraftingSettings.Instance.ScalePercent / 100f;
-            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
-            float windowHeight = Mathf.Min(CraftingSettings.Instance.WindowHeight * scale, Screen.height * 0.9f);
+            float scale = 1f;
+            float windowWidth = CraftingSettings.Instance.WindowWidth;
+            float realScale = CraftingSettings.Instance.ScalePercent / 100f;
+            if (realScale <= 0.05f) realScale = 1f;
+            float windowHeight = Mathf.Min(CraftingSettings.Instance.WindowHeight, (Screen.height / realScale) * 0.9f);
 
             // Force l'opacité interne de la fenêtre principale
             Color oldColor = GUI.color;
@@ -547,6 +607,8 @@ namespace CraftingSystem
 
                 return;
             }
+
+            GUILayout.BeginArea(new Rect(15, 15, windowWidth - 30, windowHeight - 30));
 
             // --- HEADER AVEC DÉFILEMENT POUR TEXTE LONG ---
             GUILayout.BeginHorizontal();
@@ -653,6 +715,7 @@ namespace CraftingSystem
                     case CraftingPage.CreatePotion: DrawCreatePotionGUI(scale); break;
                 }
             }
+            GUILayout.EndArea();
         }
 
         void DrawMainMenuGUI(float scale)
@@ -1441,7 +1504,8 @@ namespace CraftingSystem
                     GUIStyle rowLabelStyle = new GUIStyle(GUI.skin.label)
                     {
                         fontSize = (int)(FONT_NORMAL * scale),
-                        alignment = TextAnchor.MiddleLeft
+                        alignment = TextAnchor.MiddleLeft,
+                        wordWrap = false
                     };
                     GUILayout.BeginHorizontal(GUI.skin.box);
                     string displayName = DescriptionManager.GetDisplayName(ench.Blueprint, overrideData);
@@ -1642,8 +1706,8 @@ namespace CraftingSystem
                     // --- GAUCHE : NAVIGATION ---
                     if (string.IsNullOrEmpty(pageInput)) pageInput = (currentPage + 1).ToString();
                     GUI.enabled = (currentPage > 0);
-                    if (CButton("<<", GUILayout.Width(40 * scale))) { currentPage = 0; pageInput = "1"; }
-                    if (CButton("<", GUILayout.Width(30 * scale))) { currentPage--; pageInput = (currentPage + 1).ToString(); }
+                    if (CButton("<<", GUILayout.Width(45 * scale))) { currentPage = 0; pageInput = "1"; }
+                    if (CButton("<", GUILayout.Width(45 * scale))) { currentPage--; pageInput = (currentPage + 1).ToString(); }
                     GUI.enabled = true;
 
                     GUILayout.Space(10 * scale);
@@ -1674,8 +1738,8 @@ namespace CraftingSystem
                     GUILayout.Space(10 * scale);
 
                     GUI.enabled = (currentPage < totalPages - 1);
-                    if (CButton(">", GUILayout.Width(30 * scale))) { currentPage++; pageInput = (currentPage + 1).ToString(); }
-                    if (CButton(">>", GUILayout.Width(40 * scale))) { currentPage = totalPages - 1; pageInput = (currentPage + 1).ToString(); }
+                    if (CButton(">", GUILayout.Width(45 * scale))) { currentPage++; pageInput = (currentPage + 1).ToString(); }
+                    if (CButton(">>", GUILayout.Width(45 * scale))) { currentPage = totalPages - 1; pageInput = (currentPage + 1).ToString(); }
                     GUI.enabled = true;
 
                     GUILayout.FlexibleSpace();
@@ -1940,6 +2004,8 @@ namespace CraftingSystem
 
             GUILayout.Space(10);
 
+            settingsScrollPos = GUILayout.BeginScrollView(settingsScrollPos, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+
             GUIStyle settingsLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) };
 
             GUILayout.BeginHorizontal();
@@ -2017,9 +2083,9 @@ namespace CraftingSystem
                 GUILayout.BeginHorizontal();
                 int oldMaxEnh = CraftingSettings.Instance.MaxEnhancementBonus;
                 GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_enhancement", " Max Enhancement: +{0}"), CraftingSettings.Instance.MaxEnhancementBonus), settingsLabelStyle, GUILayout.Width(150 * scale));
-                if (CButton("-", GUILayout.Width(30 * scale))) CraftingSettings.Instance.MaxEnhancementBonus--;
+                if (CButton("-", GUILayout.Width(45 * scale))) CraftingSettings.Instance.MaxEnhancementBonus--;
                 CraftingSettings.Instance.MaxEnhancementBonus = (int)GUILayout.HorizontalSlider(CraftingSettings.Instance.MaxEnhancementBonus, 1, 20, GUILayout.Width(90 * scale));
-                if (CButton("+", GUILayout.Width(30 * scale))) CraftingSettings.Instance.MaxEnhancementBonus++;
+                if (CButton("+", GUILayout.Width(45 * scale))) CraftingSettings.Instance.MaxEnhancementBonus++;
                 if (oldMaxEnh != CraftingSettings.Instance.MaxEnhancementBonus) filtersDirty = true;
                 GUILayout.EndHorizontal();
 
@@ -2027,9 +2093,9 @@ namespace CraftingSystem
                 GUILayout.BeginHorizontal();
                 int oldMaxTotal = CraftingSettings.Instance.MaxTotalBonus;
                 GUILayout.Label(string.Format(Helpers.GetString("ui_settings_max_total", " Max Total: +{0}"), CraftingSettings.Instance.MaxTotalBonus), settingsLabelStyle, GUILayout.Width(150 * scale));
-                if (CButton("-", GUILayout.Width(30 * scale))) CraftingSettings.Instance.MaxTotalBonus--;
+                if (CButton("-", GUILayout.Width(45 * scale))) CraftingSettings.Instance.MaxTotalBonus--;
                 CraftingSettings.Instance.MaxTotalBonus = (int)GUILayout.HorizontalSlider(CraftingSettings.Instance.MaxTotalBonus, 1, 50, GUILayout.Width(90 * scale));
-                if (CButton("+", GUILayout.Width(30 * scale))) CraftingSettings.Instance.MaxTotalBonus++;
+                if (CButton("+", GUILayout.Width(45 * scale))) CraftingSettings.Instance.MaxTotalBonus++;
                 if (oldMaxTotal != CraftingSettings.Instance.MaxTotalBonus) filtersDirty = true;
                 GUILayout.EndHorizontal();
             }
@@ -2038,9 +2104,9 @@ namespace CraftingSystem
             GUILayout.Label(Helpers.GetString("ui_settings_source_display", "Source display:"), settingsLabelStyle);
             GUILayout.BeginHorizontal();
             int sliderVal = (int)CraftingSettings.Instance.CurrentSourceFilter;
-            if (CButton("<", GUILayout.Width(30 * scale))) sliderVal--;
+            if (CButton("<", GUILayout.Width(45 * scale))) sliderVal--;
             sliderVal = Mathf.RoundToInt(GUILayout.HorizontalSlider(sliderVal, 0, 4, GUILayout.Width(240 * scale)));
-            if (CButton(">", GUILayout.Width(30 * scale))) sliderVal++;
+            if (CButton(">", GUILayout.Width(45 * scale))) sliderVal++;
             sliderVal = Mathf.Clamp(sliderVal, 0, 4);
             CraftingSettings.Instance.CurrentSourceFilter = (SourceFilter)sliderVal;
             GUILayout.Space(20 * scale);
@@ -2067,8 +2133,8 @@ namespace CraftingSystem
                 EnchantmentScanner.ForceSync();
             }
 
+            GUILayout.EndScrollView();
 
-            GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
 
             if (prevCostMult != CraftingSettings.Instance.CostMultiplier || prevInstant != CraftingSettings.Instance.InstantCrafting || prevEnforce != CraftingSettings.Instance.EnforcePointsLimit
@@ -2187,20 +2253,21 @@ namespace CraftingSystem
 
         private void DrawDescriptionPopup(int windowID)
         {
-            float scale = CraftingSettings.Instance.ScalePercent / 100f;
+            float scale = 1f;
 
             // Force l'opacité interne
             Color oldColor = GUI.color;
             GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
-            GUI.DrawTexture(new Rect(0, 0, 650f * scale, 500f * scale), Texture2D.whiteTexture);
+            GUI.DrawTexture(new Rect(0, 0, 650f, 500f), Texture2D.whiteTexture);
             GUI.color = oldColor;
 
+            GUILayout.BeginArea(new Rect(15, 15, 650f - 30, 500f - 30));
             GUILayout.BeginVertical();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label(activeDescriptionTitle, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = (int)(FONT_LARGE * scale) });
             GUILayout.FlexibleSpace();
-            if (CButton(Helpers.GetString("ui_btn_close_x", "X"), GUILayout.Width(30 * scale))) activeDescriptionPopup = "";
+            if (CButton(Helpers.GetString("ui_btn_close_x", "X"), GUILayout.Width(45 * scale))) activeDescriptionPopup = "";
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
@@ -2213,6 +2280,7 @@ namespace CraftingSystem
             if (CButton(Helpers.GetString("ui_btn_ok", "OK"), GUILayout.Height(40 * scale))) activeDescriptionPopup = "";
 
             GUILayout.EndVertical();
+            GUILayout.EndArea();
             GUI.DragWindow();
         }
 
@@ -2254,7 +2322,7 @@ namespace CraftingSystem
 
         private bool CButton(string text, params GUILayoutOption[] options)
         {
-            float scale = CraftingSettings.Instance.ScalePercent / 100f;
+            float scale = 1f;
             GUIStyle style = new GUIStyle(GUI.skin.button) { fontSize = (int)(FONT_NORMAL * scale) };
             return CButtonStyled(new GUIContent(text), style, options);
         }
@@ -2283,7 +2351,7 @@ namespace CraftingSystem
 
         private bool CToggle(bool value, string text, params GUILayoutOption[] options)
         {
-            float scale = CraftingSettings.Instance.ScalePercent / 100f;
+            float scale = 1f;
             GUIStyle style = new GUIStyle(GUI.skin.label)
             {
                 fontSize = (int)(FONT_NORMAL * scale),
@@ -2295,7 +2363,7 @@ namespace CraftingSystem
         {
             int index = processIndex++;
             bool isFocused = (index == currentFocusIndex);
-            float scale = CraftingSettings.Instance.ScalePercent / 100f;
+            float scale = 1f;
             float boxSize = 18f * scale;
 
             GUILayout.BeginHorizontal(options);
@@ -2321,6 +2389,7 @@ namespace CraftingSystem
 
             // -- TEXTE --
             GUIStyle textStyle = new GUIStyle(style ?? GUI.skin.label);
+            textStyle.wordWrap = false;
             if (isFocused) textStyle.normal.textColor = Color.yellow;
 
             if (GUILayout.Button(text, textStyle, GUILayout.Height(boxSize)))
@@ -2344,7 +2413,7 @@ namespace CraftingSystem
 
         private string CTextField(string text, params GUILayoutOption[] options)
         {
-            float scale = CraftingSettings.Instance.ScalePercent / 100f;
+            float scale = 1f;
             GUIStyle style = new GUIStyle(GUI.skin.textField) { fontSize = (int)(FONT_NORMAL * scale) };
             return CTextFieldStyled(text, style, options);
         }
@@ -2422,12 +2491,15 @@ namespace CraftingSystem
 
         private void DrawBorder(Rect rect, float thickness, Color color)
         {
+            float scale = CraftingSettings.Instance.ScalePercent / 100f;
+            if (scale <= 0.05f) scale = 1f;
+            float actualThickness = thickness / scale;
             Color old = GUI.color;
             GUI.color = color;
-            GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width, thickness), Texture2D.whiteTexture); // Haut
-            GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height - thickness, rect.width, thickness), Texture2D.whiteTexture); // Bas
-            GUI.DrawTexture(new Rect(rect.x, rect.y, thickness, rect.height), Texture2D.whiteTexture); // Gauche
-            GUI.DrawTexture(new Rect(rect.x + rect.width - thickness, rect.y, thickness, rect.height), Texture2D.whiteTexture); // Droite
+            GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width, actualThickness), Texture2D.whiteTexture); // Haut
+            GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height - actualThickness, rect.width, actualThickness), Texture2D.whiteTexture); // Bas
+            GUI.DrawTexture(new Rect(rect.x, rect.y, actualThickness, rect.height), Texture2D.whiteTexture); // Gauche
+            GUI.DrawTexture(new Rect(rect.x + rect.width - actualThickness, rect.y, actualThickness, rect.height), Texture2D.whiteTexture); // Droite
             GUI.color = old;
         }
 
@@ -2469,7 +2541,7 @@ namespace CraftingSystem
                         if (data.IsEpic) metadata += Helpers.GetString("ui_epic_tag", " <color=#FF4500>(Epic)</color>");
                     }
 
-                    GUILayout.Label(" • " + displayName + metadata, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), richText = true }, GUILayout.ExpandWidth(true));
+                    GUILayout.Label(" • " + displayName + metadata, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), richText = true, wordWrap = false }, GUILayout.ExpandWidth(true));
 
                     // Bouton Description
                     if (bp != null)
@@ -2520,7 +2592,7 @@ namespace CraftingSystem
                     {
                         expectedSlotsText = Helpers.GetString("ui_slot_" + (data.Type?.ToLower() ?? "other"), data.Type ?? "Other");
                     }
-                    GUILayout.Label($"<color=#2ecc71>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter }, GUILayout.Width(120 * scale));
+                    GUILayout.Label($"<color=#2ecc71>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter, wordWrap = false }, GUILayout.Width(120 * scale));
 
                     if (CButton(Helpers.GetString("ui_btn_remove", "Remove"), GUILayout.Width(80 * scale), GUILayout.Height(25 * scale)))
                     {
@@ -2571,7 +2643,7 @@ namespace CraftingSystem
                     {
                         modelIdx++;
                         GUILayout.BeginHorizontal(GUI.skin.box);
-                        GUILayout.Label(Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.ExpandWidth(true));
+                        GUILayout.Label(Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), wordWrap = false }, GUILayout.ExpandWidth(true));
 
                         // -- AFFICHAGE DES SLOTS (AFFINITY) --
                         string modelSlotsText = "";
@@ -2584,7 +2656,7 @@ namespace CraftingSystem
                         {
                             modelSlotsText = Helpers.GetString("ui_slot_" + (model.Type?.ToLower() ?? "other"), model.Type ?? "Other");
                         }
-                        GUILayout.Label($"<color=#2ecc71>[{modelSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter }, GUILayout.Width(120 * scale));
+                        GUILayout.Label($"<color=#2ecc71>[{modelSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter, wordWrap = false }, GUILayout.Width(120 * scale));
 
                         if (CButton(Helpers.GetString("ui_btn_configure", "Configure"), GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
                         {
@@ -3025,7 +3097,7 @@ namespace CraftingSystem
             string internalName = bp != null ? bp.name : (data.Name ?? "");
 
             GUILayout.BeginHorizontal(GUI.skin.box);
-            GUIStyle toggleStyle = new GUIStyle(GUI.skin.label) { richText = true, alignment = TextAnchor.MiddleLeft };
+            GUIStyle toggleStyle = new GUIStyle(GUI.skin.label) { richText = true, alignment = TextAnchor.MiddleLeft, wordWrap = false };
 
             string label = $"<size={(int)(FONT_NORMAL * scale)}>{displayName}</size> <color=#888888><size={(int)(FONT_SMALL * scale)}>({internalName})</size></color>";
             bool newSelected = CToggleStyled(isQueued, label, toggleStyle, GUILayout.ExpandWidth(true));
@@ -3079,11 +3151,11 @@ namespace CraftingSystem
                 expectedSlotsText = Helpers.GetString("ui_slot_" + (data.Type?.ToLower() ?? "other"), data.Type ?? "Other");
             }
 
-            GUILayout.Label($"<color={slotColor}>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter }, GUILayout.Width(120 * scale));
+            GUILayout.Label($"<color={slotColor}>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter, wordWrap = false }, GUILayout.Width(120 * scale));
 
             string currency = Helpers.GetString("ui_currency_gp", "gp");
             string daysLabel = Helpers.GetString("ui_time_days_short", "d");
-            GUILayout.Label($"{costToPay} {currency} / {days} {daysLabel}   (+{data.PointCost})", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleRight, fontSize = (int)(FONT_NORMAL * scale) }, GUILayout.Width(180 * scale));
+            GUILayout.Label($"{costToPay} {currency} / {days} {daysLabel}   (+{data.PointCost})", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleRight, fontSize = (int)(FONT_NORMAL * scale), wordWrap = false }, GUILayout.Width(180 * scale));
 
             if (newSelected && !isQueued)
             {
@@ -3177,7 +3249,7 @@ namespace CraftingSystem
 
                 if (i > 0) // Bouton pour supprimer le slot (uniquement après le premier)
                 {
-                    if (CButton("<color=red><b>X</b></color>", GUILayout.Width(30 * scale)))
+                    if (CButton("<color=red><b>X</b></color>", GUILayout.Width(45 * scale)))
                     {
                         // Décalage des slots suivants
                         for (int k = i; k < count - 1; k++) dynamicParamValues["Metamagic_" + k] = dynamicParamValues["Metamagic_" + (k + 1)];
@@ -3255,17 +3327,21 @@ namespace CraftingSystem
 
         private void DrawRectBorder(Rect rect, float thickness, Color color)
         {
+            float scale = CraftingSettings.Instance.ScalePercent / 100f;
+            if (scale <= 0.05f) scale = 1f;
+            float actualThickness = thickness / scale;
             Color oldColor = GUI.color;
             GUI.color = color;
-            GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width, thickness), Texture2D.whiteTexture); // Haut
-            GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height - thickness, rect.width, thickness), Texture2D.whiteTexture); // Bas
-            GUI.DrawTexture(new Rect(rect.x, rect.y, thickness, rect.height), Texture2D.whiteTexture); // Gauche
-            GUI.DrawTexture(new Rect(rect.x + rect.width - thickness, rect.y, thickness, rect.height), Texture2D.whiteTexture); // Droite
+            GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width, actualThickness), Texture2D.whiteTexture); // Haut
+            GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height - actualThickness, rect.width, actualThickness), Texture2D.whiteTexture); // Bas
+            GUI.DrawTexture(new Rect(rect.x, rect.y, actualThickness, rect.height), Texture2D.whiteTexture); // Gauche
+            GUI.DrawTexture(new Rect(rect.x + rect.width - actualThickness, rect.y, actualThickness, rect.height), Texture2D.whiteTexture); // Droite
             GUI.color = oldColor;
         }
         void DrawDescriptionEditor(int id)
         {
-            float scale = CraftingSettings.Instance.ScalePercent / 100f;
+            float scale = 1f;
+            GUILayout.BeginArea(new Rect(15, 15, 800f - 30, 600f - 30));
             GUILayout.BeginVertical(GUI.skin.box);
 
             GUIStyle titleStyle = new GUIStyle(GUI.skin.label)
@@ -3306,6 +3382,7 @@ namespace CraftingSystem
 
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
+            GUILayout.EndArea();
         }
     }
 }
