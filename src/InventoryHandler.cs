@@ -148,8 +148,11 @@ namespace CraftingSystem
                 var box = part?.VirtualBox;
                 if (box != null && box.Items.Contains(item))
                 {
-                    box.Remove(item); 
-                    Game.Instance.Player.Inventory.Add(item); 
+                    using (ContextData<GameLogDisabled>.Request())
+                    {
+                        box.Remove(item); 
+                        Game.Instance.Player.Inventory.Add(item); 
+                    }
                 }
             });
         }
@@ -224,13 +227,14 @@ namespace CraftingSystem
         [HarmonyPrefix]
         public static bool Prefix(ItemEntity __instance, ItemEntity other, ref bool __result)
         {
-            // Si l'un des deux items appartient à notre coffre d'artisanat, on interdit la fusion.
             var mainChar = Game.Instance?.Player?.MainCharacter.Value;
             var workshop = mainChar?.Get<UnitPartWilcerWorkshop>();
-            var box = workshop?.VirtualBox;
-            if (box != null)
+            if (workshop != null)
             {
-                if (__instance.Collection == box || other.Collection == box)
+                var box = workshop.VirtualBox;
+                if (__instance.Collection == box || other.Collection == box ||
+                    workshop.StashedItemIds.Contains(__instance.UniqueId) ||
+                    workshop.StashedItemIds.Contains(other.UniqueId))
                 {
                     __result = false;
                     return false;

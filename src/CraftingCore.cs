@@ -157,11 +157,14 @@ namespace CraftingSystem
             if (playerInv != null)
             {
                 var toMove = playerInv.Items.Where(item => item != null && StashedItemIds.Contains(item.UniqueId)).ToList();
-                foreach (var item in toMove)
+                using (ContextData<GameLogDisabled>.Request())
                 {
-                    Main.ModEntry.Logger.Log($"[new-inventory] GetBox(): Déplacement de l'item {item.Name} (ID: {item.UniqueId}) de l'inventaire du joueur vers _virtualBox.");
-                    playerInv.Remove(item);
-                    _virtualBox.Add(item);
+                    foreach (var item in toMove)
+                    {
+                        Main.ModEntry.Logger.Log($"[new-inventory] GetBox(): Déplacement de l'item {item.Name} (ID: {item.UniqueId}) de l'inventaire du joueur vers _virtualBox.");
+                        playerInv.Remove(item);
+                        _virtualBox.Add(item);
+                    }
                 }
 
                 if (StashedItemIds.Count > 0 && toMove.Count == 0)
@@ -206,20 +209,23 @@ namespace CraftingSystem
                     {
                         var boxItems = _virtualBox.Items.ToList();
                         StashedItemIds.Clear();
-                        foreach (var item in boxItems)
+                        using (ContextData<GameLogDisabled>.Request())
                         {
-                            if (item == null) continue;
-                            Main.ModEntry.Logger.Log($"[new-inventory] SyncFromBox(): Enregistrement de l'ID {item.UniqueId} pour l'item {item.Name}.");
-                            StashedItemIds.Add(item.UniqueId);
-                            if (!playerInv.Items.Contains(item))
+                            foreach (var item in boxItems)
                             {
-                                Main.ModEntry.Logger.Log($"[new-inventory] SyncFromBox(): Déplacement de l'item {item.Name} (ID: {item.UniqueId}) de _virtualBox vers l'inventaire du joueur.");
-                                _virtualBox.Remove(item);
-                                playerInv.Add(item);
-                            }
-                            else
-                            {
-                                Main.ModEntry.Logger.Log($"[new-inventory-debug] SyncFromBox(): Item {item.Name} (ID: {item.UniqueId}) est déjà dans l'inventaire du joueur.");
+                                if (item == null) continue;
+                                Main.ModEntry.Logger.Log($"[new-inventory] SyncFromBox(): Enregistrement de l'ID {item.UniqueId} pour l'item {item.Name}.");
+                                StashedItemIds.Add(item.UniqueId);
+                                if (!playerInv.Items.Contains(item))
+                                {
+                                    Main.ModEntry.Logger.Log($"[new-inventory] SyncFromBox(): Déplacement de l'item {item.Name} (ID: {item.UniqueId}) de _virtualBox vers l'inventaire du joueur.");
+                                    _virtualBox.Remove(item);
+                                    playerInv.Add(item);
+                                }
+                                else
+                                {
+                                    Main.ModEntry.Logger.Log($"[new-inventory-debug] SyncFromBox(): Item {item.Name} (ID: {item.UniqueId}) est déjà dans l'inventaire du joueur.");
+                                }
                             }
                         }
                     }
@@ -251,14 +257,17 @@ namespace CraftingSystem
                 var playerInv = Game.Instance?.Player?.Inventory;
                 if (playerInv != null)
                 {
-                    foreach (var item in StashedItems)
+                    using (ContextData<GameLogDisabled>.Request())
                     {
-                        if (item == null) continue;
-                        StashedItemIds.Add(item.UniqueId);
-                        if (!playerInv.Items.Contains(item))
+                        foreach (var item in StashedItems)
                         {
-                            Main.ModEntry.Logger.Log($"[new-inventory] OnApplyPostLoadFixes(): Migration de l'item {item.Name} (ID: {item.UniqueId}) vers l'inventaire natif.");
-                            playerInv.Add(item);
+                            if (item == null) continue;
+                            StashedItemIds.Add(item.UniqueId);
+                            if (!playerInv.Items.Contains(item))
+                            {
+                                Main.ModEntry.Logger.Log($"[new-inventory] OnApplyPostLoadFixes(): Migration de l'item {item.Name} (ID: {item.UniqueId}) vers l'inventaire natif.");
+                                playerInv.Add(item);
+                            }
                         }
                     }
                     Main.ModEntry.Logger.Log($"[new-inventory] Migration réussie de {StashedItems.Count} items vers l'inventaire natif.");
