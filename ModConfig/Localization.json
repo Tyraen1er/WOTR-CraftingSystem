@@ -1002,6 +1002,21 @@
             "frFR": "Raccourci",
             "ruRU": "Клавиша"
         },
+        "ui_umm_window_width": {
+            "enGB": "IMGUI Window Width",
+            "frFR": "Largeur de la fenêtre IMGUI",
+            "ruRU": "Ширина окна IMGUI"
+        },
+        "ui_umm_window_height": {
+            "enGB": "IMGUI Window Height",
+            "frFR": "Hauteur de la fenêtre IMGUI",
+            "ruRU": "Высота окна IMGUI"
+        },
+        "ui_umm_scale_modifier": {
+            "enGB": "Scale Modifier",
+            "frFR": "Modificateur de scale",
+            "ruRU": "Модификатор масштаба"
+        },
         "ui_tooltip_magical_powers": {
             "enGB": "Magical Powers:",
             "frFR": "Pouvoirs magiques :",

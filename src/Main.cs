@@ -85,6 +85,54 @@ namespace CraftingSystem
             UnityModManager.UI.DrawKeybindingSmart(CraftingSettings.Instance.ShortcutIMGUI, Helpers.GetString("ui_umm_shortcut") + "  ", null, UnityEngine.GUILayout.Width(150));
             if (CraftingSettings.Instance.ShortcutIMGUI.keyCode != oldImgui || CraftingSettings.Instance.ShortcutIMGUI.modifiers != oldImguiMod) CraftingSettings.Instance.Save(modEntry);
             UnityEngine.GUILayout.EndHorizontal();
+
+            UnityEngine.GUILayout.Space(10);
+            UnityEngine.GUILayout.Label("<b>Positionnement & Dimensions IMGUI :</b>");
+
+            // Largeur de la fenêtre
+            UnityEngine.GUILayout.BeginHorizontal();
+            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_window_width") + " : ", UnityEngine.GUILayout.Width(250));
+            float oldWidth = CraftingSettings.Instance.WindowWidth;
+            float newWidth = UnityEngine.GUILayout.HorizontalSlider(oldWidth, 800f, 2000f, UnityEngine.GUILayout.Width(200));
+            newWidth = (float)Math.Round(newWidth);
+            UnityEngine.GUILayout.Space(10);
+            UnityEngine.GUILayout.Label($"{newWidth} px", UnityEngine.GUILayout.Width(80));
+            if (newWidth != oldWidth)
+            {
+                CraftingSettings.Instance.WindowWidth = newWidth;
+                CraftingSettings.Instance.Save(modEntry);
+            }
+            UnityEngine.GUILayout.EndHorizontal();
+
+            // Hauteur de la fenêtre
+            UnityEngine.GUILayout.BeginHorizontal();
+            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_window_height") + " : ", UnityEngine.GUILayout.Width(250));
+            float oldHeight = CraftingSettings.Instance.WindowHeight;
+            float newHeight = UnityEngine.GUILayout.HorizontalSlider(oldHeight, 600f, 1600f, UnityEngine.GUILayout.Width(200));
+            newHeight = (float)Math.Round(newHeight);
+            UnityEngine.GUILayout.Space(10);
+            UnityEngine.GUILayout.Label($"{newHeight} px", UnityEngine.GUILayout.Width(80));
+            if (newHeight != oldHeight)
+            {
+                CraftingSettings.Instance.WindowHeight = newHeight;
+                CraftingSettings.Instance.Save(modEntry);
+            }
+            UnityEngine.GUILayout.EndHorizontal();
+
+            // Modificateur de scale
+            UnityEngine.GUILayout.BeginHorizontal();
+            UnityEngine.GUILayout.Label(Helpers.GetString("ui_umm_scale_modifier") + " : ", UnityEngine.GUILayout.Width(250));
+            float oldScaleMod = CraftingSettings.Instance.ScaleModifier;
+            float newScaleMod = UnityEngine.GUILayout.HorizontalSlider(oldScaleMod, 0.5f, 2.0f, UnityEngine.GUILayout.Width(200));
+            newScaleMod = (float)Math.Round(newScaleMod, 2);
+            UnityEngine.GUILayout.Space(10);
+            UnityEngine.GUILayout.Label($"{newScaleMod:F2}x", UnityEngine.GUILayout.Width(80));
+            if (newScaleMod != oldScaleMod)
+            {
+                CraftingSettings.Instance.ScaleModifier = newScaleMod;
+                CraftingSettings.Instance.Save(modEntry);
+            }
+            UnityEngine.GUILayout.EndHorizontal();
         }
 
         static void OnSaveGUI(UnityModManager.ModEntry modEntry)

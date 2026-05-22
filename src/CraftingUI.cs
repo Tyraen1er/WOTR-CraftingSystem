@@ -230,7 +230,7 @@ namespace CraftingSystem
 
                     if (oldIndex != currentFocusIndex && focusedRect != Rect.zero)
                     {
-                        float estimatedViewHeight = REFERENCE_HEIGHT * (CraftingSettings.Instance.ScalePercent / 100f) * 0.5f; // Rough estimate of scrollview
+                        float estimatedViewHeight = CraftingSettings.Instance.WindowHeight * (CraftingSettings.Instance.ScalePercent / 100f) * 0.5f; // Rough estimate of scrollview
                         float padding = 50f * (CraftingSettings.Instance.ScalePercent / 100f);
 
                         if (focusedRect.yMax > scrollPosition.y + estimatedViewHeight)
@@ -276,7 +276,7 @@ namespace CraftingSystem
             float resScale = Math.Min(Screen.width / REFERENCE_WIDTH, Screen.height / REFERENCE_HEIGHT);
             float dpiScale = 1f;
             try { if (Screen.dpi > 0) dpiScale = Screen.dpi / 96f; } catch { dpiScale = 1f; }
-            float finalScale = Mathf.Clamp(resScale * dpiScale * 1.5f, 0.75f, 3.0f);
+            float finalScale = Mathf.Clamp(resScale * dpiScale * 1.5f, 0.75f, 3.0f) * CraftingSettings.Instance.ScaleModifier;
             CraftingSettings.Instance.ScalePercent = (int)(finalScale * 100f);
         }
 
@@ -341,8 +341,8 @@ namespace CraftingSystem
             // workshop?.CheckAndFinishProjects(); // Defer to enchant button as requested
 
             float scale = CraftingSettings.Instance.ScalePercent / 100f;
-            float width = 1000f * scale;
-            float height = Mathf.Min(900f * scale, Screen.height * 0.9f);
+            float width = CraftingSettings.Instance.WindowWidth * scale;
+            float height = Mathf.Min(CraftingSettings.Instance.WindowHeight * scale, Screen.height * 0.9f);
             Rect windowRect = new Rect((Screen.width - width) / 2f, (Screen.height - height) / 2f, width, height);
 
             if (Event.current != null && !windowRect.Contains(Event.current.mousePosition))
@@ -485,13 +485,13 @@ namespace CraftingSystem
         void DrawWindowContent(int windowID)
         {
             float scale = CraftingSettings.Instance.ScalePercent / 100f;
-            float windowWidth = 1000f * scale;
-            float windowHeight = Mathf.Min(900f * scale, Screen.height * 0.9f);
+            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
+            float windowHeight = Mathf.Min(CraftingSettings.Instance.WindowHeight * scale, Screen.height * 0.9f);
 
             // Force l'opacité interne de la fenêtre principale
             Color oldColor = GUI.color;
             GUI.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
-            GUI.DrawTexture(new Rect(0, 0, 1000f * scale, Mathf.Min(900f * scale, Screen.height * 0.9f)), Texture2D.whiteTexture);
+            GUI.DrawTexture(new Rect(0, 0, windowWidth, windowHeight), Texture2D.whiteTexture);
             GUI.color = oldColor;
 
             if (showDoubleWeaponChoice)
@@ -659,7 +659,7 @@ namespace CraftingSystem
         {
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
 
-            float windowWidth = 1000f * scale;
+            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
             float contentWidth = windowWidth - (120f * scale);
 
             GUIStyle sectionHeaderStyle = new GUIStyle(GUI.skin.label)
@@ -773,7 +773,7 @@ namespace CraftingSystem
 
         private void DrawItemBrowser(float scale, List<ItemData> items, string title)
         {
-            float windowWidth = 1000f * scale;
+            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
             float contentWidth = windowWidth - (120f * scale);
 
             // Déclenchement automatique du scan si nécessaire
@@ -952,7 +952,7 @@ namespace CraftingSystem
 
         private void DrawMagicItemGUI(float scale, string title, int basePrice, int charges, Func<SpellData, int, int, BlueprintItemEquipmentUsable> builder, Predicate<SpellData> filter = null, int maxLevel = 9)
         {
-            float windowWidth = 1000f * scale;
+            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
             float contentWidth = windowWidth - (120f * scale);
 
             // Déclenchement automatique du scan si nécessaire
@@ -1162,7 +1162,7 @@ namespace CraftingSystem
             var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
             var allItems = workshop?.GetBox()?.Items?.ToList() ?? new List<ItemEntity>();
 
-            float windowWidth = 1000f * scale;
+            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
             float contentWidth = windowWidth - (120f * scale);
 
             GUILayout.BeginHorizontal();
@@ -1298,6 +1298,8 @@ namespace CraftingSystem
 
         void DrawItemModificationGUI(float scale)
         {
+            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
+            float contentWidth = windowWidth - (120f * scale);
             if (showIconBrowser)
             {
                 DrawIconBrowserGUI(scale);
@@ -1328,10 +1330,9 @@ namespace CraftingSystem
             GUILayout.Label(Helpers.GetString("ui_special_action_rename", "Special Action: Rename item (Free)"), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
             GUILayout.BeginHorizontal();
 
-            float windowWidth = 800f * scale;
             float buttonsSpace = (120f + 100f + 25f) * scale;
             float padding = (45f + 20f) * scale;
-            float exactTextWidth = windowWidth - buttonsSpace - padding;
+            float exactTextWidth = contentWidth - buttonsSpace - padding;
 
             GUIStyle textFieldStyle = new GUIStyle(GUI.skin.textField);
             textFieldStyle.wordWrap = false;
@@ -1626,7 +1627,7 @@ namespace CraftingSystem
                 {
                     // -- NAVIGATION DE PAGINATION --
                     // -- DYNAMIC PAGINATION CALCULATION --
-                    float currentWindowHeight = Mathf.Min(900f * scale, Screen.height * 0.9f);
+                    float currentWindowHeight = Mathf.Min(CraftingSettings.Instance.WindowHeight * scale, Screen.height * 0.9f);
                     // Pagination manuelle basée sur les réglages
                     int totalItems = cachedFilteredEnchantments.Count;
                     int totalPages = Mathf.Max(1, Mathf.CeilToInt((float)totalItems / CraftingSettings.Instance.ItemsPerPage));
@@ -1847,6 +1848,8 @@ namespace CraftingSystem
 
         private void DrawIconBrowserGUI(float scale)
         {
+            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
+            float contentWidth = windowWidth - (120f * scale);
             GUIStyle titleStyle = new GUIStyle(GUI.skin.label)
             {
                 fontSize = (int)(FONT_LARGE * scale),
@@ -1865,7 +1868,7 @@ namespace CraftingSystem
 
             iconScrollPos = GUILayout.BeginScrollView(iconScrollPos, false, true, GUILayout.ExpandHeight(true));
 
-            int cols = (int)Mathf.Max(1, (800f * scale) / (120f * scale));
+            int cols = (int)Mathf.Max(1, contentWidth / (120f * scale));
             int currentCol = 0;
             float iconSize = 80 * scale;
 

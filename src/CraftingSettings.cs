@@ -29,6 +29,11 @@ namespace CraftingSystem
         public bool ApplyScrollRestrictions = true;
         public bool ApplyWandRestrictions = true;
 
+        // Configuration de la fenêtre IMGUI
+        public float WindowWidth = 1000f;
+        public float WindowHeight = 900f;
+        public float ScaleModifier = 1.0f;
+
         // Raccourcis clavier
         public KeyBinding ShortcutInventory = new KeyBinding();
         public KeyBinding ShortcutIMGUI = new KeyBinding();
