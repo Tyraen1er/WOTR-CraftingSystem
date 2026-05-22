@@ -417,35 +417,80 @@ namespace CraftingSystem
                         return result;
                     }
 
-                    // Décodage du GUID
-                    if (!DynamicGuidHelper.TryDecodeGuid(guid, out string enchantId, out List<int> vals, out int mask))
-                        return null;
+                    // On vérifie si c'est un GUID dynamique géré par le mod
+                    bool isDynamic = guidStr.StartsWith(DynamicGuidHelper.Signature, StringComparison.OrdinalIgnoreCase);
 
-                    bool isFeature = vals.Count > 0 && vals[0] == 1;
-
-                    // Support spécial pour les objets magiques (Baguettes 901, Potions 902, Parchemins 903)
-                    if (enchantId == "901" || enchantId == "902" || enchantId == "903")
+                    if (isDynamic)
                     {
-                        string spellGuid = GetSpellGuidByHash(vals.Skip(1).ToList());
-                        if (string.IsNullOrEmpty(spellGuid)) return null;
-                        
-                        int cl = vals.Count > 5 ? vals[5] : 1;
-                        int sl = vals.Count > 6 ? vals[6] : 1;
-                        
-                        if (!SpellScanner.AvailableSpells.TryGetValue(spellGuid, out var spellData))
-                            spellData = new SpellData { Guid = spellGuid, Name = "Unknown Spell" };
-
-                        if (enchantId == "901") result = GetOrBuildWand(spellData, cl, sl);
-                        else if (enchantId == "902") result = GetOrBuildPotion(spellData, cl, sl);
-                        else if (enchantId == "903") result = GetOrBuildScroll(spellData, cl, sl);
-                    }
-
-                    if (result == null)
-                    {
-                        var model = GetModelById(enchantId, isFeature);
-                        if (model != null)
+                        bool decoded = DynamicGuidHelper.TryDecodeGuid(guid, out string enchantId, out List<int> vals, out int mask);
+                        bool isFeature = false;
+                        if (decoded)
                         {
-                            result = CreateDynamicBlueprint(model, guid, vals.Skip(1).ToList(), mask);
+                            isFeature = vals.Count > 0 && vals[0] == 1;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                if (guidStr.Length >= 10)
+                                {
+                                    string isFeatHex = guidStr.Substring(8, 2);
+                                    isFeature = (Convert.ToInt32(isFeatHex, 16) == 1);
+                                }
+                            }
+                            catch {}
+                        }
+
+                        if (!decoded)
+                        {
+                            Main.ModEntry.Logger.Error($"[CRITICAL] [DYNAMIC_ENCHANT] Failed to decode dynamic GUID '{guidStr}'. Creating fallback placeholder blueprint to prevent game crash.");
+                            result = CreatePlaceholderBlueprint(guid, isFeature);
+                        }
+                        else
+                        {
+                            // Support spécial pour les objets magiques (Baguettes 901, Potions 902, Parchemins 903)
+                            if (enchantId == "901" || enchantId == "902" || enchantId == "903")
+                            {
+                                string spellGuid = GetSpellGuidByHash(vals.Skip(1).ToList());
+                                if (!string.IsNullOrEmpty(spellGuid))
+                                {
+                                    int cl = vals.Count > 5 ? vals[5] : 1;
+                                    int sl = vals.Count > 6 ? vals[6] : 1;
+                                    
+                                    if (!SpellScanner.AvailableSpells.TryGetValue(spellGuid, out var spellData))
+                                        spellData = new SpellData { Guid = spellGuid, Name = "Unknown Spell" };
+
+                                    if (enchantId == "901") result = GetOrBuildWand(spellData, cl, sl);
+                                    else if (enchantId == "902") result = GetOrBuildPotion(spellData, cl, sl);
+                                    else if (enchantId == "903") result = GetOrBuildScroll(spellData, cl, sl);
+                                }
+                            }
+
+                            if (result == null)
+                            {
+                                var model = GetModelById(enchantId, isFeature);
+                                if (model != null)
+                                {
+                                    try
+                                    {
+                                        result = CreateDynamicBlueprint(model, guid, vals.Skip(1).ToList(), mask);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Main.ModEntry.Logger.Error($"[CRITICAL] [DYNAMIC_ENCHANT] Exception creating dynamic blueprint for model '{enchantId}' (GUID: {guidStr}): {ex}");
+                                    }
+                                }
+                                else
+                                {
+                                    Main.ModEntry.Logger.Error($"[CRITICAL] [DYNAMIC_ENCHANT] Missing custom enchantment model for GUID {guidStr} (ID: {enchantId}, isFeature: {isFeature}, Params: {(vals != null ? string.Join(",", vals.Skip(1)) : "null")}).");
+                                }
+                            }
+
+                            if (result == null)
+                            {
+                                Main.ModEntry.Logger.Error($"[CRITICAL] [DYNAMIC_ENCHANT] Failed to construct custom blueprint for GUID {guidStr} (ID: {enchantId}). Returning placeholder blueprint to prevent game crash.");
+                                result = CreatePlaceholderBlueprint(guid, isFeature);
+                            }
                         }
                     }
 
@@ -464,6 +509,44 @@ namespace CraftingSystem
                 }
                 return result;
             }
+        }
+
+        private static BlueprintScriptableObject CreatePlaceholderBlueprint(BlueprintGuid guid, bool isFeature)
+        {
+            BlueprintScriptableObject bp = null;
+            try
+            {
+                if (isFeature)
+                {
+                    bp = Activator.CreateInstance(typeof(BlueprintFeature)) as BlueprintScriptableObject;
+                    bp.name = $"Placeholder_Missing_Feature_{guid}";
+                    bp.AssetGuid = guid;
+                    var tFact = typeof(BlueprintUnitFact);
+                    tFact.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, Helpers.CreateString($"{bp.name}.Name", $"[Missing Feature]"));
+                }
+                else
+                {
+                    bp = Activator.CreateInstance(typeof(BlueprintEquipmentEnchantment)) as BlueprintScriptableObject;
+                    bp.name = $"Placeholder_Missing_Enchant_{guid}";
+                    bp.AssetGuid = guid;
+                    var tEnch = typeof(BlueprintItemEnchantment);
+                    tEnch.GetField("m_EnchantName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, Helpers.CreateString($"{bp.name}.Name", $"[Missing Enchantment]"));
+                }
+
+                bp.ComponentsArray = new BlueprintComponent[0];
+                try { bp.OnEnable(); } catch {}
+
+                object dummy;
+                OwlcatModificationsManager.Instance.OnResourceLoaded(bp, bp.AssetGuid.ToString(), out dummy);
+                ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(bp.AssetGuid, bp);
+                InjectedGuids.Add(bp.AssetGuid);
+                Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Registered fallback placeholder blueprint: {bp.name} ({bp.AssetGuid})");
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"[CRITICAL] [DYNAMIC_ENCHANT] Failed to create placeholder blueprint for {guid}: {ex}");
+            }
+            return bp;
         }
 
         private static BlueprintScriptableObject CreateDynamicBlueprint(CustomEnchantmentData model, BlueprintGuid guid, List<int> paramValues, int mask)

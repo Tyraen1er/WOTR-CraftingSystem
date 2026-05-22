@@ -294,5 +294,37 @@
       }
     ],
     "PointCostFormula": "Value"
+  },
+  {
+    "EnchantId": "012",
+    "BaseName": {
+      "enGB": "Resistance Bonus (All Saves)",
+      "frFR": "Bonus de Résistance (Tous les jets)"
+    },
+    "NameCompleted": {
+      "enGB": "Resistance +{Value}",
+      "frFR": "Résistance +{Value}"
+    },
+    "FeatureModelId": "101",
+    "Type": "Other",
+    "MaxNotEpic": 5,
+    "Slots": [
+      "Shoulders"
+    ],
+    "GoldOverrideFormula": "1000 * Value * Value",
+    "PointCostFormula": "Value",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Value",
+        "Type": "Slider",
+        "Min": 1,
+        "Max": 20,
+        "Step": 1,
+        "FieldName": "Value"
+      }
+    ]
   }
 ]

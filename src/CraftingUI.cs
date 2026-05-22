@@ -38,6 +38,21 @@ namespace CraftingSystem
                 if (_isOpen == value) return;
                 _isOpen = value;
 
+                if (!_isOpen)
+                {
+                    try
+                    {
+                        Main.ModEntry.Logger.Log("[new-inventory] CraftingUI.IsOpen = false (fermeture de l'IMGUI). Appel de SyncFromBox().");
+                        var player = (Game.Instance?.Player != null) ? Game.Instance.Player.MainCharacter.Value : null;
+                        var workshop = player?.Get<UnitPartWilcerWorkshop>();
+                        workshop?.SyncFromBox();
+                    }
+                    catch (Exception ex)
+                    {
+                        Main.ModEntry.Logger.Error($"[UI] Erreur lors du sync de fermeture IMGUI : {ex.Message}");
+                    }
+                }
+
                 // Blocage/Déblocage de la caméra Rig (mouvement/zoom)
                 try
                 {
@@ -735,7 +750,7 @@ namespace CraftingSystem
                 {
                     var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
                     workshop?.CheckAndFinishProjects();
-                    workshop?.SyncFromBox(); // Crucial pour actualiser la liste même si aucun projet n'est fini
+                    workshop?.GetBox(); // Crucial pour actualiser la liste même si aucun projet n'est fini
                 }
                 // Désactivation temporaire pour les accessoires (TODO)
                 if (targetPage != CraftingPage.CreateAccessory)
@@ -1145,7 +1160,7 @@ namespace CraftingSystem
         void DrawInventoryGUI(float scale)
         {
             var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
-            var allItems = workshop?.StashedItems ?? new List<ItemEntity>();
+            var allItems = workshop?.GetBox()?.Items?.ToList() ?? new List<ItemEntity>();
 
             float windowWidth = 1000f * scale;
             float contentWidth = windowWidth - (120f * scale);

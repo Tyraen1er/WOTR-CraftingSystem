@@ -120,7 +120,10 @@ namespace CraftingSystem
 
         public void HandleItemsAdded(ItemsCollection collection, ItemEntity item, int count)
         {
-            if (collection != CraftingBox) return;
+            var mainChar = Game.Instance?.Player?.MainCharacter.Value;
+            if (mainChar == null) return;
+            var part = mainChar.Get<UnitPartWilcerWorkshop>();
+            if (part == null || collection != part.VirtualBox) return;
 
             // (La séparation des piles est désormais gérée par ItemsCollection_Add_Split_Patch)
 
@@ -139,9 +142,13 @@ namespace CraftingSystem
         {
             Observable.Timer(TimeSpan.FromMilliseconds(50)).Subscribe(_ => 
             {
-                if (CraftingBox.Items.Contains(item))
+                var mainChar = Game.Instance?.Player?.MainCharacter.Value;
+                if (mainChar == null) return;
+                var part = mainChar.Get<UnitPartWilcerWorkshop>();
+                var box = part?.VirtualBox;
+                if (box != null && box.Items.Contains(item))
                 {
-                    CraftingBox.Remove(item); 
+                    box.Remove(item); 
                     Game.Instance.Player.Inventory.Add(item); 
                 }
             });
@@ -149,7 +156,7 @@ namespace CraftingSystem
 
         public void OnInventoryClosed()
         {
-            Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] OnInventoryClosed appelé ! IsCraftingWindowOpen était : {IsCraftingWindowOpen}");
+            Main.ModEntry.Logger.Log($"[new-inventory] OnInventoryClosed() appelé (coffre fermé). IsCraftingWindowOpen={IsCraftingWindowOpen}");
             IsCraftingWindowOpen = false; 
             Game.Instance.Player.MainCharacter.Value.Ensure<UnitPartWilcerWorkshop>().SyncFromBox();
         }
@@ -218,11 +225,16 @@ namespace CraftingSystem
         public static bool Prefix(ItemEntity __instance, ItemEntity other, ref bool __result)
         {
             // Si l'un des deux items appartient à notre coffre d'artisanat, on interdit la fusion.
-            if ((__instance.Collection != null && __instance.Collection == DeferredInventoryOpener.CraftingBox) ||
-                (other.Collection != null && other.Collection == DeferredInventoryOpener.CraftingBox))
+            var mainChar = Game.Instance?.Player?.MainCharacter.Value;
+            var workshop = mainChar?.Get<UnitPartWilcerWorkshop>();
+            var box = workshop?.VirtualBox;
+            if (box != null)
             {
-                __result = false;
-                return false;
+                if (__instance.Collection == box || other.Collection == box)
+                {
+                    __result = false;
+                    return false;
+                }
             }
             return true;
         }
@@ -235,7 +247,10 @@ namespace CraftingSystem
         [HarmonyPrefix]
         public static bool Prefix(Kingmaker.Items.ItemsCollection __instance, ItemEntity newItem)
         {
-            if (__instance == DeferredInventoryOpener.CraftingBox && newItem.Count > 1)
+            var mainChar = Game.Instance?.Player?.MainCharacter.Value;
+            var workshop = mainChar?.Get<UnitPartWilcerWorkshop>();
+            var box = workshop?.VirtualBox;
+            if (box != null && __instance == box && newItem.Count > 1)
             {
                 // On extrait tout sauf 1
                 int toReturn = newItem.Count - 1;
@@ -257,16 +272,16 @@ namespace CraftingSystem
     {
         public static bool Prefix(Kingmaker.Items.ItemsCollection __instance, Kingmaker.Items.ItemEntity item)
         {
+            // Accès sécurisé au joueur et à l'atelier
+            var player = Kingmaker.Game.Instance?.Player?.MainCharacter.Value;
+            if (player == null) return true;
+
+            var workshop = player.Get<UnitPartWilcerWorkshop>();
+            var box = workshop?.VirtualBox;
+
             // 1. On vérifie si la collection est celle de la forge
-            if (__instance == DeferredInventoryOpener.CraftingBox)
+            if (box != null && __instance == box)
             {
-
-
-                // Accès sécurisé au joueur
-                var player = Kingmaker.Game.Instance.Player.MainCharacter.Value;
-                if (player == null) return true;
-
-                var workshop = player.Get<UnitPartWilcerWorkshop>();
                 
                 // 2. Si l'objet ou l'un de ses composants est en cours de forge, on bloque !
                 if (workshop != null)
@@ -325,7 +340,97 @@ namespace CraftingSystem
                         coll.GetType().GetMethod("Add")?.Invoke(coll, new object[] { mockLoot });
                     }
                 }
+
+                // Réinstancier LootCollector pour qu'il prenne en compte le nouveau mockLoot et ses groupes de slots
+                if (__instance.LootCollector != null)
+                {
+                    try
+                    {
+                        __instance.LootCollector.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Erreur lors du Dispose de l'ancien LootCollector: {ex.Message}");
+                    }
+                }
+
+                var newCollector = new Kingmaker.UI.MVVM._VM.Loot.LootCollectorVM(__instance);
+                __instance.LootCollector = newCollector;
+
+                try
+                {
+                    var addDispMethod = typeof(Owlcat.Runtime.UI.MVVM.BaseDisposable).GetMethod("AddDisposable", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                    addDispMethod?.Invoke(__instance, new object[] { newCollector });
+                }
+                catch (Exception ex)
+                {
+                    Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Erreur lors de l'ajout aux disposables : {ex.Message}");
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Kingmaker.UI.Common.ItemsFilter), nameof(Kingmaker.UI.Common.ItemsFilter.ShouldShowItem), new Type[] { typeof(ItemEntity), typeof(Kingmaker.UI.Common.ItemsFilter.FilterType) })]
+    public static class ItemsFilter_ShouldShowItem_Patch1
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ItemEntity item, ref bool __result)
+        {
+            if (item == null) return;
+            var player = (Game.Instance?.Player != null) ? Game.Instance.Player.MainCharacter.Value : null;
+            if (player == null) return;
+            var workshop = player.Get<UnitPartWilcerWorkshop>();
+            if (workshop != null && workshop.StashedItemIds.Contains(item.UniqueId))
+            {
+                var playerInv = Game.Instance?.Player?.Inventory;
+                if (playerInv != null && item.Collection == playerInv)
+                {
+                    __result = false;
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Kingmaker.UI.Common.ItemsFilter), nameof(Kingmaker.UI.Common.ItemsFilter.ShouldShowItem), new Type[] { typeof(Kingmaker.Blueprints.Items.BlueprintItem), typeof(Kingmaker.UI.Common.ItemsFilter.FilterType), typeof(ItemEntity) })]
+    public static class ItemsFilter_ShouldShowItem_Patch2
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ItemEntity item, ref bool __result)
+        {
+            if (item == null) return;
+            var player = (Game.Instance?.Player != null) ? Game.Instance.Player.MainCharacter.Value : null;
+            if (player == null) return;
+            var workshop = player.Get<UnitPartWilcerWorkshop>();
+            if (workshop != null && workshop.StashedItemIds.Contains(item.UniqueId))
+            {
+                var playerInv = Game.Instance?.Player?.Inventory;
+                if (playerInv != null && item.Collection == playerInv)
+                {
+                    __result = false;
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(ItemEntity), nameof(ItemEntity.TotalWeight), MethodType.Getter)]
+    public static class ItemEntity_TotalWeight_Patch
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ItemEntity __instance, ref float __result)
+        {
+            if (__instance == null) return;
+            var player = (Game.Instance?.Player != null) ? Game.Instance.Player.MainCharacter.Value : null;
+            if (player == null) return;
+            var workshop = player.Get<UnitPartWilcerWorkshop>();
+            if (workshop != null && workshop.StashedItemIds.Contains(__instance.UniqueId))
+            {
+                var playerInv = Game.Instance?.Player?.Inventory;
+                if (playerInv != null && __instance.Collection == playerInv)
+                {
+                    __result = 0f;
+                }
             }
         }
     }
 }
+
