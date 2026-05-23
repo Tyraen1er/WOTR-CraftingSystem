@@ -3066,7 +3066,13 @@ namespace CraftingSystem
                 if (p.EnumExclude != null && p.EnumExclude.Count > 0 && p.EnumExclude.Any(ee => ee.Equals(name, StringComparison.OrdinalIgnoreCase))) continue;
 
                 filteredNames.Add(name);
-                filteredValues.Add((int)allValues.GetValue(i));
+                
+                int val = (int)allValues.GetValue(i);
+                if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(name, out object ovr) && ovr is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null)
+                {
+                    val = (int)jo["Value"];
+                }
+                filteredValues.Add(val);
             }
 
             // 2. On ajoute les entrées virtuelles de EnumOverrides
@@ -3118,7 +3124,16 @@ namespace CraftingSystem
             else
             {
                 int currentVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
-                string currentName = Enum.GetName(enumType, currentVal);
+                string currentName = null;
+                int valIdx = Array.IndexOf(values, currentVal);
+                if (valIdx != -1)
+                {
+                    currentName = names[valIdx];
+                }
+                else
+                {
+                    currentName = Enum.GetName(enumType, currentVal);
+                }
 
                 if (string.IsNullOrEmpty(currentName) && p.EnumOverrides != null)
                 {

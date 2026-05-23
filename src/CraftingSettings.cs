@@ -14,7 +14,7 @@ namespace CraftingSystem
         public float EpicCostMultiplier = 10.0f;
 
         public float CostMultiplier = 1.0f;
-        public bool InstantCrafting = true;
+        public bool InstantCrafting = false;
         public bool EnforcePointsLimit = true;
         public int MaxTotalBonus = 10;
         public int MaxEnhancementBonus = 5;
