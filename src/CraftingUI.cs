@@ -432,15 +432,6 @@ namespace CraftingSystem
             Matrix4x4 oldMatrix = GUI.matrix;
             GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(scale, scale, 1f));
 
-            float internalScale = CraftingSettings.Instance.ScaleModifier;
-            float origSliderHeight = GUI.skin.horizontalSlider.fixedHeight;
-            float origThumbWidth = GUI.skin.horizontalSliderThumb.fixedWidth;
-            float origThumbHeight = GUI.skin.horizontalSliderThumb.fixedHeight;
-
-            GUI.skin.horizontalSlider.fixedHeight = origSliderHeight * internalScale;
-            GUI.skin.horizontalSliderThumb.fixedWidth = origThumbWidth * internalScale;
-            GUI.skin.horizontalSliderThumb.fixedHeight = origThumbHeight * internalScale;
-
             Color oldGUIColor = GUI.color;
             try
             {
@@ -487,10 +478,6 @@ namespace CraftingSystem
             }
             finally
             {
-                GUI.skin.horizontalSlider.fixedHeight = origSliderHeight;
-                GUI.skin.horizontalSliderThumb.fixedWidth = origThumbWidth;
-                GUI.skin.horizontalSliderThumb.fixedHeight = origThumbHeight;
-
                 GUI.matrix = oldMatrix;
             }
 
@@ -597,7 +584,21 @@ namespace CraftingSystem
             GUI.DrawTexture(new Rect(0, 0, windowWidth, windowHeight), Texture2D.whiteTexture);
             GUI.color = oldColor;
 
-            if (showDoubleWeaponChoice)
+            float origSliderHeight = GUI.skin.horizontalSlider.fixedHeight;
+            float origThumbWidth = GUI.skin.horizontalSliderThumb.fixedWidth;
+            float origThumbHeight = GUI.skin.horizontalSliderThumb.fixedHeight;
+
+            float baseSliderHeight = (origSliderHeight > 0.1f) ? origSliderHeight : 16f;
+            float baseThumbWidth = (origThumbWidth > 0.1f) ? origThumbWidth : 16f;
+            float baseThumbHeight = (origThumbHeight > 0.1f) ? origThumbHeight : 18f;
+
+            GUI.skin.horizontalSlider.fixedHeight = baseSliderHeight * scale;
+            GUI.skin.horizontalSliderThumb.fixedWidth = baseThumbWidth * scale;
+            GUI.skin.horizontalSliderThumb.fixedHeight = baseThumbHeight * scale;
+
+            try
+            {
+                if (showDoubleWeaponChoice)
             {
                 DrawDoubleWeaponChoice(windowID);
                 return;
@@ -757,6 +758,13 @@ namespace CraftingSystem
                     case CraftingPage.CreateScroll: DrawCreateScrollGUI(scale); break;
                     case CraftingPage.CreatePotion: DrawCreatePotionGUI(scale); break;
                 }
+            }
+            }
+            finally
+            {
+                GUI.skin.horizontalSlider.fixedHeight = origSliderHeight;
+                GUI.skin.horizontalSliderThumb.fixedWidth = origThumbWidth;
+                GUI.skin.horizontalSliderThumb.fixedHeight = origThumbHeight;
             }
             GUILayout.EndArea();
         }
