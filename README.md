@@ -38,17 +38,44 @@ The mod calculates costs dynamically based on the item type and existing propert
 - **Developers:** Pull Requests are welcome for any code improvements or bug fixes.
 - **Non-developers:** Updating data (balancing, new enchantments, translations) directly in the CSV or JSON files is greatly appreciated.
 
-## Development Configuration
-1. **UserConfig.props:** Define the path to your `Wrath_Data\Managed` folder.
-2. **Framework:** Targets .NET Framework 4.8.
-3. **Data Conversion:** The build process triggers a Python script that automatically converts the `Enchantments.csv` file into `Enchantments.json`.
-4. **Auto-Install:** The build process automatically copies the DLL and JSON files into the game's Mods folder.
+## Developer Guide
 
-### JSON Configuration and Structure
-Settings can be modified within the mod menu:
-- **Cost Multiplier:** Adjusts the global cost (Default is 0.5 for creation cost).
-- **Apply Slot Penalty:** Enables or disables the 50% surcharge.
-- **Enable Epic Costs:** Enables or disables the x10 multiplier.
+### Environment Setup
+1. **Target Framework:** .NET Framework 4.8.
+2. **Game References:** Copy or create `UserConfig.props` at the root and set `<WrathPath>` to your game's `Wrath_Data\Managed` directory.
+3. **Build Pipeline:** Compiling the project will automatically:
+   - Run `convert_csv_to_json.py` to compile `Enchantments.csv` into `ModConfig/Enchantments.json`.
+   - Copy the binaries and configuration files to the game's `Mods/CraftingSystem` directory.
+
+### Code Architecture
+- [Main.cs](src/Main.cs): Mod entry point, configuration UI, key bindings, and Harmony patches.
+- [UnifiedScanner.cs](src/UnifiedScanner.cs): Performs a multithreaded binary scan over game pack blueprints to index items, spells, and vanilla enchantments.
+- [CraftingCalculator.cs](src/CraftingCalculator.cs): Evaluates point costs, gold costs, slot penalties (+50%), multiple capacity penalties (+50%), and upgrade delta-pricing.
+- [CustomEnchantmentsBuilder.cs](src/CustomEnchantmentsBuilder.cs): Dynamically instantiates and registers new blueprints in the game cache based on templates defined in `ModConfig/CustomEnchants.json`.
+- [DynamicGuidHelper.cs](src/DynamicGuidHelper.cs): Generates and decodes custom parameters and enabled-components bitmasks directly to/from a deterministic GUID.
+- [EnchantmentDescriptionGenerator.cs](src/EnchantmentDescriptionGenerator.cs): Dynamically formats localized tooltips for custom/injected enchantments using templates.
+
+### Dynamic Blueprint Engine & GUID Format
+To bypass shipping thousands of static assets, custom enchantments are compiled on-the-fly. WotR's `BlueprintConverter.ReadJson` is patched to intercept GUIDs starting with the signature `c2af`, decode their properties, and construct the blueprint at runtime.
+
+The GUID encoding structure (32 hex characters):
+`[C2AF (4 chars)] [EnchantId (3 chars)] [ParamCount (1 char)] [Params (2 chars each)] [Zero padding] [ComponentBitmask (3 chars)]`
+
+- **EnchantId**: Identifies the base model in `CustomEnchants.json` (e.g., `109` for elemental damage).
+- **ComponentBitmask**: 12-bit bitmask determining which components defined in the model are active.
+
+### Data Configurations (ModConfig/)
+- `CustomEnchants.json` (and split files `CustomEnchants_*.json`): Configures dynamic enchantment models, their components, editable properties, and cost formulas.
+- `Enchantments.json`: Core index of vanilla and homebrew static enchantments (compiled from `Enchantments.csv`).
+- `EnchantmentTemplates.json`: Mapping of blueprint component types to string templates with placeholders (e.g., `<Value>`, `<FlagCondition:...>`) used to generate descriptions.
+- `EnchantmentDescriptionGlossary.json`: Translation mappings for technical terms, stats, and enums used in generated descriptions.
+- `Localization.json`: Contextual translation keys for the UMM interface and log outputs.
+
+### Testing & QA (tests/)
+- Run [RunPreflightChecks.ps1](tests/RunPreflightChecks.ps1) to compile the mod and validate the syntax of all configuration JSON files.
+- Run [ExtractCraftingLogSignals.ps1](tests/ExtractCraftingLogSignals.ps1) with the game's log path to quickly check for mod errors or missing blueprints.
+- Follow the checklist in [RegressionCampaign_HEAD_362a28d_to_HEAD.md](tests/RegressionCampaign_HEAD_362a28d_to_HEAD.md) for in-game validation steps.
+- Note: The game log (`Player.log`) is located in `%localappdatalow%\Owlcat Games\Pathfinder Wrath Of The Righteous\`.
 
 ## Thanks
 - **Cabarius** For the scanner logic and the renaming system utilized from ToyBox.
