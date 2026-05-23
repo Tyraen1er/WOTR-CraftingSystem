@@ -285,9 +285,9 @@ namespace CraftingSystem
             init?.Invoke(bp);
             return bp;
         }
-        public static string GetLocalizedString(object field, Dictionary<string, string> replacements = null)
+        public static string GetLocalizedString(object field, Dictionary<string, string> replacements = null, string fallback = null)
         {
-            if (field == null) return null;
+            if (field == null) return fallback;
             string raw = "";
             if (field is string s) {
                 if (s.StartsWith("ui_")) raw = GetString(s, s);
@@ -297,19 +297,29 @@ namespace CraftingSystem
             {
                 string locale = "enGB";
                 try { locale = LocalizationManager.CurrentLocale.ToString(); } catch { }
-                raw = jobj[locale]?.ToString() ?? jobj["enGB"]?.ToString() ?? jobj.Properties().FirstOrDefault()?.Value?.ToString() ?? "";
+                if (jobj[locale] != null) 
+                    raw = jobj[locale].ToString();
+                else if (locale != "enGB" && jobj["enGB"] != null) 
+                    raw = jobj["enGB"].ToString();
+                else if (locale != "enGB") 
+                    raw = jobj.Properties().FirstOrDefault(p => p.Name != "Value" && p.Name != "MaskValue" && p.Name != "MaxNotEpic" && p.Name != "PriceFactor")?.Value?.ToString() ?? "";
+                else 
+                    raw = "";
                 if (raw.StartsWith("ui_")) raw = GetString(raw, raw);
             }
             else if (field is EnumOverrideData eod)
             {
                 string locale = "enGB";
                 try { locale = LocalizationManager.CurrentLocale.ToString(); } catch { }
-                if (locale == "frFR") raw = eod.frFR ?? eod.enGB ?? "";
-                else raw = eod.enGB ?? eod.frFR ?? "";
+                if (locale == "frFR") raw = eod.frFR ?? eod.enGB ?? eod.ruRU ?? "";
+                else if (locale == "ruRU") raw = eod.ruRU ?? eod.enGB ?? eod.frFR ?? "";
+                else raw = eod.enGB ?? "";
                 if (raw.StartsWith("ui_")) raw = GetString(raw, raw);
             }
             else if (field is Newtonsoft.Json.Linq.JToken token) raw = token.ToString();
             else raw = field.ToString();
+
+            if (string.IsNullOrEmpty(raw)) raw = fallback ?? "";
 
             if (replacements != null)
             {

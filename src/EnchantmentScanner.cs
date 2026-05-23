@@ -385,7 +385,12 @@ namespace CraftingSystem
                                     if (!string.IsNullOrEmpty(enumName))
                                     {
                                         if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(enumName, out object overrideObj))
-                                            resolvedVal = Helpers.GetLocalizedString(overrideObj);
+                                        {
+                                            string defaultFallback = p.EnumTypeName.Contains("DamageEnergyType") 
+                                                ? Helpers.GetString("energy_" + enumName, enumName) 
+                                                : Helpers.GetString("ui_enum_" + enumName, enumName);
+                                            resolvedVal = Helpers.GetLocalizedString(overrideObj, null, defaultFallback);
+                                        }
                                         else
                                             resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
                                     }

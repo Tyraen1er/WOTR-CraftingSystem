@@ -28,6 +28,36 @@ namespace CraftingSystem
         public const int FONT_SMALL = 12;   // Noms internes, Indications secondaires
         public const int FONT_TINY = 10;    // Boutons Description, Micro-indications
 
+        public static float ResolvedWidth
+        {
+            get
+            {
+                float scale = CraftingSettings.Instance.ScalePercent / 100f;
+                if (scale <= 0.05f) scale = 1f;
+                float virtualScreenWidth = Screen.width / scale;
+                if (CraftingSettings.Instance.WindowWidth > 100f)
+                {
+                    return Mathf.Clamp(CraftingSettings.Instance.WindowWidth, 960f, 1920f);
+                }
+                return Mathf.Clamp(virtualScreenWidth * (CraftingSettings.Instance.WindowWidth / 100f), 960f, 1920f);
+            }
+        }
+
+        public static float ResolvedHeight
+        {
+            get
+            {
+                float scale = CraftingSettings.Instance.ScalePercent / 100f;
+                if (scale <= 0.05f) scale = 1f;
+                float virtualScreenHeight = Screen.height / scale;
+                if (CraftingSettings.Instance.WindowHeight > 100f)
+                {
+                    return Mathf.Clamp(CraftingSettings.Instance.WindowHeight, 600f, 1200f);
+                }
+                return Mathf.Clamp(virtualScreenHeight * (CraftingSettings.Instance.WindowHeight / 100f), 600f, 1200f);
+            }
+        }
+
         public static CraftingUI Instance;
         private bool _isOpen = false;
         public bool IsOpen
@@ -231,7 +261,7 @@ namespace CraftingSystem
 
                     if (oldIndex != currentFocusIndex && focusedRect != Rect.zero)
                     {
-                        float estimatedViewHeight = CraftingSettings.Instance.WindowHeight * 0.5f; // Rough estimate of scrollview
+                        float estimatedViewHeight = ResolvedHeight * 0.5f; // Rough estimate of scrollview
                         float padding = 50f;
 
                         if (focusedRect.yMax > scrollPosition.y + estimatedViewHeight)
@@ -277,7 +307,7 @@ namespace CraftingSystem
             float resScale = Math.Min(Screen.width / REFERENCE_WIDTH, Screen.height / REFERENCE_HEIGHT);
             float dpiScale = 1f;
             try { if (Screen.dpi > 0) dpiScale = Screen.dpi / 96f; } catch { dpiScale = 1f; }
-            float finalScale = Mathf.Clamp(resScale * dpiScale * 1.5f, 0.75f, 3.0f) * CraftingSettings.Instance.ScaleModifier;
+            float finalScale = Mathf.Clamp(resScale * dpiScale * 1.5f, 0.75f, 3.0f);
             CraftingSettings.Instance.ScalePercent = (int)(finalScale * 100f);
         }
 
@@ -357,8 +387,8 @@ namespace CraftingSystem
             float virtualScreenWidth = Screen.width / scale;
             float virtualScreenHeight = Screen.height / scale;
 
-            float virtualWidth = CraftingSettings.Instance.WindowWidth;
-            float virtualHeight = Mathf.Min(CraftingSettings.Instance.WindowHeight, virtualScreenHeight * 0.9f);
+            float virtualWidth = ResolvedWidth;
+            float virtualHeight = Mathf.Min(ResolvedHeight, virtualScreenHeight * 0.9f);
             Rect virtualWindowRect = new Rect((virtualScreenWidth - virtualWidth) / 2f, (virtualScreenHeight - virtualHeight) / 2f, virtualWidth, virtualHeight);
 
             Rect screenWindowRect = new Rect(virtualWindowRect.x * scale, virtualWindowRect.y * scale, virtualWindowRect.width * scale, virtualWindowRect.height * scale);
@@ -401,6 +431,15 @@ namespace CraftingSystem
             // Wrap inside GUI.matrix
             Matrix4x4 oldMatrix = GUI.matrix;
             GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(scale, scale, 1f));
+
+            float internalScale = CraftingSettings.Instance.ScaleModifier;
+            float origSliderHeight = GUI.skin.horizontalSlider.fixedHeight;
+            float origThumbWidth = GUI.skin.horizontalSliderThumb.fixedWidth;
+            float origThumbHeight = GUI.skin.horizontalSliderThumb.fixedHeight;
+
+            GUI.skin.horizontalSlider.fixedHeight = origSliderHeight * internalScale;
+            GUI.skin.horizontalSliderThumb.fixedWidth = origThumbWidth * internalScale;
+            GUI.skin.horizontalSliderThumb.fixedHeight = origThumbHeight * internalScale;
 
             Color oldGUIColor = GUI.color;
             try
@@ -448,6 +487,10 @@ namespace CraftingSystem
             }
             finally
             {
+                GUI.skin.horizontalSlider.fixedHeight = origSliderHeight;
+                GUI.skin.horizontalSliderThumb.fixedWidth = origThumbWidth;
+                GUI.skin.horizontalSliderThumb.fixedHeight = origThumbHeight;
+
                 GUI.matrix = oldMatrix;
             }
 
@@ -462,11 +505,11 @@ namespace CraftingSystem
 
         void DrawDoubleWeaponChoice(int id)
         {
-            float scale = 1f;
-            float windowWidth = CraftingSettings.Instance.WindowWidth;
+            float scale = CraftingSettings.Instance.ScaleModifier;
+            float windowWidth = ResolvedWidth;
             float realScale = CraftingSettings.Instance.ScalePercent / 100f;
             if (realScale <= 0.05f) realScale = 1f;
-            float windowHeight = Mathf.Min(CraftingSettings.Instance.WindowHeight, (Screen.height / realScale) * 0.9f);
+            float windowHeight = Mathf.Min(ResolvedHeight, (Screen.height / realScale) * 0.9f);
 
             GUILayout.BeginArea(new Rect(15, 15, windowWidth - 30, windowHeight - 30));
             GUILayout.BeginVertical();
@@ -542,11 +585,11 @@ namespace CraftingSystem
 
         void DrawWindowContent(int windowID)
         {
-            float scale = 1f;
-            float windowWidth = CraftingSettings.Instance.WindowWidth;
+            float scale = CraftingSettings.Instance.ScaleModifier;
+            float windowWidth = ResolvedWidth;
             float realScale = CraftingSettings.Instance.ScalePercent / 100f;
             if (realScale <= 0.05f) realScale = 1f;
-            float windowHeight = Mathf.Min(CraftingSettings.Instance.WindowHeight, (Screen.height / realScale) * 0.9f);
+            float windowHeight = Mathf.Min(ResolvedHeight, (Screen.height / realScale) * 0.9f);
 
             // Force l'opacité interne de la fenêtre principale
             Color oldColor = GUI.color;
@@ -722,7 +765,7 @@ namespace CraftingSystem
         {
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
 
-            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
+            float windowWidth = ResolvedWidth * scale;
             float contentWidth = windowWidth - (120f * scale);
 
             GUIStyle sectionHeaderStyle = new GUIStyle(GUI.skin.label)
@@ -836,7 +879,7 @@ namespace CraftingSystem
 
         private void DrawItemBrowser(float scale, List<ItemData> items, string title)
         {
-            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
+            float windowWidth = ResolvedWidth * scale;
             float contentWidth = windowWidth - (120f * scale);
 
             // Déclenchement automatique du scan si nécessaire
@@ -1015,7 +1058,7 @@ namespace CraftingSystem
 
         private void DrawMagicItemGUI(float scale, string title, int basePrice, int charges, Func<SpellData, int, int, BlueprintItemEquipmentUsable> builder, Predicate<SpellData> filter = null, int maxLevel = 9)
         {
-            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
+            float windowWidth = ResolvedWidth * scale;
             float contentWidth = windowWidth - (120f * scale);
 
             // Déclenchement automatique du scan si nécessaire
@@ -1225,7 +1268,7 @@ namespace CraftingSystem
             var workshop = Game.Instance.Player.MainCharacter.Value.Get<UnitPartWilcerWorkshop>();
             var allItems = workshop?.GetBox()?.Items?.ToList() ?? new List<ItemEntity>();
 
-            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
+            float windowWidth = ResolvedWidth * scale;
             float contentWidth = windowWidth - (120f * scale);
 
             GUILayout.BeginHorizontal();
@@ -1361,7 +1404,7 @@ namespace CraftingSystem
 
         void DrawItemModificationGUI(float scale)
         {
-            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
+            float windowWidth = ResolvedWidth * scale;
             float contentWidth = windowWidth - (120f * scale);
             if (showIconBrowser)
             {
@@ -1437,7 +1480,7 @@ namespace CraftingSystem
 
             GUILayout.Space(10 * scale);
 
-            if (CButton(Helpers.GetString("ui_btn_reset_icon", "Reset"), GUILayout.Width(100 * scale), GUILayout.Height(40 * scale)))
+            if (CButton(Helpers.GetString("ui_btn_reset_icon", "Reset"), GUILayout.Width(120 * scale), GUILayout.Height(40 * scale)))
             {
                 ItemRenamer.ChangeIcon(selectedItem, null);
                 feedbackMessage = Helpers.GetString("ui_feedback_icon_reset", "Icon reset to default.");
@@ -1557,11 +1600,20 @@ namespace CraftingSystem
                         };
                         GUILayout.Label(Helpers.GetString("ui_btn_cant_remove", "Can't remove"), cantStyle, GUILayout.Width(100 * scale), GUILayout.Height(20 * scale));
                     }
-                    else if (CButton(Helpers.GetString("ui_btn_remove", "Remove"), GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
+                    else
                     {
-                        selectedItem.RemoveEnchantment(ench);
-                        selectedItem.Identify();
-                        filtersDirty = true;
+                        GUIStyle removeStyle = new GUIStyle(GUI.skin.button)
+                        {
+                            fontSize = (int)(FONT_TINY * scale),
+                            alignment = TextAnchor.MiddleCenter,
+                            padding = new RectOffset(2, 2, 0, 0)
+                        };
+                        if (CButtonStyled(new GUIContent(Helpers.GetString("ui_btn_remove", "Remove")), removeStyle, GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
+                        {
+                            selectedItem.RemoveEnchantment(ench);
+                            selectedItem.Identify();
+                            filtersDirty = true;
+                        }
                     }
                     GUILayout.EndHorizontal();
                 }
@@ -1691,7 +1743,7 @@ namespace CraftingSystem
                 {
                     // -- NAVIGATION DE PAGINATION --
                     // -- DYNAMIC PAGINATION CALCULATION --
-                    float currentWindowHeight = Mathf.Min(CraftingSettings.Instance.WindowHeight * scale, Screen.height * 0.9f);
+                    float currentWindowHeight = Mathf.Min(ResolvedHeight * scale, Screen.height * 0.9f);
                     // Pagination manuelle basée sur les réglages
                     int totalItems = cachedFilteredEnchantments.Count;
                     int totalPages = Mathf.Max(1, Mathf.CeilToInt((float)totalItems / CraftingSettings.Instance.ItemsPerPage));
@@ -1912,7 +1964,7 @@ namespace CraftingSystem
 
         private void DrawIconBrowserGUI(float scale)
         {
-            float windowWidth = CraftingSettings.Instance.WindowWidth * scale;
+            float windowWidth = ResolvedWidth * scale;
             float contentWidth = windowWidth - (120f * scale);
             GUIStyle titleStyle = new GUIStyle(GUI.skin.label)
             {
@@ -2253,7 +2305,7 @@ namespace CraftingSystem
 
         private void DrawDescriptionPopup(int windowID)
         {
-            float scale = 1f;
+            float scale = CraftingSettings.Instance.ScaleModifier;
 
             // Force l'opacité interne
             Color oldColor = GUI.color;
@@ -2322,7 +2374,7 @@ namespace CraftingSystem
 
         private bool CButton(string text, params GUILayoutOption[] options)
         {
-            float scale = 1f;
+            float scale = CraftingSettings.Instance.ScaleModifier;
             GUIStyle style = new GUIStyle(GUI.skin.button) { fontSize = (int)(FONT_NORMAL * scale) };
             return CButtonStyled(new GUIContent(text), style, options);
         }
@@ -2333,9 +2385,29 @@ namespace CraftingSystem
             Color oldColor = GUI.color;
             if (isFocused) GUI.color = Color.yellow;
 
-            bool clicked = false;
-            if (style != null) clicked = GUILayout.Button(content, style, options);
-            else clicked = GUILayout.Button(content, options);
+            float scale = CraftingSettings.Instance.ScaleModifier;
+            GUIStyle activeStyle = style != null ? new GUIStyle(style) : new GUIStyle(GUI.skin.button);
+
+            // Scale padding to match scale modifier
+            activeStyle.padding = new RectOffset(
+                (int)Math.Max(1, activeStyle.padding.left * scale),
+                (int)Math.Max(1, activeStyle.padding.right * scale),
+                (int)Math.Max(1, activeStyle.padding.top * scale),
+                (int)Math.Max(1, activeStyle.padding.bottom * scale)
+            );
+
+            // Calculate min width required to fit text at current scale
+            float reqWidth = 0f;
+            if (content != null)
+            {
+                reqWidth = activeStyle.CalcSize(content).x + 4f * scale;
+            }
+
+            List<GUILayoutOption> finalOptions = new List<GUILayoutOption>();
+            if (options != null) finalOptions.AddRange(options);
+            if (reqWidth > 0f) finalOptions.Add(GUILayout.MinWidth(reqWidth));
+
+            bool clicked = GUILayout.Button(content, activeStyle, finalOptions.ToArray());
 
             if (isFocused && Event.current.type == EventType.Repaint) focusedRect = GUILayoutUtility.GetLastRect();
 
@@ -2351,7 +2423,7 @@ namespace CraftingSystem
 
         private bool CToggle(bool value, string text, params GUILayoutOption[] options)
         {
-            float scale = 1f;
+            float scale = CraftingSettings.Instance.ScaleModifier;
             GUIStyle style = new GUIStyle(GUI.skin.label)
             {
                 fontSize = (int)(FONT_NORMAL * scale),
@@ -2363,7 +2435,7 @@ namespace CraftingSystem
         {
             int index = processIndex++;
             bool isFocused = (index == currentFocusIndex);
-            float scale = 1f;
+            float scale = CraftingSettings.Instance.ScaleModifier;
             float boxSize = 18f * scale;
 
             GUILayout.BeginHorizontal(options);
@@ -2413,7 +2485,7 @@ namespace CraftingSystem
 
         private string CTextField(string text, params GUILayoutOption[] options)
         {
-            float scale = 1f;
+            float scale = CraftingSettings.Instance.ScaleModifier;
             GUIStyle style = new GUIStyle(GUI.skin.textField) { fontSize = (int)(FONT_NORMAL * scale) };
             return CTextFieldStyled(text, style, options);
         }
@@ -3023,8 +3095,14 @@ namespace CraftingSystem
             if (names.Length == 1)
             {
                 string displayName = names[0];
-                if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[0], out object ovrObj)) displayName = Helpers.GetLocalizedString(ovrObj);
-                else displayName = Helpers.GetString("ui_enum_" + names[0], names[0]);
+                if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[0], out object ovrObj))
+                {
+                    displayName = Helpers.GetLocalizedString(ovrObj, null, Helpers.GetString("ui_enum_" + names[0], names[0]));
+                }
+                else
+                {
+                    displayName = Helpers.GetString("ui_enum_" + names[0], names[0]);
+                }
 
                 GUILayout.Label(displayName, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale) });
                 dynamicParamValues[p.Name] = values[0];
@@ -3048,9 +3126,13 @@ namespace CraftingSystem
 
                 string displayName = currentName ?? "";
                 if (p.EnumOverrides != null && !string.IsNullOrEmpty(currentName) && p.EnumOverrides.TryGetValue(currentName, out object overrideObj))
-                    displayName = Helpers.GetLocalizedString(overrideObj);
+                {
+                    displayName = Helpers.GetLocalizedString(overrideObj, null, Helpers.GetString("ui_enum_" + displayName, displayName));
+                }
                 else
+                {
                     displayName = Helpers.GetString("ui_enum_" + displayName, displayName);
+                }
 
                 GUIStyle enumBtnStyle = new GUIStyle(GUI.skin.button) { fontSize = (int)(FONT_LARGE * scale) };
                 if (CButtonStyled(new GUIContent(displayName), enumBtnStyle, GUILayout.Width(250 * scale)))
@@ -3064,8 +3146,14 @@ namespace CraftingSystem
                     for (int i = 0; i < names.Length; i++)
                     {
                         string optName = names[i];
-                        if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[i], out object optOverrideObj)) optName = Helpers.GetLocalizedString(optOverrideObj);
-                        else optName = Helpers.GetString("ui_enum_" + optName, optName);
+                        if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(names[i], out object optOverrideObj))
+                        {
+                            optName = Helpers.GetLocalizedString(optOverrideObj, null, Helpers.GetString("ui_enum_" + optName, optName));
+                        }
+                        else
+                        {
+                            optName = Helpers.GetString("ui_enum_" + optName, optName);
+                        }
 
                         if (CButtonStyled(new GUIContent(optName), enumBtnStyle)) { dynamicParamValues[p.Name] = (int)values[i]; openDropdownParam = null; }
                     }
@@ -3340,7 +3428,7 @@ namespace CraftingSystem
         }
         void DrawDescriptionEditor(int id)
         {
-            float scale = 1f;
+            float scale = CraftingSettings.Instance.ScaleModifier;
             GUILayout.BeginArea(new Rect(15, 15, 800f - 30, 600f - 30));
             GUILayout.BeginVertical(GUI.skin.box);
 

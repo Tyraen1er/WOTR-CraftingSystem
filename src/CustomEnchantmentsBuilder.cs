@@ -145,6 +145,7 @@ namespace CraftingSystem
     {
         public string frFR;
         public string enGB;
+        public string ruRU;
         public int? MaxNotEpic;
         public int? PriceFactor;
         public List<string> Slots;
@@ -689,7 +690,12 @@ namespace CraftingSystem
                                 resolvedVal = "";
                             } else if (!string.IsNullOrEmpty(enumName)) {
                                 if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(enumName, out object ovrObj))
-                                    resolvedVal = Helpers.GetLocalizedString(ovrObj);
+                                {
+                                    string defaultFallback = p.EnumTypeName.Contains("DamageEnergyType") 
+                                        ? Helpers.GetString("energy_" + enumName, enumName) 
+                                        : Helpers.GetString("ui_enum_" + enumName, enumName);
+                                    resolvedVal = Helpers.GetLocalizedString(ovrObj, null, defaultFallback);
+                                }
                                 else if (p.EnumTypeName.Contains("DamageEnergyType"))
                                     resolvedVal = Helpers.GetString("energy_" + enumName, enumName);
                                 else

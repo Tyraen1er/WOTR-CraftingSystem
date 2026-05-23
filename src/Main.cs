@@ -22,6 +22,9 @@ namespace CraftingSystem
         public static Harmony HarmonyInstance;
         public static UnityModManager.ModEntry.ModLogger log => ModEntry.Logger;
 
+        private static string widthString = null;
+        private static string heightString = null;
+
         static bool Load(UnityModManager.ModEntry modEntry)
         {
             try
@@ -77,10 +80,7 @@ namespace CraftingSystem
                 DeferredInventoryOpener.RequestUI(CraftingWindowMode.LootUI, 0.2f);
             }
             UnityEngine.GUILayout.Space(20);
-            UnityEngine.KeyCode oldInv = CraftingSettings.Instance.ShortcutInventory.keyCode;
-            byte oldInvMod = CraftingSettings.Instance.ShortcutInventory.modifiers;
-            UnityModManager.UI.DrawKeybindingSmart(CraftingSettings.Instance.ShortcutInventory, Helpers.GetString("ui_umm_shortcut") + " ", null, UnityEngine.GUILayout.Width(150));
-            if (CraftingSettings.Instance.ShortcutInventory.keyCode != oldInv || CraftingSettings.Instance.ShortcutInventory.modifiers != oldInvMod) CraftingSettings.Instance.Save(modEntry);
+            UnityModManager.UI.DrawKeybindingSmart(CraftingSettings.Instance.ShortcutInventory, Helpers.GetString("ui_umm_shortcut") + " ", (kb) => CraftingSettings.Instance.Save(modEntry), null, UnityEngine.GUILayout.Width(150));
             UnityEngine.GUILayout.EndHorizontal();
 
             UnityEngine.GUILayout.BeginHorizontal();
@@ -91,10 +91,7 @@ namespace CraftingSystem
                 DeferredInventoryOpener.RequestUI(CraftingWindowMode.StoredItemIMGUI, 0.2f);
             }
             UnityEngine.GUILayout.Space(20);
-            UnityEngine.KeyCode oldImgui = CraftingSettings.Instance.ShortcutIMGUI.keyCode;
-            byte oldImguiMod = CraftingSettings.Instance.ShortcutIMGUI.modifiers;
-            UnityModManager.UI.DrawKeybindingSmart(CraftingSettings.Instance.ShortcutIMGUI, Helpers.GetString("ui_umm_shortcut") + "  ", null, UnityEngine.GUILayout.Width(150));
-            if (CraftingSettings.Instance.ShortcutIMGUI.keyCode != oldImgui || CraftingSettings.Instance.ShortcutIMGUI.modifiers != oldImguiMod) CraftingSettings.Instance.Save(modEntry);
+            UnityModManager.UI.DrawKeybindingSmart(CraftingSettings.Instance.ShortcutIMGUI, Helpers.GetString("ui_umm_shortcut") + "  ", (kb) => CraftingSettings.Instance.Save(modEntry), null, UnityEngine.GUILayout.Width(150));
             UnityEngine.GUILayout.EndHorizontal();
 
             UnityEngine.GUILayout.Space(10);
@@ -106,19 +103,43 @@ namespace CraftingSystem
             if (UnityEngine.GUILayout.Button("Reset", UnityEngine.GUILayout.Width(100)))
             {
                 CraftingSettings.Instance.WindowWidth = CraftingSettings.GetDefaultWidth();
+                widthString = CraftingSettings.Instance.WindowWidth.ToString(System.Globalization.CultureInfo.InvariantCulture);
                 CraftingSettings.Instance.Save(modEntry);
             }
             UnityEngine.GUILayout.Space(10);
-            float oldWidth = CraftingSettings.Instance.WindowWidth;
-            float newWidth = UnityEngine.GUILayout.HorizontalSlider(oldWidth, 800f, 2000f, UnityEngine.GUILayout.Width(200));
-            newWidth = (float)Math.Round(newWidth);
-            UnityEngine.GUILayout.Space(10);
-            UnityEngine.GUILayout.Label($"{newWidth} px", UnityEngine.GUILayout.Width(80));
-            if (newWidth != oldWidth)
+            if (widthString == null)
             {
-                CraftingSettings.Instance.WindowWidth = newWidth;
-                CraftingSettings.Instance.Save(modEntry);
+                widthString = CraftingSettings.Instance.WindowWidth.ToString(System.Globalization.CultureInfo.InvariantCulture);
             }
+            string newWidthStr = UnityEngine.GUILayout.TextField(widthString, UnityEngine.GUILayout.Width(100));
+            if (newWidthStr != widthString)
+            {
+                widthString = newWidthStr;
+                bool parsed = float.TryParse(newWidthStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float val);
+                if (!parsed)
+                {
+                    parsed = float.TryParse(newWidthStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.CurrentCulture, out val);
+                }
+                if (parsed)
+                {
+                    float valClamped;
+                    if (val > 100f)
+                    {
+                        valClamped = UnityEngine.Mathf.Clamp(val, 800f, 2000f);
+                    }
+                    else
+                    {
+                        valClamped = UnityEngine.Mathf.Clamp(val, 30f, 100f);
+                    }
+                    if (valClamped != CraftingSettings.Instance.WindowWidth)
+                    {
+                        CraftingSettings.Instance.WindowWidth = valClamped;
+                        CraftingSettings.Instance.Save(modEntry);
+                    }
+                }
+            }
+            string displayUnitWidth = (CraftingSettings.Instance.WindowWidth > 100f) ? "px" : "%";
+            UnityEngine.GUILayout.Label($"{CraftingSettings.Instance.WindowWidth} {displayUnitWidth}", UnityEngine.GUILayout.Width(80));
             UnityEngine.GUILayout.EndHorizontal();
 
             // Hauteur de la fenêtre
@@ -127,19 +148,43 @@ namespace CraftingSystem
             if (UnityEngine.GUILayout.Button("Reset", UnityEngine.GUILayout.Width(100)))
             {
                 CraftingSettings.Instance.WindowHeight = CraftingSettings.GetDefaultHeight();
+                heightString = CraftingSettings.Instance.WindowHeight.ToString(System.Globalization.CultureInfo.InvariantCulture);
                 CraftingSettings.Instance.Save(modEntry);
             }
             UnityEngine.GUILayout.Space(10);
-            float oldHeight = CraftingSettings.Instance.WindowHeight;
-            float newHeight = UnityEngine.GUILayout.HorizontalSlider(oldHeight, 600f, 1600f, UnityEngine.GUILayout.Width(200));
-            newHeight = (float)Math.Round(newHeight);
-            UnityEngine.GUILayout.Space(10);
-            UnityEngine.GUILayout.Label($"{newHeight} px", UnityEngine.GUILayout.Width(80));
-            if (newHeight != oldHeight)
+            if (heightString == null)
             {
-                CraftingSettings.Instance.WindowHeight = newHeight;
-                CraftingSettings.Instance.Save(modEntry);
+                heightString = CraftingSettings.Instance.WindowHeight.ToString(System.Globalization.CultureInfo.InvariantCulture);
             }
+            string newHeightStr = UnityEngine.GUILayout.TextField(heightString, UnityEngine.GUILayout.Width(100));
+            if (newHeightStr != heightString)
+            {
+                heightString = newHeightStr;
+                bool parsed = float.TryParse(newHeightStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float val);
+                if (!parsed)
+                {
+                    parsed = float.TryParse(newHeightStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.CurrentCulture, out val);
+                }
+                if (parsed)
+                {
+                    float valClamped;
+                    if (val > 100f)
+                    {
+                        valClamped = UnityEngine.Mathf.Clamp(val, 600f, 1600f);
+                    }
+                    else
+                    {
+                        valClamped = UnityEngine.Mathf.Clamp(val, 30f, 100f);
+                    }
+                    if (valClamped != CraftingSettings.Instance.WindowHeight)
+                    {
+                        CraftingSettings.Instance.WindowHeight = valClamped;
+                        CraftingSettings.Instance.Save(modEntry);
+                    }
+                }
+            }
+            string displayUnitHeight = (CraftingSettings.Instance.WindowHeight > 100f) ? "px" : "%";
+            UnityEngine.GUILayout.Label($"{CraftingSettings.Instance.WindowHeight} {displayUnitHeight}", UnityEngine.GUILayout.Width(80));
             UnityEngine.GUILayout.EndHorizontal();
 
             // Modificateur de scale

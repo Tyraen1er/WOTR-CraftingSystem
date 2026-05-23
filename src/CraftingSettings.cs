@@ -46,16 +46,12 @@ namespace CraftingSystem
 
         public static float GetDefaultWidth()
         {
-            float scale = GetDefaultScale();
-            float virtualScreenWidth = UnityEngine.Screen.width / scale;
-            return UnityEngine.Mathf.Clamp((float)Math.Round(virtualScreenWidth * 0.72f), 960f, 1920f);
+            return 72f;
         }
 
         public static float GetDefaultHeight()
         {
-            float scale = GetDefaultScale();
-            float virtualScreenHeight = UnityEngine.Screen.height / scale;
-            return UnityEngine.Mathf.Clamp((float)Math.Round(virtualScreenHeight * 0.85f), 600f, 1200f);
+            return 85f;
         }
 
         // Raccourcis clavier
