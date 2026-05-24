@@ -161,9 +161,9 @@
       "ruRU": "Бонус к спасброскам"
     },
     "NameCompleted": {
-      "enGB": "+{Value} bonus to {Stat}",
-      "frFR": "+{Value} aux jets de {Stat}",
-      "ruRU": "+{Value} бонус к {Stat}"
+      "enGB": "+{Value} {Descriptor} bonus to {Stat}",
+      "frFR": "+{Value} ({Descriptor}) aux jets de {Stat}",
+      "ruRU": "+{Value} ({Descriptor}) бонус к {Stat}"
     },
     "FeatureModelId": "101",
     "Type": "Other",
@@ -196,27 +196,84 @@
           "SaveFortitude": {
             "enGB": "Fortitude",
             "frFR": "Vigueur",
-            "ruRU": "Стойкость"
+            "ruRU": "Стойкость",
+            "MaskValue": 1
           },
           "SaveReflex": {
             "enGB": "Reflex",
             "frFR": "Réflexes",
-            "ruRU": "Реакция"
+            "ruRU": "Réaction",
+            "MaskValue": 1
           },
           "SaveWill": {
             "enGB": "Will",
             "frFR": "Volonté",
-            "ruRU": "Воля"
+            "ruRU": "Воля",
+            "MaskValue": 1
           },
           "SaveAll": {
             "enGB": "All Saves",
             "frFR": "sauvegarde (tous)",
             "ruRU": "спасброски (все)",
-            "Value": 99
+            "Value": 255,
+            "MaskValue": 2
           }
         },
         "ComponentIndex": -1,
         "FieldName": "Stat"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "DefaultValue": "Resistance",
+        "EnumOnly": [
+          "Resistance",
+          "None",
+          "Luck",
+          "Morale",
+          "Sacred",
+          "Profane",
+          "Insight"
+        ],
+        "EnumOverrides": {
+          "Resistance": {
+            "enGB": "Resistance",
+            "frFR": "Résistance",
+            "ruRU": "Сопротивление"
+          },
+          "None": {
+            "enGB": "Untyped",
+            "frFR": "Sans type",
+            "ruRU": "Без типа"
+          },
+          "Luck": {
+            "enGB": "Luck",
+            "frFR": "Chance",
+            "ruRU": "Удача"
+          },
+          "Morale": {
+            "enGB": "Morale",
+            "frFR": "Moral",
+            "ruRU": "Боевой du"
+          },
+          "Sacred": {
+            "enGB": "Sacred",
+            "frFR": "Sacré",
+            "ruRU": "Священный"
+          },
+          "Profane": {
+            "enGB": "Profane",
+            "frFR": "Profane",
+            "ruRU": "Оскверненный"
+          },
+          "Insight": {
+            "enGB": "Insight",
+            "frFR": "Intuition",
+            "ruRU": "Интуиция"
+          }
+        },
+        "ComponentIndex": -1,
+        "FieldName": "Descriptor"
       },
       {
         "Name": "Value",
@@ -881,6 +938,7 @@
   },
   {
     "EnchantId": "012",
+    "Hidden": true,
     "BaseName": {
       "enGB": "Resistance Bonus (All Saves)",
       "frFR": "Bonus de Résistance (Tous les jets)"
@@ -907,6 +965,7 @@
         "Min": 1,
         "Max": 20,
         "Step": 1,
+        "ComponentIndex": -1,
         "FieldName": "Value"
       }
     ]

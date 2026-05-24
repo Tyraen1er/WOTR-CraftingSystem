@@ -382,6 +382,22 @@ namespace CraftingSystem
                                 if (enumType != null)
                                 {
                                     string enumName = Enum.GetName(enumType, val);
+                                    
+                                    // Support des noms virtuels (SaveAll...)
+                                    if (string.IsNullOrEmpty(enumName) && p.EnumOverrides != null) {
+                                        foreach (var ovr in p.EnumOverrides) {
+                                            int? ovrValue = null;
+                                            if (ovr.Value is Newtonsoft.Json.Linq.JObject jo && jo["Value"] != null) ovrValue = (int)jo["Value"];
+                                            else if (ovr.Value is EnumOverrideData eod) ovrValue = eod.Value;
+                                            else if (ovr.Value is Dictionary<string, object> dict && dict.TryGetValue("Value", out object v)) ovrValue = Convert.ToInt32(v);
+
+                                            if (ovrValue.HasValue && ovrValue.Value == val) {
+                                                enumName = ovr.Key;
+                                                break;
+                                            }
+                                        }
+                                    }
+
                                     if (!string.IsNullOrEmpty(enumName))
                                     {
                                         if (p.EnumOverrides != null && p.EnumOverrides.TryGetValue(enumName, out object overrideObj))
@@ -409,14 +425,14 @@ namespace CraftingSystem
             string suffix = model.Suffix != null ? Helpers.GetLocalizedString(model.Suffix, replacements) : "";
 
             string fullDisplayName = finalName;
-            if (!string.IsNullOrEmpty(prefix) && !fullDisplayName.StartsWith(prefix)) fullDisplayName = prefix + " " + fullDisplayName;
+            if (!string.IsNullOrEmpty(prefix) && !fullDisplayName.StartsWith(prefix)) fullDisplayName = prefix + " " + finalName;
             if (!string.IsNullOrEmpty(suffix) && !fullDisplayName.Contains(suffix)) fullDisplayName = fullDisplayName + " " + suffix;
 
             // Détermination si c'est une altération pure (Weapon/Armor Enhancement Bonus)
             bool isEnhancement = false;
             for (int i = 0; i < model.Components.Count; i++)
             {
-                if ((mask & (1 << i)) == 0) continue;
+                if (model.Type == "Feature" && (mask & (1 << i)) == 0) continue;
 
                 object compObj = model.Components[i];
                 string compTypeName = "";

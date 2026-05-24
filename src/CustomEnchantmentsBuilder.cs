@@ -593,8 +593,8 @@ namespace CraftingSystem
 
             for (int i = 0; i < model.Components.Count; i++)
             {
-                // Vérification du masque (bit i)
-                if ((mask & (1 << i)) == 0) continue;
+                // Vérification du masque (uniquement pour les Features)
+                if (bp is BlueprintFeature && (mask & (1 << i)) == 0) continue;
 
                 object compObj = model.Components[i];
                 object actualComp = compObj;

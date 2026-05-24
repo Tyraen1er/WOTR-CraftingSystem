@@ -297,6 +297,7 @@
   },
   {
     "EnchantId": "012",
+    "Hidden": true,
     "BaseName": {
       "enGB": "Resistance Bonus (All Saves)",
       "frFR": "Bonus de Résistance (Tous les jets)"
@@ -323,6 +324,7 @@
         "Min": 1,
         "Max": 20,
         "Step": 1,
+        "ComponentIndex": -1,
         "FieldName": "Value"
       }
     ]
