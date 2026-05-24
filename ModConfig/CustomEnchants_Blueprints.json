@@ -223,6 +223,35 @@
     "PointCostFormula": "Grade * 3 + 3"
   },
   {
+    "EnchantId": "110",
+    "BaseName": "Model_SpellDC_Feature",
+    "Type": "Feature",
+    "Hidden": true,
+    "Components": [
+      "Comp_SpellSchoolDC"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "School",
+        "EnumTypeName": "Kingmaker.Blueprints.Classes.Spells.SpellSchool, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "School"
+      },
+      {
+        "Name": "Value",
+        "Max": 20,
+        "ComponentIndex": 0,
+        "FieldName": "BonusDC"
+      },
+      {
+        "Name": "Descriptor",
+        "EnumTypeName": "Kingmaker.Enums.ModifierDescriptor, Assembly-CSharp",
+        "ComponentIndex": 0,
+        "FieldName": "Descriptor"
+      }
+    ]
+  },
+  {
     "EnchantId": "999",
     "BaseName": {
       "enGB": "Stat Explorer",

@@ -93,18 +93,62 @@ namespace CraftingSystem
             
             // Si c'est un enchantement dynamique (nom_guid), on ne doit pas supprimer le guid 
             // car cela créerait des collisions entre familles (ex: toutes les résistances deviendraient identiques).
-            if (blueprintName.Contains("_c2af"))
+            int c2afIndex = blueprintName.IndexOf("_c2af", StringComparison.OrdinalIgnoreCase);
+            if (c2afIndex >= 0)
             {
                 // On garde le nom et le début du GUID (l'ID du modèle + flag feature)
                 // Résistance feu 35_c2af0013... -> Résistance feu 35_c2af001
                 var parts = blueprintName.Split('_');
                 if (parts.Length > 1) {
                     string guidPart = parts.Last();
-                    // On prend les 7 premiers caractères du GUID (c2af + 3 hex d'ID)
+                    try
+                    {
+                        var guid = BlueprintGuid.Parse(guidPart);
+                        if (DynamicGuidHelper.TryDecodeGuid(guid, out string enchantId, out List<int> decodedParams))
+                        {
+                            bool isFeature = decodedParams.Count > 0 && decodedParams[0] == 1;
+                            var model = CustomEnchantmentsBuilder.GetModelById(enchantId, isFeature);
+                            if (model != null)
+                            {
+                                var familyParts = new List<string>();
+                                familyParts.Add(enchantId);
+                                
+                                for (int i = 0; i < model.DynamicParams.Count; i++)
+                                {
+                                    if (i + 1 < decodedParams.Count)
+                                    {
+                                        var p = model.DynamicParams[i];
+                                        int val = decodedParams[i + 1];
+                                        
+                                        // On ignore les paramètres numériques de magnitude/valeur pour la famille
+                                        if (string.Equals(p.Name, "Value", StringComparison.OrdinalIgnoreCase) ||
+                                            string.Equals(p.Name, "Bonus", StringComparison.OrdinalIgnoreCase) ||
+                                            string.Equals(p.Name, "DiceCount", StringComparison.OrdinalIgnoreCase) ||
+                                            string.Equals(p.Name, "Charges", StringComparison.OrdinalIgnoreCase) ||
+                                            string.Equals(p.Name, "MaxLevel", StringComparison.OrdinalIgnoreCase) ||
+                                            string.Equals(p.Name, "Descriptor", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            continue;
+                                        }
+                                        
+                                        familyParts.Add($"{p.Name}:{val}");
+                                    }
+                                }
+                                
+                                string cleanName = Regex.Replace(parts[0], @"\d+", "").Trim();
+                                return cleanName + "_" + string.Join("_", familyParts);
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // On ignore l'erreur et on utilise le fallback
+                    }
+
+                    // Fallback si decodage impossible
                     string familyPrefix = guidPart.Length >= 7 ? guidPart.Substring(0, 7) : guidPart;
-                    // On garde le nom localisé mais on retire les chiffres pour permettre l'upgrade (10 -> 30)
-                    string cleanName = Regex.Replace(parts[0], @"\d+", "").Trim();
-                    return cleanName + "_" + familyPrefix;
+                    string cleanFallback = Regex.Replace(parts[0], @"\d+", "").Trim();
+                    return cleanFallback + "_" + familyPrefix;
                 }
             }
 
