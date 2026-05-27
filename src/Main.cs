@@ -13,6 +13,20 @@ using Kingmaker.PubSubSystem;
 using Kingmaker.UI.Models.Log;
 using Kingmaker.Blueprints.Root;
 using System.Linq;
+using Kingmaker.UnitLogic.Buffs;
+using Kingmaker.UnitLogic.Buffs.Blueprints;
+using Kingmaker.EntitySystem.Entities;
+using Kingmaker.UnitLogic.Mechanics;
+using Kingmaker.UnitLogic.Mechanics.Actions;
+using Kingmaker.UnitLogic.Abilities;
+using Kingmaker.ElementsSystem;
+using Kingmaker.Utility;
+using Kingmaker.UnitLogic;
+using Kingmaker.Visual.Particles;
+using Kingmaker.ResourceLinks;
+
+
+
 
 namespace CraftingSystem
 {
@@ -302,15 +316,6 @@ namespace CraftingSystem
 
                 // --- INJECTION DES ENCHANTEMENTS CUSTOM (JSON COMPLEXE) ---
                 CustomEnchantmentsBuilder.BuildAndInjectAll();
-
-                // DEBUG TEMPORAIRE (Après injection pour être sûr que le cache est prêt)
-                //EnchantmentDebug.DumpBlueprint("d42fc23b92c640846ac137dc26e000d4"); // Enhancement1
-                //EnchantmentDebug.DumpBlueprint("f8125dcb57d3463a9a039e4631204cbe"); // Enhancement7
-                //EnchantmentDebug.DumpBlueprint("dd0e096412423d646929d9b945fd6d4c"); // AcidResistance10Enchant
-
-                // --- DUMP DES ITEMS DE BASE ---
-                // BaseItemDumper.DumpAll();
-
             }
             catch (Exception ex)
             {
@@ -384,4 +389,37 @@ namespace CraftingSystem
                 }
             }
         }
+
+        [HarmonyPatch(typeof(ContextActionKill), "RunAction")]
+        public static class ContextActionKill_RunAction_Patch
+        {
+            [HarmonyPrefix]
+            public static bool Prefix(ContextActionKill __instance)
+            {
+                try
+                {
+                    var currentData = ContextData<MechanicsContext.Data>.Current;
+                    var context = currentData?.Context;
+                    var target = currentData?.CurrentTarget;
+
+                    if (context != null && (context.AssociatedBlueprint?.AssetGuid.ToString() == "4c02715a54a497a408a93a5d80e91a24" || context.AssociatedBlueprint?.name?.ToLowerInvariant().Contains("vorpal") == true))
+                    {
+                        var targetUnit = target?.Unit;
+                        var caster = context?.MaybeCaster;
+
+                        if (targetUnit != null && caster != null && targetUnit == caster)
+                        {
+                            Main.log.Log($"[Vorpal Protection] Blocked self-kill on wielder: {targetUnit.CharacterName}");
+                            return false; // Skip the kill action
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Main.log.Error($"[Vorpal Protection] Error in patch: {ex}");
+                }
+                return true; // Execute original kill action
+            }
+        }
     }
+

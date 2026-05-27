@@ -16,7 +16,7 @@
     
     <Nullable>disable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefaultItemExcludes>WOTR_WoljifRomanceMod\**;ToyBox-Wrath\**;CraftMaster\**;WOTR-code\**;$(DefaultItemExcludes)</DefaultItemExcludes>
+    <DefaultItemExcludes>TabletopTweaks-Core\**;WOTR_WoljifRomanceMod\**;ToyBox-Wrath\**;CraftMaster\**;WOTR-code\**;$(DefaultItemExcludes)</DefaultItemExcludes>
 
     <!-- 2. CHEMINS PAR DÉFAUT (Si non définis dans UserConfig.props) -->
     <WrathPath Condition="'$(WrathPath)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed</WrathPath>
@@ -59,6 +59,7 @@
       <HintPath>$(WrathPath)\UnityModManager\UnityModManager.dll</HintPath>
       <Private>False</Private>
     </Reference>
+
 
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(WrathPath)\Assembly-CSharp-firstpass.dll</HintPath>

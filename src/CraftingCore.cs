@@ -151,6 +151,10 @@ namespace CraftingSystem
                 return _virtualBox;
             }
 
+            if (StashedItemIds == null) StashedItemIds = new HashSet<string>();
+            if (StashedItems == null) StashedItems = new List<ItemEntity>();
+            if (ActiveProjects == null) ActiveProjects = new List<CraftingProject>();
+
             Main.ModEntry.Logger.Log($"[new-inventory] GetBox() appelé. _isBoxActive={_isBoxActive}, StashedItemIds count={StashedItemIds.Count}");
 
             var playerInv = Game.Instance?.Player?.Inventory;
@@ -199,6 +203,10 @@ namespace CraftingSystem
                 return;
             }
 
+            if (StashedItemIds == null) StashedItemIds = new HashSet<string>();
+            if (StashedItems == null) StashedItems = new List<ItemEntity>();
+            if (ActiveProjects == null) ActiveProjects = new List<CraftingProject>();
+
             _isSyncing = true;
             try
             {
@@ -246,10 +254,83 @@ namespace CraftingSystem
             SyncFromBox();
         }
 
+        private static void CleanItemEnchantments(ItemEntity item)
+        {
+            if (item?.Enchantments == null) return;
+            foreach (var ench in item.Enchantments)
+            {
+                if (ench == null) continue;
+                if (!ench.IsTemporary && ench.ParentContext != null)
+                {
+                    Main.ModEntry.Logger.Log($"[POST-LOAD-FIX] Nettoyage du ParentContext pour l'enchantement permanent {ench.Blueprint?.name ?? "Inconnu"} sur {item.Name}");
+                    try
+                    {
+                        var tEnch = typeof(Kingmaker.Blueprints.Items.Ecnchantments.ItemEnchantment);
+                        var parentContextField = tEnch.GetField("<ParentContext>k__BackingField", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                        if (parentContextField != null)
+                        {
+                            parentContextField.SetValue(ench, null);
+                        }
+                        else
+                        {
+                            var parentContextProp = tEnch.GetProperty("ParentContext", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                            if (parentContextProp != null && parentContextProp.CanWrite)
+                            {
+                                parentContextProp.SetValue(ench, null);
+                            }
+                        }
+                        ench.Reapply();
+                    }
+                    catch (Exception ex)
+                    {
+                        Main.ModEntry.Logger.Error($"[POST-LOAD-FIX] Impossible de nettoyer ParentContext de {ench.Blueprint?.name} via réflexion : {ex.Message}");
+                    }
+                }
+            }
+        }
+
         public override void OnApplyPostLoadFixes()
         {
+            if (StashedItemIds == null) StashedItemIds = new HashSet<string>();
+            if (StashedItems == null) StashedItems = new List<ItemEntity>();
+            if (ActiveProjects == null) ActiveProjects = new List<CraftingProject>();
+
             Main.ModEntry.Logger.Log($"[new-inventory] OnApplyPostLoadFixes() appelé. StashedItemIds count={StashedItemIds.Count}");
             base.OnApplyPostLoadFixes();
+
+            // Nettoyage rétroactif des ParentContext erronés pour les objets dans l'inventaire
+            try
+            {
+                var playerInv = Game.Instance?.Player?.Inventory;
+                if (playerInv != null)
+                {
+                    foreach (var item in playerInv.Items)
+                    {
+                        CleanItemEnchantments(item);
+                    }
+                }
+
+                // Nettoyage pour les objets équipés sur TOUS les personnages
+                var allUnits = Game.Instance?.Player?.AllCharacters;
+                if (allUnits != null)
+                {
+                    foreach (var unit in allUnits)
+                    {
+                        if (unit?.Body?.EquipmentSlots == null) continue;
+                        foreach (var slot in unit.Body.EquipmentSlots)
+                        {
+                            if (slot != null && slot.HasItem)
+                            {
+                                CleanItemEnchantments(slot.Item);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"[POST-LOAD-FIX] Erreur lors du nettoyage des enchantements : {ex}");
+            }
 
             if (StashedItems != null && StashedItems.Count > 0)
             {
@@ -278,6 +359,7 @@ namespace CraftingSystem
 
         public void CheckAndFinishProjects()
         {
+            if (ActiveProjects == null) ActiveProjects = new List<CraftingProject>();
             // Main.ModEntry.Logger.Log($"[ATELIER-DEBUG] Début CheckAndFinishProjects. Projets à vérifier : {ActiveProjects.Count}");
             if (ActiveProjects.Count == 0) return;
 
@@ -356,16 +438,7 @@ namespace CraftingSystem
             // On évite les doublons exacts
             if (!item.Enchantments.Any(e => e.Blueprint.AssetGuid == bp.AssetGuid))
             {
-                // 🛠️ CORRECTION FINALE : On donne au jeu un "lanceur" pour cet enchantement
-                var player = Game.Instance.Player.MainCharacter.Value;
-                
-                var context = new Kingmaker.UnitLogic.Mechanics.MechanicsContext(
-                    caster: player, 
-                    owner: player.Descriptor, 
-                    blueprint: bp
-                );
-                
-                item.AddEnchantment(bp, context);
+                item.AddEnchantment(bp, null);
                 item.Identify();
             }
         }
