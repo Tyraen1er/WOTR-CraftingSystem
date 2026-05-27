@@ -92,8 +92,8 @@ namespace CraftingSystem
                             }
                             if (subDescriptions.Count > 0) resolved = string.Join(", ", subDescriptions);
                         }
-                    } catch (Exception ex) {
-                        // Main.ModEntry.Logger.Log($"[DEBUG] AddUnitFeatureEquipment Error: {ex}");
+                    } catch (Exception) {
+                        // Main.ModEntry.Logger.Log("[DEBUG] AddUnitFeatureEquipment Error");
                     }
                 }
                 

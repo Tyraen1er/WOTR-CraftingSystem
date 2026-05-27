@@ -74,9 +74,9 @@ namespace CraftingSystem
                 }
                 // Main.log.Log("[DEBUG] --- END DUMP ---");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Main.log.Error($"[DEBUG] Error dumping blueprint {guidStr}: {ex}");
+                // Main.log.Error($"[DEBUG] Error dumping blueprint {guidStr}");
             }
         }
     }

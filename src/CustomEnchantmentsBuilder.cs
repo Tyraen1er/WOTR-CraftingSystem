@@ -125,9 +125,9 @@ namespace CraftingSystem
 
                 return reference;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Main.ModEntry.Logger.Error($"[DEBUG_REF] Error reading reference {objectType.Name}: {ex}");
+                // Main.ModEntry.Logger.Error($"[DEBUG_REF] Error reading reference {objectType.Name}");
                 return null;
             }
         }
