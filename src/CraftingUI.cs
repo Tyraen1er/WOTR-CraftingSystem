@@ -902,6 +902,8 @@ namespace CraftingSystem
 
             if (UnifiedScanner.IsScanning)
             {
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
                 GUILayout.BeginVertical(GUILayout.Width(contentWidth));
                 GUILayout.Space(50 * scale);
                 GUIStyle scanStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(24 * scale), alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
@@ -919,6 +921,8 @@ namespace CraftingSystem
                 GUILayout.Space(20 * scale);
                 GUILayout.Label(Helpers.GetString("ui_scan_warning", "This scan only happens once per session."), progressTextStyle);
                 GUILayout.EndVertical();
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
                 return;
             }
 
@@ -1077,6 +1081,8 @@ namespace CraftingSystem
 
             if (UnifiedScanner.IsScanning)
             {
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
                 GUILayout.BeginVertical(GUILayout.Width(contentWidth));
                 GUILayout.Space(50 * scale);
                 GUIStyle scanStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(24 * scale), alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
@@ -1095,6 +1101,8 @@ namespace CraftingSystem
                 GUILayout.Space(20 * scale);
                 GUILayout.Label(Helpers.GetString("ui_scan_warning", "This scan only happens once per session."), progressTextStyle);
                 GUILayout.EndVertical();
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
                 return;
             }
 
