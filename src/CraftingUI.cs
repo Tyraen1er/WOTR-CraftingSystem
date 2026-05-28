@@ -152,6 +152,7 @@ namespace CraftingSystem
         private Vector2 scrollListPos = Vector2.zero;
         private Vector2 metamagicScrollPos = Vector2.zero;
         private int selectedAlteration = 0;
+        private string selectedAccessoryCategory = "All";
         private bool showIconBrowser = false;
         private Vector2 iconScrollPos = Vector2.zero;
         private Vector2 settingsScrollPos = Vector2.zero;
@@ -949,6 +950,52 @@ namespace CraftingSystem
                 GUILayout.Space(10 * scale);
             }
 
+            // --- SÉLECTION DE CATÉGORIE D'ACCESSOIRE ---
+            if (currentPageType == CraftingPage.CreateAccessory)
+            {
+                GUILayout.BeginVertical("box");
+                GUILayout.Label("<b>" + Helpers.GetString("ui_category", "Category:") + "</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_NORMAL * scale) });
+                
+                // Row 1
+                GUILayout.BeginHorizontal();
+                string[] catRow1 = new string[] { "All", "Ring", "Neck_Amulet", "Belt", "Boots", "Gloves" };
+                foreach (var cat in catRow1)
+                {
+                    string label = cat == "All" ? Helpers.GetString("ui_cat_all", "All") : Helpers.GetString("ui_cat_" + cat.ToLower(), cat);
+                    Color oldBG = GUI.backgroundColor;
+                    if (selectedAccessoryCategory == cat) GUI.backgroundColor = Color.cyan;
+                    if (CButton(label, GUILayout.Height(30 * scale)))
+                    {
+                        selectedAccessoryCategory = cat;
+                    }
+                    GUI.backgroundColor = oldBG;
+                    GUILayout.Space(5 * scale);
+                }
+                GUILayout.EndHorizontal();
+                
+                GUILayout.Space(5 * scale);
+
+                // Row 2
+                GUILayout.BeginHorizontal();
+                string[] catRow2 = new string[] { "Glasses", "Helmet_Headband", "Cape", "Bracers", "Robe" };
+                foreach (var cat in catRow2)
+                {
+                    string label = Helpers.GetString("ui_cat_" + cat.ToLower(), cat);
+                    Color oldBG = GUI.backgroundColor;
+                    if (selectedAccessoryCategory == cat) GUI.backgroundColor = Color.cyan;
+                    if (CButton(label, GUILayout.Height(30 * scale)))
+                    {
+                        selectedAccessoryCategory = cat;
+                    }
+                    GUI.backgroundColor = oldBG;
+                    GUILayout.Space(5 * scale);
+                }
+                GUILayout.EndHorizontal();
+                
+                GUILayout.EndVertical();
+                GUILayout.Space(10 * scale);
+            }
+
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, "box");
             if (items == null || items.Count == 0)
             {
@@ -962,6 +1009,9 @@ namespace CraftingSystem
                 {
                     // NOUVEAU : On cache l'item si la variante pour le niveau sélectionné (+0, +1...) n'existe pas
                     if (!item.VariantGuids.ContainsKey(selectedAlteration)) continue;
+
+                    // Filtrage par catégorie d'accessoire
+                    if (currentPageType == CraftingPage.CreateAccessory && selectedAccessoryCategory != "All" && item.Category != selectedAccessoryCategory) continue;
 
                     if (currentPageType == CraftingPage.CreateAccessory && item.Category != lastCategory)
                     {

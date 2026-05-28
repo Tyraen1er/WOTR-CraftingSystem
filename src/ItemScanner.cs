@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 using System.Linq;
 using Kingmaker.Blueprints;
@@ -181,7 +182,9 @@ namespace CraftingSystem
             // 4. SCAN ACCESSORIES (No levels - Icon Cache only, items loaded from CSV)
             foreach (var item in accessories)
             {
-                if (item.bp != null && item.bp.Icon != null && uniqueAccessoryIcons.Add(item.bp.Icon))
+                if (item.bp == null) continue;
+
+                if (item.bp.Icon != null && uniqueAccessoryIcons.Add(item.bp.Icon))
                 {
                     if (!IconCache.ContainsKey(item.bp.ItemType)) IconCache[item.bp.ItemType] = new List<BlueprintItem>();
                     IconCache[item.bp.ItemType].Add(item.bp);
@@ -201,23 +204,100 @@ namespace CraftingSystem
                         foreach (var cfg in configs)
                         {
                             if (string.IsNullOrEmpty(cfg.Guid)) continue;
-                            
-                            var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItem>(BlueprintGuid.Parse(cfg.Guid));
+
+                            BlueprintItemEquipmentSimple bp = null;
+                            string finalGuid = cfg.Guid;
+
+                            if (cfg.Guid.StartsWith("c001"))
+                            {
+                                bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEquipmentSimple>(BlueprintGuid.Parse(cfg.Guid));
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    string clonedGuid = GenerateBlankGuid(cfg.Guid);
+                                    finalGuid = clonedGuid;
+
+                                    bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEquipmentSimple>(BlueprintGuid.Parse(clonedGuid));
+                                    if (bp == null)
+                                    {
+                                        var vanillaBp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEquipmentSimple>(BlueprintGuid.Parse(cfg.Guid));
+                                        if (vanillaBp != null)
+                                        {
+                                            bp = (BlueprintItemEquipmentSimple)Activator.CreateInstance(vanillaBp.GetType());
+                                            CopyFields(vanillaBp, bp);
+                                            bp.name = vanillaBp.name + "_BlankClone";
+                                            bp.AssetGuid = BlueprintGuid.Parse(clonedGuid);
+
+                                            // Clear enchantments
+                                            var enchantmentsField = typeof(BlueprintItemEquipmentSimple).GetField("m_Enchantments", BindingFlags.NonPublic | BindingFlags.Instance);
+                                            if (enchantmentsField != null) enchantmentsField.SetValue(bp, new BlueprintEquipmentEnchantmentReference[0]);
+
+                                            // Clear components
+                                            var componentsField = typeof(BlueprintScriptableObject).GetField("ComponentsArray", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                                               ?? typeof(BlueprintScriptableObject).GetField("m_Components", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                                            if (componentsField != null)
+                                            {
+                                                Type compType = typeof(BlueprintScriptableObject).Assembly.GetType("Kingmaker.Blueprints.BlueprintComponent");
+                                                if (compType != null) componentsField.SetValue(bp, Array.CreateInstance(compType, 0));
+                                            }
+
+                                            // Set cost to 50 GP
+                                            var costField = typeof(BlueprintItem).GetField("m_Cost", BindingFlags.NonPublic | BindingFlags.Instance);
+                                            if (costField != null) costField.SetValue(bp, 50);
+
+                                            // Set localized display name and description
+                                            string locale = "enGB";
+                                            try { locale = Kingmaker.Localization.LocalizationManager.CurrentLocale.ToString(); } catch { }
+
+                                            string suffix = " (Blank)";
+                                            string blankDesc = "A simple, non-magical accessory, ready for custom enchantments.";
+                                            if (locale == "frFR")
+                                            {
+                                                suffix = " (Vierge)";
+                                                blankDesc = "Un accessoire simple et non magique, prêt à recevoir des enchantements personnalisés.";
+                                            }
+                                            else if (locale == "ruRU")
+                                            {
+                                                suffix = " (Чистый)";
+                                                blankDesc = "Простой немагический аксессуар, готовый к наложению зачарований.";
+                                            }
+
+                                            string originalName = vanillaBp.Name;
+                                            if (string.IsNullOrEmpty(originalName)) originalName = vanillaBp.name;
+                                            string baseName = System.Text.RegularExpressions.Regex.Replace(originalName, @"\s*\+\d+", "");
+
+                                            string blankName = baseName + suffix;
+
+                                            var displayNameText = Helpers.CreateString($"blank_item_name_{clonedGuid}", blankName);
+                                            var descriptionText = Helpers.CreateString($"blank_item_desc_{clonedGuid}", blankDesc);
+
+                                            var displayNameField = typeof(BlueprintItem).GetField("m_DisplayNameText", BindingFlags.NonPublic | BindingFlags.Instance);
+                                            if (displayNameField != null) displayNameField.SetValue(bp, displayNameText);
+
+                                            var descriptionField = typeof(BlueprintItem).GetField("m_DescriptionText", BindingFlags.NonPublic | BindingFlags.Instance);
+                                            if (descriptionField != null) descriptionField.SetValue(bp, descriptionText);
+
+                                            // Add to cache
+                                            ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(bp.AssetGuid, bp);
+                                        }
+                                        else
+                                        {
+                                            Main.ModEntry.Logger.Error($"[ITEM-SCAN] Failed to find original blueprint {cfg.Guid} ({cfg.InternalName}) for cloning.");
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Main.ModEntry.Logger.Error($"[ITEM-SCAN] Error cloning accessory {cfg.InternalName} ({cfg.Guid}): {ex}");
+                                }
+                            }
+
                             if (bp != null)
                             {
-                                string resolvedName = !string.IsNullOrEmpty(cfg.DisplayName) ? cfg.DisplayName : cfg.InternalName;
-                                
-                                string category = "Accessory";
-                                string typeName = bp.GetType().Name;
-                                if (bp is BlueprintItemEquipmentRing || typeName.Contains("Ring")) category = "Ring";
-                                else if (bp is BlueprintItemEquipmentNeck || typeName.Contains("Neck")) category = "Neck_Amulet";
-                                else if (bp is BlueprintItemEquipmentBelt || typeName.Contains("Belt")) category = "Belt";
-                                else if (bp is BlueprintItemEquipmentFeet || typeName.Contains("Feet") || typeName.Contains("Boots")) category = "Boots";
-                                else if (bp is BlueprintItemEquipmentGloves || typeName.Contains("Gloves") || typeName.Contains("Hand")) category = "Gloves";
-                                else if (bp is BlueprintItemEquipmentHead || typeName.Contains("Head") || typeName.Contains("Helmet") || typeName.Contains("Circlet")) category = "Helmet_Headband";
-                                else if (bp is BlueprintItemEquipmentShoulders || typeName.Contains("Shoulders") || typeName.Contains("Cape") || typeName.Contains("Cloak")) category = "Cape";
-                                else if (bp is BlueprintItemEquipmentWrist || typeName.Contains("Wrist") || typeName.Contains("Bracers")) category = "Bracers";
-                                else if (typeName.Contains("Shirt") || typeName.Contains("Robe") || typeName.Contains("Body")) category = "Robe";
+                                string resolvedName = !string.IsNullOrEmpty(cfg.DisplayName) ? cfg.DisplayName : bp.Name;
+                                string category = GetCategoryForAccessory(bp);
 
                                 var data = new ItemData
                                 {
@@ -228,7 +308,7 @@ namespace CraftingSystem
                                     Description = bp.Description,
                                     TypeName = cfg.InternalName
                                 };
-                                data.VariantGuids[0] = cfg.Guid;
+                                data.VariantGuids[0] = finalGuid;
                                 data.VariantCosts[0] = (int)bp.m_Cost;
                                 Accessories.Add(data);
                             }
@@ -248,6 +328,126 @@ namespace CraftingSystem
             Accessories = Accessories.OrderBy(x => x.Category).ThenBy(x => x.Name).ToList();
 
             Main.ModEntry.Logger.Log($"[ITEM-SCAN] Finalisé. W:{Weapons.Count} A:{Armors.Count} S:{Shields.Count} Acc:{Accessories.Count}");
+        }
+
+        public static void PreloadAndRegisterAccessories()
+        {
+            string jsonPath = Path.Combine(Main.ModEntry.Path, "buyable_accessories.json");
+            if (!File.Exists(jsonPath))
+            {
+                Main.ModEntry.Logger.Warning($"[ITEM-SCAN] buyable_accessories.json not found for preloading at {jsonPath}");
+                return;
+            }
+
+            try
+            {
+                string json = File.ReadAllText(jsonPath);
+                var configs = JsonConvert.DeserializeObject<List<AccessoryConfig>>(json);
+                if (configs != null)
+                {
+                    int clonedCount = 0;
+                    foreach (var cfg in configs)
+                    {
+                        if (string.IsNullOrEmpty(cfg.Guid) || cfg.Guid.StartsWith("c001")) continue;
+
+                        try
+                        {
+                            string clonedGuid = GenerateBlankGuid(cfg.Guid);
+                            var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEquipmentSimple>(BlueprintGuid.Parse(clonedGuid));
+                            if (bp == null)
+                            {
+                                var vanillaBp = ResourcesLibrary.TryGetBlueprint<BlueprintItemEquipmentSimple>(BlueprintGuid.Parse(cfg.Guid));
+                                if (vanillaBp != null)
+                                {
+                                    bp = (BlueprintItemEquipmentSimple)Activator.CreateInstance(vanillaBp.GetType());
+                                    CopyFields(vanillaBp, bp);
+                                    bp.name = vanillaBp.name + "_BlankClone";
+                                    bp.AssetGuid = BlueprintGuid.Parse(clonedGuid);
+
+                                    // Clear enchantments
+                                    var enchantmentsField = typeof(BlueprintItemEquipmentSimple).GetField("m_Enchantments", BindingFlags.NonPublic | BindingFlags.Instance);
+                                    if (enchantmentsField != null) enchantmentsField.SetValue(bp, new BlueprintEquipmentEnchantmentReference[0]);
+
+                                    // Clear components
+                                    var componentsField = typeof(BlueprintScriptableObject).GetField("ComponentsArray", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                                       ?? typeof(BlueprintScriptableObject).GetField("m_Components", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                                    if (componentsField != null)
+                                    {
+                                        Type compType = typeof(BlueprintScriptableObject).Assembly.GetType("Kingmaker.Blueprints.BlueprintComponent");
+                                        if (compType != null) componentsField.SetValue(bp, Array.CreateInstance(compType, 0));
+                                    }
+
+                                    // Set cost to 50 GP
+                                    var costField = typeof(BlueprintItem).GetField("m_Cost", BindingFlags.NonPublic | BindingFlags.Instance);
+                                    if (costField != null) costField.SetValue(bp, 50);
+
+                                    // Set localized display name and description
+                                    string locale = "enGB";
+                                    try { locale = Kingmaker.Localization.LocalizationManager.CurrentLocale.ToString(); } catch { }
+
+                                    string suffix = " (Blank)";
+                                    string blankDesc = "A simple, non-magical accessory, ready for custom enchantments.";
+                                    if (locale == "frFR")
+                                    {
+                                        suffix = " (Vierge)";
+                                        blankDesc = "Un accessoire simple et non magique, prêt à recevoir des enchantements personnalisés.";
+                                    }
+                                    else if (locale == "ruRU")
+                                    {
+                                        suffix = " (Чистый)";
+                                        blankDesc = "Простой немагический аксессуар, готовый к наложению зачарований.";
+                                    }
+
+                                    string originalName = vanillaBp.Name;
+                                    if (string.IsNullOrEmpty(originalName)) originalName = vanillaBp.name;
+                                    string baseName = System.Text.RegularExpressions.Regex.Replace(originalName, @"\s*\+\d+", "");
+
+                                    string blankName = baseName + suffix;
+
+                                    var displayNameText = Helpers.CreateString($"blank_item_name_{clonedGuid}", blankName);
+                                    var descriptionText = Helpers.CreateString($"blank_item_desc_{clonedGuid}", blankDesc);
+
+                                    var displayNameField = typeof(BlueprintItem).GetField("m_DisplayNameText", BindingFlags.NonPublic | BindingFlags.Instance);
+                                    if (displayNameField != null) displayNameField.SetValue(bp, displayNameText);
+
+                                    var descriptionField = typeof(BlueprintItem).GetField("m_DescriptionText", BindingFlags.NonPublic | BindingFlags.Instance);
+                                    if (descriptionField != null) descriptionField.SetValue(bp, descriptionText);
+
+                                    // Add to cache
+                                    ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(bp.AssetGuid, bp);
+                                    clonedCount++;
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Main.ModEntry.Logger.Error($"[ITEM-SCAN] Preloading error for accessory {cfg.InternalName} ({cfg.Guid}): {ex}");
+                        }
+                    }
+                    Main.ModEntry.Logger.Log($"[ITEM-SCAN] Preloaded and registered {clonedCount} custom blank accessories at boot.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"[ITEM-SCAN] Fatal error in PreloadAndRegisterAccessories: {ex}");
+            }
+        }
+
+        private static string GetCategoryForAccessory(BlueprintItemEquipmentSimple bp)
+        {
+            string category = "Accessory";
+            string typeName = bp.GetType().Name;
+            if (bp is BlueprintItemEquipmentRing || typeName.Contains("Ring")) category = "Ring";
+            else if (bp is BlueprintItemEquipmentNeck || typeName.Contains("Neck")) category = "Neck_Amulet";
+            else if (bp is BlueprintItemEquipmentBelt || typeName.Contains("Belt")) category = "Belt";
+            else if (bp is BlueprintItemEquipmentFeet || typeName.Contains("Feet") || typeName.Contains("Boots")) category = "Boots";
+            else if (bp is BlueprintItemEquipmentGloves || typeName.Contains("Gloves") || typeName.Contains("Hand")) category = "Gloves";
+            else if (bp is BlueprintItemEquipmentGlasses || typeName.Contains("Glasses") || typeName.Contains("Goggles")) category = "Glasses";
+            else if (bp is BlueprintItemEquipmentHead || typeName.Contains("Head") || typeName.Contains("Helmet") || typeName.Contains("Circlet")) category = "Helmet_Headband";
+            else if (bp is BlueprintItemEquipmentShoulders || typeName.Contains("Shoulders") || typeName.Contains("Cape") || typeName.Contains("Cloak")) category = "Cape";
+            else if (bp is BlueprintItemEquipmentWrist || typeName.Contains("Wrist") || typeName.Contains("Bracers")) category = "Bracers";
+            else if (typeName.Contains("Shirt") || typeName.Contains("Robe") || typeName.Contains("Body")) category = "Robe";
+            return category;
         }
 
         private static int DetectLevel(string bpName, string typeName, bool isShield = false)
@@ -348,6 +548,39 @@ namespace CraftingSystem
                 Description = bp.Description,
                 TypeName = typeName
             };
+        }
+
+        private static string GenerateBlankGuid(string originalGuid)
+        {
+            using (var md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(originalGuid);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+                return "c009" + sb.ToString().Substring(4);
+            }
+        }
+
+        private static void CopyFields(object source, object target)
+        {
+            Type type = source.GetType();
+            while (type != null && type != typeof(object) && type != typeof(UnityEngine.Object))
+            {
+                var fields = type.GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.DeclaredOnly);
+                foreach (var field in fields)
+                {
+                    try
+                    {
+                        field.SetValue(target, field.GetValue(source));
+                    }
+                    catch { }
+                }
+                type = type.BaseType;
+            }
         }
     }
 

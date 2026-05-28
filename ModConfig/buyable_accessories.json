@@ -1,147 +1,1912 @@
-[
+﻿[
   {
-    "DisplayName": "Bottes duveteuses",
+    "DisplayName": "",
+    "InternalName": "BlankBeltItem",
+    "Guid": "c0010000000000000000000000000001"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BlankGlovesItem",
+    "Guid": "c0010000000000000000000000000002"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BlankGlassesItem",
+    "Guid": "c0010000000000000000000000000003"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "EqualityBeltItem",
+    "Guid": "b01ed89b10d0da14bbbe1432ed4ca168"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ClaspOfDeathItem",
+    "Guid": "59a06a5e3b294731b3e69cbacb3228f3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfAlacrityItem",
+    "Guid": "4b0b9b95225d6034f84b75a6ad1e76c7"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfAthach",
+    "Guid": "3b6c082651fcb2344b292656ccf058e5"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfPerfectComponentsLesserItem",
+    "Guid": "5e94d9ac3448c774db72a51007aab1df"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfPerfectComponentsGreaterItem",
+    "Guid": "841d3d5dfb09f6c468f4fae3567937ee"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfStrengthDexterity2",
+    "Guid": "6577d56f2da72874a8abea1a3cbd2fa0"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfStrengthDexterity6",
+    "Guid": "3475dbb1752869444ac9ffd528d8f491"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfPrimalForceItem",
+    "Guid": "20d22f879231490ab351c63568697191"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfDexterityConstitution2",
+    "Guid": "939ad0109fec02b46adcac4b85e1249a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AssailantsBeltItem",
+    "Guid": "8d48d164b7a729b459db96ab7d5cf55a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ExplorersBeltItem",
+    "Guid": "ec34985b81b9f744488456e7009044ee"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfStoneskinItem",
+    "Guid": "9162128e476bdd6428c2c273ea83d447"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfPerfection2",
+    "Guid": "7abdce2cab3e3dd43b9e6c41c1b44525"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfPerfection6",
+    "Guid": "2b400628f960a8a43bc2f085d84788cf"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfImprovedProtectionItem",
+    "Guid": "09b26c6dc80d2e2438a160ec01e340bb"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfStrengthConstitution2",
+    "Guid": "c95c552c19a5c5a4492462802104b071"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfStrengthConstitution4",
+    "Guid": "4782eaff2231a524183c6f6034ee31db"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfStrengthConstitution6",
+    "Guid": "a03b3ba9469d89347a9878cb5c00769a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfLesserColdResistanceItem",
+    "Guid": "546c72cd7d8ec664ea5fcfae47c7b91b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfBeastlySturdinessItem",
+    "Guid": "16ef03e9206b0c946813464085f541ff"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DaredevilsBeltItem",
+    "Guid": "77f0ee6cd7103d04489ed8eea39cf187"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfVeneratedChampionItem",
+    "Guid": "87c5f3e1b5a01d0448d550b727f45cb4"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfArodenItem",
+    "Guid": "fb02b80542194b0d863269f56ce9617d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SpecialistBeltItem",
+    "Guid": "01a4b366b2774594fbc2e545df027bde"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "MirroredBeltItem",
+    "Guid": "be3cadb084c816448b873dd791eec3e4"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfStrength2",
+    "Guid": "c354de364a714ee4dbe2cfee628df267"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltOfStrength4",
+    "Guid": "ede812de6b31b194686595fab33fc3ed"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GozrehsEmbracementBeltItem",
+    "Guid": "77bfc25b7f08e044d9ce73b76c332651"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "OldEarthBelt_IntermediateItem",
+    "Guid": "3919ef68585e5e44eb31a071cf764e38"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeltofAdditionalPockets",
+    "Guid": "f8ce35e547965db47b1b3ffce9fac8f1"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HeartOfIce_Item",
+    "Guid": "a113c68406d74e37951717e417840bfa"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HermitRopeBeltItem",
+    "Guid": "c6edeb6c69d5da74a9bf5d73700ed04e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CordOfStubbornFuryItem",
+    "Guid": "3b7820965662afe4ab17627103e44228"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "InfernalCordGreaterItem",
+    "Guid": "174433eb78a197d4a8926d761b556572"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DisplayOfPowerItem",
+    "Guid": "42831d8b78d38674e83b89657a3e5434"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DevilsSashItem",
+    "Guid": "bfa671a8f5e9f8549ba0abc86f550c9f"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SashOfRazorsItem",
+    "Guid": "1138835111e5aeb4081ea9fa6eb5286e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "KorgathShackledFury",
+    "Guid": "04992d8f7ac12674eab02d73f726d4ac"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SeedOfInsanityBeltItem",
+    "Guid": "1fa5125a155d06543aebddfcfeee5cd2"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "WarKiltOfSarenrae",
+    "Guid": "6af69da499184fe7ae0839105be416be"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "UnceasingSlaughterItem",
+    "Guid": "cd015f36cdccb134e86a0b4daa0283e8"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DivineSupportBeltItem",
+    "Guid": "da13dd41c96287e4d934cb10ae069c28"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DaredevilBoots",
+    "Guid": "d6354aa44a4745088ec9bef8900e6394"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BootsOfStampedeItem",
+    "Guid": "1e67f0071700eb5418b82009427bce8a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "FreeDancersBootsItem",
+    "Guid": "693b9facfda93fe4cac07c3ac7c32d30"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BootsOfTheCreepingDeath",
+    "Guid": "11e350708227f3b4eaf641a5b5fd2863"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BootsOfOutbreakItem",
+    "Guid": "e55f0210859bb3b4883958e41c155490"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BootsOfTheLightStepItem",
+    "Guid": "815cc85ce13ab64428253aea3b6708a8"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BootsOfSwiftFoot",
+    "Guid": "8644bca1c3bf6f64ab4d89be643a8850"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BootsOfTheSwampItem",
+    "Guid": "1ccb68fd1e0f6d141b739e3744e5af4e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BootsOfTheBattleHerald",
+    "Guid": "039c98d84eba4ab58a95cf7ee1d2964a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RootsenseBootsItem",
+    "Guid": "76f24c51fc4f437286261b787df3a1bb"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BootsOfTheRat_Item",
+    "Guid": "2bf3589bf5104c4789ac7071192cd256"
+  },
+  {
+    "DisplayName": "",
     "InternalName": "FluffyBootsItem",
     "Guid": "c5d49a08ecdc41d3a5d29b9c66a8e07a"
   },
   {
     "DisplayName": "",
-    "InternalName": "Set2_Bracers",
-    "Guid": "ba8fd2a707644a54a07c8c54be6276ea"
+    "InternalName": "BootsOfElvenKind",
+    "Guid": "1223ceb45ed647b44a04b44a9312328b"
   },
   {
     "DisplayName": "",
-    "InternalName": "Set3_Bracers",
-    "Guid": "0c3dacfec6354a1ba200603ebb059a7b"
+    "InternalName": "PermanentFreedomItem",
+    "Guid": "29ec0781b00678541acd9d0f30043967"
   },
   {
     "DisplayName": "",
-    "InternalName": "Set1_Cloak",
-    "Guid": "fef478f33acb4b41b611136ed97f5d15"
+    "InternalName": "BootsOfTheCatItem",
+    "Guid": "c26c4b72544948318ec71348ab8931c0"
   },
   {
     "DisplayName": "",
-    "InternalName": "Set4_Cloak",
-    "Guid": "8dfede445a50494d957c155f4cb3c343"
+    "InternalName": "ConnectiontoEarthBoostItem",
+    "Guid": "57d89d9340dedb449a279622ec0541be"
   },
   {
-    "DisplayName": "Tiare de jade",
-    "InternalName": "JasperCirclet",
-    "Guid": "35f2344d0c7b8e24a865dbc440adcdb5"
+    "DisplayName": "",
+    "InternalName": "EvadingStepsItem",
+    "Guid": "91b1162500bb78545b0f802e33dfd8d6"
   },
   {
-    "DisplayName": "Heaume d'acier",
+    "DisplayName": "",
+    "InternalName": "Artifact_FeetItem",
+    "Guid": "ad08a9676a9be2c46ac512aae0151c35"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RatcatchersGogglesItem",
+    "Guid": "0285111eb68f0da429409ee16c40f868"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GooglesOfMadScientistItem",
+    "Guid": "ff4db4ecacfb46bea1c4751dc05b44d8"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RazmiryInfiltratorMask",
+    "Guid": "23c7116a5fd244169718f8228b66ec66"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RazmiryInfiltratorMaskGold",
+    "Guid": "3eef3a2e84d24db4909edb2a943dfe22"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RazmiryInfiltratorMaskSilver",
+    "Guid": "a56599028493481d854dd03ccdb22877"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "MaskOfTheFastBitesItem",
+    "Guid": "e71b0d384c7d47618fcf27be493ee3fd"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "MindmastersEyes",
+    "Guid": "dd245b8645dc4930af554ab700a99e43"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GlovesOfLighterTouch",
+    "Guid": "1397ec489f9467c4d98c5257c186f32c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_StarGauntletItem",
+    "Guid": "ad58b472fa90da84bafe3d4e5ad2c368"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DeliquescentGlovesItem",
+    "Guid": "ac79bcf464e676f49b630895f8b2fd42"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DashingCavaliersGlovesItem",
+    "Guid": "176da707c9c9d764e972a9da8b444ff3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "TrapspringerGloves",
+    "Guid": "0dc9944c49e3ae343b8802a2da33973c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BigGameGlovesItem",
+    "Guid": "9bed061d10d9cf643973dd9bca94ce02"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GlovesOfRendingItem",
+    "Guid": "dc32a6847570110499e3042674ebfc32"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BombThrowingGlovesItem",
+    "Guid": "7cd1af0658cea0348b9ee109b8a36f24"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "JawsOfTheJackalItem",
+    "Guid": "88cdb1dfb62341047888ac918eac9038"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SteadyHandGlovesItem",
+    "Guid": "e71f8bc35c5dfa14da490f8d396b26f8"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BlessedHandsGlovesItem",
+    "Guid": "ab75ae2763172474eac628651b301ada"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GlovesStaglordItem",
+    "Guid": "e82d860e41a13534ea605fa0b00a9bb0"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GlovesNumerianItem",
+    "Guid": "e11d5d581d05d3348b1d50e55d355411"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GauntletOfPunching",
+    "Guid": "a6e3b8f1f3f3e7540b5b7c9e5737f200"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetFullPlateEvilRedItem",
+    "Guid": "b1baf9142d6f83d4c82aa86e99fe66a3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BookwormsHeadbandItem",
+    "Guid": "866f59db467f8414cbd909df9b10361f"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HatOfTheOwlItem",
+    "Guid": "1d7c3e7ccf5d49d199a5667bacb84fb5"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_DemonicHelmetItem",
+    "Guid": "6a82043ec92815f4388f6237061d100f"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ClumsyHelmetItem",
+    "Guid": "a24096fcf3ed4cca9623676f9a6f8a48"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "MarksmansHatItem",
+    "Guid": "7188029fda598f749a9dfbf23bec9bdc"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "StewardsHelmetItem",
+    "Guid": "bc12035620054e8281ac281b71f17b23"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BandOfStalwartWarriorsLuck",
+    "Guid": "06a6dbc06fba88245888463669309b73"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BlackHatOfHandsomenessItem",
+    "Guid": "4a1b9d61532e4d9298ddd8fcf01cfdd6"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HatOfHearteningSongItem",
+    "Guid": "0f84e6afc9aed26469d3a00da7caa95f"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ExpertsHatItem",
+    "Guid": "405abbf543c9cc148a6f091bb5e58d14"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HatWitchRedItem",
+    "Guid": "c26987a7ed22f3347b75d1dac40d4feb"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HatWitchGreenItem",
+    "Guid": "7329b913d7f10974b910bdc9ad0058fd"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "MagnificentPlumeHatItem",
+    "Guid": "3d6a088f897cf5c4f9e5eb49ceaeca34"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetEvilTeethItem",
+    "Guid": "24f5cdf6f8d58064aa843e625616f94c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ProfessorHatItem",
+    "Guid": "efc6ab00482c16b4c898283cb215c6f3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HatTricornFeatheredItem",
+    "Guid": "f33dadeeb51cdba45b23bb40a40e5fb3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "JesterCap",
+    "Guid": "d3e3a641c5dd40dd971bd1c587d7f6a8"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_HornsOfNaragaItem",
+    "Guid": "96acb4453b384288815a71a07413e453"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "KingCrown",
+    "Guid": "2bffd039eb8f54847a2e0642db6c9080"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AngelFlowerCrownItem",
+    "Guid": "23b5ec958ec340eba7fb1dd18048ff82"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CrownOfElementsItem",
+    "Guid": "0e7082c3e45af414e8516afbe58f0f6e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BlazingCrownItem",
+    "Guid": "c4ebdd7c0465d0441baa785d8ef9cb76"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "WarpaintedSkullItem",
+    "Guid": "5d343648bb8887d42b24cbadfeb36991"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HeadbandOfFrozenShout",
+    "Guid": "9628598182b76784e975ce8486b2c944"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "KineticDiademLesserItem",
+    "Guid": "2c46e4062d47c5243922e60eb5ab3df1"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HeadbandOfAedinasfaith",
+    "Guid": "6b4daa6b4c3e1e8418ded841fb7469a6"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CommandantsTiaraItem",
+    "Guid": "d3ea3ccf434d47998dcbf8c662a62e4c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GoldenThreadHeadbandItem",
+    "Guid": "8b3521fdebc83a149a1fe766cdb52610"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetFullplateMithralArcaneItem",
+    "Guid": "ac63e05cee46fba4c93785c2eb0009ff"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SteelHelm_Hellknight",
+    "Guid": "2db24f8127080d243adfc4fac3939357"
+  },
+  {
+    "DisplayName": "",
     "InternalName": "SteelHelm",
     "Guid": "7bf221661e9c5bf4bb6269627d5abd92"
   },
   {
-    "DisplayName": "Chaîne en or ornée de diamants",
-    "InternalName": "GoldenChainWithDiamonds",
-    "Guid": "f1103195723022844a562bf772e102ce"
+    "DisplayName": "",
+    "InternalName": "HelmOfFearlessVanguardItem",
+    "Guid": "1d1c33c50a4414d4db21c632eae60991"
   },
   {
-    "DisplayName": "Collier d'émeraude",
-    "InternalName": "EmeraldNecklace",
-    "Guid": "7506e7e62c58c6444881d0896fff5db1"
+    "DisplayName": "",
+    "InternalName": "HelmetFullplateCyclopsGroetusItem",
+    "Guid": "107013e973a60eb44a067184c80fa5d9"
   },
   {
-    "DisplayName": "Pendentif de perle noire",
-    "InternalName": "BlackPearlPendant",
-    "Guid": "d3707bd5d57f7b64ba591a7a9db640e3"
+    "DisplayName": "",
+    "InternalName": "HelmetOfComraderyItem",
+    "Guid": "921352be73ce4fc43ac530e35d295c74"
   },
   {
-    "DisplayName": "Pendentif de turquoise",
-    "InternalName": "TurquoisePendant",
-    "Guid": "d7d19d4517998d6498f99f60ad03fe88"
+    "DisplayName": "",
+    "InternalName": "HeadbuttersHelmItem",
+    "Guid": "b878cf5165c698440b5c942323ef97a5"
   },
   {
-    "DisplayName": "Médaillon en or",
-    "InternalName": "GoldenMedallion",
-    "Guid": "32242d89f184f9f47b51bdedb50256c0"
+    "DisplayName": "",
+    "InternalName": "KnightsHelmetItem",
+    "Guid": "fdc95ffb7adbb9c48adfafc9546fa633"
   },
   {
-    "DisplayName": "Collier de citrine",
-    "InternalName": "CitrineNecklace",
-    "Guid": "426068b72e8055b45a6b8dcfc92c637c"
+    "DisplayName": "",
+    "InternalName": "HelmetOfBattlefieldClarity",
+    "Guid": "5d47f2fbf9eb8ae41a88f28e7707f627"
   },
   {
-    "DisplayName": "Médaillon en argent",
-    "InternalName": "SilverMedallion",
-    "Guid": "06846b7beaca5444d8eebfebc320adca"
+    "DisplayName": "",
+    "InternalName": "HelmetOfCertaintyItem",
+    "Guid": "cc90636f359f53247a5065c106d89090"
   },
   {
-    "DisplayName": "Chaîne en or",
-    "InternalName": "GoldenChain",
-    "Guid": "688d61ed91f68944da24c61f378c47b5"
+    "DisplayName": "",
+    "InternalName": "RedDragonHelmetItem",
+    "Guid": "e6b06daad1ed43cea2eb80f2eb93bfce"
   },
   {
-    "DisplayName": "Chaîne en argent",
+    "DisplayName": "",
+    "InternalName": "HelmetNobleItem",
+    "Guid": "6e937af0f78bb474092f00ee0d531886"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "WindMasterHelmetItem",
+    "Guid": "07979e1b3309aa543af22e34012fe9f5"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ShapeshiftersHelmItem",
+    "Guid": "6b658e1f12d7a624ab4911873f78c694"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "WardedHelmetItem",
+    "Guid": "e11492eec1164544aa16d991b5fdc2d0"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetOfWeakeningTortureItem",
+    "Guid": "2168d3e3b8ce32a478db0b7db49064d6"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "StagHelmetItem",
+    "Guid": "7437f12e61554634595e36fdbf804bbc"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetFullplateDwarvenItem",
+    "Guid": "5cfc5e6dfe07a5540b06fd0f2c1e6720"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetOfTheDuskItem",
+    "Guid": "713e371e88a44984cacfaadf48551d47"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetOfTheGuidingLight",
+    "Guid": "8db1c151a8250f7479a5f23a615babdf"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GraveyardKeepersHelmetItem",
+    "Guid": "50aaf42c8b2d2ff488a46051da29980b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CheerfulWarriorsHelmItem",
+    "Guid": "63e3909df7242c24da96e080ba5456ef"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "KillerHelm_easterEgg",
+    "Guid": "0034a132380641a0840ff684facbd476"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetDragonscaleBlueItem",
+    "Guid": "bdbf0a7a8b95dc6488008872f497f16b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetDragonscaleBlackItem",
+    "Guid": "19f27f871b1934a47b08b78fbccc3865"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetDragonscaleRedItem",
+    "Guid": "7cd9ef2a249d5d947a5721e062a89729"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetFullplateVilderavnItem",
+    "Guid": "aa7077c0a39efbd46a1fb7997b8d8411"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetFullplateRichSilverBlueItem",
+    "Guid": "282393f860a510b429432e13943f27c0"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "IdentifyingGlasses",
+    "Guid": "2140811c26dede24aa00bf7fe6cf3a1d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetFullplatePitaxGuardItem",
+    "Guid": "e2f801723e487a34ebb6155936ebd1aa"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "MaskOfNothingItem",
+    "Guid": "8344b46a6e404227b72d129073383a6c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HeadbandOfSharpEye",
+    "Guid": "f286eaf3897455147be99fbcde210774"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "TwilightShadeItem",
+    "Guid": "298ce58699654328beb94fed896c08e3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RogueCapItem",
+    "Guid": "e7dbbfd147a9e214396a4fbaf68563dd"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ParagonOfDefendersItem",
+    "Guid": "e9cc3f1f8074fc14eb3ada35871c98da"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "PhylachetryOfNegativeChannelingLesser",
+    "Guid": "9751f7b073f740b458ab170cc81f5f1b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CrushingPresenceItem",
+    "Guid": "835d2e861aef0dd4fb21df9700074edc"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetArmagItem",
+    "Guid": "d22b682ccd5672042891b1a7882278a9"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetHalfPlateFeyItem",
+    "Guid": "b4a543719a69c1142af4b0c0832137b3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "InquisitorCapItem",
+    "Guid": "ea9a08013ecff744597cc1f9318b58d1"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetEvilItem",
+    "Guid": "9fdbea707a02b8d448e8e46fd3088468"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DemonicResentmentItem",
+    "Guid": "f7d357a00baf9ab4dab0b6e49e11656d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetFullplateRoyalItem",
+    "Guid": "a3713ad3603420447bfaa1c4e552e55d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HatWitchBlackItem",
+    "Guid": "be1486487d0b94247b2af03c60bbd860"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "LightAbsoberHeadbandItem",
+    "Guid": "bc87fd1cd75d1814f93695259906ba01"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "StubbornHeadItem",
+    "Guid": "127fd5a7b742937428953334f6c13052"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "JasperCirclet",
+    "Guid": "35f2344d0c7b8e24a865dbc440adcdb5"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "LensesOfProlonguedGazeItem",
+    "Guid": "335d50d92efde4f4e91747bfe3c06d6e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HelmetFullPlateKnightItem",
+    "Guid": "19e9d2e877107fa4eb64ff9d62a288ab"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "EyesOfEagle",
+    "Guid": "303e3a1df232b0747b7fde723828fa45"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeholderOfWindAmuletItem",
+    "Guid": "a22e2c829b0ce44418919def9bf51885"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfSpells",
+    "Guid": "b9bc244f20551564da681a54865a2103"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RiversongAmuletItem",
+    "Guid": "c4b62855e9f9bfa40b710445cbd91141"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfCirculatingBloodItem",
+    "Guid": "5043aad8b5815cc4a86f93c7ff2b50e3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfApothecaryItem",
+    "Guid": "9ec8fb23e5534ba4bb728a8e61567cac"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GlassAmuletOfClarityItem",
+    "Guid": "eed92946d09c54e4b8e8defc9588c18d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfNatureCalling_Item",
+    "Guid": "1c257c00832d48a6a97340a15cc18d7e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfJoustingItem",
+    "Guid": "97d9b639fb5948947881392260340892"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SilverTongueAmuletItem",
+    "Guid": "4d4231b4a395bba4b9819dfbb2dc785d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfImposingPhysiqueItem",
+    "Guid": "6f7c7875303bc0d4686da084726416e8"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfTimeTrickery",
+    "Guid": "8fdd83cc5f9d57e4387430a1b437de0c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfAgileFists",
+    "Guid": "afd04948b8f211c448f1cc4bd9a67e3e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfAgileFistsPlus1",
+    "Guid": "057127ddc43059a4ea9c638ad199fa2e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfAgileFistsPlus2",
+    "Guid": "e645015fe02c29e40be2559795a2993b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfAgileFistsPlus3",
+    "Guid": "302fe578692531b4094bd87b8a296f09"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfAgileFistsPlus4",
+    "Guid": "296a9377c1f5ea44c82f023e5f54e4a3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfMightyFists1",
+    "Guid": "a82d4f94b327d6743ad9c2b9c440061c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfMightyFists2",
+    "Guid": "c640025d7096aba49bd19e7ffcac9400"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfMightyFists4",
+    "Guid": "75ebf721bdece6342b0078a765b1f65a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfMightyFists5",
+    "Guid": "ff74157b090c1744598408c8f221b9fc"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfFourElementsItem",
+    "Guid": "140e0480b4c1b5747b70f66e31d5d94b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfDeepRootsItem",
+    "Guid": "77f4808ddc364929a739d44424ccf0a5"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfEpicSongsItem",
+    "Guid": "b1adc956d75565c4bbb2896ee7969365"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "WardMastersAmuletItem",
+    "Guid": "1bc94bd99a10f7648bd39d8563ca47c9"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfBlackenedMirrorItem",
+    "Guid": "31894ce7e7d5a574d9777a99b45ad9de"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CameliaAmuletItem",
+    "Guid": "94b2b8b9ef254344cbc71663fecf8b99"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BoneAmuletItem",
+    "Guid": "08de14e8676f56347b1d57e79fb48bd0"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AspectOfTheAspItem",
+    "Guid": "7d55f6615f884bc45b85fdaa45cd7672"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DarekSunhammersFake",
+    "Guid": "3e4ce583dc71401588f33f8192c252cd"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DarekSunhammersWork",
+    "Guid": "5a3463e8f61c4663aa59660ff51e3cb1"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GiantslayersClasp",
+    "Guid": "5114819cf9fec3b4db5cffdcb9eded62"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DaeranGift",
+    "Guid": "6d4c5036156d06f49b117bdc7a76b81a"
+  },
+  {
+    "DisplayName": "",
     "InternalName": "SilverChain",
     "Guid": "b8a84c05641f88e4ca5a6181ddc9eb79"
   },
   {
     "DisplayName": "",
-    "InternalName": "Set2_Robe",
-    "Guid": "0361af3514c14b18868b01139f011af7"
+    "InternalName": "GoldenChain",
+    "Guid": "688d61ed91f68944da24c61f378c47b5"
   },
   {
-    "DisplayName": "Anneau de rubis",
-    "InternalName": "RubyEncrustedRing",
-    "Guid": "2e8868ceffb4d7f4baa53cd21c62416c"
+    "DisplayName": "",
+    "InternalName": "MayasCharmItem",
+    "Guid": "5719bea74c11d8d4eb66fac430435f04"
   },
   {
-    "DisplayName": "Chevalière arcanique",
-    "InternalName": "ArcaneSignet",
-    "Guid": "7829052aa5f0b57409dbef0fbc413682"
+    "DisplayName": "",
+    "InternalName": "AmuletOfDeepWaterItem",
+    "Guid": "35a3d8b21bf0a6044aeff000bb965cd8"
   },
   {
-    "DisplayName": "Chevalière bénie",
-    "InternalName": "BlessedSignet",
-    "Guid": "4421a45952e4f2a40a11c1f409fe2e13"
+    "DisplayName": "",
+    "InternalName": "HeartOfTheHeraldItem",
+    "Guid": "abd2459160cd479085fb2a75b927737f"
   },
   {
-    "DisplayName": "Chevalière impie",
-    "InternalName": "UnholySignet",
-    "Guid": "7840bf8ed0674fc5831e1b09a6cabb89"
+    "DisplayName": "",
+    "InternalName": "HeartOfIraItem",
+    "Guid": "c17f627fedd420d4aa871f23d0995fcf"
   },
   {
-    "DisplayName": "Anneau de saphir",
-    "InternalName": "SapphireRing",
-    "Guid": "80e3fe7c341165548abfecd22b1f6069"
+    "DisplayName": "",
+    "InternalName": "CitrineNecklace",
+    "Guid": "426068b72e8055b45a6b8dcfc92c637c"
   },
   {
-    "DisplayName": "Chevalière en or",
-    "InternalName": "GoldenSignet",
-    "Guid": "45a5397ab34f60247906064949b710fc"
+    "DisplayName": "",
+    "InternalName": "NahCollar",
+    "Guid": "ab3ee90fd2faffb46a00f889a2d226c8"
   },
   {
-    "DisplayName": "Anneau de grenat",
-    "InternalName": "GarnetEncrustedRing",
-    "Guid": "489a7b81151c40541b8de88b0eaa6a77"
+    "DisplayName": "",
+    "InternalName": "EmeraldNecklace",
+    "Guid": "7506e7e62c58c6444881d0896fff5db1"
   },
   {
-    "DisplayName": "Anneau d'or",
-    "InternalName": "GoldRing",
-    "Guid": "ba4276197d204314d9b4a69a4366b2a3"
+    "DisplayName": "",
+    "InternalName": "NecklaceOfEarsItem",
+    "Guid": "6a26ffa9238302f44b517fc0b7363014"
   },
   {
-    "DisplayName": "Anneau de topaze",
-    "InternalName": "TopazEncrustedRing",
-    "Guid": "94694f0cad94e0c4a8ff41a46c72d536"
+    "DisplayName": "",
+    "InternalName": "BoneNecklace",
+    "Guid": "ecd2f72602f59af459323f0417368abf"
   },
   {
-    "DisplayName": "Anneau d'argent",
-    "InternalName": "SilverRing",
-    "Guid": "212a1a78c7865154482ffda45796510e"
+    "DisplayName": "",
+    "InternalName": "AmuletOfEternalHunter",
+    "Guid": "c4c7997fb14c9ee47a384d76fbc4512a"
   },
   {
-    "DisplayName": "Anneau d'améthyste",
+    "DisplayName": "",
+    "InternalName": "MesmerizingNecklaceItem",
+    "Guid": "d0a0bd80c6c61ba4495abd1191bd4e8a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "XavornsCrossItem",
+    "Guid": "4537e2beb46b28a47bde3e3e1ac95255"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DeathlyArousalItem",
+    "Guid": "ced0c42331b39f5499846880a2b82c9b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SwarmbaneClaspItem",
+    "Guid": "a4dda39fab2d4e99884a71ecdc8f77ad"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletofArodenItem",
+    "Guid": "92d29a84dbd54072b74ddc52c034b436"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SecretsOfSuramgaminNecklaceItem",
+    "Guid": "6bbf04b71ee91734dab328837fc168cf"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BindingsOfThePrinceItem",
+    "Guid": "33674f7c73f0da0448ce6d84c6846f1a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "LocketOfMagicMissileMasteryItem",
+    "Guid": "6c1f471b01500eb409ed73711ef3b79e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "MedallionOfDemonicDisruption",
+    "Guid": "96c3f59318944afeaaa003197733e02d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "LocketOfPerfectCantripsItem",
+    "Guid": "828561d73332c5846b11ffb4bd6df94d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SilverMedallion",
+    "Guid": "06846b7beaca5444d8eebfebc320adca"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GoldenMedallion",
+    "Guid": "32242d89f184f9f47b51bdedb50256c0"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "MenanceOfDeathAmuletItem",
+    "Guid": "8c7525cda7ad79a47a578197dab6c487"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HalfOfPairedPendantItem",
+    "Guid": "43b2b67063747ec43b962ed12111e106"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "StormAmberNecklaceItem",
+    "Guid": "e3acbfd13b857ed41a1ba8c330824f7d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BlackPearlPendant",
+    "Guid": "d3707bd5d57f7b64ba591a7a9db640e3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "TurquoisePendant",
+    "Guid": "d7d19d4517998d6498f99f60ad03fe88"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ClockworkPendant",
+    "Guid": "a42d83fee9771e349bb885dd702bad96"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RiverFoxPendantItem",
+    "Guid": "169fd99b68c1dd04692c2368a7b957b7"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SarzaksisPayzaItem",
+    "Guid": "7a1921b84c2d958489c9f3b70b7f5093"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "PitchTunerItem",
+    "Guid": "46ef4528d79b830489ffe99688db39d4"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletofInitiative",
+    "Guid": "5cacbec6a8ddfae4389d82fbf75ec2c1"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BackrankAssistanceItem",
+    "Guid": "b27f99aae1efc5e47b5741b6b94ac539"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RecklessVengeanceItem",
+    "Guid": "9343a0ba1c98d7f4eb5f5cb517280764"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfInnerVirtue",
+    "Guid": "8722776a6f94485499fe476bce767716"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AmuletOfLifeVeilItem",
+    "Guid": "138f2b7ce23a4fa4fa3d633c1d3a0ae3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SarkorianWeddingSignetItem",
+    "Guid": "9f8324afafbf4e11aad954273e554b1b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "AcerbicRingItem",
+    "Guid": "1f34a6b309907a44681c689709976bff"
+  },
+  {
+    "DisplayName": "",
     "InternalName": "AmethystEncrustedRing",
     "Guid": "3cfeae23012c8b9488b5b36d51ee4a8d"
   },
   {
-    "DisplayName": "Anneau de cuivre",
+    "DisplayName": "",
+    "InternalName": "SilverRing",
+    "Guid": "212a1a78c7865154482ffda45796510e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfRenownArtisanItem",
+    "Guid": "5d6100feb15a81d47a99f227247b81e1"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ChameleonRingItem",
+    "Guid": "072ddfdddd30f3c428e18cb70b566493"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfLuck1",
+    "Guid": "ec4c8aa06b5f46e4f961c5bc3526da04"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfCircumstancesItem",
+    "Guid": "dde6fa4881bed584aa5647cb0d16dd45"
+  },
+  {
+    "DisplayName": "",
     "InternalName": "CopperRing",
     "Guid": "caeb348840e1fd240a70971db14da63b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfChaoticTortureItem",
+    "Guid": "a684e74c2c545764ea436b570d47e7f3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfExtremeJukingItem",
+    "Guid": "5fbd92212e9143508700e027edb26023"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfTwinArrows",
+    "Guid": "83c2ff8758c18db4a93d3255d72dad16"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfBlurItem",
+    "Guid": "9811125a437824c41a1b106653de7eda"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfSharpStrikeItem",
+    "Guid": "c400893b91a9d604abb58da1776a9007"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GarnetEncrustedRing",
+    "Guid": "489a7b81151c40541b8de88b0eaa6a77"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DaeranStartingRingItem",
+    "Guid": "e0986c3e091b2a14a91d2257979b39b6"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfDeadlySwingItem",
+    "Guid": "ed27fa4fb5206bf4ab6d251a3ce1126a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ConmansRingItem",
+    "Guid": "b18f6311af7d32545882e1901f75e0b9"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfLawItem",
+    "Guid": "5004d122ca41d2b4897d9c2c5ec08439"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfPowerfulBloodMagic",
+    "Guid": "c5e9e714a758420191d0188a0d5eca08"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DLC3_RingOfInstantTriumphItem",
+    "Guid": "b631f6412333463eb620b4fd0571698c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfProcrastinatorItem",
+    "Guid": "951e3e908bce44a09ab0879ea5560585"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "PrologueRing",
+    "Guid": "f24cc854fb1e08c479d33cc1a7085ea6"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfProtection2",
+    "Guid": "254755ca73eb52a4d8ab1a663106659b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfProtection4",
+    "Guid": "1c8d2d0358c664447bc9bff52220f027"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfProtection6",
+    "Guid": "88945c4d1bd44de59905ac20898d05d5"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfPlanarProtectionItem",
+    "Guid": "38d067e54e1aa0049a7d707d4b9213c4"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfProtection7Extra",
+    "Guid": "b23ed741ab984225946c7d22c96c680d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BorealMightItem",
+    "Guid": "a61c1d4b6f5ef6f4c853651e8df94c0c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfPyromaniatItem",
+    "Guid": "e2f23f658afc6fe48a61f8aea173dc29"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RazmirRing",
+    "Guid": "1ef783f955584050972c13f9399eb9d8"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RubyEncrustedRing",
+    "Guid": "2e8868ceffb4d7f4baa53cd21c62416c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SapphireRing",
+    "Guid": "80e3fe7c341165548abfecd22b1f6069"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RinfOfHintsItem",
+    "Guid": "4f98129ba5e3bc74c88390d29858877c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfSecurityItem",
+    "Guid": "70dadcb5b5184e746a7ee1b8e43b8b63"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "TopazEncrustedRing",
+    "Guid": "94694f0cad94e0c4a8ff41a46c72d536"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfSacredTouchItem",
+    "Guid": "e71794e3f78dea249951fe1fe01af589"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DLC5_DarkLifeRing",
+    "Guid": "be863e5e51894eb0a832e75b24e71e70"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfDevastatingWillItem",
+    "Guid": "b96b86afe4cc1594fa7203e2318ae81f"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfBalanceGreaterItem",
+    "Guid": "5bd6fafea3ee43c42abb7bec222afa11"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ThieflingRingItem",
+    "Guid": "ce0eb16ed3b57fa408cc14a42af8abf2"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfHuntersLuckItem",
+    "Guid": "fde80a3b342957f4b88b90fe8b8c261a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfTheDeadItem",
+    "Guid": "14b525f36c1856544863501824676262"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingofMagicDevices",
+    "Guid": "66ab84747fa8c5f43851b4bd02ed3f85"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfEvasionItem",
+    "Guid": "ae3638b2f8016f84d87122ae60d26937"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfAcidImmunityItem",
+    "Guid": "97e6c9904cb2b8a40942068019f88be3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GoldRing",
+    "Guid": "ba4276197d204314d9b4a69a4366b2a3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingofConstitution",
+    "Guid": "6c7f785bab7bd1243a43e365dc2089bd"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BlackRingWithRunesItem",
+    "Guid": "bd069e1bf0d16b649ba20047ff61ba12"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "PaladinsRingItem",
+    "Guid": "e809270de6b424c4ebacd019271b665d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfFoeFocusItem",
+    "Guid": "f60f543c44b8401dae8da71453daa7b9"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfTheSneakyWizard",
+    "Guid": "a821e1c6b8799b74490a5b0dd3bd0dd1"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfUndercoverWizardItem",
+    "Guid": "ccd79131ecc2ea34aaadfedd8fc6ca44"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BeastKingItem",
+    "Guid": "382d36b339d911248bf4da59c258f5dc"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ZeriexCharmedRing",
+    "Guid": "073e5a57cf0359744a4db056ab481103"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingofSickeningEntanglement",
+    "Guid": "a71872b5b18d31c42b8bfc19c9a16d5f"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "PrismaticRingItem",
+    "Guid": "851fbefced1106e4a86251ec5242f815"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HerbalRingItem",
+    "Guid": "75069b8c7bf012b4dbc409bc52b8ff8c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfBoneBreakingItem",
+    "Guid": "e5d00168cc74448da1e2f3c17d17e44c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfMercyless_Item",
+    "Guid": "fd8e043dd85848108e4e6c1f3034f709"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "UnholyShepherdItem",
+    "Guid": "e75173b870a9d7f4ca1e18b576c5e3a3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ArcaneSignet",
+    "Guid": "7829052aa5f0b57409dbef0fbc413682"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BlessedSignet",
+    "Guid": "4421a45952e4f2a40a11c1f409fe2e13"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GoldenSignet",
+    "Guid": "45a5397ab34f60247906064949b710fc"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "UnholySignet",
+    "Guid": "7840bf8ed0674fc5831e1b09a6cabb89"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "EnliveningLeaderishipItem",
+    "Guid": "ce230a619be858d468a5eb14d358d7d5"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SacredCommandmentItem",
+    "Guid": "0c8977ea599481c4abfe4522b8582bec"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfFirmTouchItem",
+    "Guid": "5d78ed7cb768e94459a5aff99f7db20c"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfHumbleMasterItem",
+    "Guid": "c29d9ca30384c5e47a2a0392fe750878"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfEternalSkyItem",
+    "Guid": "71d0a43206dc9b449b6721c09b160332"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "LinziRing",
+    "Guid": "dea2c61ad3503864db6189db96ddef65"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "FlowOfWaterRingItem",
+    "Guid": "6ea390070285dca40868145c3dc83025"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingofArodenItem",
+    "Guid": "9699071c8bf046bca5272d0a14b717e0"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "PortalStonePlanarRingItem",
+    "Guid": "031e6d000ff5b4849b84f15707a625ec"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ElementalProtectorItem",
+    "Guid": "05bef2136b8766049830442a654a98ed"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ProtectionOfColdItem",
+    "Guid": "5cd01cf5ae523e9438690b70ba667825"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfProtectionCarrok",
+    "Guid": "e148591ac5ad4a9e9369523be6d8a0ee"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RavagerOfDreadRingItem",
+    "Guid": "3d9c6db97f82b284b8aca0813a402b21"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RedSalamandraItem",
+    "Guid": "6f8105a52cd227c45b860d526ce7c661"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingofForceShield",
+    "Guid": "1fdfcfdaeee3ca441adc14f204fca521"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RingOfEnergySourceItem",
+    "Guid": "9525bbdd4aeb7db4ab7fe2a7b8f20902"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SigilOfCreationRingItem",
+    "Guid": "04cfe9660005b05438b9ba46ba85e08d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ShootDownItem",
+    "Guid": "50a96500ad8974c48873a690a0414a25"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RobeOnTheBrinkOfDeathItem",
+    "Guid": "ba3d3f98974021f4a96ec087b3940df6"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ClaspOfDeathRobeItem",
+    "Guid": "d8c0d242f1844c4fa1e40e91eae3f198"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "GorgeousGlowingGarnetGarmentItem",
+    "Guid": "8afe91a71d05417cb8162d8ce1f903a5"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CorsetOfDireWitchcraft",
+    "Guid": "ded0ec6431f54b85be50a464006ac815"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BestialRagsItem",
+    "Guid": "efc86eef11d548d7be4ebfba999b9e9d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RobeElementalImbuementItem",
+    "Guid": "672327dcb5731f74a85ae23697cd7b26"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SilverRobeItem",
+    "Guid": "a9f65e1bb03ba7542880f2280bf39e1f"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RobeOfDeterminationItem",
+    "Guid": "ee26e7fdc05725f48abae2db22ada906"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RobeOfFalseDeathCorrectItem",
+    "Guid": "4f56360fd24e44049d8899fe17f132d2"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "LoremastersRobeItem",
+    "Guid": "68ed893157ce46deb6fdba8aae5deaa2"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DLC3_RobeOfUnspeakableTruthItem",
+    "Guid": "9d7e7dbc35ea4298bd51790644caa8c6"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RobeOfMaliceItem",
+    "Guid": "2e78284d218c51643bc3e1f0a530a5fc"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RobeOfMephistophelesItem",
+    "Guid": "204b71bd46194f9ab523dcd728f2f370"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RobeOfAngelicPrudenceItem",
+    "Guid": "1c2fc5c3b82e428ab6b06dab81ef01dd"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RobeOfVirtueItem",
+    "Guid": "17c5e2686dbb5a843b5ba859f22aeea1"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RobeOfTrampleItem",
+    "Guid": "f3989bdf3f1e92248950ed7b0922dd8e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DarkMastersRobeItemShirt",
+    "Guid": "62d2df6b7f534378b3492a4d2f78889d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RobeOfArcaneAnnihilationItemCorrect",
+    "Guid": "f389db9e641c45a2b3f7ab9cca0f76ce"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SilkyVeilItem",
+    "Guid": "32fd0a44742ca084aad9d599794f1355"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CallToViolenceItem",
+    "Guid": "25b37490da95d9541b73972837354eff"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CapeOfFeinting",
+    "Guid": "3b12f5f57ab14e029576f8c0d25b136a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BlackFurCloakItem",
+    "Guid": "ae0cf84fb23478f4aaa07e3d10984bea"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HeroCloakItem",
+    "Guid": "ffe1561dc6bc4d5c8695598db286cb67"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfTheAncientHeraldItem",
+    "Guid": "ffcad7e6a9d02474ea93b698eec94d1d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfTheBearItem",
+    "Guid": "9af35985be20c384a957e5c7dfdb41f2"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfMorta",
+    "Guid": "1c28fa1d710041289dd83e18dfc8316d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfAstoundingProwessItem",
+    "Guid": "6d14fc0b4c6a421e921f68ee3172311a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfArcaneReservesItem",
+    "Guid": "2d38bb0ae9d48904ab2bebf5dac57a36"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfSeerItem",
+    "Guid": "017f9cbc5ff31e74598e2ef0379d3c82"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DLC3_CloakOfRadianceItem",
+    "Guid": "a9e22202c101432fa5dc28f3a4769e4f"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfDarkestRitesItem",
+    "Guid": "ed3e8b648fce4b33b809606cd1c4b933"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DungeoneersCloakItem",
+    "Guid": "fd1ed44854da4b35a70c613fac2d3d8f"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HerbalistCapeItem",
+    "Guid": "e8157dd509418c449a642dbe4c4dd102"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfHeroism",
+    "Guid": "dd7e65ef127b930488b85a48616b4baa"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfEfficientInvisibilityItem",
+    "Guid": "3dbd64fdfe9f43d2b49ff5110821a213"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "WhiteWindsCloakItem",
+    "Guid": "262b8ece36ba43f44bd407e82c079028"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "SkinnedLeatherCloakItem",
+    "Guid": "98d3ea2a37f566c4ebce104c2d60fdb9"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfTheLion",
+    "Guid": "465bcf20235d0d04593d671bf9b607f0"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfLoneWolfItem",
+    "Guid": "700eae066f5a50c47a482fbdf8378327"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfBloodScentItem",
+    "Guid": "876255a39ab11734a8c12cfb451a146e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CloakOfStagLord",
+    "Guid": "3496c0af23640bf4a9f0881771514630"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "WrathOfTheUndeadItem",
+    "Guid": "5e8470733b954db686cd2dbfaaf1f058"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "WarmEmbrace",
+    "Guid": "4b6af84f2f1821841b6f71d32585208e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ShroudOfAbaddon",
+    "Guid": "03d72918c5f5c4d498607e76231e3487"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BloodClarityItem",
+    "Guid": "66f98b74960cecc4f94d039539463d33"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RulersMantleItem",
+    "Guid": "d243856faedafb348ac448402efc1d12"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "CelestialProtectionItem",
+    "Guid": "38ab96e73df32c448ad72b6b2097aa7a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_AeonCloakItem",
+    "Guid": "b24d6185acea1f949b026c3b58e47947"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_AngelCloakItem",
+    "Guid": "2f45a11adb74b5a4a81f857a9886c5bd"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_AzataCloakItem",
+    "Guid": "78cd50deada655e4cbe49765c0bbb7e4"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_DemonCloakItem",
+    "Guid": "cdc95a3c4a74a874a895b3be61369564"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_DevilCloakItem",
+    "Guid": "d7a89e21497bcd94a8f8c0e278574b5b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_DragonCloakItem",
+    "Guid": "2c0129fc1485da149a68a1b0584cad91"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_LegendCloakItem",
+    "Guid": "ceaf9f93f42d40f468fc89ba6c32ea9d"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_LichCloakItem",
+    "Guid": "1622ceba1d7829b4f9ee709b71bd6baf"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_LocustCloakItem",
+    "Guid": "217ca79948e2c7a4698b4944b1ed9bf3"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Artifact_TricksterCloakItem",
+    "Guid": "50b398d4630d9f244a5db288124ff181"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "ShroudOfDecayItem",
+    "Guid": "4b7d966416275e545b4214276e6ae5a2"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "EngravedBracelet",
+    "Guid": "a78b976c8e356b34a9f2d84e42d8c918"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "BracersOfArcheryLesser",
+    "Guid": "01d51ff5f3db2164b88aaa662a9b0f2e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "DLC3_BracersOfBraveryItem",
+    "Guid": "cb7f21a7624e4697827698f0ba629e68"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "HellfireBracersWristItem",
+    "Guid": "01611c3a767f4716bd0b7f82ced0627e"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "RighteousExorcistsBracersItem",
+    "Guid": "d68cea6c999eab4459c030c6588c1083"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "PhantomSlayersBracersItem",
+    "Guid": "142fb54550dd04947a6593adafe053e8"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "PlayersStartingBracersItem",
+    "Guid": "7a169971bbe8ca1469f2f5d4b4a8dcff"
   }
 ]

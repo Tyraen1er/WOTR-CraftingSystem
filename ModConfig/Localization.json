@@ -937,6 +937,11 @@
             "frFR": "Gants",
             "ruRU": "Перчатки"
         },
+        "ui_cat_glasses": {
+            "enGB": "Glasses & Goggles",
+            "frFR": "Lunettes",
+            "ruRU": "Очки"
+        },
         "ui_cat_helmet_headband": {
             "enGB": "Helmets & Headbands",
             "frFR": "Casques & Diadèmes",
@@ -1571,6 +1576,96 @@
             "enGB": "Charges",
             "frFR": "Charges",
             "ruRU": "Заряды"
+        },
+        "ui_category": {
+            "enGB": "Category",
+            "frFR": "Catégorie",
+            "ruRU": "Категория"
+        },
+        "ui_cat_all": {
+            "enGB": "All",
+            "frFR": "Toutes",
+            "ruRU": "Все"
+        },
+        "ui_cat_ring": {
+            "enGB": "Rings",
+            "frFR": "Anneaux",
+            "ruRU": "Кольца"
+        },
+        "ui_cat_neck_amulet": {
+            "enGB": "Necklaces & Amulets",
+            "frFR": "Colliers & Amulettes",
+            "ruRU": "Ожерелья и Амулеты"
+        },
+        "ui_cat_belt": {
+            "enGB": "Belts",
+            "frFR": "Ceintures",
+            "ruRU": "Пояса"
+        },
+        "ui_cat_boots": {
+            "enGB": "Boots",
+            "frFR": "Bottes",
+            "ruRU": "Сапоги"
+        },
+        "ui_cat_gloves": {
+            "enGB": "Gloves",
+            "frFR": "Gants",
+            "ruRU": "Перчатки"
+        },
+        "ui_cat_glasses": {
+            "enGB": "Glasses & Goggles",
+            "frFR": "Lunettes & Visières",
+            "ruRU": "Очки и Линзы"
+        },
+        "ui_cat_helmet_headband": {
+            "enGB": "Helmets & Headbands",
+            "frFR": "Casques & Bandeaux",
+            "ruRU": "Шлемы и Ободки"
+        },
+        "ui_cat_cape": {
+            "enGB": "Capes & Cloaks",
+            "frFR": "Capes & Manteaux",
+            "ruRU": "Плащи и Накидки"
+        },
+        "ui_cat_bracers": {
+            "enGB": "Bracers",
+            "frFR": "Bracelets & Brassards",
+            "ruRU": "Наручи"
+        },
+        "ui_cat_robe": {
+            "enGB": "Robes & Shirts",
+            "frFR": "Robes & Chemises",
+            "ruRU": "Мантии и Рубашки"
+        },
+        "ui_item_blank_belt_name": {
+            "enGB": "Simple Belt",
+            "frFR": "Ceinture simple",
+            "ruRU": "Простой пояс"
+        },
+        "ui_item_blank_belt_desc": {
+            "enGB": "A simple, non-magical leather belt, ready for custom enchantments.",
+            "frFR": "Une ceinture en cuir simple et non magique, prête à recevoir des enchantements personnalisés.",
+            "ruRU": "Простой немагический кожаный пояс, готовый к наложению особых зачарований."
+        },
+        "ui_item_blank_gloves_name": {
+            "enGB": "Simple Gloves",
+            "frFR": "Gants simples",
+            "ruRU": "Простые перчатки"
+        },
+        "ui_item_blank_gloves_desc": {
+            "enGB": "Simple, non-magical leather gloves, ready for custom enchantments.",
+            "frFR": "Des gants en cuir simples et non magiques, prêts à recevoir des enchantements personnalisés.",
+            "ruRU": "Простые немагические кожаные перчатки, готовые к наложению особых зачарований."
+        },
+        "ui_item_blank_glasses_name": {
+            "enGB": "Simple Goggles",
+            "frFR": "Lunettes simples",
+            "ruRU": "Простые очки"
+        },
+        "ui_item_blank_glasses_desc": {
+            "enGB": "Simple, non-magical lenses, ready for custom enchantments.",
+            "frFR": "Des lunettes simples et non magiques, prêtes à recevoir des enchantements personnalisés.",
+            "ruRU": "Простые немагические очки, готовые к наложению особых зачарований."
         }
     }
 }

@@ -317,6 +317,10 @@ namespace CraftingSystem
                 // --- INJECTION DES ENCHANTEMENTS CUSTOM (JSON COMPLEXE) ---
                 CustomEnchantmentsBuilder.BuildAndInjectAll();
 
+                // --- INJECTION DES ACCESSOIRES VIERGES ---
+                CustomItemBuilder.BuildBlankAccessories();
+                ItemScanner.PreloadAndRegisterAccessories();
+
                 // --- CHARGEMENT DU CACHE DES SORTS ---
                 SpellScanner.LoadCache();
             }
@@ -377,6 +381,16 @@ namespace CraftingSystem
                 }
 
                 return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(ItemEntity), "ApplyEnchantments")]
+        public static class ItemEntity_ApplyEnchantments_Patch
+        {
+            [HarmonyPrefix]
+            public static void Prefix(ref bool onInitializeOrEquip)
+            {
+                onInitializeOrEquip = true;
             }
         }
 
