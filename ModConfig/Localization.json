@@ -857,6 +857,61 @@
             "frFR": "Synchronisation en cours...",
             "ruRU": "Идёт синхронизация..."
         },
+        "ui_sync_waiting": {
+            "enGB": "Waiting for synchronization...",
+            "frFR": "En attente de synchronisation...",
+            "ruRU": "Ожидание синхронизации..."
+        },
+        "ui_sync_json_loaded": {
+            "enGB": "JSON loaded ({0} entries).",
+            "frFR": "JSON chargé ({0} entrées).",
+            "ruRU": "JSON загружен ({0} записей)."
+        },
+        "ui_sync_json_error": {
+            "enGB": "JSON Error: {0}",
+            "frFR": "Erreur JSON : {0}",
+            "ruRU": "Ошибка JSON: {0}"
+        },
+        "ui_sync_finalize_error": {
+            "enGB": "Finalization failed: {0}",
+            "frFR": "Échec finalisation : {0}",
+            "ruRU": "Сбой завершения: {0}"
+        },
+        "ui_scan_initializing": {
+            "enGB": "Initializing unified scan...",
+            "frFR": "Initialisation du scan unifié...",
+            "ruRU": "Инициализация единого сканирования..."
+        },
+        "ui_scan_blueprints_in_progress": {
+            "enGB": "Scanning blueprints...",
+            "frFR": "Analyse des blueprints...",
+            "ruRU": "Сканирование чертежей..."
+        },
+        "ui_scan_spells_in_progress": {
+            "enGB": "Scanning blueprints for spells...",
+            "frFR": "Analyse des blueprints pour les sorts...",
+            "ruRU": "Сканирование чертежей для заклинаний..."
+        },
+        "ui_scan_processing": {
+            "enGB": "Processing blueprints: {0}/{1}",
+            "frFR": "Traitement des blueprints : {0}/{1}",
+            "ruRU": "Обработка чертежей: {0}/{1}"
+        },
+        "ui_scan_finalizing": {
+            "enGB": "Finalizing data registration...",
+            "frFR": "Finalisation de l'enregistrement des données...",
+            "ruRU": "Завершение регистрации данных..."
+        },
+        "ui_scan_completed": {
+            "enGB": "Scan completed.",
+            "frFR": "Scan terminé.",
+            "ruRU": "Сканирование завершено."
+        },
+        "ui_scan_warning": {
+            "enGB": "This scan only happens once per session.",
+            "frFR": "Ce scan ne se produit qu'une fois par session.",
+            "ruRU": "Это сканирование происходит только один раз за сессию."
+        },
         "ui_sync_error_index": {
             "enGB": "Failed: Game index inaccessible.",
             "frFR": "Échec : Index du jeu inaccessible.",

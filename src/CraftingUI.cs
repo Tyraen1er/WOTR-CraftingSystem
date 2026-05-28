@@ -905,7 +905,7 @@ namespace CraftingSystem
                 GUILayout.BeginVertical(GUILayout.Width(contentWidth));
                 GUILayout.Space(50 * scale);
                 GUIStyle scanStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(24 * scale), alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
-                GUILayout.Label(Helpers.GetString("ui_scan_in_progress", "Scanning blueprints..."), scanStyle);
+                GUILayout.Label(Helpers.GetString("ui_scan_blueprints_in_progress", "Scanning blueprints..."), scanStyle);
                 GUILayout.Space(20 * scale);
                 
                 Rect progressRect = GUILayoutUtility.GetRect(contentWidth, 30 * scale);
@@ -1080,7 +1080,7 @@ namespace CraftingSystem
                 GUILayout.BeginVertical(GUILayout.Width(contentWidth));
                 GUILayout.Space(50 * scale);
                 GUIStyle scanStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(24 * scale), alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
-                GUILayout.Label(Helpers.GetString("ui_scan_in_progress", "Scanning blueprints for spells..."), scanStyle);
+                GUILayout.Label(Helpers.GetString("ui_scan_spells_in_progress", "Scanning blueprints for spells..."), scanStyle);
                 GUILayout.Space(20 * scale);
                 
                 // Barre de progression simulée

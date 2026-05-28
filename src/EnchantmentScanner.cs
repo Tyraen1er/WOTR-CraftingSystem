@@ -113,6 +113,7 @@ namespace CraftingSystem
 
         public static void Load()
         {
+            LastSyncMessage = Helpers.GetString("ui_sync_waiting", "En attente de synchronisation...");
             try
             {
                 string path = Path.Combine(Main.ModEntry.Path, "Enchantments.json");
@@ -137,7 +138,7 @@ namespace CraftingSystem
                         if (string.IsNullOrEmpty(e.Guid)) continue;
                         if (!GuidMap.TryAdd(e.Guid, e)) Main.ModEntry.Logger.Warning($"[SYNC] Doublon de GUID détecté dans Enchantments.json : {e.Guid} ({e.Name})");
                     }
-                    LastSyncMessage = $"JSON chargé ({MasterList.Count} entrées).";
+                    LastSyncMessage = string.Format(Helpers.GetString("ui_sync_json_loaded", "JSON chargé ({0} entrées)."), MasterList.Count);
                     // Main.ModEntry.Logger.Log($"[SYNC] JSON d'enchantements chargé : {MasterList.Count} entrées.");
                 }
                 else
@@ -156,7 +157,7 @@ namespace CraftingSystem
             }
             catch (Exception ex)
             {
-                LastSyncMessage = $"Erreur JSON : {ex.Message}";
+                LastSyncMessage = string.Format(Helpers.GetString("ui_sync_json_error", "Erreur JSON : {0}"), ex.Message);
                 Main.ModEntry.Logger.Error($"[SYNC] Erreur chargement JSON : {ex}");
             }
         }
@@ -253,7 +254,7 @@ namespace CraftingSystem
             }
             catch (Exception ex)
             {
-                LastSyncMessage = $"Échec finalisation : {ex.Message}";
+                LastSyncMessage = string.Format(Helpers.GetString("ui_sync_finalize_error", "Échec finalisation : {0}"), ex.Message);
                 Main.ModEntry.Logger.Error($"[SYNC] Erreur critique FinalizeScan : {ex}");
             }
             finally

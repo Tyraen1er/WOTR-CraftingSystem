@@ -1,0 +1,5314 @@
+{
+  "0c852a2405dd9f14a8bbcfaf245ff823": {
+    "Guid": "0c852a2405dd9f14a8bbcfaf245ff823",
+    "Name": "Aspersion acide",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c3a8f31778c3980498d8f00c980be5f5": {
+    "Guid": "c3a8f31778c3980498d8f00c980be5f5",
+    "Name": "Assistance divine",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "877297946a6b70744a188eb15dd2daab": {
+    "Guid": "877297946a6b70744a188eb15dd2daab",
+    "Name": "Berceuse",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "16e23c7a8ae53cc42a93066d19766404": {
+    "Guid": "16e23c7a8ae53cc42a93066d19766404",
+    "Name": "Choc",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8a1992f59e06dd64ab9ba52337bf8cb5": {
+    "Guid": "8a1992f59e06dd64ab9ba52337bf8cb5",
+    "Name": "Choc divin",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "652739779aa05504a9ad5db1db6d02ae": {
+    "Guid": "652739779aa05504a9ad5db1db6d02ae",
+    "Name": "Destruction de mort-vivant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "97a23111df7547fd8f6417f9ba9b9775": {
+    "Guid": "97a23111df7547fd8f6417f9ba9b9775",
+    "Name": "Dissipation de sort",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "564c2ac83c7844beb1921e69ab159ac6": {
+    "Guid": "564c2ac83c7844beb1921e69ab159ac6",
+    "Name": "Étincelle de feu",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5bf3315ce1ed4d94e8805706820ef64d": {
+    "Guid": "5bf3315ce1ed4d94e8805706820ef64d",
+    "Name": "Fatigue",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "55f14bc84d7c85446b07a1b5dd6b2b4c": {
+    "Guid": "55f14bc84d7c85446b07a1b5dd6b2b4c",
+    "Name": "Hébétement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f0f8e5b9808f44e4eadd22b138131d52": {
+    "Guid": "f0f8e5b9808f44e4eadd22b138131d52",
+    "Name": "Illumination",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "95f206566c5261c42aa5b3e7e0d1e36c": {
+    "Guid": "95f206566c5261c42aa5b3e7e0d1e36c",
+    "Name": "Lumière",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9af2ab69df6538f4793b2f9c3cc85603": {
+    "Guid": "9af2ab69df6538f4793b2f9c3cc85603",
+    "Name": "Rayon de givre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7bc8e27cba24f0e43ae64ed201ad5785": {
+    "Guid": "7bc8e27cba24f0e43ae64ed201ad5785",
+    "Name": "Résistance",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0557ccee0a86dc44cb3d3f6a3b235329": {
+    "Guid": "0557ccee0a86dc44cb3d3f6a3b235329",
+    "Name": "Stabilisation",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d3a852385ba4cd740992d1970170301a": {
+    "Guid": "d3a852385ba4cd740992d1970170301a",
+    "Name": "Stimulant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c60969e7f264e6d4b84a1499fdcf9039": {
+    "Guid": "c60969e7f264e6d4b84a1499fdcf9039",
+    "Name": "Agrandissement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9efb34c2990349c58e1f3b599c7c4d6b": {
+    "Guid": "9efb34c2990349c58e1f3b599c7c4d6b",
+    "Name": "Analyse de la résistance à l'énergie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "fbdd8c455ac4cde4a9a3e18c84af9485": {
+    "Guid": "fbdd8c455ac4cde4a9a3e18c84af9485",
+    "Name": "Anathème",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3e9d1119d43d07c4c8ba9ebfd1671952": {
+    "Guid": "3e9d1119d43d07c4c8ba9ebfd1671952",
+    "Name": "Arc tempétueux",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d7fdd79f0f6b6a2418298e936bb68e40": {
+    "Guid": "d7fdd79f0f6b6a2418298e936bb68e40",
+    "Name": "Arme magique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9e1ad5d6f87d19e4d8883d63a6e35568": {
+    "Guid": "9e1ad5d6f87d19e4d8883d63a6e35568",
+    "Name": "Armure de mage",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7bdb6a9fb6b37614e96f155748ae50c6": {
+    "Guid": "7bdb6a9fb6b37614e96f155748ae50c6",
+    "Name": "Aspect du faucon",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a5ec7892fb1c2f74598b3a82f3fd679f": {
+    "Guid": "a5ec7892fb1c2f74598b3a82f3fd679f",
+    "Name": "Barrière étourdissante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "90e59f4a4ada87243b7b3535a06d0638": {
+    "Guid": "90e59f4a4ada87243b7b3535a06d0638",
+    "Name": "Bénédiction",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "de954d4cbf995864ba8662e67a473f93": {
+    "Guid": "de954d4cbf995864ba8662e67a473f93",
+    "Name": "Bénédiction d'arme",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e5af3674bb241f14b9a9f6b0c7dc3d27": {
+    "Guid": "e5af3674bb241f14b9a9f6b0c7dc3d27",
+    "Name": "Blessure légère",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ef768022b0785eb43a18969903c537c4": {
+    "Guid": "ef768022b0785eb43a18969903c537c4",
+    "Name": "Bouclier",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "183d5bb91dea3a1489a6db6c9cb64445": {
+    "Guid": "183d5bb91dea3a1489a6db6c9cb64445",
+    "Name": "Bouclier de la foi",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2d81362af43aeac4387a3d4fced489c3": {
+    "Guid": "2d81362af43aeac4387a3d4fced489c3",
+    "Name": "Boule de feu",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9f10909f0be1f5141bf1c102041f93d9": {
+    "Guid": "9f10909f0be1f5141bf1c102041f93d9",
+    "Name": "Boule de neige",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "fde4d2da304345bca11a73eb8f06b755": {
+    "Guid": "fde4d2da304345bca11a73eb8f06b755",
+    "Name": "Bras longs",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "40ec382849b60504d88946df46a10f2d": {
+    "Guid": "40ec382849b60504d88946df46a10f2d",
+    "Name": "Brume onirique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "dd38f33c56ad00a4da386c1afaa49967": {
+    "Guid": "dd38f33c56ad00a4da386c1afaa49967",
+    "Name": "Cœur indestructible",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cf6c901fb7acc904e85c63b342e9c949": {
+    "Guid": "cf6c901fb7acc904e85c63b342e9c949",
+    "Name": "Confusion",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "95810d2829895724f950c8c4086056e7": {
+    "Guid": "95810d2829895724f950c8c4086056e7",
+    "Name": "Contact corrosif",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c6147854641924442a3bb736080cfeb6": {
+    "Guid": "c6147854641924442a3bb736080cfeb6",
+    "Name": "Convocation d'alliés naturels I",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8fd74eddd9b6c224693d9ab241f25e84": {
+    "Guid": "8fd74eddd9b6c224693d9ab241f25e84",
+    "Name": "Convocation de monstres I",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "91da41b9793a4624797921f221db653c": {
+    "Guid": "91da41b9793a4624797921f221db653c",
+    "Name": "Couleurs dansantes",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2c38da66e5a599347ac95b3294acbe00": {
+    "Guid": "2c38da66e5a599347ac95b3294acbe00",
+    "Name": "Coup au but",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8e7cfa5f213a90549aadd18f8f6f4664": {
+    "Guid": "8e7cfa5f213a90549aadd18f8f6f4664",
+    "Name": "Cri perçant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ab395d2335d3f384e99dddee8562978f": {
+    "Guid": "ab395d2335d3f384e99dddee8562978f",
+    "Name": "Décharge électrique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "57aae1aa36b8022479e1cd39f3a85ef9": {
+    "Guid": "57aae1aa36b8022479e1cd39f3a85ef9",
+    "Name": "Défier le mal",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f3c0b267dd17a2a45a40805e31fe3cd1": {
+    "Guid": "f3c0b267dd17a2a45a40805e31fe3cd1",
+    "Name": "Démarche aérienne",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f001c73999fb5a543a199f890108d936": {
+    "Guid": "f001c73999fb5a543a199f890108d936",
+    "Name": "Disparition",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f6f95242abdfac346befd6f4f6222140": {
+    "Guid": "f6f95242abdfac346befd6f4f6222140",
+    "Name": "Dissipation de la fièvre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6e2054e6adc64bbaa2be46be1f41e3f6": {
+    "Guid": "6e2054e6adc64bbaa2be46be1f41e3f6",
+    "Name": "Doubles d'ombre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7db77ae03a76426f970f2488149fa267": {
+    "Guid": "7db77ae03a76426f970f2488149fa267",
+    "Name": "Éclair de toile",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0fd00984a2c0e0a429cf1a911b4ec5ca": {
+    "Guid": "0fd00984a2c0e0a429cf1a911b4ec5ca",
+    "Name": "Enchevêtrement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9d5d2d3ffdd73c648af3eb3e585b1113": {
+    "Guid": "9d5d2d3ffdd73c648af3eb3e585b1113",
+    "Name": "Faveur divine",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "fd4d9fd7f87575d47aafe2a64a6e2d8d": {
+    "Guid": "fd4d9fd7f87575d47aafe2a64a6e2d8d",
+    "Name": "Fou rire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bd81a3931aa285a4f9844585b5d97e51": {
+    "Guid": "bd81a3931aa285a4f9844585b5d97e51",
+    "Name": "Frayeur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "464a7193519429f48b4d190acb753cf0": {
+    "Guid": "464a7193519429f48b4d190acb753cf0",
+    "Name": "Grâce",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "95851f6e85fe87d4190675db0419d112": {
+    "Guid": "95851f6e85fe87d4190675db0419d112",
+    "Name": "Graisse",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "14c90900b690cac429b229efdf416127": {
+    "Guid": "14c90900b690cac429b229efdf416127",
+    "Name": "Grand pas",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "39a602aa80cc96f4597778b6d4d49c0a": {
+    "Guid": "39a602aa80cc96f4597778b6d4d49c0a",
+    "Name": "Grandes illuminations",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "75de4ded3e731dc4f84d978fe947dc67": {
+    "Guid": "75de4ded3e731dc4f84d978fe947dc67",
+    "Name": "Gueule acide",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "88367310478c10b47903463c5d0152b0": {
+    "Guid": "88367310478c10b47903463c5d0152b0",
+    "Name": "Hypnose",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8bc64d869456b004b9db255cdd1ea734": {
+    "Guid": "8bc64d869456b004b9db255cdd1ea734",
+    "Name": "Imprécation",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "feb70aab86cc17f4bb64432c83737ac2": {
+    "Guid": "feb70aab86cc17f4bb64432c83737ac2",
+    "Name": "Injonction",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c219641a29670d44db0b30470565dede": {
+    "Guid": "c219641a29670d44db0b30470565dede",
+    "Name": "Invocation du monstre 0",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "779179912e6c6fe458fa4cfb90d96e10": {
+    "Guid": "779179912e6c6fe458fa4cfb90d96e10",
+    "Name": "Lames de plomb",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4d9bf81b7939b304185d58a09960f589": {
+    "Guid": "4d9bf81b7939b304185d58a09960f589",
+    "Name": "Lueur féerique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4783c3709a74a794dbe7c8e7e0b1b038": {
+    "Guid": "4783c3709a74a794dbe7c8e7e0b1b038",
+    "Name": "Mains brûlantes",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ad10bfec6d7ae8b47870e3a545cc8900": {
+    "Guid": "ad10bfec6d7ae8b47870e3a545cc8900",
+    "Name": "Maladresse",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "24afb2c948c731440a3aaf5411904c89": {
+    "Guid": "24afb2c948c731440a3aaf5411904c89",
+    "Name": "Mixture pour bombe ciblée",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "403cf599412299a4f9d5d925c7b9fb33": {
+    "Guid": "403cf599412299a4f9d5d925c7b9fb33",
+    "Name": "Morsure magique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9d504f8dff6e93b4ab6afc938ed6a23d": {
+    "Guid": "9d504f8dff6e93b4ab6afc938ed6a23d",
+    "Name": "Œil du mitrailleur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b065231094a21d14dbf1c3832f776871": {
+    "Guid": "b065231094a21d14dbf1c3832f776871",
+    "Name": "Panse ardente",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "85067a04a97416949b5d1dbf986d93f3": {
+    "Guid": "85067a04a97416949b5d1dbf986d93f3",
+    "Name": "Poing de pierre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4ac47ddb9fa1eaf43a1b6809980cfbd2": {
+    "Guid": "4ac47ddb9fa1eaf43a1b6809980cfbd2",
+    "Name": "Projectile magique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c3aafbbb6e8fc754fb8c82ede3280051": {
+    "Guid": "c3aafbbb6e8fc754fb8c82ede3280051",
+    "Name": "Protection contre la Loi",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "433b1faf4d02cc34abb0ade5ceda47c4": {
+    "Guid": "433b1faf4d02cc34abb0ade5ceda47c4",
+    "Name": "Protection contre l'alignement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1eaf1020e82028d4db55e6e464269e00": {
+    "Guid": "1eaf1020e82028d4db55e6e464269e00",
+    "Name": "Protection contre le Chaos",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c28f7234f5fb8c943a77621ad96ad8f9": {
+    "Guid": "c28f7234f5fb8c943a77621ad96ad8f9",
+    "Name": "Protection contre le Chaos/Mal",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "eee384c813b6d74498d1b9cc720d61f4": {
+    "Guid": "eee384c813b6d74498d1b9cc720d61f4",
+    "Name": "Protection contre le Mal",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b48b4c5ffb4eab0469feba27fc86a023": {
+    "Guid": "b48b4c5ffb4eab0469feba27fc86a023",
+    "Name": "Ralentissement du poison",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4e0e9aba6447d514f88eff1464cc4763": {
+    "Guid": "4e0e9aba6447d514f88eff1464cc4763",
+    "Name": "Rapetissement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "450af0402422b0b4980d9c2175869612": {
+    "Guid": "450af0402422b0b4980d9c2175869612",
+    "Name": "Rayon affaiblissant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "78e0d5e8ad0e3eb4c8d65e0d34b945b4": {
+    "Guid": "78e0d5e8ad0e3eb4c8d65e0d34b945b4",
+    "Name": "Rayon affaiblissant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "fa3078b9976a5b24caf92e20ee9c0f54": {
+    "Guid": "fa3078b9976a5b24caf92e20ee9c0f54",
+    "Name": "Rayon de fièvre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "55a037e514c0ee14a8e3ed14b47061de": {
+    "Guid": "55a037e514c0ee14a8e3ed14b47061de",
+    "Name": "Regain d'assurance",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4f8181e7a7f1d904fbaea64220e83379": {
+    "Guid": "4f8181e7a7f1d904fbaea64220e83379",
+    "Name": "Repli expéditif",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "21ffef7791ce73f468b6fca4d9371e8b": {
+    "Guid": "21ffef7791ce73f468b6fca4d9371e8b",
+    "Name": "Résistance aux énergies destructives",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e84fc922ccf952943b5240293669b171": {
+    "Guid": "e84fc922ccf952943b5240293669b171",
+    "Name": "Restauration partielle",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1626dbd11c4143b2a5641da8f227b78c": {
+    "Guid": "1626dbd11c4143b2a5641da8f227b78c",
+    "Name": "Runes incendiaires",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5590652e1c2225c4ca30c4a699ab3649": {
+    "Guid": "5590652e1c2225c4ca30c4a699ab3649",
+    "Name": "Soins légers",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bb7ecad2d3d2c8247a38f44855c99061": {
+    "Guid": "bb7ecad2d3d2c8247a38f44855c99061",
+    "Name": "Sommeil",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "72d9f5adda6387a40a63c49d7781bbbf": {
+    "Guid": "72d9f5adda6387a40a63c49d7781bbbf",
+    "Name": "Voile céleste",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6bb0533cd457d1f4eaccc73ab7680fb2": {
+    "Guid": "6bb0533cd457d1f4eaccc73ab7680fb2",
+    "Name": "Voile d'énergie positive",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "431f783e1a020cd46ab37b8666a92bd3": {
+    "Guid": "431f783e1a020cd46ab37b8666a92bd3",
+    "Name": "Accorder la grâce",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "03a9630394d10164a9410882d31572f0": {
+    "Guid": "03a9630394d10164a9410882d31572f0",
+    "Name": "Aide",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "768b18138fb44b70b686c23119e66e02": {
+    "Guid": "768b18138fb44b70b686c23119e66e02",
+    "Name": "Analyse des réflexes",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e6048d85fc3294f4c92b21c8d7526b1f": {
+    "Guid": "e6048d85fc3294f4c92b21c8d7526b1f",
+    "Name": "Appel cacophonique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5181c2ed0190fc34b8a1162783af5bf4": {
+    "Guid": "5181c2ed0190fc34b8a1162783af5bf4",
+    "Name": "Appel des pierres",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "eaac3d36e0336cb479209a6f65e25e7c": {
+    "Guid": "eaac3d36e0336cb479209a6f65e25e7c",
+    "Name": "Arc brûlant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d026d5c80dbb9224f9a97fec83f5644a": {
+    "Guid": "d026d5c80dbb9224f9a97fec83f5644a",
+    "Name": "Arme alignée",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e1291272c8f48c14ab212a599ad17aac": {
+    "Guid": "e1291272c8f48c14ab212a599ad17aac",
+    "Name": "Armure sans effort",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d4b28341acdfa9443a3a779acb58be51": {
+    "Guid": "d4b28341acdfa9443a3a779acb58be51",
+    "Name": "Aspect animal",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a4ad1b8fa11e7c347a608c004efce9d5": {
+    "Guid": "a4ad1b8fa11e7c347a608c004efce9d5",
+    "Name": "Aspect de l'ours",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "acb787cf9f76e924a9a93bbd011af040": {
+    "Guid": "acb787cf9f76e924a9a93bbd011af040",
+    "Name": "Aura de bravoure supérieure",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9a7e3cd1323dfe347a6dcce357844769": {
+    "Guid": "9a7e3cd1323dfe347a6dcce357844769",
+    "Name": "Bénédiction de chance et de fermeté",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c36c1d11771b0584f8e100b92ee5475b": {
+    "Guid": "c36c1d11771b0584f8e100b92ee5475b",
+    "Name": "Bénédiction de vie et de courage",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "65f0b63c45ea82a4f8b8325768a3832d": {
+    "Guid": "65f0b63c45ea82a4f8b8325768a3832d",
+    "Name": "Blessure modérée",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b7731c2b4fa1c9844a092329177be4c3": {
+    "Guid": "b7731c2b4fa1c9844a092329177be4c3",
+    "Name": "Brasseur d'os",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ed22aa8751c049fa915dabfa29712c08": {
+    "Guid": "ed22aa8751c049fa915dabfa29712c08",
+    "Name": "Brume hantée",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "68f4129f658d02244ad57a4bfe3a5e61": {
+    "Guid": "68f4129f658d02244ad57a4bfe3a5e61",
+    "Name": "Brume sanglante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c3893092a333b93499fd0a21845aa265": {
+    "Guid": "c3893092a333b93499fd0a21845aa265",
+    "Name": "Cacophonie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "46fd02ad56c35224c9c91c88cd457791": {
+    "Guid": "46fd02ad56c35224c9c91c88cd457791",
+    "Name": "Cécité",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b2d9ad1cc95d718459c09499a2e9dbf9": {
+    "Guid": "b2d9ad1cc95d718459c09499a2e9dbf9",
+    "Name": "Champ de fleurs",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b6010dda6333bcf4093ce20f0063cd41": {
+    "Guid": "b6010dda6333bcf4093ce20f0063cd41",
+    "Name": "Contact gelé",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0b101dd5618591e478f825f0eef155b4": {
+    "Guid": "0b101dd5618591e478f825f0eef155b4",
+    "Name": "Contrôle mineur des morts-vivants",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "298148133cdc3fd42889b99c82711986": {
+    "Guid": "298148133cdc3fd42889b99c82711986",
+    "Name": "Convocation d'alliés naturels II",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1724061e89c667045a6891179ee2e8e7": {
+    "Guid": "1724061e89c667045a6891179ee2e8e7",
+    "Name": "Convocation de monstres II",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "970c6db48ff0c6f43afc9dbb48780d03": {
+    "Guid": "970c6db48ff0c6f43afc9dbb48780d03",
+    "Name": "Convocation de petit élémentaire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "df75c9faf5829da4aabb47995d5a6f8a": {
+    "Guid": "df75c9faf5829da4aabb47995d5a6f8a",
+    "Name": "Convocation de petit élémentaire de bière",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "29ccc62632178d344ad0be0865fd3113": {
+    "Guid": "29ccc62632178d344ad0be0865fd3113",
+    "Name": "Création de fosse",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "29b0f9026ad05e14789d84e867cc6dff": {
+    "Guid": "29b0f9026ad05e14789d84e867cc6dff",
+    "Name": "Croissance d'épines",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "448aa456600749d18c14ad979cc88a67": {
+    "Guid": "448aa456600749d18c14ad979cc88a67",
+    "Name": "Déformation douloureuse",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f8bce986adfc88544a42bf4ab7ae75b2": {
+    "Guid": "f8bce986adfc88544a42bf4ab7ae75b2",
+    "Name": "Délivrance de la paralysie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "27bf851c585817c4fbd079c970a162fa": {
+    "Guid": "27bf851c585817c4fbd079c970a162fa",
+    "Name": "Démarche du caméléon",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "30e5dc243f937fc4b95d2f8f4e1b7ff3": {
+    "Guid": "30e5dc243f937fc4b95d2f8f4e1b7ff3",
+    "Name": "Détection de l'invisibilité",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "82962a820ebc0e7408b8582fdc3f4c0c": {
+    "Guid": "82962a820ebc0e7408b8582fdc3f4c0c",
+    "Name": "Détection des organes vitaux",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4709274b2080b6444a3c11c6ebbe2404": {
+    "Guid": "4709274b2080b6444a3c11c6ebbe2404",
+    "Name": "Détection des pièges",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8abcdb612ab449e49c4f5b244f92edde": {
+    "Guid": "8abcdb612ab449e49c4f5b244f92edde",
+    "Name": "Douleur lancinante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d57fcfdfcffa2d346985648cb77390fb": {
+    "Guid": "d57fcfdfcffa2d346985648cb77390fb",
+    "Name": "Édit de riposte",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "08cb5f4c3b2695e44971bf5c45205df0": {
+    "Guid": "08cb5f4c3b2695e44971bf5c45205df0",
+    "Name": "Effroi",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6c7467f0344004d48848a43d8c078bf8": {
+    "Guid": "6c7467f0344004d48848a43d8c078bf8",
+    "Name": "Enchevêtrement fiévreux",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a900628aea19aa74aad0ece0e65d091a": {
+    "Guid": "a900628aea19aa74aad0ece0e65d091a",
+    "Name": "Endurance de l'ours",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4733d8dd549ff544395f1684ec73c392": {
+    "Guid": "4733d8dd549ff544395f1684ec73c392",
+    "Name": "Esprit cristallin",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "644d2c0d029e54d4188bc34216d9d8c0": {
+    "Guid": "644d2c0d029e54d4188bc34216d9d8c0",
+    "Name": "Festin de peur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d0ed16b4f939c274e86ceb95c5f680ae": {
+    "Guid": "d0ed16b4f939c274e86ceb95c5f680ae",
+    "Name": "Flammes des Abysses",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9a46dfd390f943647ab4395fc997936d": {
+    "Guid": "9a46dfd390f943647ab4395fc997936d",
+    "Name": "Flèche acide",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "dd2a5a6e76611c04e9eac6254fcf8c6b": {
+    "Guid": "dd2a5a6e76611c04e9eac6254fcf8c6b",
+    "Name": "Flèche de loi",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "14ec7a4e52e90fa47a4c8d63c69fd5c1": {
+    "Guid": "14ec7a4e52e90fa47a4c8d63c69fd5c1",
+    "Name": "Flou",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4c3d08935262b6544ae97599b3a9556d": {
+    "Guid": "4c3d08935262b6544ae97599b3a9556d",
+    "Name": "Force de taureau",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "47c80ed8e725ede4d91f06eddcc3e75a": {
+    "Guid": "47c80ed8e725ede4d91f06eddcc3e75a",
+    "Name": "Force égale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "66fa2aab59294c44cad02c4dd60f986d": {
+    "Guid": "66fa2aab59294c44cad02c4dd60f986d",
+    "Name": "Forme démoniaque I",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ce4c4e52c53473549ae033e2bb44b51a": {
+    "Guid": "ce4c4e52c53473549ae033e2bb44b51a",
+    "Name": "Fustiger",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "770eef29433299e4f9d21142d0706cfb": {
+    "Guid": "770eef29433299e4f9d21142d0706cfb",
+    "Name": "Grâce de l'ours",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "de7a025d48ad5da4991e7d3c682cf69d": {
+    "Guid": "de7a025d48ad5da4991e7d3c682cf69d",
+    "Name": "Grâce féline",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5ab0d42fb68c9e34abae4921822b9d63": {
+    "Guid": "5ab0d42fb68c9e34abae4921822b9d63",
+    "Name": "Héroïsme",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3e4ab69ada402d145a5e0ad3ad4b8564": {
+    "Guid": "3e4ab69ada402d145a5e0ad3ad4b8564",
+    "Name": "Image miroir",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "41bab342089c0254ca222eb918e98cd4": {
+    "Guid": "41bab342089c0254ca222eb918e98cd4",
+    "Name": "Immobilisation d'animal",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c7104f7526c4c524f91474614054547e": {
+    "Guid": "c7104f7526c4c524f91474614054547e",
+    "Name": "Immobilisation de personne",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "89940cde01689fb46946b2f8cd7b66b7": {
+    "Guid": "89940cde01689fb46946b2f8cd7b66b7",
+    "Name": "Invisibilité",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c9198d9dfd2515d4ba98335b57bb66c7": {
+    "Guid": "c9198d9dfd2515d4ba98335b57bb66c7",
+    "Name": "Litanie d'éloquence",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "16f7754287811724abe1e0ead88f74ca": {
+    "Guid": "16f7754287811724abe1e0ead88f74ca",
+    "Name": "Litanie d'enchevêtrement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f602da89a6344b11b91b268e59a9f2b2": {
+    "Guid": "f602da89a6344b11b91b268e59a9f2b2",
+    "Name": "Malédiction de sort",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f1a0dd9c0b6f9654fb025875dc4b905d": {
+    "Guid": "f1a0dd9c0b6f9654fb025875dc4b905d",
+    "Name": "Ode au miracle de la magie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "42a65895ba0cb3a42b6019039dd2bff1": {
+    "Guid": "42a65895ba0cb3a42b6019039dd2bff1",
+    "Name": "Orbe en fusion",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5b77d7cc65b8ab74688e74a37fc2f553": {
+    "Guid": "5b77d7cc65b8ab74688e74a37fc2f553",
+    "Name": "Peau d'écorce",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "10f0308c40d647c42a6b4caaee7658a8": {
+    "Guid": "10f0308c40d647c42a6b4caaee7658a8",
+    "Name": "Poème régénérant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "dee3074b2fbfb064b80b973f9b56319e": {
+    "Guid": "dee3074b2fbfb064b80b973f9b56319e",
+    "Name": "Poison pernicieux",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3d1c5aa69827faf419bb17b0a8cadf9b": {
+    "Guid": "3d1c5aa69827faf419bb17b0a8cadf9b",
+    "Name": "Poisson-missile",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ce7dad2b25acf85429b6c9550787b2d9": {
+    "Guid": "ce7dad2b25acf85429b6c9550787b2d9",
+    "Name": "Poussière scintillante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8b8ccc9763e3cc74bbf5acc9c98557b9": {
+    "Guid": "8b8ccc9763e3cc74bbf5acc9c98557b9",
+    "Name": "Protection contre la Loi (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2cadf6c6350e4684baa109d067277a45": {
+    "Guid": "2cadf6c6350e4684baa109d067277a45",
+    "Name": "Protection contre l'alignement (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0ec75ec95d9e39d47a23610123ba1bad": {
+    "Guid": "0ec75ec95d9e39d47a23610123ba1bad",
+    "Name": "Protection contre le Chaos (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3026de673d4d8fe45baf40e0b5edd718": {
+    "Guid": "3026de673d4d8fe45baf40e0b5edd718",
+    "Name": "Protection contre le Chaos/Mal (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "93f391b0c5a99e04e83bbfbe3bb6db64": {
+    "Guid": "93f391b0c5a99e04e83bbfbe3bb6db64",
+    "Name": "Protection contre le Mal (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d2f116cfe05fcdd4a94e80143b67046f": {
+    "Guid": "d2f116cfe05fcdd4a94e80143b67046f",
+    "Name": "Protection contre les énergies destructives",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c28de1f98a3f432448e52e5d47c73208": {
+    "Guid": "c28de1f98a3f432448e52e5d47c73208",
+    "Name": "Protection contre les projectiles",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2dbe271c979d9104c8e2e6b42e208e32": {
+    "Guid": "2dbe271c979d9104c8e2e6b42e208e32",
+    "Name": "Purulence",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "97b991256e43bb140b263c326f690ce2": {
+    "Guid": "97b991256e43bb140b263c326f690ce2",
+    "Name": "Rage",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cdb106d53c65bbc4086183d54c3b97c7": {
+    "Guid": "cdb106d53c65bbc4086183d54c3b97c7",
+    "Name": "Rayon ardent",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7ef096fdc8394e149a9e8dced7576fee": {
+    "Guid": "7ef096fdc8394e149a9e8dced7576fee",
+    "Name": "Rayon ardent (froid)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ff652882623d43f184eb6abef741e20e": {
+    "Guid": "ff652882623d43f184eb6abef741e20e",
+    "Name": "Runes explosives",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ae4d3ad6a8fda1542acf2e9bbc13d113": {
+    "Guid": "ae4d3ad6a8fda1542acf2e9bbc13d113",
+    "Name": "Ruse du renard",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "dde924776bd7ad247928b5efbfacfbdd": {
+    "Guid": "dde924776bd7ad247928b5efbfacfbdd",
+    "Name": "Rythme naturel",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f0455c9295b53904f9e02fc571dd2ce1": {
+    "Guid": "f0455c9295b53904f9e02fc571dd2ce1",
+    "Name": "Sagesse du hibou",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7a5b5bf845779a941a67251539545762": {
+    "Guid": "7a5b5bf845779a941a67251539545762",
+    "Name": "Simulacre de vie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6b90c773a6543dc49b2505858ce33db5": {
+    "Guid": "6b90c773a6543dc49b2505858ce33db5",
+    "Name": "Soins modérés",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "446f7bf201dc1934f96ac0a26e324803": {
+    "Guid": "446f7bf201dc1934f96ac0a26e324803",
+    "Name": "Splendeur de l'aigle",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "134cb6d492269aa4f8662700ef57449f": {
+    "Guid": "134cb6d492269aa4f8662700ef57449f",
+    "Name": "Toile d'araignée",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bc153808ef4884a4594bc9bec2299b69": {
+    "Guid": "bc153808ef4884a4594bc9bec2299b69",
+    "Name": "Vérole",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "584a2f29a8f50044fa2b6d9c2a6fb82a": {
+    "Guid": "584a2f29a8f50044fa2b6d9c2a6fb82a",
+    "Name": "Voix du renouveau",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "64923c9c808143c7ab7adba5a27f0ca4": {
+    "Guid": "64923c9c808143c7ab7adba5a27f0ca4",
+    "Name": "Affûtage",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "255ae2be713947ad9162fc207457035c": {
+    "Guid": "255ae2be713947ad9162fc207457035c",
+    "Name": "Analyse de l'esprit",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4b76d32feb089ad4499c3a1ce8e1ac27": {
+    "Guid": "4b76d32feb089ad4499c3a1ce8e1ac27",
+    "Name": "Animation des morts",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2a9ef0e0b5822a24d88b16673a267456": {
+    "Guid": "2a9ef0e0b5822a24d88b16673a267456",
+    "Name": "Appel de la foudre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0f92caa35619f234298d95a4b6dda90d": {
+    "Guid": "0f92caa35619f234298d95a4b6dda90d",
+    "Name": "Arme magique suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "75a10d5a635986641bfbcceceec87217": {
+    "Guid": "75a10d5a635986641bfbcceceec87217",
+    "Name": "Aspect angélique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c9c56af3b25be3942aa0ffd12f11cf35": {
+    "Guid": "c9c56af3b25be3942aa0ffd12f11cf35",
+    "Name": "Aspect animal supérieur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e67efd8c84f69d24ab472c9f546fff7e": {
+    "Guid": "e67efd8c84f69d24ab472c9f546fff7e",
+    "Name": "Aura d'archon",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8a28a811ca5d20d49a863e832c31cce1": {
+    "Guid": "8a28a811ca5d20d49a863e832c31cce1",
+    "Name": "Baiser du vampire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "30302d12c4aed124ba55857c7dfab114": {
+    "Guid": "30302d12c4aed124ba55857c7dfab114",
+    "Name": "Barbe grandiose",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9e33ed477ddd4fad9d90fb64b1a6f732": {
+    "Guid": "9e33ed477ddd4fad9d90fb64b1a6f732",
+    "Name": "Barrière étourdissante supérieure",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bd5da98859cf2b3418f6d68ea66cabbe": {
+    "Guid": "bd5da98859cf2b3418f6d68ea66cabbe",
+    "Name": "Blessure grave",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b75ff0546bf948948adb68336e2b475d": {
+    "Guid": "b75ff0546bf948948adb68336e2b475d",
+    "Name": "Bouclier contre les démons",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1a36c8b9ed655c249a9f9e8d4731f001": {
+    "Guid": "1a36c8b9ed655c249a9f9e8d4731f001",
+    "Name": "Boue apaisante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0a2f7c6aa81bc6548ac7780d8b70bcbc": {
+    "Guid": "0a2f7c6aa81bc6548ac7780d8b70bcbc",
+    "Name": "Boule percutante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "265582bc494c4b12b5860b508a2f89a2": {
+    "Guid": "265582bc494c4b12b5860b508a2f89a2",
+    "Name": "Bulle de vie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "25f741db26e3e27428c4fcb5e60a4ab9": {
+    "Guid": "25f741db26e3e27428c4fcb5e60a4ab9",
+    "Name": "Canalisation de rage",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "dd2918e4a77c50044acba1ac93494c36": {
+    "Guid": "dd2918e4a77c50044acba1ac93494c36",
+    "Name": "Chagrin écrasant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2daf19a1e59545fba89b3d2a822c20b4": {
+    "Guid": "2daf19a1e59545fba89b3d2a822c20b4",
+    "Name": "Chant de discorde suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "045351f1421ee3f449a9143db701d192": {
+    "Guid": "045351f1421ee3f449a9143db701d192",
+    "Name": "Clignotement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "48e2744846ed04b4580be1a3343a5d3d": {
+    "Guid": "48e2744846ed04b4580be1a3343a5d3d",
+    "Name": "Contagion",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "fdcf7e57ec44f704591f11b45f4acf61": {
+    "Guid": "fdcf7e57ec44f704591f11b45f4acf61",
+    "Name": "Convocation d'alliés naturels III",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5d61dde0020bbf54ba1521f7ca0229dc": {
+    "Guid": "5d61dde0020bbf54ba1521f7ca0229dc",
+    "Name": "Convocation de monstres III",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8d1c8d7d4fa82884ebf99fc280d49978": {
+    "Guid": "8d1c8d7d4fa82884ebf99fc280d49978",
+    "Name": "Convocation d'élémentaire de bière moyen",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2daf9c5112f16d54ab3cd6904c705c59": {
+    "Guid": "2daf9c5112f16d54ab3cd6904c705c59",
+    "Name": "Corps épineux",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9779c8578acd919419f563c33d7b2af5": {
+    "Guid": "9779c8578acd919419f563c33d7b2af5",
+    "Name": "Crachat venimeux",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b48674cef2bff5e478a007cf57d8345b": {
+    "Guid": "b48674cef2bff5e478a007cf57d8345b",
+    "Name": "Délivrance des malédictions",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d219494150ac1f24f9ce14a3d4f66d26": {
+    "Guid": "d219494150ac1f24f9ce14a3d4f66d26",
+    "Name": "Démarche aérienne de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7ec0ffdd8779c344f85337109af0c6c5": {
+    "Guid": "7ec0ffdd8779c344f85337109af0c6c5",
+    "Name": "Démarche du caméléon supérieure",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "903092f6488f9ce45a80943923576ab3": {
+    "Guid": "903092f6488f9ce45a80943923576ab3",
+    "Name": "Déplacement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4baf4109145de4345861fe0f2209d903": {
+    "Guid": "4baf4109145de4345861fe0f2209d903",
+    "Name": "Désespoir foudroyant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1a045f845778dc54db1c2be33a8c3c0a": {
+    "Guid": "1a045f845778dc54db1c2be33a8c3c0a",
+    "Name": "Détection de l'invisibilité (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "92681f181b507b34ea87018e8f7a528a": {
+    "Guid": "92681f181b507b34ea87018e8f7a528a",
+    "Name": "Dissipation de la magie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "143775c49ae6b7446b805d3b2e702298": {
+    "Guid": "143775c49ae6b7446b805d3b2e702298",
+    "Name": "Dissipation de la magie (cible)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1130f3e7d6a4bb444bbedc3e20dcd1dd": {
+    "Guid": "1130f3e7d6a4bb444bbedc3e20dcd1dd",
+    "Name": "Dôme arc-en-ciel",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "754c478a2aa9bb54d809e648c3f7ac0e": {
+    "Guid": "754c478a2aa9bb54d809e648c3f7ac0e",
+    "Name": "Domination d'animal",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d2cff9243a7ee804cb6d5be47af30c73": {
+    "Guid": "d2cff9243a7ee804cb6d5be47af30c73",
+    "Name": "Éclair",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "dfe3594aed8907248958a25614aa5281": {
+    "Guid": "dfe3594aed8907248958a25614aa5281",
+    "Name": "Édit de non-résistance",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2a6eda8ef30379142a4b75448fb214a3": {
+    "Guid": "2a6eda8ef30379142a4b75448fb214a3",
+    "Name": "Empoisonnement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d797007a142a6c0409a74b064065a15e": {
+    "Guid": "d797007a142a6c0409a74b064065a15e",
+    "Name": "Empoisonnement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2b9db9808a1aad74b94f651c5732fd3c": {
+    "Guid": "2b9db9808a1aad74b94f651c5732fd3c",
+    "Name": "Emprise de la nature",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d934f706a12b40ec87a9c8baf221b8a9": {
+    "Guid": "d934f706a12b40ec87a9c8baf221b8a9",
+    "Name": "Enchantement d'ombre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "42c78009dd5cb8e429b27c13d92152b7": {
+    "Guid": "42c78009dd5cb8e429b27c13d92152b7",
+    "Name": "Ennemi du moment",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a5e23522eda32dc45801e32c05dc9f96": {
+    "Guid": "a5e23522eda32dc45801e32c05dc9f96",
+    "Name": "Espoir",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4fe69e00f43203e4fb4c5d128af18309": {
+    "Guid": "4fe69e00f43203e4fb4c5d128af18309",
+    "Name": "Exilé par la nature",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a8666d26bbbd9b640958284e0eee3602": {
+    "Guid": "a8666d26bbbd9b640958284e0eee3602",
+    "Name": "Explosion de vie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c411f9aa46b84efcbca1954c4cb16023": {
+    "Guid": "c411f9aa46b84efcbca1954c4cb16023",
+    "Name": "Final purificateur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a896760c975d4f3b96f279aa3cdf2292": {
+    "Guid": "a896760c975d4f3b96f279aa3cdf2292",
+    "Name": "Final revigorant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b0ffc8eaff404f2e9e0a3ee9f4c35486": {
+    "Guid": "b0ffc8eaff404f2e9e0a3ee9f4c35486",
+    "Name": "Fléchettes d'argent",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "61a7ed778dd93f344a5dacdbad324cc9": {
+    "Guid": "61a7ed778dd93f344a5dacdbad324cc9",
+    "Name": "Forme bestiale I",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "98f23614c5c91e14f89f63d438027d43": {
+    "Guid": "98f23614c5c91e14f89f63d438027d43",
+    "Name": "Forme démoniaque II",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "46097f610219ac445b4d6403fc596b9f": {
+    "Guid": "46097f610219ac445b4d6403fc596b9f",
+    "Name": "Fosse hérissée de pieux",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c6c516e59ca34f34aefb82a850287b97": {
+    "Guid": "c6c516e59ca34f34aefb82a850287b97",
+    "Name": "Frappe de l'aile céleste",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1a33199538c31a14db23318fdb6e10cb": {
+    "Guid": "1a33199538c31a14db23318fdb6e10cb",
+    "Name": "Frappe télékinétique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e80a4d6c0efa5774cbd515e3e37095b0": {
+    "Guid": "e80a4d6c0efa5774cbd515e3e37095b0",
+    "Name": "Grand pas supérieur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c927a8b0cd3f5174f8c0b67cdbfde539": {
+    "Guid": "c927a8b0cd3f5174f8c0b67cdbfde539",
+    "Name": "Guérison de la cécité",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4093d5a0eb5cae94e909eb1e0e1a6b36": {
+    "Guid": "4093d5a0eb5cae94e909eb1e0e1a6b36",
+    "Name": "Guérison des maladies",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cab32c685bfb3fc4ebe042867af825d6": {
+    "Guid": "cab32c685bfb3fc4ebe042867af825d6",
+    "Name": "Hymne impie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8dcb9c02148a704489948eaf84ab04bf": {
+    "Guid": "8dcb9c02148a704489948eaf84ab04bf",
+    "Name": "Invisibilité quasi suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f492622e473d34747806bdb39356eb89": {
+    "Guid": "f492622e473d34747806bdb39356eb89",
+    "Name": "Lenteur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4b8265132f9c8174f87ce7fa6d0fe47b": {
+    "Guid": "4b8265132f9c8174f87ce7fa6d0fe47b",
+    "Name": "Lueur d'arc-en-ciel",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bf0accce250381a44b857d4af6c8e10d": {
+    "Guid": "bf0accce250381a44b857d4af6c8e10d",
+    "Name": "Lumière brûlante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2b877386976817a429002e8bb10bb3fc": {
+    "Guid": "2b877386976817a429002e8bb10bb3fc",
+    "Name": "Lumière du jour",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "99343a2490f699b4198868a58fa0416d": {
+    "Guid": "99343a2490f699b4198868a58fa0416d",
+    "Name": "Lumière stellaire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "921ed6a6751d71140b4e75ab7bcb9890": {
+    "Guid": "921ed6a6751d71140b4e75ab7bcb9890",
+    "Name": "Maîtrise de la chair",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "989ab5c44240907489aba0a8568d0603": {
+    "Guid": "989ab5c44240907489aba0a8568d0603",
+    "Name": "Malédiction",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6fb10fff27b84bff81746194bf8e38a8": {
+    "Guid": "6fb10fff27b84bff81746194bf8e38a8",
+    "Name": "Manteau des vents",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f1100650705a69c4384d3edd88ba0f52": {
+    "Guid": "f1100650705a69c4384d3edd88ba0f52",
+    "Name": "Morsure magique suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5f1ca17be3ba44949be427f18e696d9b": {
+    "Guid": "5f1ca17be3ba44949be427f18e696d9b",
+    "Name": "Murmure sacré",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e7240516af4241b42b2cd819929ea9da": {
+    "Guid": "e7240516af4241b42b2cd819929ea9da",
+    "Name": "Neutralisation du poison",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a68fc6abb6cb03f46a658b734d476630": {
+    "Guid": "a68fc6abb6cb03f46a658b734d476630",
+    "Name": "Nuage hallucinogène",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "68a9e6d7256f1354289a39003a46d826": {
+    "Guid": "68a9e6d7256f1354289a39003a46d826",
+    "Name": "Nuage nauséabond",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2d4263d80f5136b4296d6eb43a221d7d": {
+    "Guid": "2d4263d80f5136b4296d6eb43a221d7d",
+    "Name": "Panoplie magique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "fc58ddcff6ab1394eb6c18e9126bb990": {
+    "Guid": "fc58ddcff6ab1394eb6c18e9126bb990",
+    "Name": "Poing de force",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "faabd2cc67efa4646ac58c7bb3e40fcc": {
+    "Guid": "faabd2cc67efa4646ac58c7bb3e40fcc",
+    "Name": "Prière",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5f83b793960047e49af1a3551afa4d58": {
+    "Guid": "5f83b793960047e49af1a3551afa4d58",
+    "Name": "Protection contre la maladie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "76a629d019275b94184a1a8733cac45e": {
+    "Guid": "76a629d019275b94184a1a8733cac45e",
+    "Name": "Protection contre les énergies destructives (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "96c9d98b6a9a7c249b6c4572e4977157": {
+    "Guid": "96c9d98b6a9a7c249b6c4572e4977157",
+    "Name": "Protection contre les projectiles (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9c2c85a3782af804880c81c1712e3a7b": {
+    "Guid": "9c2c85a3782af804880c81c1712e3a7b",
+    "Name": "Puissance des déchus",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "04e820e1ce3a66f47a50ad5074d3ae40": {
+    "Guid": "04e820e1ce3a66f47a50ad5074d3ae40",
+    "Name": "Ralentissement du poison (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "486eaff58293f6441a5c2759c4872f98": {
+    "Guid": "486eaff58293f6441a5c2759c4872f98",
+    "Name": "Rapidité",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8eead52509987034ea9025d60cc05985": {
+    "Guid": "8eead52509987034ea9025d60cc05985",
+    "Name": "Rayon d'épuisement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "724e11ad1e2d4ee8899feccde86b2d24": {
+    "Guid": "724e11ad1e2d4ee8899feccde86b2d24",
+    "Name": "Regard maudit",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5d28f75db5d3cc141ba5783a1a139f66": {
+    "Guid": "5d28f75db5d3cc141ba5783a1a139f66",
+    "Name": "Relativité",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b16d3d442bb3ed148a4a79a22ee7c880": {
+    "Guid": "b16d3d442bb3ed148a4a79a22ee7c880",
+    "Name": "Repos accordé",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0d760f2e879c4cf78d1a87aea97bdd6d": {
+    "Guid": "0d760f2e879c4cf78d1a87aea97bdd6d",
+    "Name": "Résistance à l'âge mineure",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7bb0c402f7f789d4d9fae8ca87b4c7e2": {
+    "Guid": "7bb0c402f7f789d4d9fae8ca87b4c7e2",
+    "Name": "Résistance aux énergies destructives (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8baeffb9caf081e449ce52bf7bdd6236": {
+    "Guid": "8baeffb9caf081e449ce52bf7bdd6236",
+    "Name": "Restauration morbide",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "da49f07e431b47abaad41ef28df487f7": {
+    "Guid": "da49f07e431b47abaad41ef28df487f7",
+    "Name": "Sables du temps",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bbbcaa880ac0fa0479ce3ee8ac937d50": {
+    "Guid": "bbbcaa880ac0fa0479ce3ee8ac937d50",
+    "Name": "Sang corrompu",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3361c5df793b4c8448756146a88026ad": {
+    "Guid": "3361c5df793b4c8448756146a88026ad",
+    "Name": "Soins importants",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7658b74f626c56a49939d9c20580885e": {
+    "Guid": "7658b74f626c56a49939d9c20580885e",
+    "Name": "Sommeil profond",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bc9f91f243634c04bcee43028362b5c3": {
+    "Guid": "bc9f91f243634c04bcee43028362b5c3",
+    "Name": "Souffle d'or",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "163c7697cf606334e9d7745c547d3b47": {
+    "Guid": "163c7697cf606334e9d7745c547d3b47",
+    "Name": "Sourire optimiste",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c26eeeeabf732914ba723f2b67fe9b9d": {
+    "Guid": "c26eeeeabf732914ba723f2b67fe9b9d",
+    "Name": "Tambours tonnants",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d2aeac47450c76347aebbc02e4f463e0": {
+    "Guid": "d2aeac47450c76347aebbc02e4f463e0",
+    "Name": "Terreur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "199d585bff173c74b86387856919242c": {
+    "Guid": "199d585bff173c74b86387856919242c",
+    "Name": "Accorder la grâce du champion",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "66dc49bf154863148bd217287079245e": {
+    "Guid": "66dc49bf154863148bd217287079245e",
+    "Name": "Agrandissement de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "332ad68273db9704ab0e92518f2efd1c": {
+    "Guid": "332ad68273db9704ab0e92518f2efd1c",
+    "Name": "Âme de l'aigle",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9f0f0233dc0d43239afa77dbb3f3b948": {
+    "Guid": "9f0f0233dc0d43239afa77dbb3f3b948",
+    "Name": "Analyse de l'endurance",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7792da00c85b9e042a0fdfc2b66ec9a8": {
+    "Guid": "7792da00c85b9e042a0fdfc2b66ec9a8",
+    "Name": "Annulation d'enchantement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b1c7576bd06812b42bda3f09ab202f14": {
+    "Guid": "b1c7576bd06812b42bda3f09ab202f14",
+    "Name": "Aspect angélique supérieur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6126b36fe22291543ad72f8b9f0d53a7": {
+    "Guid": "6126b36fe22291543ad72f8b9f0d53a7",
+    "Name": "Aspect du loup",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6717dbaef00c0eb4897a1c908a75dfe5": {
+    "Guid": "6717dbaef00c0eb4897a1c908a75dfe5",
+    "Name": "Assassin imaginaire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bf3b19ed9c919464aa2a741271718542": {
+    "Guid": "bf3b19ed9c919464aa2a741271718542",
+    "Name": "Beauté fatale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "462c21cebf7820c40a87f5e4d03e17cf": {
+    "Guid": "462c21cebf7820c40a87f5e4d03e17cf",
+    "Name": "Bénédiction de chance et de fermeté de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9256a86aec14ad14e9497f6b60e26f3f": {
+    "Guid": "9256a86aec14ad14e9497f6b60e26f3f",
+    "Name": "Bénédiction de la salamandre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "651110ed4f117a948b41c05c5c7624c0": {
+    "Guid": "651110ed4f117a948b41c05c5c7624c0",
+    "Name": "Blessure critique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "62888999171921e4dafb46de83f4d67d": {
+    "Guid": "62888999171921e4dafb46de83f4d67d",
+    "Name": "Bouclier de l'aube",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f72f8f03bf0136c4180cd1d70eb773a5": {
+    "Guid": "f72f8f03bf0136c4180cd1d70eb773a5",
+    "Name": "Boule de feu contrôlée",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6b30813c3709fc44b92dc8fd8191f345": {
+    "Guid": "6b30813c3709fc44b92dc8fd8191f345",
+    "Name": "Bourbier",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ea373f990b4d8a947a4688e6cbcb1d5f": {
+    "Guid": "ea373f990b4d8a947a4688e6cbcb1d5f",
+    "Name": "Canalisation de rage (partagée)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "84ccca10da2a4484c89a837fbea2a829": {
+    "Guid": "84ccca10da2a4484c89a837fbea2a829",
+    "Name": "Caresse vaseuse",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3b86de15c18e4b44bb7315fc6c116b4d": {
+    "Guid": "3b86de15c18e4b44bb7315fc6c116b4d",
+    "Name": "Chaînes abyssales",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f8cea58227f59c64399044a82c9735c4": {
+    "Guid": "f8cea58227f59c64399044a82c9735c4",
+    "Name": "Chaînes de lumière",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ad5ed5ea4ec52334a94e975a64dad336": {
+    "Guid": "ad5ed5ea4ec52334a94e975a64dad336",
+    "Name": "Châtiment sacré",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e05a95d3cf386844f98e4710d9a4730b": {
+    "Guid": "e05a95d3cf386844f98e4710d9a4730b",
+    "Name": "Chute d'eau",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f9910c76efc34af41b6e43d5d8752f0f": {
+    "Guid": "f9910c76efc34af41b6e43d5d8752f0f",
+    "Name": "Colonne de feu",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c83db50513abdf74ca103651931fac4b": {
+    "Guid": "c83db50513abdf74ca103651931fac4b",
+    "Name": "Convocation d'alliés naturels IV",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7be54b9c2801db041b39ed78167b4438": {
+    "Guid": "7be54b9c2801db041b39ed78167b4438",
+    "Name": "Convocation de grizzly graisseux",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7ed74a3ec8c458d4fb50b192fd7be6ef": {
+    "Guid": "7ed74a3ec8c458d4fb50b192fd7be6ef",
+    "Name": "Convocation de monstres IV",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "112d1c1b34bd66b43b68a131959b4e85": {
+    "Guid": "112d1c1b34bd66b43b68a131959b4e85",
+    "Name": "Convocation d'élémentaire de bière blonde",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e42b1dbff4262c6469a9ff0a6ce730e3": {
+    "Guid": "e42b1dbff4262c6469a9ff0a6ce730e3",
+    "Name": "Convocation d'élémentaire moyen",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "caac251ca7601324bbe000372a0a1005": {
+    "Guid": "caac251ca7601324bbe000372a0a1005",
+    "Name": "Convocation d'ombres",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "690c90a82bf2e58449c6b541cb8ea004": {
+    "Guid": "690c90a82bf2e58449c6b541cb8ea004",
+    "Name": "Corps élémentaire I",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9047cb1797639924487ec0ad566a3fea": {
+    "Guid": "9047cb1797639924487ec0ad566a3fea",
+    "Name": "Coup retentissant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1ec8f035d8329134d96cdc7b90fdc2e1": {
+    "Guid": "1ec8f035d8329134d96cdc7b90fdc2e1",
+    "Name": "Courroux de l'ordre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f09453607e683784c8fca646eec49162": {
+    "Guid": "f09453607e683784c8fca646eec49162",
+    "Name": "Cri",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "56923211d2ac95e43b8ac5031bab74d8": {
+    "Guid": "56923211d2ac95e43b8ac5031bab74d8",
+    "Name": "Croissance animale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d7cbd2004ce66a042aeab2e95a3c5c61": {
+    "Guid": "d7cbd2004ce66a042aeab2e95a3c5c61",
+    "Name": "Domination",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "20b548bf09bb3ea4bafea78dcb4f3db6": {
+    "Guid": "20b548bf09bb3ea4bafea78dcb4f3db6",
+    "Name": "Écholocalisation",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3f205f55a6e7759449772feb34edc378": {
+    "Guid": "3f205f55a6e7759449772feb34edc378",
+    "Name": "Édit de prédétermination",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f34fb78eaaec141469079af124bcfa0f": {
+    "Guid": "f34fb78eaaec141469079af124bcfa0f",
+    "Name": "Énergie négative",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "041581ac635afe24daa421de5d2c2ee1": {
+    "Guid": "041581ac635afe24daa421de5d2c2ee1",
+    "Name": "Ennemi des impies",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bea9deffd3ab6734c9534153ddc70bde": {
+    "Guid": "bea9deffd3ab6734c9534153ddc70bde",
+    "Name": "Épée sainte",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1bc83efec9f8c4b42a46162d72cbf494": {
+    "Guid": "1bc83efec9f8c4b42a46162d72cbf494",
+    "Name": "Explosion de gloire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0e633cc133207a849915e4d15dec8410": {
+    "Guid": "0e633cc133207a849915e4d15dec8410",
+    "Name": "Festin de mort",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e48638596c955a74c8a32dbc90b518c1": {
+    "Guid": "e48638596c955a74c8a32dbc90b518c1",
+    "Name": "Flot obsidien",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5d4028eb28a106d4691ed1b92bbb1915": {
+    "Guid": "5d4028eb28a106d4691ed1b92bbb1915",
+    "Name": "Forme bestiale II",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "42eef01ee83faaf4e9ad79f15bface6b": {
+    "Guid": "42eef01ee83faaf4e9ad79f15bface6b",
+    "Name": "Forme démoniaque III",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "33e53b74891b4c34ba6ee3baa322beeb": {
+    "Guid": "33e53b74891b4c34ba6ee3baa322beeb",
+    "Name": "Forme pure",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "be0537e563ad07241a15c25dba990bd1": {
+    "Guid": "be0537e563ad07241a15c25dba990bd1",
+    "Name": "Forme véritable",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1407fb5054d087d47a4c40134c809f12": {
+    "Guid": "1407fb5054d087d47a4c40134c809f12",
+    "Name": "Fosse acide",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f2f1efac32ea2884e84ecaf14657298b": {
+    "Guid": "f2f1efac32ea2884e84ecaf14657298b",
+    "Name": "Fractures multiples",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2c08fcbf3b796b3459aef2488b2cef01": {
+    "Guid": "2c08fcbf3b796b3459aef2488b2cef01",
+    "Name": "Guérison chaotique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "41e8a952da7a5c247b3ec1c2dbb73018": {
+    "Guid": "41e8a952da7a5c247b3ec1c2dbb73018",
+    "Name": "Immobilisation de monstre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ecaa0def35b38f949bd1976a6c9539e0": {
+    "Guid": "ecaa0def35b38f949bd1976a6c9539e0",
+    "Name": "Invisibilité suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "be5452c422a6ea744bf1037b0a443bb1": {
+    "Guid": "be5452c422a6ea744bf1037b0a443bb1",
+    "Name": "Lame du croisé",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cc8be337fff61284caabe3340fc48294": {
+    "Guid": "cc8be337fff61284caabe3340fc48294",
+    "Name": "Lame du soleil",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "81ac91fe92240a8478b5d2512c9fbec2": {
+    "Guid": "81ac91fe92240a8478b5d2512c9fbec2",
+    "Name": "Lame vampirique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0087fc2d64b6095478bc7b8d7d512caf": {
+    "Guid": "0087fc2d64b6095478bc7b8d7d512caf",
+    "Name": "Liberté de mouvement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c0c2ef5955cb415ca482597f1bfc4eca": {
+    "Guid": "c0c2ef5955cb415ca482597f1bfc4eca",
+    "Name": "Malédiction de négation magique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e418c20c8ce362943a8025d82c865c1c": {
+    "Guid": "e418c20c8ce362943a8025d82c865c1c",
+    "Name": "Manteau de guêpes",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c42ac3feb96d1e54e9bc77c84082f05f": {
+    "Guid": "c42ac3feb96d1e54e9bc77c84082f05f",
+    "Name": "Marteau du chaos",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bf74b3b54c21a9344afe9947546e036f": {
+    "Guid": "bf74b3b54c21a9344afe9947546e036f",
+    "Name": "Nimbe sacré",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3cefd45bcac368c4892d110d0b9ae891": {
+    "Guid": "3cefd45bcac368c4892d110d0b9ae891",
+    "Name": "Peau abyssale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c66e86905f7606c4eaa5c774f0357b2b": {
+    "Guid": "c66e86905f7606c4eaa5c774f0357b2b",
+    "Name": "Peau de pierre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d1afa8bc28c99104da7d784115552de5": {
+    "Guid": "d1afa8bc28c99104da7d784115552de5",
+    "Name": "Pierres acérées",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4a648b57935a59547b7a2ee86fb4f26a": {
+    "Guid": "4a648b57935a59547b7a2ee86fb4f26a",
+    "Name": "Porte dimensionnelle",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5bdc37e4acfa209408334326076a43bc": {
+    "Guid": "5bdc37e4acfa209408334326076a43bc",
+    "Name": "Porte dimensionnelle de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "45094504ee3041f98ebf97ab1791e3d9": {
+    "Guid": "45094504ee3041f98ebf97ab1791e3d9",
+    "Name": "Prédiction parfaite",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4b7e6e992a4862a45bcfc9ba95bfc727": {
+    "Guid": "4b7e6e992a4862a45bcfc9ba95bfc727",
+    "Name": "Principe d'incertitude",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "68a9e6cdab0a51d428816e17fb366778": {
+    "Guid": "68a9e6cdab0a51d428816e17fb366778",
+    "Name": "Protection contre la maladie (partagée)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e9cc9378fd6841f48ad59384e79e9953": {
+    "Guid": "e9cc9378fd6841f48ad59384e79e9953",
+    "Name": "Protection contre la mort",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0413915f355a38146bc6ad40cdf27b3f": {
+    "Guid": "0413915f355a38146bc6ad40cdf27b3f",
+    "Name": "Protection contre la mort",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "728071812567e814886ff1fc84fe066a": {
+    "Guid": "728071812567e814886ff1fc84fe066a",
+    "Name": "Protection contre l'impureté",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ef16771cb05d1344989519e87f25b3c5": {
+    "Guid": "ef16771cb05d1344989519e87f25b3c5",
+    "Name": "Puissance divine",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3bbb3398e37929343b236bba6b4008a8": {
+    "Guid": "3bbb3398e37929343b236bba6b4008a8",
+    "Name": "Rage infectieuse",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2427f2e3ca22ae54ea7337bbab555b16": {
+    "Guid": "2427f2e3ca22ae54ea7337bbab555b16",
+    "Name": "Rapetissement de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "788d72e7713cf90418ee1f38449416dc": {
+    "Guid": "788d72e7713cf90418ee1f38449416dc",
+    "Name": "Récupération motivante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e9c9a61b81a297942a326c91da2af8ca": {
+    "Guid": "e9c9a61b81a297942a326c91da2af8ca",
+    "Name": "Regard du bodak",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "95f7cdcec94e293489a85afdf5af1fd7": {
+    "Guid": "95f7cdcec94e293489a85afdf5af1fd7",
+    "Name": "Renvoi",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cc0aeb74b35cb7147bff6c53538bbc76": {
+    "Guid": "cc0aeb74b35cb7147bff6c53538bbc76",
+    "Name": "Repentir forcé",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e0a1e835292a4bec810238fc88606ce6": {
+    "Guid": "e0a1e835292a4bec810238fc88606ce6",
+    "Name": "Résistance à l'âge",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f2115ac1148256b4ba20788f7e966830": {
+    "Guid": "f2115ac1148256b4ba20788f7e966830",
+    "Name": "Restauration",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d316d3d94d20c674db2c24d7de96f6a7": {
+    "Guid": "d316d3d94d20c674db2c24d7de96f6a7",
+    "Name": "Sérénité",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cb3d70cc98b5f1540bddfff6f9667f73": {
+    "Guid": "cb3d70cc98b5f1540bddfff6f9667f73",
+    "Name": "Serment de paix",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "dc6af3b4fd149f841912d8a3ce0983de": {
+    "Guid": "dc6af3b4fd149f841912d8a3ce0983de",
+    "Name": "Simulacre de vie supérieur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "41c9016596fe1de4faf67425ed691203": {
+    "Guid": "41c9016596fe1de4faf67425ed691203",
+    "Name": "Soins intensifs",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0d657aa811b310e4bbd8586e60156a2d": {
+    "Guid": "0d657aa811b310e4bbd8586e60156a2d",
+    "Name": "Soins intensifs",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5e826bcdfde7f82468776b55315b2403": {
+    "Guid": "5e826bcdfde7f82468776b55315b2403",
+    "Name": "Souffle de dragon",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "48a555180a109e545a6e367b1bd3f535": {
+    "Guid": "48a555180a109e545a6e367b1bd3f535",
+    "Name": "Symbole de révélation",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b3e8e307811b2a24387c2c9226fb4c10": {
+    "Guid": "b3e8e307811b2a24387c2c9226fb4c10",
+    "Name": "Téléportation",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "fcb028205a71ee64d98175ff39a0abf9": {
+    "Guid": "fcb028205a71ee64d98175ff39a0abf9",
+    "Name": "Tempête de grêle",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "16ce660837fb2544e96c3b7eaad73c63": {
+    "Guid": "16ce660837fb2544e96c3b7eaad73c63",
+    "Name": "Tempête volcanique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a02cf51787df937489ef5d4cf5970335": {
+    "Guid": "a02cf51787df937489ef5d4cf5970335",
+    "Name": "Ténèbres maudites",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "12fb4a4c22549c74d949e2916a2f0b6a": {
+    "Guid": "12fb4a4c22549c74d949e2916a2f0b6a",
+    "Name": "Toile fantasmagorique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b5f4ea77492d4f23ad3a6f429cbfa35e": {
+    "Guid": "b5f4ea77492d4f23ad3a6f429cbfa35e",
+    "Name": "Vol d'arcane",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7a3b1ffd1712fab4ca73b1e31820347c": {
+    "Guid": "7a3b1ffd1712fab4ca73b1e31820347c",
+    "Name": "Accolade amicale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1d06e3306677431e846e6e6afdcc2138": {
+    "Guid": "1d06e3306677431e846e6e6afdcc2138",
+    "Name": "Analyse de l'évitement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3fce8e988a51a2a4ea366324d6153001": {
+    "Guid": "3fce8e988a51a2a4ea366324d6153001",
+    "Name": "Anneaux constricteurs",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1098095d7a88c6747aee67f8d449fa06": {
+    "Guid": "1098095d7a88c6747aee67f8d449fa06",
+    "Name": "Annulation de mort",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1262284b6fa45b9458b8c3693edbd676": {
+    "Guid": "1262284b6fa45b9458b8c3693edbd676",
+    "Name": "Appel cacophonique de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d5a36a7ee8177be4f848b953d1c53c84": {
+    "Guid": "d5a36a7ee8177be4f848b953d1c53c84",
+    "Name": "Appel de la tempête",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "46c96cc3a3ef35243915ff3452dfacf5": {
+    "Guid": "46c96cc3a3ef35243915ff3452dfacf5",
+    "Name": "Arme destructrice",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d361391f645db984bbf58907711a146a": {
+    "Guid": "d361391f645db984bbf58907711a146a",
+    "Name": "Bannissement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9da37873d79ef0a468f969e4e5116ad2": {
+    "Guid": "9da37873d79ef0a468f969e4e5116ad2",
+    "Name": "Blessure légère de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a34921035f2a6714e9be5ca76c5e34b5": {
+    "Guid": "a34921035f2a6714e9be5ca76c5e34b5",
+    "Name": "Bouclier d'ombre vampirique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4e22d7cfda74b3644b31de8e7c044e21": {
+    "Guid": "4e22d7cfda74b3644b31de8e7c044e21",
+    "Name": "Bourrasque",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "eabf94e4edc6e714cabd96aa69f8b207": {
+    "Guid": "eabf94e4edc6e714cabd96aa69f8b207",
+    "Name": "Brume mentale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "548d339ba87ee56459c98e80167bdf10": {
+    "Guid": "548d339ba87ee56459c98e80167bdf10",
+    "Name": "Brume mortelle",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d38aaf487e29c3d43a3bffa4a4a55f8f": {
+    "Guid": "d38aaf487e29c3d43a3bffa4a4a55f8f",
+    "Name": "Chant de discorde",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e7c530f8137630f4d9d7ee1aa7b1edc0": {
+    "Guid": "e7c530f8137630f4d9d7ee1aa7b1edc0",
+    "Name": "Cône de froid",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8f98a22f35ca6684a983363d32e51bfe": {
+    "Guid": "8f98a22f35ca6684a983363d32e51bfe",
+    "Name": "Convocation d'alliés naturels V",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "630c8b85d9f07a64f917d79cb5905741": {
+    "Guid": "630c8b85d9f07a64f917d79cb5905741",
+    "Name": "Convocation de monstres V",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "31456292261253d4f996ab2e82b328a4": {
+    "Guid": "31456292261253d4f996ab2e82b328a4",
+    "Name": "Convocation de noble élémentaire de bière",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "89404dd71edc1aa42962824b44156fe5": {
+    "Guid": "89404dd71edc1aa42962824b44156fe5",
+    "Name": "Convocation d'élémentaire de taille G",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6d437be73b459594ab103acdcae5b9e2": {
+    "Guid": "6d437be73b459594ab103acdcae5b9e2",
+    "Name": "Corps élémentaire II",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5c8cde7f0dcec4e49bfa2632dfe2ecc0": {
+    "Guid": "5c8cde7f0dcec4e49bfa2632dfe2ecc0",
+    "Name": "Cri ki",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bacba2ff48d498b46b86384053945e83": {
+    "Guid": "bacba2ff48d498b46b86384053945e83",
+    "Name": "Crocs des grottes",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "444eed6e26f773a40ab6e4d160c67faa": {
+    "Guid": "444eed6e26f773a40ab6e4d160c67faa",
+    "Name": "Débilité",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8fb1a1670b6e1f84b89ea846f589b627": {
+    "Guid": "8fb1a1670b6e1f84b89ea846f589b627",
+    "Name": "Détection de pensées",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f0f761b808dc4b149b08eaf44b99f633": {
+    "Guid": "f0f761b808dc4b149b08eaf44b99f633",
+    "Name": "Dissipation suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "be5a5624bf514881967aee08ac416ba2": {
+    "Guid": "be5a5624bf514881967aee08ac416ba2",
+    "Name": "Douleur lancinante de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b7bc99f6e3592a3499815387e1d721e2": {
+    "Guid": "b7bc99f6e3592a3499815387e1d721e2",
+    "Name": "Édit de persévérance",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9ccd404771c25e24490e4f8838ea8ebb": {
+    "Guid": "9ccd404771c25e24490e4f8838ea8ebb",
+    "Name": "Élan télékinétique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4fbd47525382517419c66fb548fe9a67": {
+    "Guid": "4fbd47525382517419c66fb548fe9a67",
+    "Name": "Exécution",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cc51242ff01192b49a2e25adf096e2d0": {
+    "Guid": "cc51242ff01192b49a2e25adf096e2d0",
+    "Name": "Explosion osseuse",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "291524731e8b8f440b44915be833ae07": {
+    "Guid": "291524731e8b8f440b44915be833ae07",
+    "Name": "Exsanguination",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "15a04c40f84545949abeedef7279751a": {
+    "Guid": "15a04c40f84545949abeedef7279751a",
+    "Name": "Extase",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3c4c33f314a8bd64994d34ed5db2b96f": {
+    "Guid": "3c4c33f314a8bd64994d34ed5db2b96f",
+    "Name": "Flammes purificatrices",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "26aaee184eda5c545a0d353c5082cfd2": {
+    "Guid": "26aaee184eda5c545a0d353c5082cfd2",
+    "Name": "Fléau de vie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "90810e5cf53bf854293cbd5ea1066252": {
+    "Guid": "90810e5cf53bf854293cbd5ea1066252",
+    "Name": "Force du colosse",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9b93040dad242eb43ac7de6bb6547030": {
+    "Guid": "9b93040dad242eb43ac7de6bb6547030",
+    "Name": "Forme bestiale III",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a8815c40e1e6d3a44b57ad7b3727eebb": {
+    "Guid": "a8815c40e1e6d3a44b57ad7b3727eebb",
+    "Name": "Forme démoniaque IV",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f63f4d1806b78604a952b3958892ce1c": {
+    "Guid": "f63f4d1806b78604a952b3958892ce1c",
+    "Name": "Fosse affamée",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "41236cf0e476d7043bc16a33a9f449bd": {
+    "Guid": "41236cf0e476d7043bc16a33a9f449bd",
+    "Name": "Fustiger de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "07b608fab304f894880898dc0764e6e5": {
+    "Guid": "07b608fab304f894880898dc0764e6e5",
+    "Name": "Génie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e15e5e7045fda2244b98c8f010adfe31": {
+    "Guid": "e15e5e7045fda2244b98c8f010adfe31",
+    "Name": "Héroïsme suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cb15cc8d7a5480648855a23b3ba3f93d": {
+    "Guid": "cb15cc8d7a5480648855a23b3ba3f93d",
+    "Name": "Injonction suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c543eef6d725b184ea8669dd09b3894c": {
+    "Guid": "c543eef6d725b184ea8669dd09b3894c",
+    "Name": "Jet d'acide",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "237427308e48c3341b3d532b9d3a001f": {
+    "Guid": "237427308e48c3341b3d532b9d3a001f",
+    "Name": "Magie des ombres",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7f71a70d822af94458dc1a235507e972": {
+    "Guid": "7f71a70d822af94458dc1a235507e972",
+    "Name": "Manteau de rêves",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "93d9d74dac46b9b458d4d2ea7f4b1911": {
+    "Guid": "93d9d74dac46b9b458d4d2ea7f4b1911",
+    "Name": "Métamorphose",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3105d6e9febdc3f41a08d2b7dda1fe74": {
+    "Guid": "3105d6e9febdc3f41a08d2b7dda1fe74",
+    "Name": "Métamorphose funeste",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b56521d58f996cd4299dab3f38d5fe31": {
+    "Guid": "b56521d58f996cd4299dab3f38d5fe31",
+    "Name": "Nimbe profane",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b1723a0239d428243a1be2299696eb85": {
+    "Guid": "b1723a0239d428243a1be2299696eb85",
+    "Name": "Ordre absolu",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "df7d13c967bce6a40bec3ba7c9f0e64c": {
+    "Guid": "df7d13c967bce6a40bec3ba7c9f0e64c",
+    "Name": "Parole résonnante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7c5d556b9a5883048bf030e20daebe31": {
+    "Guid": "7c5d556b9a5883048bf030e20daebe31",
+    "Name": "Peau de pierre (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6d1d48a939ce475409f06e1b376bc386": {
+    "Guid": "6d1d48a939ce475409f06e1b376bc386",
+    "Name": "Piège de lianes",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "aca83c764d751594287f18b817814bce": {
+    "Guid": "aca83c764d751594287f18b817814bce",
+    "Name": "Pilier de vie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a759d339d98572a42a0c6e1dcc33453d": {
+    "Guid": "a759d339d98572a42a0c6e1dcc33453d",
+    "Name": "Pluie de hallebardes",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "65e8d23aef5e7784dbeb27b1fca40931": {
+    "Guid": "65e8d23aef5e7784dbeb27b1fca40931",
+    "Name": "Prison de glace",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d6042abe75df262498b6021eb8cc07a5": {
+    "Guid": "d6042abe75df262498b6021eb8cc07a5",
+    "Name": "Proportions microscopiques",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6fcaa7eb895239e4397e8e0781347adf": {
+    "Guid": "6fcaa7eb895239e4397e8e0781347adf",
+    "Name": "Protection contre les maux",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "fcb5af4434f13b141986b4af2403704d": {
+    "Guid": "fcb5af4434f13b141986b4af2403704d",
+    "Name": "Protection contre l'impureté (partagée)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "be2062d6d85f4634ea4f26e9e858c3b8": {
+    "Guid": "be2062d6d85f4634ea4f26e9e858c3b8",
+    "Name": "Purification",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a0fc99f0933d01643b2b8fe570caa4c5": {
+    "Guid": "a0fc99f0933d01643b2b8fe570caa4c5",
+    "Name": "Rappel à la vie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1cde0691195feae45bab5b83ea3f221e": {
+    "Guid": "1cde0691195feae45bab5b83ea3f221e",
+    "Name": "Rayon dévastateur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "de5f875a5f98d99459e45e6af8ce5dcd": {
+    "Guid": "de5f875a5f98d99459e45e6af8ce5dcd",
+    "Name": "Reconversion",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c6195ff24255d3f46a26323de9f1187a": {
+    "Guid": "c6195ff24255d3f46a26323de9f1187a",
+    "Name": "Remise à zéro",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0a5ddfbcfb3989543ac7c936fc256889": {
+    "Guid": "0a5ddfbcfb3989543ac7c936fc256889",
+    "Name": "Résistance à la magie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6bc458d0abe249a983d0642f9629f274": {
+    "Guid": "6bc458d0abe249a983d0642f9629f274",
+    "Name": "Résistance à l'âge supérieure",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d7e6f8a0369530341b50987d3ebdfe57": {
+    "Guid": "d7e6f8a0369530341b50987d3ebdfe57",
+    "Name": "Second souffle",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ebade19998e1f8542a1b55bd4da766b3": {
+    "Guid": "ebade19998e1f8542a1b55bd4da766b3",
+    "Name": "Serpent de feu",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0a3cd675bbee86a45a22b8bc63b5ec29": {
+    "Guid": "0a3cd675bbee86a45a22b8bc63b5ec29",
+    "Name": "Soigneur fantasmagorique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5d3d689392e4ff740a761ef346815074": {
+    "Guid": "5d3d689392e4ff740a761ef346815074",
+    "Name": "Soins légers de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d5847cad0b0e54c4d82d6c59a3cda6b0": {
+    "Guid": "d5847cad0b0e54c4d82d6c59a3cda6b0",
+    "Name": "Souffle de vie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1325e698f4a3f224b880e3b83a551228": {
+    "Guid": "1325e698f4a3f224b880e3b83a551228",
+    "Name": "Supernova",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "58e9e2883bca1574e9c932e72fd361f9": {
+    "Guid": "58e9e2883bca1574e9c932e72fd361f9",
+    "Name": "Tempête abyssale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8878d0c46dfbd564e9d5756349d5e439": {
+    "Guid": "8878d0c46dfbd564e9d5756349d5e439",
+    "Name": "Vagues de fatigue",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4cf3d0fae3239ec478f51e86f49161cb": {
+    "Guid": "4cf3d0fae3239ec478f51e86f49161cb",
+    "Name": "Vision lucide",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "fa08cb49ade3eee42b5fd42bd33cb407": {
+    "Guid": "fa08cb49ade3eee42b5fd42bd33cb407",
+    "Name": "Vision lucide (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "eacb5f788001ca84cb83c3091c1ced19": {
+    "Guid": "eacb5f788001ca84cb83c3091c1ced19",
+    "Name": "Voracité",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "249c0abba99e4d6f82437b83db57f52c": {
+    "Guid": "249c0abba99e4d6f82437b83db57f52c",
+    "Name": "Analyse de la résistance à la magie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a9a52760290591844a96d0109e30e04d": {
+    "Guid": "a9a52760290591844a96d0109e30e04d",
+    "Name": "Annihilation de mort-vivant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0f5bd128c76dd374b8cb9111e3b5186b": {
+    "Guid": "0f5bd128c76dd374b8cb9111e3b5186b",
+    "Name": "Arbitrage",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "36c8971e91f1745418cc3ffdfac17b74": {
+    "Guid": "36c8971e91f1745418cc3ffdfac17b74",
+    "Name": "Barrière de lames",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bd10c534a09f44f4ea632c8b8ae97145": {
+    "Guid": "bd10c534a09f44f4ea632c8b8ae97145",
+    "Name": "Blasphème",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "03944622fbe04824684ec29ff2cec6a7": {
+    "Guid": "03944622fbe04824684ec29ff2cec6a7",
+    "Name": "Blessure modérée de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0093fc0098c984c43ac239d1211d1311": {
+    "Guid": "0093fc0098c984c43ac239d1211d1311",
+    "Name": "Bouclier en os",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "dbf99b00cd35d0a4491c6cc9e771b487": {
+    "Guid": "dbf99b00cd35d0a4491c6cc9e771b487",
+    "Name": "Brume acide",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a89dcbbab8f40e44e920cc60636097cf": {
+    "Guid": "a89dcbbab8f40e44e920cc60636097cf",
+    "Name": "Cercle de mort",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f7b476555f96afe4b9ba6e7d56d3272a": {
+    "Guid": "f7b476555f96afe4b9ba6e7d56d3272a",
+    "Name": "Chants d'acier",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "943328ac5bc8a734e85b5b2af3ae2bf7": {
+    "Guid": "943328ac5bc8a734e85b5b2af3ae2bf7",
+    "Name": "Charme universel",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "55bbce9b3e76d4a4a8c8e0698d29002c": {
+    "Guid": "55bbce9b3e76d4a4a8c8e0698d29002c",
+    "Name": "Convocation d'alliés naturels VI",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "dd679ef3aa4a71a4da192aeb0040d84b": {
+    "Guid": "dd679ef3aa4a71a4da192aeb0040d84b",
+    "Name": "Convocation de magicien constamment contrarié",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e740afbab0147944dab35d83faa0ae1c": {
+    "Guid": "e740afbab0147944dab35d83faa0ae1c",
+    "Name": "Convocation de monstres VI",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "844c042deeae2c5408f120f1b3b45c7c": {
+    "Guid": "844c042deeae2c5408f120f1b3b45c7c",
+    "Name": "Convocation de seigneur élémentaire de bière",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4814f8645d1d77447a70479c0be51c72": {
+    "Guid": "4814f8645d1d77447a70479c0be51c72",
+    "Name": "Convocation d'élémentaire de feu de taille TG",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "766ec978fa993034f86a372c8eb1fc10": {
+    "Guid": "766ec978fa993034f86a372c8eb1fc10",
+    "Name": "Convocation d'élémentaire de taille TG",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "459e6d5aab080a14499e13b407eb3b85": {
+    "Guid": "459e6d5aab080a14499e13b407eb3b85",
+    "Name": "Corps élémentaire III",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cd4b858611f11ec44861f02505f9261d": {
+    "Guid": "cd4b858611f11ec44861f02505f9261d",
+    "Name": "Corps élémentaire III (air)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "76a11b460be25e44ca85904d6806e5a3": {
+    "Guid": "76a11b460be25e44ca85904d6806e5a3",
+    "Name": "Création de mort-vivant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "fd0d3840c48cafb44bb29e8eb74df204": {
+    "Guid": "fd0d3840c48cafb44bb29e8eb74df204",
+    "Name": "Cri suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "302ab5e241931a94881d323a7844ae8f": {
+    "Guid": "302ab5e241931a94881d323a7844ae8f",
+    "Name": "Décret",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4aa7942c3e62a164387a73184bca3fc1": {
+    "Guid": "4aa7942c3e62a164387a73184bca3fc1",
+    "Name": "Désintégration",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6d490c80598f1d34bb277735b52d52c1": {
+    "Guid": "6d490c80598f1d34bb277735b52d52c1",
+    "Name": "Dissipation suprême (cible)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f767399367df54645ac620ef7b2062bb": {
+    "Guid": "f767399367df54645ac620ef7b2062bb",
+    "Name": "Draconide I",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c82168800b665324f8b4807b531fea46": {
+    "Guid": "c82168800b665324f8b4807b531fea46",
+    "Name": "Éclair de justice",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "645558d63604747428d55f0dd3a4cb58": {
+    "Guid": "645558d63604747428d55f0dd3a4cb58",
+    "Name": "Éclair multiple",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d7741c08ccf699e4a8a8f8ab2ed345f8": {
+    "Guid": "d7741c08ccf699e4a8a8f8ab2ed345f8",
+    "Name": "Édit de forteresse impénétrable",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d7882fc74a30f5f43afb644045299b63": {
+    "Guid": "d7882fc74a30f5f43afb644045299b63",
+    "Name": "Égide des fidèles",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ba07962827484eb38bf0b6aadd9f5f22": {
+    "Guid": "ba07962827484eb38bf0b6aadd9f5f22",
+    "Name": "Enchantement d'ombre suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f6bcea6db14f0814d99b54856e918b92": {
+    "Guid": "f6bcea6db14f0814d99b54856e918b92",
+    "Name": "Endurance de l'ours de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8c29e953190cc67429dc9c701b16b7c2": {
+    "Guid": "8c29e953190cc67429dc9c701b16b7c2",
+    "Name": "Éruption caustique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6303b404df12b0f4793fa0763b21dd2c": {
+    "Guid": "6303b404df12b0f4793fa0763b21dd2c",
+    "Name": "Évaluation élémentaire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e96424f70ff884947b06f41a765b7658": {
+    "Guid": "e96424f70ff884947b06f41a765b7658",
+    "Name": "Explosion de lumière",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6a234c6dcde7ae94e94e9c36fd1163a7": {
+    "Guid": "6a234c6dcde7ae94e94e9c36fd1163a7",
+    "Name": "Force de taureau de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "940a545a665194b48b722c1f9dd78d53": {
+    "Guid": "940a545a665194b48b722c1f9dd78d53",
+    "Name": "Forme bestiale IV",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b140c323981ba0a45a3bee5a1a57f493": {
+    "Guid": "b140c323981ba0a45a3bee5a1a57f493",
+    "Name": "Forme bestiale IV (tertre errant)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d7e6b7a26d2855f4cbf658122301abb7": {
+    "Guid": "d7e6b7a26d2855f4cbf658122301abb7",
+    "Name": "Fosse d'agrément",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "474ed0aa656cc38499cc9a073d113716": {
+    "Guid": "474ed0aa656cc38499cc9a073d113716",
+    "Name": "Frappe umbrale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5ef85d426783a5347b420546f91a677b": {
+    "Guid": "5ef85d426783a5347b420546f91a677b",
+    "Name": "Froide frappe de glace",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1f6c94d56f178b84ead4c02f1b1e1c48": {
+    "Guid": "1f6c94d56f178b84ead4c02f1b1e1c48",
+    "Name": "Grâce féline de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5da172c4c89f9eb4cbb614f3a67357d3": {
+    "Guid": "5da172c4c89f9eb4cbb614f3a67357d3",
+    "Name": "Guérison suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ff8f1534f66559c478448723e16b6624": {
+    "Guid": "ff8f1534f66559c478448723e16b6624",
+    "Name": "Guérison suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "de8a737580c4cb94f9b21c290d4af17d": {
+    "Guid": "de8a737580c4cb94f9b21c290d4af17d",
+    "Name": "Hymne sacré",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5ab2e32dd25724a488878c2a52c65ace": {
+    "Guid": "5ab2e32dd25724a488878c2a52c65ace",
+    "Name": "Incarnation de l'ordre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a5c56f0f699daec44b7aedd8b273b08a": {
+    "Guid": "a5c56f0f699daec44b7aedd8b273b08a",
+    "Name": "Inspiration brillante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "50497d3b8d0b40e4682fd643f5080f45": {
+    "Guid": "50497d3b8d0b40e4682fd643f5080f45",
+    "Name": "Joie de vivre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "435e73bcff18f304293484f9511b4672": {
+    "Guid": "435e73bcff18f304293484f9511b4672",
+    "Name": "Litanie de folie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3167d30dd3c622c46b0c0cb242061642": {
+    "Guid": "3167d30dd3c622c46b0c0cb242061642",
+    "Name": "Mauvais œil",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cc09224ecc9af79449816c45bc5be218": {
+    "Guid": "cc09224ecc9af79449816c45bc5be218",
+    "Name": "Mise à mal",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7d700cdf260d36e48bb7af3a8ca5031f": {
+    "Guid": "7d700cdf260d36e48bb7af3a8ca5031f",
+    "Name": "Nappe de goudron",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "89bc94bd06dcf5847bb9e4d6ba1b9767": {
+    "Guid": "89bc94bd06dcf5847bb9e4d6ba1b9767",
+    "Name": "Néant glacial",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "69f2e7aff2d1cd148b8075ee476515b1": {
+    "Guid": "69f2e7aff2d1cd148b8075ee476515b1",
+    "Name": "Parole du Chaos",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4737294a66c91b844842caee8cf505c8": {
+    "Guid": "4737294a66c91b844842caee8cf505c8",
+    "Name": "Parole sacrée",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0ad356eaf621d9a469e7da0acc552383": {
+    "Guid": "0ad356eaf621d9a469e7da0acc552383",
+    "Name": "Pluie d'étoiles arc-en-ciel",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "41cf93453b027b94886901dbfc680cb9": {
+    "Guid": "41cf93453b027b94886901dbfc680cb9",
+    "Name": "Présence écrasante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "da1b292d91ba37948893cdbe9ea89e28": {
+    "Guid": "da1b292d91ba37948893cdbe9ea89e28",
+    "Name": "Proportions légendaires",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b66eee357e8404d49b7d8ad58cbb7f15": {
+    "Guid": "b66eee357e8404d49b7d8ad58cbb7f15",
+    "Name": "Protection contre la faiblesse",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ab43915fec9e61f4588447f01f2ff6e2": {
+    "Guid": "ab43915fec9e61f4588447f01f2ff6e2",
+    "Name": "Protection contre les maux (partagée)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "76a031aeeb69f51409c6f9dbaa7cb989": {
+    "Guid": "76a031aeeb69f51409c6f9dbaa7cb989",
+    "Name": "Protection de la nature",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "52b8b14360a87104482b2735c7fc8606": {
+    "Guid": "52b8b14360a87104482b2735c7fc8606",
+    "Name": "Purulence de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1f2e6019ece86d64baa5effa15e81ecc": {
+    "Guid": "1f2e6019ece86d64baa5effa15e81ecc",
+    "Name": "Putréfaction fantasmagorique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "700cfcbd0cb2975419bcab7dbb8c6210": {
+    "Guid": "700cfcbd0cb2975419bcab7dbb8c6210",
+    "Name": "Rayon de feu infernal",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "07d577a74441a3a44890e3006efcf604": {
+    "Guid": "07d577a74441a3a44890e3006efcf604",
+    "Name": "Régression primale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2b24159ad9907a8499c2313ba9c0f615": {
+    "Guid": "2b24159ad9907a8499c2313ba9c0f615",
+    "Name": "Ruse du renard de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9f5ada581af3db4419b54db77f44e430": {
+    "Guid": "9f5ada581af3db4419b54db77f44e430",
+    "Name": "Sagesse du hibou de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d6b8099f8c7be8f4492b14da84dc06d4": {
+    "Guid": "d6b8099f8c7be8f4492b14da84dc06d4",
+    "Name": "Simulacre de grâce",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7bd52a86498c7854ebe99bc3cfb85bfe": {
+    "Guid": "7bd52a86498c7854ebe99bc3cfb85bfe",
+    "Name": "Siphon de vie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e346cc550c5bfdf428faa7cdb4849d8e": {
+    "Guid": "e346cc550c5bfdf428faa7cdb4849d8e",
+    "Name": "Siphon temporel",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "093ed1d67a539ad4c939d9d05cfe192c": {
+    "Guid": "093ed1d67a539ad4c939d9d05cfe192c",
+    "Name": "Sirocco",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "571221cc141bc21449ae96b3944652aa": {
+    "Guid": "571221cc141bc21449ae96b3944652aa",
+    "Name": "Soins modérés de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d42c6d3f29e07b6409d670792d72bc82": {
+    "Guid": "d42c6d3f29e07b6409d670792d72bc82",
+    "Name": "Souffle de la banshie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b5be90707c17a9643b90d90b7c4096e2": {
+    "Guid": "b5be90707c17a9643b90d90b7c4096e2",
+    "Name": "Souffle empoisonné",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2caa607eadda4ab44934c5c9875e01bc": {
+    "Guid": "2caa607eadda4ab44934c5c9875e01bc",
+    "Name": "Splendeur de l'aigle de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "82a5b848c05e3f342b893dedb1f9b446": {
+    "Guid": "82a5b848c05e3f342b893dedb1f9b446",
+    "Name": "Tempête de peste",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "740d943e42b60f64a8de74926ba6ddf7": {
+    "Guid": "740d943e42b60f64a8de74926ba6ddf7",
+    "Name": "Tranquillité euphorique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "27203d62eb3d4184c9aced94f22e1806": {
+    "Guid": "27203d62eb3d4184c9aced94f22e1806",
+    "Name": "Transformation martiale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e243740dfdb17a246b116b334ed0b165": {
+    "Guid": "e243740dfdb17a246b116b334ed0b165",
+    "Name": "Transmutation de la pierre en chair",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "368d7cf2fb69d8a46be5a650f5a5a173": {
+    "Guid": "368d7cf2fb69d8a46be5a650f5a5a173",
+    "Name": "Traverser l'espace",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1e2d1489781b10a45a3b70192bba9be3": {
+    "Guid": "1e2d1489781b10a45a3b70192bba9be3",
+    "Name": "Vagues d'extase",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "af2ed41c7894b934c9a9ca5048af3f58": {
+    "Guid": "af2ed41c7894b934c9a9ca5048af3f58",
+    "Name": "Vents d'automne",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "756f1d07f9ae29448888ecf016fa40a7": {
+    "Guid": "756f1d07f9ae29448888ecf016fa40a7",
+    "Name": "Zone de prédétermination",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2b044152b3620c841badb090e01ed9de": {
+    "Guid": "2b044152b3620c841badb090e01ed9de",
+    "Name": "Aliénation mentale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "26be70c4664d07446bdfe83504c1d757": {
+    "Guid": "26be70c4664d07446bdfe83504c1d757",
+    "Name": "Bâton sylvanien",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2abf1b69cec760d4ebc73d5ce8d79f0a": {
+    "Guid": "2abf1b69cec760d4ebc73d5ce8d79f0a",
+    "Name": "Bénédiction des morts-vivants",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "820170444d4d2a14abc480fcbdb49535": {
+    "Guid": "820170444d4d2a14abc480fcbdb49535",
+    "Name": "Blessure importante de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "98734a2665c18cd4db71878b0532024a": {
+    "Guid": "98734a2665c18cd4db71878b0532024a",
+    "Name": "Brandon",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f333185ae986b2a45823cce86535a122": {
+    "Guid": "f333185ae986b2a45823cce86535a122",
+    "Name": "Cercle de clarté",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "051b979e7d7f8ec41b9fa35d04746b33": {
+    "Guid": "051b979e7d7f8ec41b9fa35d04746b33",
+    "Name": "Convocation d'alliés naturels VII",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ab167fd8203c1314bac6568932f1752f": {
+    "Guid": "ab167fd8203c1314bac6568932f1752f",
+    "Name": "Convocation de monstres VII",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4bd71b7351aea8047b74ec77c7689237": {
+    "Guid": "4bd71b7351aea8047b74ec77c7689237",
+    "Name": "Convocation de sanglier de désolation",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8eb769e3b583f594faabe1cfdb0bb696": {
+    "Guid": "8eb769e3b583f594faabe1cfdb0bb696",
+    "Name": "Convocation d'élémentaire noble",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a4849d6bd536ade48a3839a4ad960a8b": {
+    "Guid": "a4849d6bd536ade48a3839a4ad960a8b",
+    "Name": "Convocation d'élémentaire noble d'air",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "08255ea4cdd812341af93f9cd113acb9": {
+    "Guid": "08255ea4cdd812341af93f9cd113acb9",
+    "Name": "Convocation d'ombres suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "89778dc261fe6094bb2445cb389842d2": {
+    "Guid": "89778dc261fe6094bb2445cb389842d2",
+    "Name": "Corps de glace",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "376db0590f3ca4945a8b6dc16ed14975": {
+    "Guid": "376db0590f3ca4945a8b6dc16ed14975",
+    "Name": "Corps élémentaire IV",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ee63301f83c76694692d4704d8a05bdc": {
+    "Guid": "ee63301f83c76694692d4704d8a05bdc",
+    "Name": "Corps élémentaire IV (air)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "96d2ab91f2d2329459a8dab496c5bede": {
+    "Guid": "96d2ab91f2d2329459a8dab496c5bede",
+    "Name": "Corps élémentaire IV (eau)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c281eeecc554b72449fef43924e522ce": {
+    "Guid": "c281eeecc554b72449fef43924e522ce",
+    "Name": "Corps élémentaire IV (feu)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "facdc8851a0b3f44a8bed50f0199b83c": {
+    "Guid": "facdc8851a0b3f44a8bed50f0199b83c",
+    "Name": "Corps élémentaire IV (terre)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6e109d21da9e1c44fb772a9eca2cafdd": {
+    "Guid": "6e109d21da9e1c44fb772a9eca2cafdd",
+    "Name": "Dé du destin pipé",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a4eeea42be61d0f469676371ee0a5aa7": {
+    "Guid": "a4eeea42be61d0f469676371ee0a5aa7",
+    "Name": "Déferlement de hallebardes",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3b646e1db3403b940bf620e01d2ce0c7": {
+    "Guid": "3b646e1db3403b940bf620e01d2ce0c7",
+    "Name": "Destruction",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e03024c8a03f454db5b78660f524757d": {
+    "Guid": "e03024c8a03f454db5b78660f524757d",
+    "Name": "Doigt de mort",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6f1dcf6cfa92d1948a740195707c0dbe": {
+    "Guid": "6f1dcf6cfa92d1948a740195707c0dbe",
+    "Name": "Doigt de mort",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "666556ded3a32f34885e8c318c3a0ced": {
+    "Guid": "666556ded3a32f34885e8c318c3a0ced",
+    "Name": "Draconide II",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6d21deddd7712fd409c94d248b75643d": {
+    "Guid": "6d21deddd7712fd409c94d248b75643d",
+    "Name": "Édit d'invulnérabilité",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "edf6e91ca5a468849b8326bcc9c569b2": {
+    "Guid": "edf6e91ca5a468849b8326bcc9c569b2",
+    "Name": "Festin sanglant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "88bb6f877c8185543850656a5f14e802": {
+    "Guid": "88bb6f877c8185543850656a5f14e802",
+    "Name": "Flèches arc-en-ciel",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "91d04f9180e94065ac768959323d2002": {
+    "Guid": "91d04f9180e94065ac768959323d2002",
+    "Name": "Forme parfaite",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "defbbeaef79eda64abc645036228a31b": {
+    "Guid": "defbbeaef79eda64abc645036228a31b",
+    "Name": "Immobilisation de personne de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "98310a099009bbd4dbdf66bcef58b4cd": {
+    "Guid": "98310a099009bbd4dbdf66bcef58b4cd",
+    "Name": "Invisibilité de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ca8bc7d438e6b004a87222f3c32572f2": {
+    "Guid": "ca8bc7d438e6b004a87222f3c32572f2",
+    "Name": "Lance en os",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "947a929f3347d3e458a524424fbceccb": {
+    "Guid": "947a929f3347d3e458a524424fbceccb",
+    "Name": "Lien indéfectible",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6101d0f0720927e4ca413de7b3c4b7e5": {
+    "Guid": "6101d0f0720927e4ca413de7b3c4b7e5",
+    "Name": "Malédiction suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "201c1235b0467f741b0c46e09c85d89b": {
+    "Guid": "201c1235b0467f741b0c46e09c85d89b",
+    "Name": "Marque solaire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cf689244b2c7e904eb85f26fd6e81552": {
+    "Guid": "cf689244b2c7e904eb85f26fd6e81552",
+    "Name": "Métamorphose animale",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a9fc28e147dbb364ea4a3c1831e7e55f": {
+    "Guid": "a9fc28e147dbb364ea4a3c1831e7e55f",
+    "Name": "Métamorphose suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "137af566f68fd9b428e2e12da43c1482": {
+    "Guid": "137af566f68fd9b428e2e12da43c1482",
+    "Name": "Mise à mal",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b974af13e45639a41a04843ce1c9aa12": {
+    "Guid": "b974af13e45639a41a04843ce1c9aa12",
+    "Name": "Mort rampante",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "261e1788bfc5ac1419eec68b1d485dbc": {
+    "Guid": "261e1788bfc5ac1419eec68b1d485dbc",
+    "Name": "Mot de pouvoir aveuglant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "edc7d27fb42b9a94bac0bee1f3286b49": {
+    "Guid": "edc7d27fb42b9a94bac0bee1f3286b49",
+    "Name": "Mur de lumière",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1f01a098d737ec6419aedc4e7ad61fdd": {
+    "Guid": "1f01a098d737ec6419aedc4e7ad61fdd",
+    "Name": "Prémonition",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0dd638688edf68a4da865752d7b9ee82": {
+    "Guid": "0dd638688edf68a4da865752d7b9ee82",
+    "Name": "Présage traumatisant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "19e5803dbaf54de4eb02c5f50655fba9": {
+    "Guid": "19e5803dbaf54de4eb02c5f50655fba9",
+    "Name": "Protection contre la faiblesse (partagée)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1fca0ba2fdfe2994a8c8bc1f0f2fc5b1": {
+    "Guid": "1fca0ba2fdfe2994a8c8bc1f0f2fc5b1",
+    "Name": "Rayon de soleil",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b22fd434bdb60fb4ba1068206402c4cf": {
+    "Guid": "b22fd434bdb60fb4ba1068206402c4cf",
+    "Name": "Rayons prismatiques",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "fafd77c6bfa85c04ba31fdc1c962c914": {
+    "Guid": "fafd77c6bfa85c04ba31fdc1c962c914",
+    "Name": "Restauration suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "80a1a388ee938aa4e90d427ce9a7a3e9": {
+    "Guid": "80a1a388ee938aa4e90d427ce9a7a3e9",
+    "Name": "Résurrection",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "319c5a450b01f834599389853753d0f0": {
+    "Guid": "319c5a450b01f834599389853753d0f0",
+    "Name": "Révolte",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a9dbff7a630003d4eafa6c9dd203cb7e": {
+    "Guid": "a9dbff7a630003d4eafa6c9dd203cb7e",
+    "Name": "Soin des morts-vivants",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0cea35de4d553cc439ae80b3a8724397": {
+    "Guid": "0cea35de4d553cc439ae80b3a8724397",
+    "Name": "Soins importants de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e3d0dfe1c8527934294f241e0ae96a8d": {
+    "Guid": "e3d0dfe1c8527934294f241e0ae96a8d",
+    "Name": "Tempête de feu",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a6a86db75c6af6d41aa480f05adae693": {
+    "Guid": "a6a86db75c6af6d41aa480f05adae693",
+    "Name": "Ténacité héroïque",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cd7b6981218a0274c916db0a2fc29855": {
+    "Guid": "cd7b6981218a0274c916db0a2fc29855",
+    "Name": "Torrent d'eau",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ea036c023f074c6c964d858607d123b3": {
+    "Guid": "ea036c023f074c6c964d858607d123b3",
+    "Name": "Trou noir",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3e4d3b9a5bd03734d9b053b9067c2f38": {
+    "Guid": "3e4d3b9a5bd03734d9b053b9067c2f38",
+    "Name": "Vagues d'épuisement",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "87bcf706e376b80418903ae0d4303feb": {
+    "Guid": "87bcf706e376b80418903ae0d4303feb",
+    "Name": "Zone radieuse",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e788b02f8d21014488067bdd3ba7b325": {
+    "Guid": "e788b02f8d21014488067bdd3ba7b325",
+    "Name": "Aspect terrifiant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "47f9cb1c367a5e4489cfa32fce290f86": {
+    "Guid": "47f9cb1c367a5e4489cfa32fce290f86",
+    "Name": "Aura maudite",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "808ab74c12df8784ab4eeaf6a107dbea": {
+    "Guid": "808ab74c12df8784ab4eeaf6a107dbea",
+    "Name": "Aura sacrée",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b8d3dd15ce1232d499d7813f570eed56": {
+    "Guid": "b8d3dd15ce1232d499d7813f570eed56",
+    "Name": "Bénédiction du vengeur",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5ee395a2423808c4baf342a4f8395b19": {
+    "Guid": "5ee395a2423808c4baf342a4f8395b19",
+    "Name": "Blessure critique de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "73e7728808865094b8892613ddfaf7f5": {
+    "Guid": "73e7728808865094b8892613ddfaf7f5",
+    "Name": "Bouclier de la Loi",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "52ddf5357c9c67a47b3f324bbb3a979d": {
+    "Guid": "52ddf5357c9c67a47b3f324bbb3a979d",
+    "Name": "Chaînes solaires",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a508fd48695440cd8216526a859ecb53": {
+    "Guid": "a508fd48695440cd8216526a859ecb53",
+    "Name": "Châtiment draconique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ea78c04f0bd13d049a1cce5daf8d83e0": {
+    "Guid": "ea78c04f0bd13d049a1cce5daf8d83e0",
+    "Name": "Convocation d'alliés naturels VIII",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d3ac756a229830243a72e84f3ab050d0": {
+    "Guid": "d3ac756a229830243a72e84f3ab050d0",
+    "Name": "Convocation de monstres VIII",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8a7f8c1223bda1541b42fd0320cdbe2b": {
+    "Guid": "8a7f8c1223bda1541b42fd0320cdbe2b",
+    "Name": "Convocation de seigneur élémentaire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "e4926aa766a1cc048835237b3a97597d": {
+    "Guid": "e4926aa766a1cc048835237b3a97597d",
+    "Name": "Convocation de seigneur élémentaire de feu",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1e42ecaa79454e85b274edc73e130a03": {
+    "Guid": "1e42ecaa79454e85b274edc73e130a03",
+    "Name": "Convocation draconique I",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "198fcc43490993f49899ed086fe723c1": {
+    "Guid": "198fcc43490993f49899ed086fe723c1",
+    "Name": "Corps de fer",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "dd3dacafcf40a0145a5824c838e2698d": {
+    "Guid": "dd3dacafcf40a0145a5824c838e2698d",
+    "Name": "Crevasse de ruine",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0d820abda7693a9418546a47eea62ea2": {
+    "Guid": "0d820abda7693a9418546a47eea62ea2",
+    "Name": "Domaine de la chair affamée",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1cdc4ad4c208246419b98a35539eafa6": {
+    "Guid": "1cdc4ad4c208246419b98a35539eafa6",
+    "Name": "Draconide III",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0e67fa8f011662c43934d486acc50253": {
+    "Guid": "0e67fa8f011662c43934d486acc50253",
+    "Name": "Échec annoncé",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "df2a0ba6b6dcecf429cbb80a56fee5cf": {
+    "Guid": "df2a0ba6b6dcecf429cbb80a56fee5cf",
+    "Name": "Esprit impénétrable",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "c3d2294a6740bc147870fff652f3ced5": {
+    "Guid": "c3d2294a6740bc147870fff652f3ced5",
+    "Name": "Étreinte de la mort",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "41e229444616fc045a9da02f19e47f76": {
+    "Guid": "41e229444616fc045a9da02f19e47f76",
+    "Name": "Étreinte mortelle",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8af93e330e1642298c88ec6080e5de12": {
+    "Guid": "8af93e330e1642298c88ec6080e5de12",
+    "Name": "Exigence draconique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "08323922485f7e246acb3d2276515526": {
+    "Guid": "08323922485f7e246acb3d2276515526",
+    "Name": "Flétrissure",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3c4a2d4181482e84d9cd752ef8edc3b6": {
+    "Guid": "3c4a2d4181482e84d9cd752ef8edc3b6",
+    "Name": "Magie des ombres suprême",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "9155dbc8268da1c49a7fc4834fa1a4b1": {
+    "Guid": "9155dbc8268da1c49a7fc4834fa1a4b1",
+    "Name": "Manteau du Chaos",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7ef49f184922063499b8f1346fb7f521": {
+    "Guid": "7ef49f184922063499b8f1346fb7f521",
+    "Name": "Manteau marin",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f958ef62eea5050418fb92dfa944c631": {
+    "Guid": "f958ef62eea5050418fb92dfa944c631",
+    "Name": "Mot de pouvoir étourdissant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4dc60d08c6c4d3c47b413904e4de5ff0": {
+    "Guid": "4dc60d08c6c4d3c47b413904e4de5ff0",
+    "Name": "Motif scintillant",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7cfbefe0931257344b2cb7ddc4cdff6f": {
+    "Guid": "7cfbefe0931257344b2cb7ddc4cdff6f",
+    "Name": "Nuées d'orage",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b4afacd337dac4a40a769a567c038ab7": {
+    "Guid": "b4afacd337dac4a40a769a567c038ab7",
+    "Name": "Pilleur d'âmes",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "42aa71adc7343714fa92e471baa98d42": {
+    "Guid": "42aa71adc7343714fa92e471baa98d42",
+    "Name": "Protection contre les sorts",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "bfc6aa5be6bc41f68ca78aef37913e9f": {
+    "Guid": "bfc6aa5be6bc41f68ca78aef37913e9f",
+    "Name": "Puissance draconique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "4de4a5f242ff5dd4eb5e351bebc4a1fa": {
+    "Guid": "4de4a5f242ff5dd4eb5e351bebc4a1fa",
+    "Name": "Rafale de vie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "17696c144a0194c478cbe402b496cb23": {
+    "Guid": "17696c144a0194c478cbe402b496cb23",
+    "Name": "Rayon polaire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1f173a16120359e41a20fc75bb53d449": {
+    "Guid": "1f173a16120359e41a20fc75bb53d449",
+    "Name": "Soins intensifs de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b118f142f9bc88a44acbba737a135382": {
+    "Guid": "b118f142f9bc88a44acbba737a135382",
+    "Name": "Tempête de justice",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "37302f72b06ced1408bf5bb965766d46": {
+    "Guid": "37302f72b06ced1408bf5bb965766d46",
+    "Name": "Absorption d'énergie",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "22b9044aa229815429d57d0a30e4b739": {
+    "Guid": "22b9044aa229815429d57d0a30e4b739",
+    "Name": "Changement de forme",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ae13b1831a5c79c468584e57ea94d07d": {
+    "Guid": "ae13b1831a5c79c468584e57ea94d07d",
+    "Name": "Colère des justes",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a7469ef84ba50ac4cbf3d145e3173f8e": {
+    "Guid": "a7469ef84ba50ac4cbf3d145e3173f8e",
+    "Name": "Convocation d'alliés naturels IX",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "52b5df2a97df18242aec67610616ded0": {
+    "Guid": "52b5df2a97df18242aec67610616ded0",
+    "Name": "Convocation de monstres IX",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "954f1469ed62843409783c9fa7472998": {
+    "Guid": "954f1469ed62843409783c9fa7472998",
+    "Name": "Convocation de ver vénérable",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "51b498f1cacd42e08ed6852f53261f11": {
+    "Guid": "51b498f1cacd42e08ed6852f53261f11",
+    "Name": "Convocation draconique II",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "08ccad78cac525040919d51963f9ac39": {
+    "Guid": "08ccad78cac525040919d51963f9ac39",
+    "Name": "Corps enflammé",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "59d08b909d684b91a137766ab22f4b1a": {
+    "Guid": "59d08b909d684b91a137766ab22f4b1a",
+    "Name": "Courroux draconique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "85f616bb9d054f669f357636c6c06338": {
+    "Guid": "85f616bb9d054f669f357636c6c06338",
+    "Name": "Disjonction",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "3c17035ec4717674cae2e841a190e757": {
+    "Guid": "3c17035ec4717674cae2e841a190e757",
+    "Name": "Domination universelle",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0883ea8000404b28a6d5f2b8f8bbed15": {
+    "Guid": "0883ea8000404b28a6d5f2b8f8bbed15",
+    "Name": "Domination universelle",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "870af83be6572594d84d276d7fc583e0": {
+    "Guid": "870af83be6572594d84d276d7fc583e0",
+    "Name": "Ennemi subconscient",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5c377ad96e3fc4f4d9b74eba9d38f4f8": {
+    "Guid": "5c377ad96e3fc4f4d9b74eba9d38f4f8",
+    "Name": "Éruption négative",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "87a29febd010993419f2a4a9bee11cfc": {
+    "Guid": "87a29febd010993419f2a4a9bee11cfc",
+    "Name": "Esprit impénétrable (partagé)",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "f7bc6e97e7d44ed8ba5c4d9f76a5a3d3": {
+    "Guid": "f7bc6e97e7d44ed8ba5c4d9f76a5a3d3",
+    "Name": "Fierté draconique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "568084843e133374bb03fb5e6cb6f22f": {
+    "Guid": "568084843e133374bb03fb5e6cb6f22f",
+    "Name": "Forme solaire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "102e38aec2c921745a9f5c5e049d6526": {
+    "Guid": "102e38aec2c921745a9f5c5e049d6526",
+    "Name": "Forteresse des fidèles",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "867524328b54f25488d371214eea0d90": {
+    "Guid": "867524328b54f25488d371214eea0d90",
+    "Name": "Guérison suprême de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "01300baad090d634cb1a1b2defe068d6": {
+    "Guid": "01300baad090d634cb1a1b2defe068d6",
+    "Name": "Heurt de pierres",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7f4b66a2b1fdab142904a263c7866d46": {
+    "Guid": "7f4b66a2b1fdab142904a263c7866d46",
+    "Name": "Immobilisation de monstre de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "8db470cd85fb46d6bb17212558b5fdfb": {
+    "Guid": "8db470cd85fb46d6bb17212558b5fdfb",
+    "Name": "Invocation de kékétar",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "43740dab07286fe4aa00a6ee104ce7c1": {
+    "Guid": "43740dab07286fe4aa00a6ee104ce7c1",
+    "Name": "Invocation héroïque",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "6fd7bdd6dfa9dd943b36d65faf97ac41": {
+    "Guid": "6fd7bdd6dfa9dd943b36d65faf97ac41",
+    "Name": "Magie corrompue",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d35b16edbd5c436286e34cf7bcbdb645": {
+    "Guid": "d35b16edbd5c436286e34cf7bcbdb645",
+    "Name": "Mille morsures",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "2f8a67c483dfa0f439b293e094ca9e3c": {
+    "Guid": "2f8a67c483dfa0f439b293e094ca9e3c",
+    "Name": "Mot de pouvoir mortel",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a5481866babd5214bb3ccf0710fe4d20": {
+    "Guid": "a5481866babd5214bb3ccf0710fe4d20",
+    "Name": "Mourir pour servir",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "0340fe43f35e7a448981b646c638c83d": {
+    "Guid": "0340fe43f35e7a448981b646c638c83d",
+    "Name": "Nuée d'élémentaires",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "07e8f6479cbcc3f46a12696784805305": {
+    "Guid": "07e8f6479cbcc3f46a12696784805305",
+    "Name": "Nuée d'élémentaires : air",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1c509c6f186528b49a291ab77f7f997d": {
+    "Guid": "1c509c6f186528b49a291ab77f7f997d",
+    "Name": "Nuée d'élémentaires : feu",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a6c41f10be92dec488276ab079a296c8": {
+    "Guid": "a6c41f10be92dec488276ab079a296c8",
+    "Name": "Nuée d'élémentaires : terre",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "ba48abb52b142164eba309fd09898856": {
+    "Guid": "ba48abb52b142164eba309fd09898856",
+    "Name": "Nuit polaire",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "b24583190f36a8442b212e45226c54fc": {
+    "Guid": "b24583190f36a8442b212e45226c54fc",
+    "Name": "Plainte d'outre-tombe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1852a9393a23d5741b650a1ea7078abc": {
+    "Guid": "1852a9393a23d5741b650a1ea7078abc",
+    "Name": "Prison de glace de groupe",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "70e12191790f69a439ea0132c75f83aa": {
+    "Guid": "70e12191790f69a439ea0132c75f83aa",
+    "Name": "Reflets d'ombres",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "d8144161e352ca846a73cf90e85bf9ac": {
+    "Guid": "d8144161e352ca846a73cf90e85bf9ac",
+    "Name": "Tsunami",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5d8f1da2fdc0b9242af9f326f9e507be": {
+    "Guid": "5d8f1da2fdc0b9242af9f326f9e507be",
+    "Name": "Vents de la vengeance",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "eb0d3e22826725d4199a3aac0db0ad50": {
+    "Guid": "eb0d3e22826725d4199a3aac0db0ad50",
+    "Name": "Vie nouvelle",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "483157d358afd1a498c2a4762f4057ba": {
+    "Guid": "483157d358afd1a498c2a4762f4057ba",
+    "Name": "Armée du paradis",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cb127670411c41298a4aa4d0a165a20b": {
+    "Guid": "cb127670411c41298a4aa4d0a165a20b",
+    "Name": "Convocation draconique III",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "24067ba8e0e69a14e83ff397826f6c6d": {
+    "Guid": "24067ba8e0e69a14e83ff397826f6c6d",
+    "Name": "Destin de servitude",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "af92783492851f445abb2c01d346c376": {
+    "Guid": "af92783492851f445abb2c01d346c376",
+    "Name": "Don du phénix",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cc74245ba989480488925214dd925100": {
+    "Guid": "cc74245ba989480488925214dd925100",
+    "Name": "Fosse du désespoir",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "7d721be6d74f07f4d952ee8d6f8f44a0": {
+    "Guid": "7d721be6d74f07f4d952ee8d6f8f44a0",
+    "Name": "Mort absolue",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "a948e10ecf1fa674dbae5eaae7f25a7f": {
+    "Guid": "a948e10ecf1fa674dbae5eaae7f25a7f",
+    "Name": "Œil du soleil",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "1b76573f991543145897702b7edc4d7a": {
+    "Guid": "1b76573f991543145897702b7edc4d7a",
+    "Name": "Reviviscence",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "16c3fe873538010459a8a3fd61304825": {
+    "Guid": "16c3fe873538010459a8a3fd61304825",
+    "Name": "Royaume des morts",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "5b1984f4af00412eb0c0efb0ebb90189": {
+    "Guid": "5b1984f4af00412eb0c0efb0ebb90189",
+    "Name": "Tempête draconique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  },
+  "cff9e3bf5ccf40c489023bf368c2c802": {
+    "Guid": "cff9e3bf5ccf40c489023bf368c2c802",
+    "Name": "Tempête draconique",
+    "MinLevel": 99,
+    "School": "None",
+    "Classes": [],
+    "IsFromMod": false
+  }
+}

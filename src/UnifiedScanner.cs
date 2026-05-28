@@ -32,7 +32,7 @@ namespace CraftingSystem
         {
             if (IsScanning) return;
             IsScanning = true;
-            StatusMessage = "Initializing unified scan...";
+            StatusMessage = Helpers.GetString("ui_scan_initializing", "Initializing unified scan...");
             
             try
             {
@@ -62,6 +62,7 @@ namespace CraftingSystem
                 var accessories = new ConcurrentBag<(BlueprintItemEquipment bp, BlueprintGuid guid)>();
 
                 int processed = 0;
+                string processingFormat = Helpers.GetString("ui_scan_processing", "Processing blueprints: {0}/{1}");
 
                 // 2. Scan Multithreadé
                 await Task.Run(() =>
@@ -80,7 +81,7 @@ namespace CraftingSystem
                             if (currentProcessed % 2000 == 0)
                             {
                                 Progress = (float)currentProcessed / total;
-                                StatusMessage = $"Processing blueprints: {currentProcessed}/{total}";
+                                StatusMessage = string.Format(processingFormat, currentProcessed, total);
                             }
 
                             if (bpCache.m_LoadedBlueprints.TryGetValue(guid, out var entry) && entry.Offset != 0)
@@ -129,7 +130,7 @@ namespace CraftingSystem
                     });
                 });
 
-                StatusMessage = "Finalizing data registration...";
+                StatusMessage = Helpers.GetString("ui_scan_finalizing", "Finalizing data registration...");
                 
                 // 3. Finalisation des sous-systèmes
                 // On passe les résultats aux scanners spécifiques qui vont transformer les BPs en Data
@@ -146,7 +147,7 @@ namespace CraftingSystem
             finally
             {
                 IsScanning = false;
-                StatusMessage = "Scan completed.";
+                StatusMessage = Helpers.GetString("ui_scan_completed", "Scan completed.");
                 Progress = 1.0f;
             }
         }
