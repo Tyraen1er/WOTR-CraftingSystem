@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.Linq;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Items.Weapons;
@@ -176,24 +178,74 @@ namespace CraftingSystem
             Armors.AddRange(finalShields);
             Armors = Armors.OrderBy(x => x.Name).ToList();
 
-            // 4. SCAN ACCESSORIES (No levels)
+            // 4. SCAN ACCESSORIES (No levels - Icon Cache only, items loaded from CSV)
             foreach (var item in accessories)
             {
-                if (IsBaseOrEnhancementOnly(item.bp) && !item.bp.IsNotable)
-                {
-                    var data = CreateBaseData(item.bp, "Accessory", "");
-                    data.VariantGuids[0] = item.guid.ToString();
-                    data.VariantCosts[0] = (int)item.bp.m_Cost;
-                    Accessories.Add(data);
-                }
-
-                if (item.bp.Icon != null && uniqueAccessoryIcons.Add(item.bp.Icon))
+                if (item.bp != null && item.bp.Icon != null && uniqueAccessoryIcons.Add(item.bp.Icon))
                 {
                     if (!IconCache.ContainsKey(item.bp.ItemType)) IconCache[item.bp.ItemType] = new List<BlueprintItem>();
                     IconCache[item.bp.ItemType].Add(item.bp);
                 }
             }
-            Accessories = Accessories.OrderBy(x => x.Name).ToList();
+
+            // Load buyable accessories from JSON
+            string jsonPath = Path.Combine(Main.ModEntry.Path, "buyable_accessories.json");
+            if (File.Exists(jsonPath))
+            {
+                try
+                {
+                    string json = File.ReadAllText(jsonPath);
+                    var configs = JsonConvert.DeserializeObject<List<AccessoryConfig>>(json);
+                    if (configs != null)
+                    {
+                        foreach (var cfg in configs)
+                        {
+                            if (string.IsNullOrEmpty(cfg.Guid)) continue;
+                            
+                            var bp = ResourcesLibrary.TryGetBlueprint<BlueprintItem>(BlueprintGuid.Parse(cfg.Guid));
+                            if (bp != null)
+                            {
+                                string resolvedName = !string.IsNullOrEmpty(cfg.DisplayName) ? cfg.DisplayName : cfg.InternalName;
+                                
+                                string category = "Accessory";
+                                string typeName = bp.GetType().Name;
+                                if (bp is BlueprintItemEquipmentRing || typeName.Contains("Ring")) category = "Ring";
+                                else if (bp is BlueprintItemEquipmentNeck || typeName.Contains("Neck")) category = "Neck_Amulet";
+                                else if (bp is BlueprintItemEquipmentBelt || typeName.Contains("Belt")) category = "Belt";
+                                else if (bp is BlueprintItemEquipmentFeet || typeName.Contains("Feet") || typeName.Contains("Boots")) category = "Boots";
+                                else if (bp is BlueprintItemEquipmentGloves || typeName.Contains("Gloves") || typeName.Contains("Hand")) category = "Gloves";
+                                else if (bp is BlueprintItemEquipmentHead || typeName.Contains("Head") || typeName.Contains("Helmet") || typeName.Contains("Circlet")) category = "Helmet_Headband";
+                                else if (bp is BlueprintItemEquipmentShoulders || typeName.Contains("Shoulders") || typeName.Contains("Cape") || typeName.Contains("Cloak")) category = "Cape";
+                                else if (bp is BlueprintItemEquipmentWrist || typeName.Contains("Wrist") || typeName.Contains("Bracers")) category = "Bracers";
+                                else if (typeName.Contains("Shirt") || typeName.Contains("Robe") || typeName.Contains("Body")) category = "Robe";
+
+                                var data = new ItemData
+                                {
+                                    Name = resolvedName,
+                                    BaseCost = (int)bp.m_Cost,
+                                    Category = category,
+                                    Icon = bp.Icon,
+                                    Description = bp.Description,
+                                    TypeName = cfg.InternalName
+                                };
+                                data.VariantGuids[0] = cfg.Guid;
+                                data.VariantCosts[0] = (int)bp.m_Cost;
+                                Accessories.Add(data);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Main.ModEntry.Logger.Error($"[ITEM-SCAN] Error loading buyable_accessories.json: {ex.Message}");
+                }
+            }
+            else
+            {
+                Main.ModEntry.Logger.Warning($"[ITEM-SCAN] buyable_accessories.json not found at {jsonPath}!");
+            }
+
+            Accessories = Accessories.OrderBy(x => x.Category).ThenBy(x => x.Name).ToList();
 
             Main.ModEntry.Logger.Log($"[ITEM-SCAN] Finalisé. W:{Weapons.Count} A:{Armors.Count} S:{Shields.Count} Acc:{Accessories.Count}");
         }
@@ -297,5 +349,12 @@ namespace CraftingSystem
                 TypeName = typeName
             };
         }
+    }
+
+    public class AccessoryConfig
+    {
+        public string DisplayName { get; set; }
+        public string InternalName { get; set; }
+        public string Guid { get; set; }
     }
 }

@@ -912,6 +912,56 @@
             "frFR": "Ce scan ne se produit qu'une fois par session.",
             "ruRU": "Это сканирование происходит только один раз за сессию."
         },
+        "ui_cat_ring": {
+            "enGB": "Rings",
+            "frFR": "Anneaux",
+            "ruRU": "Кольца"
+        },
+        "ui_cat_neck_amulet": {
+            "enGB": "Necklaces & Amulets",
+            "frFR": "Colliers & Amulettes",
+            "ruRU": "Амулеты и ожерелья"
+        },
+        "ui_cat_belt": {
+            "enGB": "Belts",
+            "frFR": "Ceintures",
+            "ruRU": "Пояса"
+        },
+        "ui_cat_boots": {
+            "enGB": "Boots",
+            "frFR": "Bottes",
+            "ruRU": "Обувь"
+        },
+        "ui_cat_gloves": {
+            "enGB": "Gloves & Gauntlets",
+            "frFR": "Gants",
+            "ruRU": "Перчатки"
+        },
+        "ui_cat_helmet_headband": {
+            "enGB": "Helmets & Headbands",
+            "frFR": "Casques & Diadèmes",
+            "ruRU": "Шлемы и обручи"
+        },
+        "ui_cat_cape": {
+            "enGB": "Cloaks & Capes",
+            "frFR": "Capes",
+            "ruRU": "Плащи"
+        },
+        "ui_cat_bracers": {
+            "enGB": "Bracers",
+            "frFR": "Bracelets",
+            "ruRU": "Наручи"
+        },
+        "ui_cat_robe": {
+            "enGB": "Robes & Shirts",
+            "frFR": "Robes & Chemises",
+            "ruRU": "Робы и рубашки"
+        },
+        "ui_cat_accessory": {
+            "enGB": "Accessories",
+            "frFR": "Accessoires",
+            "ruRU": "Аксессуары"
+        },
         "ui_sync_error_index": {
             "enGB": "Failed: Game index inaccessible.",
             "frFR": "Échec : Index du jeu inaccessible.",

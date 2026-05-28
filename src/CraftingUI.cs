@@ -866,9 +866,7 @@ namespace CraftingSystem
                     workshop?.CheckAndFinishProjects();
                     workshop?.GetBox(); // Crucial pour actualiser la liste même si aucun projet n'est fini
                 }
-                // Désactivation temporaire pour les accessoires (TODO)
-                if (targetPage != CraftingPage.CreateAccessory)
-                    currentPageType = targetPage;
+                currentPageType = targetPage;
             }
             GUI.backgroundColor = oldBG;
         }
@@ -891,13 +889,9 @@ namespace CraftingSystem
             float contentWidth = windowWidth - (120f * scale);
 
             // Déclenchement automatique du scan si nécessaire
-            if (items != null && items.Count == 0 && !UnifiedScanner.IsScanning)
+            if (items != null && items.Count == 0 && !UnifiedScanner.IsScanning && !UnifiedScanner.HasScanned)
             {
-                // Note: On vérifie AvailableSpells.Count == 0 pour savoir si un scan global a déjà eu lieu
-                if (SpellScanner.AvailableSpells.Count == 0)
-                {
-                    SpellScanner.ScanAll();
-                }
+                _ = UnifiedScanner.RunFullScan();
             }
 
             if (UnifiedScanner.IsScanning)
@@ -963,10 +957,28 @@ namespace CraftingSystem
             else
             {
                 int index = 0;
+                string lastCategory = null;
                 foreach (var item in items)
                 {
                     // NOUVEAU : On cache l'item si la variante pour le niveau sélectionné (+0, +1...) n'existe pas
                     if (!item.VariantGuids.ContainsKey(selectedAlteration)) continue;
+
+                    if (currentPageType == CraftingPage.CreateAccessory && item.Category != lastCategory)
+                    {
+                        lastCategory = item.Category;
+                        GUILayout.Space(15 * scale);
+                        string localizedCategory = Helpers.GetString("ui_cat_" + lastCategory.ToLower().Replace("/", "_").Replace(" ", "_"), lastCategory);
+                        GUIStyle categoryHeaderStyle = new GUIStyle(GUI.skin.label)
+                        {
+                            fontSize = (int)(FONT_LARGE * scale),
+                            fontStyle = FontStyle.Bold,
+                            normal = { textColor = new Color(0.9f, 0.7f, 0.3f) },
+                            alignment = TextAnchor.MiddleLeft
+                        };
+                        GUILayout.Label($"👑 {localizedCategory}", categoryHeaderStyle);
+                        DrawSeparator(contentWidth, new Color(0.9f, 0.7f, 0.3f, 0.4f));
+                        GUILayout.Space(5 * scale);
+                    }
 
                     index++;
                     Color oldBG = GUI.backgroundColor;

@@ -1,0 +1,147 @@
+[
+  {
+    "DisplayName": "Bottes duveteuses",
+    "InternalName": "FluffyBootsItem",
+    "Guid": "c5d49a08ecdc41d3a5d29b9c66a8e07a"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Set2_Bracers",
+    "Guid": "ba8fd2a707644a54a07c8c54be6276ea"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Set3_Bracers",
+    "Guid": "0c3dacfec6354a1ba200603ebb059a7b"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Set1_Cloak",
+    "Guid": "fef478f33acb4b41b611136ed97f5d15"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Set4_Cloak",
+    "Guid": "8dfede445a50494d957c155f4cb3c343"
+  },
+  {
+    "DisplayName": "Tiare de jade",
+    "InternalName": "JasperCirclet",
+    "Guid": "35f2344d0c7b8e24a865dbc440adcdb5"
+  },
+  {
+    "DisplayName": "Heaume d'acier",
+    "InternalName": "SteelHelm",
+    "Guid": "7bf221661e9c5bf4bb6269627d5abd92"
+  },
+  {
+    "DisplayName": "Chaîne en or ornée de diamants",
+    "InternalName": "GoldenChainWithDiamonds",
+    "Guid": "f1103195723022844a562bf772e102ce"
+  },
+  {
+    "DisplayName": "Collier d'émeraude",
+    "InternalName": "EmeraldNecklace",
+    "Guid": "7506e7e62c58c6444881d0896fff5db1"
+  },
+  {
+    "DisplayName": "Pendentif de perle noire",
+    "InternalName": "BlackPearlPendant",
+    "Guid": "d3707bd5d57f7b64ba591a7a9db640e3"
+  },
+  {
+    "DisplayName": "Pendentif de turquoise",
+    "InternalName": "TurquoisePendant",
+    "Guid": "d7d19d4517998d6498f99f60ad03fe88"
+  },
+  {
+    "DisplayName": "Médaillon en or",
+    "InternalName": "GoldenMedallion",
+    "Guid": "32242d89f184f9f47b51bdedb50256c0"
+  },
+  {
+    "DisplayName": "Collier de citrine",
+    "InternalName": "CitrineNecklace",
+    "Guid": "426068b72e8055b45a6b8dcfc92c637c"
+  },
+  {
+    "DisplayName": "Médaillon en argent",
+    "InternalName": "SilverMedallion",
+    "Guid": "06846b7beaca5444d8eebfebc320adca"
+  },
+  {
+    "DisplayName": "Chaîne en or",
+    "InternalName": "GoldenChain",
+    "Guid": "688d61ed91f68944da24c61f378c47b5"
+  },
+  {
+    "DisplayName": "Chaîne en argent",
+    "InternalName": "SilverChain",
+    "Guid": "b8a84c05641f88e4ca5a6181ddc9eb79"
+  },
+  {
+    "DisplayName": "",
+    "InternalName": "Set2_Robe",
+    "Guid": "0361af3514c14b18868b01139f011af7"
+  },
+  {
+    "DisplayName": "Anneau de rubis",
+    "InternalName": "RubyEncrustedRing",
+    "Guid": "2e8868ceffb4d7f4baa53cd21c62416c"
+  },
+  {
+    "DisplayName": "Chevalière arcanique",
+    "InternalName": "ArcaneSignet",
+    "Guid": "7829052aa5f0b57409dbef0fbc413682"
+  },
+  {
+    "DisplayName": "Chevalière bénie",
+    "InternalName": "BlessedSignet",
+    "Guid": "4421a45952e4f2a40a11c1f409fe2e13"
+  },
+  {
+    "DisplayName": "Chevalière impie",
+    "InternalName": "UnholySignet",
+    "Guid": "7840bf8ed0674fc5831e1b09a6cabb89"
+  },
+  {
+    "DisplayName": "Anneau de saphir",
+    "InternalName": "SapphireRing",
+    "Guid": "80e3fe7c341165548abfecd22b1f6069"
+  },
+  {
+    "DisplayName": "Chevalière en or",
+    "InternalName": "GoldenSignet",
+    "Guid": "45a5397ab34f60247906064949b710fc"
+  },
+  {
+    "DisplayName": "Anneau de grenat",
+    "InternalName": "GarnetEncrustedRing",
+    "Guid": "489a7b81151c40541b8de88b0eaa6a77"
+  },
+  {
+    "DisplayName": "Anneau d'or",
+    "InternalName": "GoldRing",
+    "Guid": "ba4276197d204314d9b4a69a4366b2a3"
+  },
+  {
+    "DisplayName": "Anneau de topaze",
+    "InternalName": "TopazEncrustedRing",
+    "Guid": "94694f0cad94e0c4a8ff41a46c72d536"
+  },
+  {
+    "DisplayName": "Anneau d'argent",
+    "InternalName": "SilverRing",
+    "Guid": "212a1a78c7865154482ffda45796510e"
+  },
+  {
+    "DisplayName": "Anneau d'améthyste",
+    "InternalName": "AmethystEncrustedRing",
+    "Guid": "3cfeae23012c8b9488b5b36d51ee4a8d"
+  },
+  {
+    "DisplayName": "Anneau de cuivre",
+    "InternalName": "CopperRing",
+    "Guid": "caeb348840e1fd240a70971db14da63b"
+  }
+]

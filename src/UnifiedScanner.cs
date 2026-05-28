@@ -27,6 +27,7 @@ namespace CraftingSystem
         public static bool IsScanning { get; private set; }
         public static float Progress { get; private set; }
         public static string StatusMessage { get; private set; } = "";
+        public static bool HasScanned { get; set; } = false;
 
         public static async Task RunFullScan()
         {
@@ -137,6 +138,7 @@ namespace CraftingSystem
                 EnchantmentScanner.FinalizeScan(enchants);
                 SpellScanner.FinalizeScan(spellbooks, spellLists);
                 ItemScanner.FinalizeScan(weapons, armors, shields, accessories);
+                HasScanned = true;
 
                 Main.ModEntry.Logger.Log($"[UNIFIED-SCAN] Scan completed: Found {enchants.Count} enchants and {spellbooks.Count + spellLists.Count} spell-related objects.");
             }
