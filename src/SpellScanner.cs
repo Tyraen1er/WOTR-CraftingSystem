@@ -6,6 +6,7 @@ using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.Blueprints.Classes.Spells;
 using System.IO;
 using Kingmaker.Localization;
+using Newtonsoft.Json;
 
 namespace CraftingSystem
 {
@@ -40,6 +41,56 @@ namespace CraftingSystem
             _ = UnifiedScanner.RunFullScan();
         }
 
+        public static void LoadCache()
+        {
+            try
+            {
+                string cachePath = Path.Combine(Main.ModEntry.Path, "SpellCache.json");
+                if (File.Exists(cachePath))
+                {
+                    string json = File.ReadAllText(cachePath);
+                    var spells = JsonConvert.DeserializeObject<Dictionary<string, SpellData>>(json);
+                    if (spells != null && spells.Count > 0)
+                    {
+                        AvailableSpells = spells;
+                        HashToGuid.Clear();
+                        foreach (var kvp in spells)
+                        {
+                            try
+                            {
+                                var guid = BlueprintGuid.Parse(kvp.Key);
+                                byte[] bytes = guid.ToByteArray();
+                                uint hash = BitConverter.ToUInt32(bytes, 0);
+                                HashToGuid[hash] = kvp.Key;
+                            }
+                            catch {}
+                        }
+                        _initialized = true;
+                        Main.ModEntry.Logger.Log($"[SCROLL-SCAN] Loaded {AvailableSpells.Count} cached spells from SpellCache.json.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"[SCROLL-SCAN] Failed to load spell cache: {ex.Message}");
+            }
+        }
+
+        public static void SaveCache()
+        {
+            try
+            {
+                string cachePath = Path.Combine(Main.ModEntry.Path, "SpellCache.json");
+                string json = JsonConvert.SerializeObject(AvailableSpells, Formatting.Indented);
+                File.WriteAllText(cachePath, json);
+                Main.ModEntry.Logger.Log($"[SCROLL-SCAN] Saved {AvailableSpells.Count} spells to SpellCache.json.");
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"[SCROLL-SCAN] Failed to save spell cache: {ex.Message}");
+            }
+        }
+
         /// <summary>
         /// Appelée par le UnifiedScanner après avoir collecté tous les objets liés aux sorts.
         /// </summary>
@@ -65,6 +116,7 @@ namespace CraftingSystem
             _initialized = true;
             Main.ModEntry.Logger.Log($"[SCROLL-SCAN] Scan unifié terminé. {AvailableSpells.Count} sorts uniques trouvés.");
             
+            SaveCache();
             // DumpToFile();
         }
 

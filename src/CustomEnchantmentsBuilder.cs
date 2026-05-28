@@ -444,8 +444,14 @@ namespace CraftingSystem
 
                         if (!decoded)
                         {
+                            // On tente d'extraire l'enchantId du GUID pour quand même avoir la bonne classe
+                            string fallbackEnchantId = null;
+                            if (guidStr.StartsWith("c2af", StringComparison.OrdinalIgnoreCase) && guidStr.Length >= 7)
+                            {
+                                fallbackEnchantId = guidStr.Substring(4, 3);
+                            }
                             Main.ModEntry.Logger.Error($"[CRITICAL] [DYNAMIC_ENCHANT] Failed to decode dynamic GUID '{guidStr}'. Creating fallback placeholder blueprint to prevent game crash.");
-                            result = CreatePlaceholderBlueprint(guid, isFeature);
+                            result = CreatePlaceholderBlueprint(guid, fallbackEnchantId, isFeature);
                         }
                         else
                         {
@@ -490,7 +496,7 @@ namespace CraftingSystem
                             if (result == null)
                             {
                                 Main.ModEntry.Logger.Error($"[CRITICAL] [DYNAMIC_ENCHANT] Failed to construct custom blueprint for GUID {guidStr} (ID: {enchantId}). Returning placeholder blueprint to prevent game crash.");
-                                result = CreatePlaceholderBlueprint(guid, isFeature);
+                                result = CreatePlaceholderBlueprint(guid, enchantId, isFeature);
                             }
                         }
                     }
@@ -512,36 +518,142 @@ namespace CraftingSystem
             }
         }
 
-        private static BlueprintScriptableObject CreatePlaceholderBlueprint(BlueprintGuid guid, bool isFeature)
+        private static BlueprintScriptableObject CreatePlaceholderBlueprint(BlueprintGuid guid, string enchantId, bool isFeature)
         {
             BlueprintScriptableObject bp = null;
             try
             {
+                Type bpType = null;
+                string displayNameField = null;
+                string placeholderName = "Placeholder_Missing";
+
+                // 1. Détermination du type attendu
                 if (isFeature)
                 {
-                    bp = Activator.CreateInstance(typeof(BlueprintFeature)) as BlueprintScriptableObject;
-                    bp.name = $"Placeholder_Missing_Feature_{guid}";
-                    bp.AssetGuid = guid;
-                    var tFact = typeof(BlueprintUnitFact);
-                    tFact.GetField("m_DisplayName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, Helpers.CreateString($"{bp.name}.Name", $"[Missing Feature]"));
+                    bpType = typeof(BlueprintFeature);
+                    displayNameField = "m_DisplayName";
+                    placeholderName = "Feature";
+                }
+                else if (!string.IsNullOrEmpty(enchantId))
+                {
+                    // Objets magiques connus et sceptres
+                    if (enchantId == "901" || enchantId == "902" || enchantId == "903" || enchantId == "007")
+                    {
+                        bpType = Type.GetType("Kingmaker.Blueprints.Items.Equipment.BlueprintItemEquipmentUsable, Assembly-CSharp");
+                        displayNameField = "m_DisplayNameText";
+                        placeholderName = "Item";
+                    }
+                    else if (enchantId == "103")
+                    {
+                        bpType = Type.GetType("Kingmaker.UnitLogic.ActivatableAbilities.BlueprintActivatableAbility, Assembly-CSharp");
+                        displayNameField = "m_DisplayName";
+                        placeholderName = "Ability";
+                    }
+                    else if (enchantId == "105")
+                    {
+                        bpType = typeof(BlueprintAbilityResource);
+                        placeholderName = "Resource";
+                    }
+                    else if (enchantId == "106")
+                    {
+                        bpType = typeof(BlueprintBuff);
+                        displayNameField = "m_DisplayName";
+                        placeholderName = "Buff";
+                    }
+                    else
+                    {
+                        // On cherche le modèle pour connaître le type exact (arme, armure, etc.)
+                        var model = GetModelById(enchantId, isFeature);
+                        if (model != null)
+                        {
+                            switch (model.Type)
+                            {
+                                case "Weapon":
+                                case "WeaponEnchantment":
+                                    bpType = typeof(BlueprintWeaponEnchantment);
+                                    displayNameField = "m_EnchantName";
+                                    placeholderName = "WeaponEnchant";
+                                    break;
+                                case "Armor":
+                                case "ArmorEnchantment":
+                                    bpType = typeof(BlueprintArmorEnchantment);
+                                    displayNameField = "m_EnchantName";
+                                    placeholderName = "ArmorEnchant";
+                                    break;
+                                case "Feature":
+                                    bpType = typeof(BlueprintFeature);
+                                    displayNameField = "m_DisplayName";
+                                    placeholderName = "Feature";
+                                    break;
+                                case "Buff":
+                                    bpType = typeof(BlueprintBuff);
+                                    displayNameField = "m_DisplayName";
+                                    placeholderName = "Buff";
+                                    break;
+                                case "ActivatableAbility":
+                                    bpType = Type.GetType("Kingmaker.UnitLogic.ActivatableAbilities.BlueprintActivatableAbility, Assembly-CSharp");
+                                    displayNameField = "m_DisplayName";
+                                    placeholderName = "Ability";
+                                    break;
+                                case "AbilityResource":
+                                    bpType = typeof(BlueprintAbilityResource);
+                                    placeholderName = "Resource";
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                // Fallback par défaut si type non résolu (ou si c'est un enchantement générique)
+                if (bpType == null)
+                {
+                    bpType = typeof(BlueprintEquipmentEnchantment);
+                    displayNameField = "m_EnchantName";
+                    placeholderName = "Enchant";
+                }
+
+                // Instanciation du blueprint
+                if (typeof(ScriptableObject).IsAssignableFrom(bpType))
+                {
+                    bp = (ScriptableObject.CreateInstance(bpType) as object) as BlueprintScriptableObject;
                 }
                 else
                 {
-                    bp = Activator.CreateInstance(typeof(BlueprintEquipmentEnchantment)) as BlueprintScriptableObject;
-                    bp.name = $"Placeholder_Missing_Enchant_{guid}";
-                    bp.AssetGuid = guid;
-                    var tEnch = typeof(BlueprintItemEnchantment);
-                    tEnch.GetField("m_EnchantName", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(bp, Helpers.CreateString($"{bp.name}.Name", $"[Missing Enchantment]"));
+                    bp = Activator.CreateInstance(bpType) as BlueprintScriptableObject;
                 }
 
-                bp.ComponentsArray = new BlueprintComponent[0];
-                try { bp.OnEnable(); } catch {}
+                if (bp != null)
+                {
+                    bp.name = $"Placeholder_Missing_{placeholderName}_{guid}";
+                    bp.AssetGuid = guid;
 
-                object dummy;
-                OwlcatModificationsManager.Instance.OnResourceLoaded(bp, bp.AssetGuid.ToString(), out dummy);
-                ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(bp.AssetGuid, bp);
-                InjectedGuids.Add(bp.AssetGuid);
-                Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Registered fallback placeholder blueprint: {bp.name} ({bp.AssetGuid})");
+                    // Attribution du nom d'affichage via réflexion
+                    if (!string.IsNullOrEmpty(displayNameField))
+                    {
+                        var targetType = bp.GetType();
+                        // Recherche récursive du champ dans les classes parentes (ex: m_DisplayName est dans BlueprintUnitFact pour BlueprintFeature/BlueprintBuff)
+                        FieldInfo field = null;
+                        while (targetType != null && field == null)
+                        {
+                            field = targetType.GetField(displayNameField, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                            targetType = targetType.BaseType;
+                        }
+
+                        if (field != null)
+                        {
+                            field.SetValue(bp, Helpers.CreateString($"{bp.name}.Name", $"[Missing {placeholderName}]"));
+                        }
+                    }
+
+                    bp.ComponentsArray = new BlueprintComponent[0];
+                    try { bp.OnEnable(); } catch {}
+
+                    object dummy;
+                    OwlcatModificationsManager.Instance.OnResourceLoaded(bp, bp.AssetGuid.ToString(), out dummy);
+                    ResourcesLibrary.BlueprintsCache.AddCachedBlueprint(bp.AssetGuid, bp);
+                    InjectedGuids.Add(bp.AssetGuid);
+                    Main.ModEntry.Logger.Log($"[DYNAMIC_ENCHANT] Registered fallback placeholder blueprint: {bp.name} ({bp.AssetGuid}) of type {bpType.Name}");
+                }
             }
             catch (Exception ex)
             {

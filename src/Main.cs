@@ -316,6 +316,9 @@ namespace CraftingSystem
 
                 // --- INJECTION DES ENCHANTEMENTS CUSTOM (JSON COMPLEXE) ---
                 CustomEnchantmentsBuilder.BuildAndInjectAll();
+
+                // --- CHARGEMENT DU CACHE DES SORTS ---
+                SpellScanner.LoadCache();
             }
             catch (Exception ex)
             {
