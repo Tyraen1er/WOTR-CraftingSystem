@@ -1,5 +1,65 @@
 {
     "strings": {
+        "ui_category": {
+            "enGB": "Category:",
+            "frFR": "Catégorie :",
+            "ruRU": "Категория:"
+        },
+        "ui_cat_all": {
+            "enGB": "All",
+            "frFR": "Tout",
+            "ruRU": "Все"
+        },
+        "ui_cat_ring": {
+            "enGB": "Rings",
+            "frFR": "Anneaux",
+            "ruRU": "Кольца"
+        },
+        "ui_cat_neck_amulet": {
+            "enGB": "Necklaces/Amulets",
+            "frFR": "Colliers/Amulettes",
+            "ruRU": "Амулеты/Ожерелья"
+        },
+        "ui_cat_belt": {
+            "enGB": "Belts",
+            "frFR": "Ceintures",
+            "ruRU": "Пояса"
+        },
+        "ui_cat_boots": {
+            "enGB": "Boots/Feet",
+            "frFR": "Bottes/Pieds",
+            "ruRU": "Обувь/Сапоги"
+        },
+        "ui_cat_gloves": {
+            "enGB": "Gloves/Hands",
+            "frFR": "Gants/Mains",
+            "ruRU": "Перчатки/Рукавицы"
+        },
+        "ui_cat_glasses": {
+            "enGB": "Glasses/Goggles",
+            "frFR": "Lunettes/Lentilles",
+            "ruRU": "Очки"
+        },
+        "ui_cat_helmet_headband": {
+            "enGB": "Helmets/Headbands",
+            "frFR": "Casques/Diadèmes",
+            "ruRU": "Шлемы/Ободки"
+        },
+        "ui_cat_cape": {
+            "enGB": "Capes/Cloaks",
+            "frFR": "Capes",
+            "ruRU": "Плащи"
+        },
+        "ui_cat_bracers": {
+            "enGB": "Bracers/Wrists",
+            "frFR": "Bracelets/Poignets",
+            "ruRU": "Наручи"
+        },
+        "ui_cat_robe": {
+            "enGB": "Robes/Shirts",
+            "frFR": "Robes/Chemises",
+            "ruRU": "Рясы/Рубашки"
+        },
         "ui_search": {
             "enGB": "Search",
             "frFR": "Rechercher",
@@ -56,9 +116,9 @@
             "ruRU": "Создать доспех"
         },
         "ui_menu_create_accessory": {
-            "enGB": "Create Accessory (TODO)",
-            "frFR": "Créer un Accessoire (TODO)",
-            "ruRU": "Создать аксессуар (TODO)"
+            "enGB": "Create Accessory",
+            "frFR": "Créer un Accessoire",
+            "ruRU": "Создать аксессуар"
         },
         "ui_menu_create_rod": {
             "enGB": "Create Metamagic Rod",
