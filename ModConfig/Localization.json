@@ -1,5 +1,30 @@
 {
     "strings": {
+        "ui_param_spell": {
+            "enGB": "Spell",
+            "frFR": "Sort",
+            "ruRU": "Заклинание"
+        },
+        "ui_param_casterlevel": {
+            "enGB": "Caster Level",
+            "frFR": "Niveau de lanceur",
+            "ruRU": "Уровень заклинателя"
+        },
+        "ui_param_spelllevel": {
+            "enGB": "Spell Level",
+            "frFR": "Niveau de sort",
+            "ruRU": "Уровень заклинания"
+        },
+        "ui_param_dc": {
+            "enGB": "DC",
+            "frFR": "DD",
+            "ruRU": "Сложность (СЛ)"
+        },
+        "ui_select_spell_placeholder": {
+            "enGB": "Select a spell...",
+            "frFR": "Sélectionner un sort...",
+            "ruRU": "Выберите заклинание..."
+        },
         "ui_category": {
             "enGB": "Category:",
             "frFR": "Catégorie :",

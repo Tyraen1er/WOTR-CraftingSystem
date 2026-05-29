@@ -196,6 +196,24 @@ namespace CraftingSystem
             return false;
         }
 
+        private static string FormatSlotsText(List<string> slots, string type = null)
+        {
+            if (slots == null || slots.Count == 0)
+            {
+                return Helpers.GetString("ui_slot_" + (type?.ToLower() ?? "other"), type ?? "Other");
+            }
+            
+            var localizedSlots = slots.Select(s => Helpers.GetString("ui_slot_" + s.ToLower(), s)).ToList();
+            if (localizedSlots.Count > 3)
+            {
+                return string.Join(", ", localizedSlots.Take(2)) + " +" + (localizedSlots.Count - 2);
+            }
+            else
+            {
+                return string.Join(", ", localizedSlots);
+            }
+        }
+
         // --- DESIGN SYSTEM : POLICES ---
         public const int FONT_HUGE = 20;    // Titres principaux, En-têtes de fenêtre
         public const int FONT_LARGE = 16;   // Titres de sections, Nom de l'objet sélectionné
@@ -2909,16 +2927,7 @@ namespace CraftingSystem
                     }
 
                     // -- AFFICHAGE DES SLOTS (AFFINITY) --
-                    string expectedSlotsText = "";
-                    if (data != null && data.Slots != null && data.Slots.Count > 0)
-                    {
-                        var localizedSlots = data.Slots.Select(s => Helpers.GetString("ui_slot_" + s.ToLower(), s));
-                        expectedSlotsText = string.Join(", ", localizedSlots);
-                    }
-                    else if (data != null)
-                    {
-                        expectedSlotsText = Helpers.GetString("ui_slot_" + (data.Type?.ToLower() ?? "other"), data.Type ?? "Other");
-                    }
+                    string expectedSlotsText = FormatSlotsText(data?.Slots, data?.Type);
                     GUILayout.Label($"<color=#2ecc71>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter, wordWrap = false }, GUILayout.Width(120 * scale));
 
                     if (CButton(Helpers.GetString("ui_btn_remove", "Remove"), GUILayout.Width(80 * scale), GUILayout.Height(25 * scale)))
@@ -2973,16 +2982,7 @@ namespace CraftingSystem
                         GUILayout.Label(Helpers.GetLocalizedString(model.BaseName ?? model.NameCompleted), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), wordWrap = false }, GUILayout.ExpandWidth(true));
 
                         // -- AFFICHAGE DES SLOTS (AFFINITY) --
-                        string modelSlotsText = "";
-                        if (model.Slots != null && model.Slots.Count > 0)
-                        {
-                            var localizedSlots = model.Slots.Select(s => Helpers.GetString("ui_slot_" + s.ToLower(), s));
-                            modelSlotsText = string.Join(", ", localizedSlots);
-                        }
-                        else
-                        {
-                            modelSlotsText = Helpers.GetString("ui_slot_" + (model.Type?.ToLower() ?? "other"), model.Type ?? "Other");
-                        }
+                        string modelSlotsText = FormatSlotsText(model.Slots, model.Type);
                         GUILayout.Label($"<color=#2ecc71>[{modelSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter, wordWrap = false }, GUILayout.Width(120 * scale));
 
                         if (CButton(Helpers.GetString("ui_btn_configure", "Configure"), GUILayout.Width(100 * scale), GUILayout.Height(20 * scale)))
@@ -3182,7 +3182,7 @@ namespace CraftingSystem
                         if (p.Type == "Spell")
                         {
                             int currentHashVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
-                            string selectedSpellName = "Select a spell...";
+                            string selectedSpellName = Helpers.GetString("ui_select_spell_placeholder", "Select a spell...");
                             string selectedSpellGuid = null;
                             if (currentHashVal != 0)
                             {
@@ -3668,17 +3668,7 @@ namespace CraftingSystem
             bool isWrong = CraftingCalculator.IsWrongSlot(selectedItem, data);
             string slotColor = isWrong ? "#f1c40f" : "#2ecc71"; // Jaune (Avertissement) / Vert (Correct)
 
-            string expectedSlotsText = "";
-            if (data.Slots != null && data.Slots.Count > 0)
-            {
-                var localizedSlots = data.Slots.Select(s => Helpers.GetString("ui_slot_" + s.ToLower(), s));
-                expectedSlotsText = string.Join(", ", localizedSlots);
-            }
-            else
-            {
-                expectedSlotsText = Helpers.GetString("ui_slot_" + (data.Type?.ToLower() ?? "other"), data.Type ?? "Other");
-            }
-
+            string expectedSlotsText = FormatSlotsText(data.Slots, data.Type);
             GUILayout.Label($"<color={slotColor}>[{expectedSlotsText}]</color>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_TINY * scale), alignment = TextAnchor.MiddleCenter, wordWrap = false }, GUILayout.Width(120 * scale));
 
             string currency = Helpers.GetString("ui_currency_gp", "gp");
