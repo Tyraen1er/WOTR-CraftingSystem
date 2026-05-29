@@ -969,5 +969,76 @@
         "FieldName": "Value"
       }
     ]
+  },
+  {
+    "EnchantId": "013",
+    "BaseName": {
+      "enGB": "Spellcasting",
+      "frFR": "Sortilèges",
+      "ruRU": "Заклинание"
+    },
+    "NameCompleted": {
+      "enGB": "{Spell} ({Charges}/day, CL {CasterLevel}, DC {DC})",
+      "frFR": "{Spell} ({Charges}/jour, NLS {CasterLevel}, DD {DC})",
+      "ruRU": "{Spell} ({Charges}/день, УКС {CasterLevel}, СЛ {DC})"
+    },
+    "Type": "Other",
+    "Slots": [
+      "Weapon",
+      "Body",
+      "Ring",
+      "Neck",
+      "Shoulders",
+      "Belt",
+      "Head",
+      "Wrist",
+      "Hands",
+      "Feet",
+      "Other"
+    ],
+    "GoldOverrideFormula": "CasterLevel * MAX(SpellLevel, 0.5) * 1800 * Charges / 5",
+    "PointCostFormula": "MAX(SpellLevel, 1)",
+    "Components": [
+      "Comp_EquipmentFeature"
+    ],
+    "DynamicParams": [
+      {
+        "Name": "Spell",
+        "Type": "Spell",
+        "ComponentIndex": -1
+      },
+      {
+        "Name": "Charges",
+        "Type": "Slider",
+        "Min": 1,
+        "Max": 10,
+        "DefaultValue": 3,
+        "ComponentIndex": -1
+      },
+      {
+        "Name": "CasterLevel",
+        "Type": "Slider",
+        "Min": 1,
+        "Max": 20,
+        "DefaultValue": 9,
+        "ComponentIndex": -1
+      },
+      {
+        "Name": "SpellLevel",
+        "Type": "Slider",
+        "Min": 0,
+        "Max": 9,
+        "DefaultValue": 5,
+        "ComponentIndex": -1
+      },
+      {
+        "Name": "DC",
+        "Type": "Slider",
+        "Min": 10,
+        "Max": 40,
+        "DefaultValue": 20,
+        "ComponentIndex": -1
+      }
+    ]
   }
 ]

@@ -146,6 +146,8 @@ namespace CraftingSystem
 
         // Scroll Creation State
         private string scrollSearch = "";
+        private string spellSelectorSearch = "";
+        private Vector2 spellSelectorScrollPos = Vector2.zero;
         private SpellData selectedScrollSpell = null;
         private int scrollCasterLevel = 1;
         private int scrollSpellLevel = 1;
@@ -2837,6 +2839,19 @@ namespace CraftingSystem
                                         }
                                     }
                                 }
+                                else if (p.Type == "Spell")
+                                {
+                                    if (SpellScanner.AvailableSpells.Count > 0)
+                                    {
+                                        var firstSpell = SpellScanner.AvailableSpells.Values.OrderBy(s => s.MinLevel).ThenBy(s => s.Name).FirstOrDefault();
+                                        if (firstSpell != null)
+                                        {
+                                            int[] hash = CustomEnchantmentsBuilder.GetSpellHash(firstSpell.Guid);
+                                            byte[] bytes = new byte[] { (byte)hash[0], (byte)hash[1], (byte)hash[2], (byte)hash[3] };
+                                            defVal = (int)BitConverter.ToUInt32(bytes, 0);
+                                        }
+                                    }
+                                }
                                 else if (p.Type == "Enum")
                                 {
                                     // Sélection intelligente du défaut : première valeur valide après filtrage
@@ -2959,23 +2974,102 @@ namespace CraftingSystem
                     GUILayout.BeginVertical(GUI.skin.box);
                     foreach (var p in selectedModel.DynamicParams)
                     {
-                        GUILayout.BeginHorizontal();
-                        string labelText = Helpers.GetString("ui_param_" + p.Name.ToLower().Replace(" ", "_"), p.Name) + ": ";
-                        GUILayout.Label(labelText, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_LARGE * scale) }, GUILayout.Width(200 * scale));
+                        if (p.Type == "Spell")
+                        {
+                            int currentHashVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
+                            string selectedSpellName = "Select a spell...";
+                            string selectedSpellGuid = null;
+                            if (currentHashVal != 0)
+                            {
+                                uint hash = (uint)currentHashVal;
+                                if (SpellScanner.HashToGuid.TryGetValue(hash, out string sg))
+                                {
+                                    selectedSpellGuid = sg;
+                                    if (SpellScanner.AvailableSpells.TryGetValue(sg, out var sd))
+                                    {
+                                        selectedSpellName = sd.Name;
+                                    }
+                                }
+                            }
 
-                        if (p.Type == "Slider")
-                        {
-                            int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
-                            GUILayout.Label(val.ToString(), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_LARGE * scale), alignment = TextAnchor.MiddleRight }, GUILayout.Width(60 * scale));
-                            int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max);
-                            if (p.Step > 1) newVal = (newVal / p.Step) * p.Step;
-                            dynamicParamValues[p.Name] = newVal;
+                            GUILayout.BeginVertical(GUI.skin.box);
+                            GUILayout.BeginHorizontal();
+                            string labelText = Helpers.GetString("ui_param_" + p.Name.ToLower().Replace(" ", "_"), p.Name) + ": ";
+                            GUILayout.Label($"<b>{labelText}</b>", new GUIStyle(GUI.skin.label) { richText = true, fontSize = (int)(FONT_LARGE * scale) }, GUILayout.Width(200 * scale));
+                            
+                            GUIStyle spellBtnStyle = new GUIStyle(GUI.skin.button) { fontSize = (int)(FONT_LARGE * scale) };
+                            if (CButtonStyled(new GUIContent(selectedSpellName), spellBtnStyle, GUILayout.ExpandWidth(true)))
+                            {
+                                openDropdownParam = (openDropdownParam == p.Name) ? null : p.Name;
+                            }
+                            GUILayout.EndHorizontal();
+
+                            if (currentlyOpenParam == p.Name)
+                            {
+                                GUILayout.Space(5 * scale);
+                                GUILayout.BeginHorizontal();
+                                GUIStyle searchLabelStyle = new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_NORMAL * scale), alignment = TextAnchor.MiddleLeft };
+                                GUILayout.Label("🔍 " + Helpers.GetString("ui_search", "Search:"), searchLabelStyle, GUILayout.Width(80 * scale), GUILayout.Height(25 * scale));
+                                spellSelectorSearch = CTextField(spellSelectorSearch, GUILayout.ExpandWidth(true), GUILayout.Height(25 * scale));
+                                if (CButton("X", GUILayout.Width(25 * scale), GUILayout.Height(25 * scale))) spellSelectorSearch = "";
+                                GUILayout.EndHorizontal();
+
+                                GUILayout.Space(5 * scale);
+                                spellSelectorScrollPos = GUILayout.BeginScrollView(spellSelectorScrollPos, GUILayout.Height(200 * scale));
+                                var filtered = SpellScanner.AvailableSpells.Values
+                                    .Where(s => string.IsNullOrEmpty(spellSelectorSearch) || s.Name.IndexOf(spellSelectorSearch, StringComparison.OrdinalIgnoreCase) >= 0)
+                                    .OrderBy(s => s.MinLevel).ThenBy(s => s.Name);
+
+                                foreach (var s in filtered)
+                                {
+                                    GUIStyle itemStyle = new GUIStyle(GUI.skin.button) { alignment = TextAnchor.MiddleLeft, fontSize = (int)(FONT_NORMAL * scale) };
+                                    if (selectedSpellGuid != null && selectedSpellGuid == s.Guid)
+                                    {
+                                        itemStyle.normal.background = itemStyle.active.background;
+                                        itemStyle.normal.textColor = Color.cyan;
+                                    }
+
+                                    string modTag = s.IsFromMod ? "<color=#88BBFF>[MOD]</color> " : "";
+                                    string btnText = $"{modTag}Lvl {s.MinLevel} - {s.Name}";
+
+                                    if (CButtonStyled(new GUIContent(btnText), itemStyle, GUILayout.Height(25 * scale)))
+                                    {
+                                        int[] hash = CustomEnchantmentsBuilder.GetSpellHash(s.Guid);
+                                        byte[] bytes = new byte[] { (byte)hash[0], (byte)hash[1], (byte)hash[2], (byte)hash[3] };
+                                        uint hashVal = BitConverter.ToUInt32(bytes, 0);
+                                        dynamicParamValues[p.Name] = (int)hashVal;
+                                        
+                                        if (dynamicParamValues.ContainsKey("SpellLevel"))
+                                        {
+                                            dynamicParamValues["SpellLevel"] = s.MinLevel;
+                                        }
+                                        openDropdownParam = null; // Replie le menu après sélection
+                                    }
+                                }
+                                GUILayout.EndScrollView();
+                            }
+                            GUILayout.EndVertical();
                         }
-                        else if (p.Type == "Enum")
+                        else
                         {
-                            DrawEnumSelector(p, scale, currentlyOpenParam);
+                            GUILayout.BeginHorizontal();
+                            string labelText = Helpers.GetString("ui_param_" + p.Name.ToLower().Replace(" ", "_"), p.Name) + ": ";
+                            GUILayout.Label(labelText, new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_LARGE * scale) }, GUILayout.Width(200 * scale));
+
+                            if (p.Type == "Slider")
+                            {
+                                int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
+                                GUILayout.Label(val.ToString(), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_LARGE * scale), alignment = TextAnchor.MiddleRight }, GUILayout.Width(60 * scale));
+                                int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max);
+                                if (p.Step > 1) newVal = (newVal / p.Step) * p.Step;
+                                dynamicParamValues[p.Name] = newVal;
+                            }
+                            else if (p.Type == "Enum")
+                            {
+                                DrawEnumSelector(p, scale, currentlyOpenParam);
+                            }
+                            GUILayout.EndHorizontal();
                         }
-                        GUILayout.EndHorizontal();
                         GUILayout.Space(5);
                     }
                     GUILayout.EndVertical();
@@ -3008,7 +3102,25 @@ namespace CraftingSystem
                 }
                 else
                 {
-                    orderedValues = selectedModel.DynamicParams.Select(p => dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min).ToArray();
+                    List<int> vals = new List<int>();
+                    foreach (var p in selectedModel.DynamicParams)
+                    {
+                        int rawVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
+                        if (p.Type == "Spell")
+                        {
+                            uint hash = (uint)rawVal;
+                            byte[] bytes = BitConverter.GetBytes(hash);
+                            vals.Add(bytes[0]);
+                            vals.Add(bytes[1]);
+                            vals.Add(bytes[2]);
+                            vals.Add(bytes[3]);
+                        }
+                        else
+                        {
+                            vals.Add(rawVal);
+                        }
+                    }
+                    orderedValues = vals.ToArray();
                     foreach (var p in selectedModel.DynamicParams)
                     {
                         if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName) && p.EnumOverrides != null)

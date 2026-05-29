@@ -367,15 +367,61 @@ namespace CraftingSystem
             }
             else
             {
+                var rawParams = values.Skip(1).ToList();
+                var alignedParams = new List<int>();
+                int rawIdx = 0;
                 for (int i = 0; i < model.DynamicParams.Count; i++)
                 {
-                    if (i + 1 < values.Count)
+                    if (rawIdx >= rawParams.Count) break;
+                    var p = model.DynamicParams[i];
+                    if (p.Type == "Spell")
+                    {
+                        if (rawIdx + 3 < rawParams.Count)
+                        {
+                            byte[] hashBytes = new byte[] {
+                                (byte)rawParams[rawIdx],
+                                (byte)rawParams[rawIdx + 1],
+                                (byte)rawParams[rawIdx + 2],
+                                (byte)rawParams[rawIdx + 3]
+                            };
+                            uint hash = BitConverter.ToUInt32(hashBytes, 0);
+                            alignedParams.Add((int)hash);
+                            rawIdx += 4;
+                        }
+                        else
+                        {
+                            alignedParams.Add(0);
+                            rawIdx += 1;
+                        }
+                    }
+                    else
+                    {
+                        alignedParams.Add(rawParams[rawIdx]);
+                        rawIdx += 1;
+                    }
+                }
+
+                for (int i = 0; i < model.DynamicParams.Count; i++)
+                {
+                    if (i < alignedParams.Count)
                     {
                         var p = model.DynamicParams[i];
-                        int val = values[i + 1];
+                        int val = alignedParams[i];
                         string resolvedVal = val.ToString();
 
-                        if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
+                        if (p.Type == "Spell")
+                        {
+                            uint hash = (uint)val;
+                            if (SpellScanner.HashToGuid.TryGetValue(hash, out string spellGuid) && SpellScanner.AvailableSpells.TryGetValue(spellGuid, out var spellData))
+                            {
+                                resolvedVal = spellData.Name;
+                            }
+                            else
+                            {
+                                resolvedVal = "Unknown Spell";
+                            }
+                        }
+                        else if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
                         {
                             try
                             {

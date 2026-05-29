@@ -159,6 +159,7 @@ namespace CraftingSystem
         public string Name;
         public string Label;
         
+        [JsonProperty("Type")]
         private string _type;
         public string Type 
         { 
@@ -767,16 +768,62 @@ namespace CraftingSystem
             try { bp.OnEnable(); } catch (Exception ex) { Main.ModEntry.Logger.Warning($"OnEnable failed for {bp.name}: {ex.Message}"); }
 
             // Initialisation des textes
+            // --- ALIGNEMENT DES PARAMÈTRES POUR LES PLAGES VARIABLES ---
+            var alignedParams = new List<int>();
+            int rawIdx = 0;
+            for (int i = 0; i < model.DynamicParams.Count; i++)
+            {
+                if (rawIdx >= paramValues.Count) break;
+                var p = model.DynamicParams[i];
+                if (p.Type == "Spell")
+                {
+                    if (rawIdx + 3 < paramValues.Count)
+                    {
+                        byte[] hashBytes = new byte[] {
+                            (byte)paramValues[rawIdx],
+                            (byte)paramValues[rawIdx + 1],
+                            (byte)paramValues[rawIdx + 2],
+                            (byte)paramValues[rawIdx + 3]
+                        };
+                        uint hash = BitConverter.ToUInt32(hashBytes, 0);
+                        alignedParams.Add((int)hash);
+                        rawIdx += 4;
+                    }
+                    else
+                    {
+                        alignedParams.Add(0);
+                        rawIdx += 1;
+                    }
+                }
+                else
+                {
+                    alignedParams.Add(paramValues[rawIdx]);
+                    rawIdx += 1;
+                }
+            }
+
             // --- RÉSOLUTION DES PARAMÈTRES POUR LE NOMMAGE ---
             var replacements = new Dictionary<string, string>();
-            for (int i = 0; i < model.DynamicParams.Count && i < paramValues.Count; i++)
+            for (int i = 0; i < model.DynamicParams.Count && i < alignedParams.Count; i++)
             {
                 var p = model.DynamicParams[i];
-                var val = paramValues[i];
+                var val = alignedParams[i];
                 string resolvedVal = val.ToString();
 
+                if (p.Type == "Spell")
+                {
+                    uint hash = (uint)val;
+                    if (SpellScanner.HashToGuid.TryGetValue(hash, out string spellGuid) && SpellScanner.AvailableSpells.TryGetValue(spellGuid, out var spellData))
+                    {
+                        resolvedVal = spellData.Name;
+                    }
+                    else
+                    {
+                        resolvedVal = "Unknown Spell";
+                    }
+                }
                 // Si c'est un Enum, on essaie de récupérer le nom localisé
-                if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
+                else if (p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
                 {
                     try {
                         var enumType = Type.GetType(p.EnumTypeName);
@@ -964,10 +1011,12 @@ namespace CraftingSystem
             }
 
             // Application des paramètres dynamiques aux composants via indexMap
-            for (int i = 0; i < model.DynamicParams.Count && i < paramValues.Count; i++)
+            for (int i = 0; i < model.DynamicParams.Count && i < alignedParams.Count; i++)
             {
                 var p = model.DynamicParams[i];
-                var val = paramValues[i];
+                var val = alignedParams[i];
+
+                if (p.Type == "Spell") continue; // Les paramètres de sort sont gérés via Harmony, pas via injection de composant
 
                 if (p.ComponentIndex == -1)
                 {
@@ -1493,7 +1542,7 @@ namespace CraftingSystem
         }
 
  
-        private static int[] GetSpellHash(string spellGuid)
+        public static int[] GetSpellHash(string spellGuid)
         {
             if (string.IsNullOrEmpty(spellGuid)) return new int[] { 0, 0, 0, 0 };
             try {
@@ -1505,7 +1554,7 @@ namespace CraftingSystem
             }
         }
 
-        private static string GetSpellGuidByHash(List<int> vals)
+        public static string GetSpellGuidByHash(List<int> vals)
         {
             if (vals.Count < 4) return null;
             try {

@@ -440,6 +440,11 @@ namespace CraftingSystem
             {
                 item.AddEnchantment(bp, null);
                 item.Identify();
+
+                if (SpellcastingPatches.TryGetSpellcastingParams(item, out _, out int charges, out _, out _, out _))
+                {
+                    item.Charges = charges;
+                }
             }
         }
     }
