@@ -827,16 +827,56 @@
         "Name": "Element",
         "EnumTypeName": "Kingmaker.Enums.Damage.DamageEnergyType, Assembly-CSharp",
         "EnumOverrides": {
-          "Fire": { "enGB": "Fire", "frFR": "Feu", "ruRU": "Огонь" },
-          "Cold": { "enGB": "Cold", "frFR": "Froid", "ruRU": "Холод" },
-          "Electricity": { "enGB": "Electricity", "frFR": "Électricité", "ruRU": "Éлектричество" },
-          "Acid": { "enGB": "Acid", "frFR": "Acide", "ruRU": "Кислота" },
-          "Sonic": { "enGB": "Sonic", "frFR": "Sonique", "ruRU": "Звук" },
-          "Divine": { "enGB": "Divine", "frFR": "Divin", "ruRU": "Божественный" },
-          "Unholy": { "enGB": "Unholy", "frFR": "Impie", "ruRU": "Неcheстивый" },
-          "Holy": { "enGB": "Holy", "frFR": "Sacré", "ruRU": "Святой" },
-          "PositiveEnergy": { "enGB": "Positive", "frFR": "Positif", "ruRU": "Позитивная энергия" },
-          "NegativeEnergy": { "enGB": "Negative", "frFR": "Négatif", "ruRU": "Негативная энергия" }
+          "Fire": {
+            "enGB": "Fire",
+            "frFR": "Feu",
+            "ruRU": "Огонь"
+          },
+          "Cold": {
+            "enGB": "Cold",
+            "frFR": "Froid",
+            "ruRU": "Холод"
+          },
+          "Electricity": {
+            "enGB": "Electricity",
+            "frFR": "Électricité",
+            "ruRU": "Éлектричество"
+          },
+          "Acid": {
+            "enGB": "Acid",
+            "frFR": "Acide",
+            "ruRU": "Кислота"
+          },
+          "Sonic": {
+            "enGB": "Sonic",
+            "frFR": "Sonique",
+            "ruRU": "Звук"
+          },
+          "Divine": {
+            "enGB": "Divine",
+            "frFR": "Divin",
+            "ruRU": "Божественный"
+          },
+          "Unholy": {
+            "enGB": "Unholy",
+            "frFR": "Impie",
+            "ruRU": "Неcheстивый"
+          },
+          "Holy": {
+            "enGB": "Holy",
+            "frFR": "Sacré",
+            "ruRU": "Святой"
+          },
+          "PositiveEnergy": {
+            "enGB": "Positive",
+            "frFR": "Positif",
+            "ruRU": "Позитивная энергия"
+          },
+          "NegativeEnergy": {
+            "enGB": "Negative",
+            "frFR": "Négatif",
+            "ruRU": "Негативная энергия"
+          }
         },
         "ComponentIndex": -1,
         "FieldName": "Element"
@@ -851,9 +891,15 @@
       {
         "Name": "DiceType",
         "EnumTypeName": "Kingmaker.RuleSystem.DiceType, Assembly-CSharp",
-        "EnumOnly": [ "D6" ],
+        "EnumOnly": [
+          "D6"
+        ],
         "EnumOverrides": {
-          "D6": { "enGB": "d6", "frFR": "d6", "ruRU": "d6" }
+          "D6": {
+            "enGB": "d6",
+            "frFR": "d6",
+            "ruRU": "d6"
+          }
         },
         "ComponentIndex": -1,
         "FieldName": "EnergyDamageDice.m_Dice"
@@ -896,15 +942,42 @@
             "ruRU": "Все школы",
             "PointCostFormula": "Value * 2"
           },
-          "Abjuration": { "frFR": "Abjuration", "ruRU": "Ограждение" },
-          "Conjuration": { "frFR": "Invocation", "ruRU": "Вызов" },
-          "Divination": { "frFR": "Divination", "ruRU": "Прорицание" },
-          "Enchantment": { "frFR": "Enchantement", "ruRU": "Очарование" },
-          "Evocation": { "frFR": "Évocation", "ruRU": "Воплощение" },
-          "Illusion": { "frFR": "Illusion", "ruRU": "Иллюзия" },
-          "Necromancy": { "frFR": "Nécromancie", "ruRU": "Некромантия" },
-          "Transmutation": { "frFR": "Transmutation", "ruRU": "Превращение" },
-          "Universalist": { "frFR": "Universaliste", "ruRU": "Универсальная" }
+          "Abjuration": {
+            "frFR": "Abjuration",
+            "ruRU": "Ограждение"
+          },
+          "Conjuration": {
+            "frFR": "Invocation",
+            "ruRU": "Вызов"
+          },
+          "Divination": {
+            "frFR": "Divination",
+            "ruRU": "Прорицание"
+          },
+          "Enchantment": {
+            "frFR": "Enchantement",
+            "ruRU": "Очарование"
+          },
+          "Evocation": {
+            "frFR": "Évocation",
+            "ruRU": "Воплощение"
+          },
+          "Illusion": {
+            "frFR": "Illusion",
+            "ruRU": "Иллюзия"
+          },
+          "Necromancy": {
+            "frFR": "Nécromancie",
+            "ruRU": "Некромантия"
+          },
+          "Transmutation": {
+            "frFR": "Transmutation",
+            "ruRU": "Превращение"
+          },
+          "Universalist": {
+            "frFR": "Universaliste",
+            "ruRU": "Универсальная"
+          }
         },
         "ComponentIndex": -1,
         "FieldName": "School"
@@ -929,7 +1002,10 @@
           "Insight"
         ],
         "EnumOverrides": {
-          "UntypedStackable": { "frFR": "Cumulable", "ruRU": "Без типа" }
+          "UntypedStackable": {
+            "frFR": "Cumulable",
+            "ruRU": "Без типа"
+          }
         },
         "ComponentIndex": -1,
         "FieldName": "Descriptor"
@@ -983,20 +1059,8 @@
       "ruRU": "{Spell} ({Charges}/день, УКС {CasterLevel}, СЛ {DC})"
     },
     "Type": "Other",
-    "Slots": [
-      "Weapon",
-      "Body",
-      "Ring",
-      "Neck",
-      "Shoulders",
-      "Belt",
-      "Head",
-      "Wrist",
-      "Hands",
-      "Feet",
-      "Other"
-    ],
-    "GoldOverrideFormula": "CasterLevel * MAX(SpellLevel, 0.5) * 1800 * Charges / 5",
+    "Slots": [],
+    "GoldOverrideFormula": "SpellLevel * CasterLevel * 1800 * Charges / 5",
     "PointCostFormula": "MAX(SpellLevel, 1)",
     "Components": [
       "Comp_EquipmentFeature"
@@ -1011,7 +1075,7 @@
         "Name": "Charges",
         "Type": "Slider",
         "Min": 1,
-        "Max": 10,
+        "Max": 5,
         "DefaultValue": 3,
         "ComponentIndex": -1
       },

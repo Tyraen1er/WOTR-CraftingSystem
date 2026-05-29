@@ -564,7 +564,7 @@ namespace CraftingSystem
                         }
                         else
                         {
-                            if (pDef.Type != "Enum" && pVal > currentMaxNotEpic)
+                            if (pDef.Type != "Enum" && pDef.Type != "Spell" && pVal > currentMaxNotEpic)
                             {
                                 isEpic = true; break;
                             }

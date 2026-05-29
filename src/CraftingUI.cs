@@ -21,6 +21,181 @@ namespace CraftingSystem
 {
     public class CraftingUI : MonoBehaviour
     {
+        private static HashSet<string> _baseClassNamesLocal = null;
+
+        private static void InitBaseClassNamesLocal()
+        {
+            if (_baseClassNamesLocal != null && _baseClassNamesLocal.Count > 0) return;
+            
+            var tempSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                var progression = Kingmaker.Blueprints.Root.BlueprintRoot.Instance?.Progression;
+                if (progression != null)
+                {
+                    foreach (var clsBp in progression.CharacterClasses)
+                    {
+                        if (clsBp == null) continue;
+                        
+                        if (!clsBp.PrestigeClass && !clsBp.IsMythic)
+                        {
+                            string locName = clsBp.Name;
+                            if (!string.IsNullOrEmpty(locName))
+                            {
+                                tempSet.Add(locName);
+                            }
+                            
+                            if (!string.IsNullOrEmpty(clsBp.name))
+                            {
+                                tempSet.Add(clsBp.name);
+                                if (clsBp.name.EndsWith("Class", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    tempSet.Add(clsBp.name.Substring(0, clsBp.name.Length - 5));
+                                }
+                            }
+                        }
+                    }
+                    if (tempSet.Count > 0)
+                    {
+                        _baseClassNamesLocal = tempSet;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"Failed to initialize base class names: {ex}");
+            }
+        }
+
+        private static bool IsBaseClassSpell(SpellData s)
+        {
+            if (s.Classes == null || s.Classes.Count == 0) return false;
+            
+            InitBaseClassNamesLocal();
+            if (_baseClassNamesLocal == null) return false;
+
+            foreach (var cls in s.Classes)
+            {
+                if (string.IsNullOrEmpty(cls)) continue;
+                
+                foreach (var baseCls in _baseClassNamesLocal)
+                {
+                    if (cls.Equals(baseCls, StringComparison.OrdinalIgnoreCase) ||
+                        cls.Equals(baseCls + "Spellbook", StringComparison.OrdinalIgnoreCase) ||
+                        cls.Equals(baseCls + "Class", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
+        }
+
+        private static HashSet<string> _mythicClassNamesLocal = null;
+
+        private static void InitMythicClassNamesLocal()
+        {
+            if (_mythicClassNamesLocal != null && _mythicClassNamesLocal.Count > 0) return;
+            
+            var tempSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                var progression = Kingmaker.Blueprints.Root.BlueprintRoot.Instance?.Progression;
+                if (progression != null)
+                {
+                    foreach (var clsBp in progression.CharacterClasses)
+                    {
+                        if (clsBp == null) continue;
+                        
+                        if (clsBp.IsMythic)
+                        {
+                            string locName = clsBp.Name;
+                            if (!string.IsNullOrEmpty(locName))
+                            {
+                                tempSet.Add(locName);
+                            }
+                            
+                            if (!string.IsNullOrEmpty(clsBp.name))
+                            {
+                                tempSet.Add(clsBp.name);
+                                if (clsBp.name.EndsWith("Class", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    tempSet.Add(clsBp.name.Substring(0, clsBp.name.Length - 5));
+                                }
+                            }
+                        }
+                    }
+                    if (tempSet.Count > 0)
+                    {
+                        _mythicClassNamesLocal = tempSet;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.ModEntry.Logger.Error($"Failed to initialize mythic class names: {ex}");
+            }
+        }
+
+        private static bool IsMythicSpell(SpellData s)
+        {
+            if (s == null) return false;
+            if (s.IsMythic) return true;
+            if (s.Classes == null || s.Classes.Count == 0) return false;
+            
+            InitMythicClassNamesLocal();
+            if (_mythicClassNamesLocal == null) return false;
+
+            bool hasMythicClass = false;
+            bool hasBaseClass = false;
+
+            foreach (var cls in s.Classes)
+            {
+                if (string.IsNullOrEmpty(cls)) continue;
+                
+                bool isMythic = false;
+                foreach (var mythicCls in _mythicClassNamesLocal)
+                {
+                    if (cls.Equals(mythicCls, StringComparison.OrdinalIgnoreCase) ||
+                        cls.Equals(mythicCls + "Spellbook", StringComparison.OrdinalIgnoreCase) ||
+                        cls.Equals(mythicCls + "Class", StringComparison.OrdinalIgnoreCase))
+                    {
+                        isMythic = true;
+                        break;
+                    }
+                }
+
+                if (isMythic)
+                {
+                    hasMythicClass = true;
+                }
+                else if (!cls.Equals("Special/Other", StringComparison.OrdinalIgnoreCase))
+                {
+                    hasBaseClass = true;
+                }
+            }
+            
+            return hasMythicClass && !hasBaseClass;
+        }
+
+        private static bool IsDeceiverSpell(SpellData s)
+        {
+            if (s == null) return false;
+            if (s.Classes == null || s.Classes.Count == 0) return false;
+
+            foreach (var cls in s.Classes)
+            {
+                if (string.IsNullOrEmpty(cls)) continue;
+                if (cls.IndexOf("deceiver", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         // --- DESIGN SYSTEM : POLICES ---
         public const int FONT_HUGE = 20;    // Titres principaux, En-têtes de fenêtre
         public const int FONT_LARGE = 16;   // Titres de sections, Nom de l'objet sélectionné
@@ -2843,7 +3018,19 @@ namespace CraftingSystem
                                 {
                                     if (SpellScanner.AvailableSpells.Count > 0)
                                     {
-                                        var firstSpell = SpellScanner.AvailableSpells.Values.OrderBy(s => s.MinLevel).ThenBy(s => s.Name).FirstOrDefault();
+                                        SpellData firstSpell = null;
+                                        if (model.EnchantId == "013")
+                                        {
+                                            firstSpell = SpellScanner.AvailableSpells.Values
+                                                .Where(s => s.MinLevel >= 1 && s.MinLevel <= 9 && IsBaseClassSpell(s) && !IsMythicSpell(s) && !IsDeceiverSpell(s))
+                                                .OrderBy(s => s.MinLevel).ThenBy(s => s.Name)
+                                                .FirstOrDefault();
+                                        }
+                                        else
+                                        {
+                                            firstSpell = SpellScanner.AvailableSpells.Values.OrderBy(s => s.MinLevel).ThenBy(s => s.Name).FirstOrDefault();
+                                        }
+
                                         if (firstSpell != null)
                                         {
                                             int[] hash = CustomEnchantmentsBuilder.GetSpellHash(firstSpell.Guid);
@@ -2877,6 +3064,24 @@ namespace CraftingSystem
                                 }
                                 dynamicParamValues[p.Name] = defVal;
                                 filtersDirty = true;
+                            }
+
+                            if (model.EnchantId == "013")
+                            {
+                                int spellHashVal = dynamicParamValues.ContainsKey("Spell") ? dynamicParamValues["Spell"] : 0;
+                                if (spellHashVal != 0)
+                                {
+                                    uint hash = (uint)spellHashVal;
+                                    if (SpellScanner.HashToGuid.TryGetValue(hash, out string sg))
+                                    {
+                                        if (SpellScanner.AvailableSpells.TryGetValue(sg, out var sd))
+                                        {
+                                            dynamicParamValues["SpellLevel"] = sd.MinLevel;
+                                            dynamicParamValues["CasterLevel"] = 2 * sd.MinLevel - 1;
+                                            dynamicParamValues["DC"] = 10 + sd.MinLevel + (sd.MinLevel / 2);
+                                        }
+                                    }
+                                }
                             }
                         }
                         GUILayout.EndHorizontal();
@@ -3017,10 +3222,14 @@ namespace CraftingSystem
                                 GUILayout.Space(5 * scale);
                                 spellSelectorScrollPos = GUILayout.BeginScrollView(spellSelectorScrollPos, GUILayout.Height(200 * scale));
                                 var filtered = SpellScanner.AvailableSpells.Values
-                                    .Where(s => string.IsNullOrEmpty(spellSelectorSearch) || s.Name.IndexOf(spellSelectorSearch, StringComparison.OrdinalIgnoreCase) >= 0)
-                                    .OrderBy(s => s.MinLevel).ThenBy(s => s.Name);
+                                    .Where(s => string.IsNullOrEmpty(spellSelectorSearch) || s.Name.IndexOf(spellSelectorSearch, StringComparison.OrdinalIgnoreCase) >= 0);
+                                if (selectedModel.EnchantId == "013")
+                                {
+                                    filtered = filtered.Where(s => s.MinLevel >= 1 && s.MinLevel <= 9 && IsBaseClassSpell(s) && !IsMythicSpell(s) && !IsDeceiverSpell(s));
+                                }
+                                var ordered = filtered.OrderBy(s => s.MinLevel).ThenBy(s => s.Name);
 
-                                foreach (var s in filtered)
+                                foreach (var s in ordered)
                                 {
                                     GUIStyle itemStyle = new GUIStyle(GUI.skin.button) { alignment = TextAnchor.MiddleLeft, fontSize = (int)(FONT_NORMAL * scale) };
                                     if (selectedSpellGuid != null && selectedSpellGuid == s.Guid)
@@ -3039,9 +3248,27 @@ namespace CraftingSystem
                                         uint hashVal = BitConverter.ToUInt32(bytes, 0);
                                         dynamicParamValues[p.Name] = (int)hashVal;
                                         
-                                        if (dynamicParamValues.ContainsKey("SpellLevel"))
+                                        if (selectedModel.EnchantId == "013")
                                         {
-                                            dynamicParamValues["SpellLevel"] = s.MinLevel;
+                                            if (dynamicParamValues.ContainsKey("SpellLevel"))
+                                            {
+                                                dynamicParamValues["SpellLevel"] = s.MinLevel;
+                                            }
+                                            if (dynamicParamValues.ContainsKey("CasterLevel"))
+                                            {
+                                                dynamicParamValues["CasterLevel"] = 2 * s.MinLevel - 1;
+                                            }
+                                            if (dynamicParamValues.ContainsKey("DC"))
+                                            {
+                                                dynamicParamValues["DC"] = 10 + s.MinLevel + (s.MinLevel / 2);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (dynamicParamValues.ContainsKey("SpellLevel"))
+                                            {
+                                                dynamicParamValues["SpellLevel"] = s.MinLevel;
+                                            }
                                         }
                                         openDropdownParam = null; // Replie le menu après sélection
                                     }
@@ -3060,9 +3287,17 @@ namespace CraftingSystem
                             {
                                 int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
                                 GUILayout.Label(val.ToString(), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_LARGE * scale), alignment = TextAnchor.MiddleRight }, GUILayout.Width(60 * scale));
-                                int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max);
-                                if (p.Step > 1) newVal = (newVal / p.Step) * p.Step;
-                                dynamicParamValues[p.Name] = newVal;
+                                
+                                if (selectedModel.EnchantId == "013" && (p.Name == "CasterLevel" || p.Name == "SpellLevel" || p.Name == "DC"))
+                                {
+                                    // Non-modifiable (display only, no slider)
+                                }
+                                else
+                                {
+                                    int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max);
+                                    if (p.Step > 1) newVal = (newVal / p.Step) * p.Step;
+                                    dynamicParamValues[p.Name] = newVal;
+                                }
                             }
                             else if (p.Type == "Enum")
                             {

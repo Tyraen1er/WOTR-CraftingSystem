@@ -18,6 +18,12 @@ namespace CraftingSystem
         public string School;
         public List<string> Classes = new List<string>();
         public bool IsFromMod = false;
+        public bool IsMythic = false;
+
+        [JsonIgnore]
+        public bool SeenMythic = false;
+        [JsonIgnore]
+        public bool SeenNonMythicClass = false;
 
         // TTRPG Restrictions Data
         public Kingmaker.UnitLogic.Abilities.Blueprints.AbilityRange Range;
@@ -103,14 +109,28 @@ namespace CraftingSystem
             foreach (var item in spellbooks)
             {
                 var list = item.sb.SpellList;
-                if (list == null) continue;
-                ProcessSpellList(list, item.sb.CharacterClass?.Name ?? item.sb.name);
+                if (list != null)
+                {
+                    ProcessSpellList(list, item.sb.CharacterClass?.Name ?? item.sb.name, item.sb.IsMythic);
+                }
+
+                // ALSO process MythicSpellList for mythic spellbooks!
+                if (item.sb.IsMythic && item.sb.MythicSpellList != null)
+                {
+                    ProcessSpellList(item.sb.MythicSpellList, item.sb.CharacterClass?.Name ?? item.sb.name, true);
+                }
             }
 
             // 2. Traitement des SpellLists directs (Special/Other)
             foreach (var item in spellLists)
             {
-                ProcessSpellList(item.sl, "Special/Other");
+                ProcessSpellList(item.sl, "Special/Other", item.sl.IsMythic);
+            }
+
+            // 3. Finalize IsMythic based on SeenMythic and SeenNonMythicClass
+            foreach (var s in AvailableSpells.Values)
+            {
+                s.IsMythic = s.SeenMythic && !s.SeenNonMythicClass;
             }
 
             _initialized = true;
@@ -120,7 +140,7 @@ namespace CraftingSystem
             // DumpToFile();
         }
 
-        private static void ProcessSpellList(BlueprintSpellList list, string className)
+        private static void ProcessSpellList(BlueprintSpellList list, string className, bool isMythic)
         {
             if (list == null || list.SpellsByLevel == null) return;
 
@@ -142,6 +162,7 @@ namespace CraftingSystem
                             Name = spell.Name,
                             School = spell.GetComponent<SpellComponent>()?.School.ToString() ?? "None",
                             IsFromMod = !guid.StartsWith("0") && !guid.StartsWith("1") && !guid.StartsWith("2"), // Heuristique simple pour les GUIDs vanilla
+                            IsMythic = isMythic,
                             
                             // TTRPG Data
                             Range = spell.Range,
@@ -159,6 +180,16 @@ namespace CraftingSystem
                             uint hash = BitConverter.ToUInt32(bytes, 0);
                             if (!HashToGuid.ContainsKey(hash)) HashToGuid[hash] = guid;
                         } catch {}
+                    }
+
+                    // Update Seen flags
+                    if (isMythic)
+                    {
+                        data.SeenMythic = true;
+                    }
+                    else if (className != "Special/Other")
+                    {
+                        data.SeenNonMythicClass = true;
                     }
 
                     if (level < data.MinLevel) data.MinLevel = level;
