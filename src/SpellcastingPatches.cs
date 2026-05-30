@@ -24,7 +24,14 @@ namespace CraftingSystem
             sl = 1;
             dc = 10;
 
-            if (item?.Enchantments == null) return false;
+            if (item == null) return false;
+
+            // During ItemEntity constructor execution (specifically for ItemEntityShield),
+            // calling item.Enchantments will trigger UpdateCachedEnchantments, which accesses
+            // the subclass fields (like ArmorComponent) before they are initialized, causing a NullReferenceException.
+            if (item is ItemEntityShield shield && shield.ArmorComponent == null) return false;
+
+            if (item.Enchantments == null) return false;
 
             foreach (var ench in item.Enchantments)
             {
