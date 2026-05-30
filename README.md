@@ -8,6 +8,7 @@ This mod provides an immersive crafting and enchantment system for Pathfinder: W
 - **External Enchantment Support:** If a specific enchantment is not detected or comes from an external source, it can be manually added to the JSON file using its GUID. Unused GUIDs do not affect mod performance.
 - **Intelligent Upgrade System:** The mod identifies enchantment families (e.g., Enhancement, Acid Resistance). When upgrading, it only charges the price difference between the old and the new rank.
 - **JSON Overrides:** Precise configuration of properties (point costs, fixed prices, crafting duration, allowed slots, epic status) via the `Enchantments.json` file.
+- **Dynamic Parameter Formulas:** Parameter boundaries (`Min`, `Max`, `DefaultValue`) in dynamic enchantments support mathematical formulas (e.g., `= SpellMinCasterLevel` or `= 2 * SpellLevel - 1`) that are resolved in topological dependency order.
 
 ### Balancing and Rules (Pathfinder 1e)
 The mod calculates costs dynamically based on the item type and existing properties:
@@ -65,14 +66,14 @@ The GUID encoding structure (32 hex characters):
 - **ComponentBitmask**: 12-bit bitmask determining which components defined in the model are active.
 
 ### Data Configurations (ModConfig/)
-- `CustomEnchants.json` (and split files `CustomEnchants_*.json`): Configures dynamic enchantment models, their components, editable properties, and cost formulas.
+- `CustomEnchants.json` (and split files `CustomEnchants_*.json`): Configures dynamic enchantment models, their components, editable properties, and cost formulas. Dynamic parameters can use mathematical formulas. Context variables such as `SpellLevel` and `SpellMinCasterLevel` (derived dynamically from the spell class progression tables at scan time) are automatically resolved.
 - `Enchantments.json`: Core index of vanilla and homebrew static enchantments (compiled from `Enchantments.csv`).
 - `EnchantmentTemplates.json`: Mapping of blueprint component types to string templates with placeholders (e.g., `<Value>`, `<FlagCondition:...>`) used to generate descriptions.
 - `EnchantmentDescriptionGlossary.json`: Translation mappings for technical terms, stats, and enums used in generated descriptions.
 - `Localization.json`: Contextual translation keys for the UMM interface and log outputs.
 
 ### Testing & QA (tests/)
-- Run [RunPreflightChecks.ps1](tests/RunPreflightChecks.ps1) to compile the mod and validate the syntax of all configuration JSON files.
+- Run [RunPreflightChecks.ps1](tests/RunPreflightChecks.ps1) to compile the mod and validate the syntax of all configuration JSON files. It now executes `validate_enchantment_formulas.py` to automatically detect invalid variable references or circular formula dependency loops before compiling.
 - Run [ExtractCraftingLogSignals.ps1](tests/ExtractCraftingLogSignals.ps1) with the game's log path to quickly check for mod errors or missing blueprints.
 - Follow the checklist in [RegressionCampaign_HEAD_362a28d_to_HEAD.md](tests/RegressionCampaign_HEAD_362a28d_to_HEAD.md) for in-game validation steps.
 - Note: The game log (`Player.log`) is located in `%localappdatalow%\Owlcat Games\Pathfinder Wrath Of The Righteous\`.
