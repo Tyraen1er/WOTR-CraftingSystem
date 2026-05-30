@@ -7,13 +7,16 @@ Set-Location $ProjectRoot
 
 Write-Host "== Crafting System preflight checks ==" -ForegroundColor Cyan
 
-Write-Host "[1/3] Build (Release)..." -ForegroundColor Yellow
+Write-Host "[1/4] Build (Release)..." -ForegroundColor Yellow
 dotnet build "CraftingSystem.csproj" -c Release | Out-Host
 
-Write-Host "[2/3] Validate ModConfig/CustomEnchants.json..." -ForegroundColor Yellow
+Write-Host "[2/4] Validate ModConfig/CustomEnchants.json..." -ForegroundColor Yellow
 Get-Content "ModConfig/CustomEnchants.json" -Raw | ConvertFrom-Json | Out-Null
 
-Write-Host "[3/3] Validate ModConfig/Localization.json..." -ForegroundColor Yellow
+Write-Host "[3/4] Validate ModConfig/Localization.json..." -ForegroundColor Yellow
 Get-Content "ModConfig/Localization.json" -Raw | ConvertFrom-Json | Out-Null
+
+Write-Host "[4/4] Validate JSON formulas..." -ForegroundColor Yellow
+python validate_enchantment_formulas.py
 
 Write-Host "Preflight checks: PASS" -ForegroundColor Green

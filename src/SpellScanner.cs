@@ -15,6 +15,11 @@ namespace CraftingSystem
         public string Guid;
         public string Name;
         public int MinLevel = 99;
+        public int MinCasterLevel = 99;
+
+        [JsonIgnore]
+        public int MinCasterLevelSafe => MinCasterLevel > 0 && MinCasterLevel < 99 ? MinCasterLevel : Math.Max(1, 2 * MinLevel - 1);
+
         public string School;
         public List<string> Classes = new List<string>();
         public bool IsFromMod = false;
@@ -111,13 +116,13 @@ namespace CraftingSystem
                 var list = item.sb.SpellList;
                 if (list != null)
                 {
-                    ProcessSpellList(list, item.sb.CharacterClass?.Name ?? item.sb.name, item.sb.IsMythic);
+                    ProcessSpellList(list, item.sb.CharacterClass?.Name ?? item.sb.name, item.sb.IsMythic, item.sb);
                 }
 
                 // ALSO process MythicSpellList for mythic spellbooks!
                 if (item.sb.IsMythic && item.sb.MythicSpellList != null)
                 {
-                    ProcessSpellList(item.sb.MythicSpellList, item.sb.CharacterClass?.Name ?? item.sb.name, true);
+                    ProcessSpellList(item.sb.MythicSpellList, item.sb.CharacterClass?.Name ?? item.sb.name, true, item.sb);
                 }
             }
 
@@ -140,7 +145,26 @@ namespace CraftingSystem
             // DumpToFile();
         }
 
-        private static void ProcessSpellList(BlueprintSpellList list, string className, bool isMythic)
+        public static int GetMinCasterLevel(BlueprintSpellbook sb, int spellLevel)
+        {
+            if (sb == null) return 1;
+            
+            var spellsPerDay = sb.SpellsPerDay;
+            if (spellsPerDay == null || spellsPerDay.Levels == null) return 1;
+
+            for (int cl = 1; cl < spellsPerDay.Levels.Length; cl++)
+            {
+                int count = spellsPerDay.GetCount(cl, spellLevel);
+                if (count >= 0)
+                {
+                    int casterLevel = cl + sb.CasterLevelModifier;
+                    return Math.Max(1, casterLevel);
+                }
+            }
+            return 1;
+        }
+
+        private static void ProcessSpellList(BlueprintSpellList list, string className, bool isMythic, BlueprintSpellbook sb = null)
         {
             if (list == null || list.SpellsByLevel == null) return;
 
@@ -194,6 +218,18 @@ namespace CraftingSystem
 
                     if (level < data.MinLevel) data.MinLevel = level;
                     if (!data.Classes.Contains(className)) data.Classes.Add(className);
+
+                    // Calcul et mise à jour du caster level minimum
+                    int spellcl = 1;
+                    if (sb != null)
+                    {
+                        spellcl = GetMinCasterLevel(sb, level);
+                    }
+                    else
+                    {
+                        spellcl = Math.Max(1, 2 * level - 1);
+                    }
+                    if (spellcl < data.MinCasterLevel) data.MinCasterLevel = spellcl;
                 }
             }
         }

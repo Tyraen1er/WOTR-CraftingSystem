@@ -168,8 +168,8 @@ namespace CraftingSystem
         }
 
         public string EnumTypeName; // Pour Type == Enum
-        public int Min = 1; // Pour Type == Slider
-        public int Max = 100; // Pour Type == Slider
+        public object Min = 1; // Pour Type == Slider (peut être int ou string formule)
+        public object Max = 100; // Pour Type == Slider (peut être int ou string formule)
         public int Step = 1;
         public List<string> EnumOnly = null; // Optionnel : ne garder que ces valeurs d'enum
         public List<string> EnumExclude = null; // Optionnel : exclure ces valeurs d'enum
@@ -180,6 +180,125 @@ namespace CraftingSystem
         // Cible pour l'injection
         public int ComponentIndex;
         public string FieldName; // ex: "Type", "Value.Value"
+
+        public int GetMin(Dictionary<string, double> variables)
+        {
+            if (Min == null) return 1;
+            if (Min is string str)
+            {
+                string formula = str.StartsWith("=") ? str.Substring(1) : str;
+                return FormulaEvaluator.EvaluateInt(formula, variables);
+            }
+            try
+            {
+                return Convert.ToInt32(Min);
+            }
+            catch
+            {
+                return 1;
+            }
+        }
+
+        public int GetMax(Dictionary<string, double> variables)
+        {
+            if (Max == null) return 100;
+            if (Max is string str)
+            {
+                string formula = str.StartsWith("=") ? str.Substring(1) : str;
+                return FormulaEvaluator.EvaluateInt(formula, variables);
+            }
+            try
+            {
+                return Convert.ToInt32(Max);
+            }
+            catch
+            {
+                return 100;
+            }
+        }
+
+        public object GetDefaultValue(Dictionary<string, double> variables)
+        {
+            if (DefaultValue == null) return GetMin(variables);
+            if (DefaultValue is string str)
+            {
+                if (str.StartsWith("="))
+                {
+                    return FormulaEvaluator.EvaluateInt(str.Substring(1), variables);
+                }
+                if (Type == "Enum") return str;
+                if (int.TryParse(str, out int val)) return val;
+                return FormulaEvaluator.EvaluateInt(str, variables);
+            }
+            try
+            {
+                if (DefaultValue is long || DefaultValue is int || DefaultValue is double || DefaultValue is float)
+                {
+                    return Convert.ToInt32(DefaultValue);
+                }
+                return DefaultValue;
+            }
+            catch
+            {
+                return DefaultValue;
+            }
+        }
+
+        public static bool DependsOn(DynamicParam param, string otherName)
+        {
+            if (string.IsNullOrEmpty(otherName)) return false;
+
+            bool FormulaReferences(object formulaObj)
+            {
+                if (formulaObj is string formulaStr)
+                {
+                    string pattern = @"(?<![a-zA-Z0-9_\.])" + System.Text.RegularExpressions.Regex.Escape(otherName) + @"(?![a-zA-Z0-9_\.])";
+                    return System.Text.RegularExpressions.Regex.IsMatch(formulaStr, pattern);
+                }
+                return false;
+            }
+
+            return FormulaReferences(param.Min) || FormulaReferences(param.Max) || FormulaReferences(param.DefaultValue);
+        }
+
+        public static List<DynamicParam> SortParamsByDependency(List<DynamicParam> parameters)
+        {
+            var sorted = new List<DynamicParam>();
+            var visited = new HashSet<string>();
+            var visiting = new HashSet<string>();
+
+            void Visit(DynamicParam p)
+            {
+                if (visited.Contains(p.Name)) return;
+                if (visiting.Contains(p.Name))
+                {
+                    // Circular dependency
+                    Main.ModEntry.Logger.Error($"[FORMULA] Circular dependency detected involving parameter '{p.Name}'");
+                    return;
+                }
+
+                visiting.Add(p.Name);
+
+                foreach (var other in parameters)
+                {
+                    if (other.Name != p.Name && DependsOn(p, other.Name))
+                    {
+                        Visit(other);
+                    }
+                }
+
+                visiting.Remove(p.Name);
+                visited.Add(p.Name);
+                sorted.Add(p);
+            }
+
+            foreach (var p in parameters)
+            {
+                Visit(p);
+            }
+
+            return sorted;
+        }
     }
 
     public class CustomEnchantmentData

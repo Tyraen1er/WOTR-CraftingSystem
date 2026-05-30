@@ -15,3 +15,9 @@ WOTR-code/
 CraftMaster/
 screenshots/
 .vscode/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

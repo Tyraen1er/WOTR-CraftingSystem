@@ -1496,13 +1496,16 @@ namespace CraftingSystem
                 if (selectedModel != null)
                 {
                     dynamicParamValues.Clear();
-                    foreach (var p in selectedModel.DynamicParams)
+                    var sortedParams = DynamicParam.SortParamsByDependency(selectedModel.DynamicParams);
+                    foreach (var p in sortedParams)
                     {
-                        int defVal = p.Min;
-                        if (p.DefaultValue != null)
+                        var evalVars = GetEvaluationVariables(selectedModel);
+                        int defVal = p.GetMin(evalVars);
+                        object rawDefault = p.GetDefaultValue(evalVars);
+                        if (rawDefault != null)
                         {
-                            if (p.DefaultValue is long || p.DefaultValue is int) defVal = Convert.ToInt32(p.DefaultValue);
-                            else if (p.DefaultValue is string defStr && p.Type == "Enum")
+                            if (rawDefault is int rawInt) defVal = rawInt;
+                            else if (rawDefault is string defStr && p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
                             {
                                 try
                                 {
@@ -2848,6 +2851,37 @@ namespace CraftingSystem
             GUI.color = old;
         }
 
+        private Dictionary<string, double> GetEvaluationVariables(CustomEnchantmentData model)
+        {
+            var variables = new Dictionary<string, double>();
+
+            // 1. Add all parameter values currently set
+            foreach (var kvp in dynamicParamValues)
+            {
+                variables[kvp.Key] = kvp.Value;
+            }
+
+            // 2. Look for a parameter of Type == "Spell" to extract spell context
+            if (model != null && model.DynamicParams != null)
+            {
+                var spellParam = model.DynamicParams.FirstOrDefault(p => p.Type == "Spell");
+                if (spellParam != null && dynamicParamValues.TryGetValue(spellParam.Name, out int spellHashVal) && spellHashVal != 0)
+                {
+                    uint hash = (uint)spellHashVal;
+                    if (SpellScanner.HashToGuid.TryGetValue(hash, out string sg))
+                    {
+                        if (SpellScanner.AvailableSpells.TryGetValue(sg, out var sd))
+                        {
+                            variables["SpellLevel"] = sd.MinLevel;
+                            variables["SpellMinCasterLevel"] = sd.MinCasterLevelSafe;
+                        }
+                    }
+                }
+            }
+
+            return variables;
+        }
+
         void DrawCustomEnchantmentGUI_Content(float scale)
         {
             GUILayout.BeginVertical();
@@ -2989,16 +3023,19 @@ namespace CraftingSystem
                         {
                             selectedModel = model;
                             dynamicParamValues.Clear();
-                            foreach (var p in model.DynamicParams)
+                            var sortedParams = DynamicParam.SortParamsByDependency(model.DynamicParams);
+                            foreach (var p in sortedParams)
                             {
-                                int defVal = p.Min;
-                                if (p.DefaultValue != null)
+                                var evalVars = GetEvaluationVariables(model);
+                                int defVal = p.GetMin(evalVars);
+                                object rawDefault = p.GetDefaultValue(evalVars);
+                                if (rawDefault != null)
                                 {
-                                    if (p.DefaultValue is long || p.DefaultValue is int)
+                                    if (rawDefault is int rawInt)
                                     {
-                                        defVal = Convert.ToInt32(p.DefaultValue);
+                                        defVal = rawInt;
                                     }
-                                    else if (p.DefaultValue is string defStr && p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
+                                    else if (rawDefault is string defStr && p.Type == "Enum" && !string.IsNullOrEmpty(p.EnumTypeName))
                                     {
                                         try
                                         {
@@ -3077,7 +3114,7 @@ namespace CraftingSystem
                                         if (SpellScanner.AvailableSpells.TryGetValue(sg, out var sd))
                                         {
                                             dynamicParamValues["SpellLevel"] = sd.MinLevel;
-                                            dynamicParamValues["CasterLevel"] = 2 * sd.MinLevel - 1;
+                                            dynamicParamValues["CasterLevel"] = sd.MinCasterLevelSafe;
                                             dynamicParamValues["DC"] = 10 + sd.MinLevel + (sd.MinLevel / 2);
                                         }
                                     }
@@ -3139,9 +3176,16 @@ namespace CraftingSystem
 
                         if (p.Type == "Slider")
                         {
-                            int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
+                            var evalVars = GetEvaluationVariables(selectedModel);
+                            int minBound = p.GetMin(evalVars);
+                            int maxBound = p.GetMax(evalVars);
+                            int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : minBound;
+                            if (val < minBound) val = minBound;
+                            if (val > maxBound) val = maxBound;
+                            dynamicParamValues[p.Name] = val;
+
                             GUILayout.BeginHorizontal();
-                            int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max, GUILayout.ExpandWidth(true));
+                            int newVal = (int)GUILayout.HorizontalSlider(val, minBound, maxBound, GUILayout.ExpandWidth(true));
                             GUILayout.Space(10);
                             GUILayout.Label(val.ToString(), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_LARGE * scale), alignment = TextAnchor.MiddleRight }, GUILayout.Width(45 * scale));
                             GUILayout.EndHorizontal();
@@ -3256,7 +3300,7 @@ namespace CraftingSystem
                                             }
                                             if (dynamicParamValues.ContainsKey("CasterLevel"))
                                             {
-                                                dynamicParamValues["CasterLevel"] = 2 * s.MinLevel - 1;
+                                                dynamicParamValues["CasterLevel"] = s.MinCasterLevelSafe;
                                             }
                                             if (dynamicParamValues.ContainsKey("DC"))
                                             {
@@ -3285,16 +3329,23 @@ namespace CraftingSystem
 
                             if (p.Type == "Slider")
                             {
-                                int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
+                                var evalVars = GetEvaluationVariables(selectedModel);
+                                int minBound = p.GetMin(evalVars);
+                                int maxBound = p.GetMax(evalVars);
+                                int val = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : minBound;
+                                if (val < minBound) val = minBound;
+                                if (val > maxBound) val = maxBound;
+                                dynamicParamValues[p.Name] = val;
+
                                 GUILayout.Label(val.ToString(), new GUIStyle(GUI.skin.label) { fontSize = (int)(FONT_LARGE * scale), alignment = TextAnchor.MiddleRight }, GUILayout.Width(60 * scale));
                                 
-                                if (selectedModel.EnchantId == "013" && (p.Name == "CasterLevel" || p.Name == "SpellLevel" || p.Name == "DC"))
+                                if (selectedModel.EnchantId == "013" && (p.Name == "SpellLevel" || p.Name == "DC"))
                                 {
                                     // Non-modifiable (display only, no slider)
                                 }
                                 else
                                 {
-                                    int newVal = (int)GUILayout.HorizontalSlider(val, p.Min, p.Max);
+                                    int newVal = (int)GUILayout.HorizontalSlider(val, minBound, maxBound);
                                     if (p.Step > 1) newVal = (newVal / p.Step) * p.Step;
                                     dynamicParamValues[p.Name] = newVal;
                                 }
@@ -3338,9 +3389,10 @@ namespace CraftingSystem
                 else
                 {
                     List<int> vals = new List<int>();
+                    var evalVars = GetEvaluationVariables(selectedModel);
                     foreach (var p in selectedModel.DynamicParams)
                     {
-                        int rawVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.Min;
+                        int rawVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : p.GetMin(evalVars);
                         if (p.Type == "Spell")
                         {
                             uint hash = (uint)rawVal;
@@ -3408,7 +3460,35 @@ namespace CraftingSystem
                 bool canCraft = totalCost >= 0 && totalPoints >= 0;
                 bool hasMoney = selectedModel.Type != "UsableItem" || Game.Instance.Player.Money >= totalCost;
 
-                if (!canCraft)
+                bool hasInvalidSpellSelection = false;
+                if (selectedModel != null && selectedModel.DynamicParams != null)
+                {
+                    foreach (var p in selectedModel.DynamicParams)
+                    {
+                        if (p.Type == "Spell")
+                        {
+                            int spellHashVal = dynamicParamValues.ContainsKey(p.Name) ? dynamicParamValues[p.Name] : 0;
+                            if (spellHashVal == 0)
+                            {
+                                hasInvalidSpellSelection = true;
+                                break;
+                            }
+                            uint hash = (uint)spellHashVal;
+                            if (!SpellScanner.HashToGuid.TryGetValue(hash, out string sg) || !SpellScanner.AvailableSpells.ContainsKey(sg))
+                            {
+                                hasInvalidSpellSelection = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (hasInvalidSpellSelection)
+                {
+                    GUI.enabled = false;
+                    btnLabel = Helpers.GetString("err_no_spell_selected", "You must select a spell first.");
+                }
+                else if (!canCraft)
                 {
                     GUI.enabled = false;
                     btnLabel = Helpers.GetString("ui_err_invalid_formula", "Invalid Formula (Cost -1)");

@@ -437,6 +437,11 @@
             "frFR": "Enchantement personnalisé",
             "ruRU": "Особое зачарование"
         },
+        "err_no_spell_selected": {
+            "enGB": "You must select a spell first.",
+            "frFR": "Vous devez d'abord sélectionner un sort.",
+            "ruRU": "Сначала выберите заклинание."
+        },
         "err_no_enchant_selected": {
             "enGB": "No enchantment selected.",
             "frFR": "Aucun enchantement sélectionné.",

@@ -1082,9 +1082,9 @@
       {
         "Name": "CasterLevel",
         "Type": "Slider",
-        "Min": 1,
+        "Min": "= SpellMinCasterLevel",
         "Max": 20,
-        "DefaultValue": 9,
+        "DefaultValue": "= SpellMinCasterLevel",
         "ComponentIndex": -1
       },
       {
