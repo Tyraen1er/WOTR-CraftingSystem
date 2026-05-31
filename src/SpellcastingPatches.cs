@@ -61,6 +61,8 @@ namespace CraftingSystem
 
             if (item.Enchantments == null) return false;
 
+            if (item.Enchantments.Count == 0) return false;
+
             var currentEnchants = item.Enchantments;
 
             if (_cache.TryGetValue(item, out var cached) && cached.IsUpToDate(currentEnchants))

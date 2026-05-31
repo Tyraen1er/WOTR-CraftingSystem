@@ -75,15 +75,23 @@ namespace CraftingSystem
             parameters = new List<int>();
             mask = 0xFFF; // Valeur par défaut si décodage impossible
 
-            // On se base sur la version string pour plus de fiabilité vis-à-vis de l'endianness
-            string s = guid.ToString().Replace("-", "").ToUpper();
-            // Main.ModEntry.Logger.Log($"[DEBUG_GUID] Deciphering: {s}"); 
-            
-            if (s.Length != 32 || !s.StartsWith(Signature))
+            string s = guid.ToString();
+            if (s.Length != 32) return false;
+
+            char c0 = s[0];
+            char c1 = s[1];
+            char c2 = s[2];
+            char c3 = s[3];
+
+            if (!((c0 == 'c' || c0 == 'C') &&
+                  (c1 == '2') &&
+                  (c2 == 'a' || c2 == 'A') &&
+                  (c3 == 'f' || c3 == 'F')))
             {
-                // Main.ModEntry.Logger.Warning($"[DEBUG_GUID] Signature mismatch or length error: {s}");
                 return false;
             }
+
+            s = s.ToUpper();
 
             enchantId = s.Substring(Signature.Length, 3);
             
