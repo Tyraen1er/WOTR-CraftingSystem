@@ -3460,6 +3460,38 @@ namespace CraftingSystem
                 bool canCraft = totalCost >= 0 && totalPoints >= 0;
                 bool hasMoney = selectedModel.Type != "UsableItem" || Game.Instance.Player.Money >= totalCost;
 
+                bool alreadyHasSpellcasting = false;
+                if (selectedModel != null && selectedModel.EnchantId == "013")
+                {
+                    if (selectedItem != null && selectedItem.Enchantments != null)
+                    {
+                        foreach (var e in selectedItem.Enchantments)
+                        {
+                            if (e.IsTemporary || e.Blueprint == null) continue;
+                            if (DynamicGuidHelper.TryDecodeGuid(e.Blueprint.AssetGuid, out string enchantId, out _) && enchantId == "013")
+                            {
+                                alreadyHasSpellcasting = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (queuedEnchantGuids != null)
+                    {
+                        foreach (var g in queuedEnchantGuids)
+                        {
+                            try
+                            {
+                                if (DynamicGuidHelper.TryDecodeGuid(BlueprintGuid.Parse(g), out string enchantId, out _) && enchantId == "013")
+                                {
+                                    alreadyHasSpellcasting = true;
+                                    break;
+                                }
+                            }
+                            catch { }
+                        }
+                    }
+                }
+
                 bool hasInvalidSpellSelection = false;
                 if (selectedModel != null && selectedModel.DynamicParams != null)
                 {
@@ -3483,7 +3515,12 @@ namespace CraftingSystem
                     }
                 }
 
-                if (hasInvalidSpellSelection)
+                if (alreadyHasSpellcasting)
+                {
+                    GUI.enabled = false;
+                    btnLabel = Helpers.GetString("err_already_has_spellcasting", "Cet équipement possède déjà un sortilège.");
+                }
+                else if (hasInvalidSpellSelection)
                 {
                     GUI.enabled = false;
                     btnLabel = Helpers.GetString("err_no_spell_selected", "You must select a spell first.");

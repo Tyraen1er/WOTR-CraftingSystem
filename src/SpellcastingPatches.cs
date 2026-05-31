@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using HarmonyLib;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Items.Equipment;
@@ -10,12 +11,39 @@ using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Abilities;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.Blueprints.Items;
+using Kingmaker.Blueprints.Items.Ecnchantments;
 using Kingmaker.Utility;
 
 namespace CraftingSystem
 {
     public static class SpellcastingPatches
     {
+        private class CachedSpellcastingParams
+        {
+            public List<ItemEnchantment> Enchantments;
+            public bool HasSpellcasting;
+            public BlueprintAbility Spell;
+            public int Charges;
+            public int Cl;
+            public int Sl;
+            public int Dc;
+
+            public bool IsUpToDate(List<ItemEnchantment> current)
+            {
+                if (current == null) return Enchantments == null;
+                if (Enchantments == null) return false;
+                if (current.Count != Enchantments.Count) return false;
+                for (int i = 0; i < current.Count; i++)
+                {
+                    if (current[i] != Enchantments[i]) return false;
+                }
+                return true;
+            }
+        }
+
+        private static readonly ConditionalWeakTable<ItemEntity, CachedSpellcastingParams> _cache = 
+            new ConditionalWeakTable<ItemEntity, CachedSpellcastingParams>();
+
         public static bool TryGetSpellcastingParams(ItemEntity item, out BlueprintAbility spell, out int charges, out int cl, out int sl, out int dc)
         {
             spell = null;
@@ -33,7 +61,31 @@ namespace CraftingSystem
 
             if (item.Enchantments == null) return false;
 
-            foreach (var ench in item.Enchantments)
+            var currentEnchants = item.Enchantments;
+
+            if (_cache.TryGetValue(item, out var cached) && cached.IsUpToDate(currentEnchants))
+            {
+                if (cached.HasSpellcasting)
+                {
+                    spell = cached.Spell;
+                    charges = cached.Charges;
+                    cl = cached.Cl;
+                    sl = cached.Sl;
+                    dc = cached.Dc;
+                    return true;
+                }
+                return false;
+            }
+
+            // Otherwise, compute and update cache
+            bool found = false;
+            BlueprintAbility foundSpell = null;
+            int foundCharges = 1;
+            int foundCl = 1;
+            int foundSl = 1;
+            int foundDc = 10;
+
+            foreach (var ench in currentEnchants)
             {
                 if (ench == null || ench.Blueprint == null) continue;
                 
@@ -48,16 +100,44 @@ namespace CraftingSystem
                             string spellGuid = CustomEnchantmentsBuilder.GetSpellGuidByHash(paramValues.Skip(1).ToList());
                             if (!string.IsNullOrEmpty(spellGuid))
                             {
-                                spell = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(spellGuid)) as BlueprintAbility;
-                                charges = paramValues[5];
-                                cl = paramValues[6];
-                                sl = paramValues[7];
-                                dc = paramValues[8];
-                                return true;
+                                foundSpell = ResourcesLibrary.TryGetBlueprint(BlueprintGuid.Parse(spellGuid)) as BlueprintAbility;
+                                foundCharges = paramValues[5];
+                                foundCl = paramValues[6];
+                                foundSl = paramValues[7];
+                                foundDc = paramValues[8];
+                                found = true;
+                                break;
                             }
                         }
                     }
                 }
+            }
+
+            var newCache = new CachedSpellcastingParams
+            {
+                Enchantments = new List<ItemEnchantment>(currentEnchants),
+                HasSpellcasting = found,
+                Spell = foundSpell,
+                Charges = foundCharges,
+                Cl = foundCl,
+                Sl = foundSl,
+                Dc = foundDc
+            };
+
+            lock (_cache)
+            {
+                _cache.Remove(item);
+                _cache.Add(item, newCache);
+            }
+
+            if (found)
+            {
+                spell = foundSpell;
+                charges = foundCharges;
+                cl = foundCl;
+                sl = foundSl;
+                dc = foundDc;
+                return true;
             }
             return false;
         }
@@ -106,9 +186,18 @@ namespace CraftingSystem
                         }
                         if (__instance.Ability == null && spell != null)
                         {
-                            Ability ability = __instance.Wielder.AddFact<Ability>(spell, null, null);
-                            ability.SetSourceItem(__instance);
-                            __instance.Ability = ability;
+                            // Fix B: Prevents synchronous re-entry loop by checking if the wielder already has the fact associated with this item
+                            var alreadyHasFact = __instance.Wielder.Facts.GetAll<Ability>().FirstOrDefault(a => a.Blueprint == spell && a.SourceItem == __instance);
+                            if (alreadyHasFact == null)
+                            {
+                                Ability ability = __instance.Wielder.AddFact<Ability>(spell, null, null);
+                                ability.SetSourceItem(__instance);
+                                __instance.Ability = ability;
+                            }
+                            else
+                            {
+                                __instance.Ability = alreadyHasFact;
+                            }
                         }
                     }
                     else

@@ -420,6 +420,46 @@ namespace CraftingSystem
             if (item == null || selectedList == null || selectedList.Count == 0) return Helpers.GetString("err_no_enchant_selected", "Aucun enchantement sélectionné.");
             if (Game.Instance.Player.Money < totalCost) return Helpers.GetString("err_not_enough_gold", "Vous n'avez pas assez d'or pour lancer tous les projets sélectionnés.");
 
+            // Validation : Un seul enchantement de sortilège (013) par équipement
+            bool itemAlreadyHasSpellcasting = false;
+            if (item.Enchantments != null)
+            {
+                foreach (var e in item.Enchantments)
+                {
+                    if (e.IsTemporary || e.Blueprint == null) continue;
+                    if (DynamicGuidHelper.TryDecodeGuid(e.Blueprint.AssetGuid, out string enchantId, out _))
+                    {
+                        if (enchantId == "013")
+                        {
+                            itemAlreadyHasSpellcasting = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            int selectedSpellcastingCount = 0;
+            foreach (var d in selectedList)
+            {
+                if (string.IsNullOrEmpty(d.Guid)) continue;
+                try
+                {
+                    if (DynamicGuidHelper.TryDecodeGuid(BlueprintGuid.Parse(d.Guid), out string enchantId, out _))
+                    {
+                        if (enchantId == "013")
+                        {
+                            selectedSpellcastingCount++;
+                        }
+                    }
+                }
+                catch { }
+            }
+
+            if ((itemAlreadyHasSpellcasting && selectedSpellcastingCount > 0) || selectedSpellcastingCount > 1)
+            {
+                return Helpers.GetString("err_multiple_spellcasting", "Un équipement ne peut pas posséder plus d'un enchantement de type 'Sortilège'.");
+            }
+
             int currentPoints = CalculateDisplayedEnchantmentPoints(item);
             int currentEnhancement = 0;
             
