@@ -141,11 +141,8 @@ namespace CraftingSystem
     }
 
     // --- Data Classes for JSON ---
-    public class EnumOverrideData
+    public class EnumOverrideData : LocalizedText
     {
-        public string frFR;
-        public string enGB;
-        public string ruRU;
         public int? MaxNotEpic;
         public int? PriceFactor;
         public List<string> Slots;

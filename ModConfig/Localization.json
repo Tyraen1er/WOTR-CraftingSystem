@@ -1756,6 +1756,30 @@
             "enGB": "Simple, non-magical lenses, ready for custom enchantments.",
             "frFR": "Des lunettes simples et non magiques, prêtes à recevoir des enchantements personnalisés.",
             "ruRU": "Простые немагические очки, готовые к наложению особых зачарований."
+        },
+        "ui_spellcasting_desc": {
+            "enGB": "Grants the wielder the ability to cast the spell <b>{0}</b> <b>{1}</b> times per day (Caster Level <b>{2}</b>, DC <b>{3}</b>).",
+            "frFR": "Confère la capacité de lancer le sort <b>{0}</b> <b>{1}</b> fois par jour (Niveau de lanceur : <b>{2}</b>, DD : <b>{3}</b>).",
+            "ruRU": "Дарует возможность разыгрывать заклинание <b>{0}</b> <b>{1}</b> раз в день (Уровень заклинателя <b>{2}</b>, СЛ <b>{3}</b>).",
+            "zhCN": "赋予佩戴者每日 <b>{1}</b> 次施放法术 <b>{0}</b> 的能力（施法者等级 <b>{2}</b>，DC <b>{3}</b>）。"
+        },
+        "ui_spellcasting_name": {
+            "enGB": "{0} ({1}/day, CL {2}, DC {3})",
+            "frFR": "{0} ({1}/jour, NLS {2}, DD {3})",
+            "ruRU": "{0} ({1}/день, УКС {2}, СЛ {3})",
+            "zhCN": "{0}（{1}次/天，CL {2}，DC {3}）"
+        },
+        "ui_blank_suffix": {
+            "enGB": " (Blank)",
+            "frFR": " (Vierge)",
+            "ruRU": " (Чистый)",
+            "zhCN": "（空白）"
+        },
+        "ui_blank_desc": {
+            "enGB": "A simple, non-magical accessory, ready for custom enchantments.",
+            "frFR": "Un accessoire simple et non magique, prêt à recevoir des enchantements personnalisés.",
+            "ruRU": "Простой немагический аксессуар, готовый к наложению зачарований.",
+            "zhCN": "一件简单、非魔法的饰品，可用于附加自定义附魔。"
         }
     }
 }
