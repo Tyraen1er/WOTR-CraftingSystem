@@ -307,13 +307,11 @@ namespace CraftingSystem
                     raw = "";
                 if (raw.StartsWith("ui_")) raw = GetString(raw, raw);
             }
-            else if (field is EnumOverrideData eod)
+            else if (field is LocalizedText localizedText)
             {
                 string locale = "enGB";
                 try { locale = LocalizationManager.CurrentLocale.ToString(); } catch { }
-                if (locale == "frFR") raw = eod.frFR ?? eod.enGB ?? eod.ruRU ?? "";
-                else if (locale == "ruRU") raw = eod.ruRU ?? eod.enGB ?? eod.frFR ?? "";
-                else raw = eod.enGB ?? "";
+                raw = localizedText.GetText(locale);
                 if (raw.StartsWith("ui_")) raw = GetString(raw, raw);
             }
             else if (field is Newtonsoft.Json.Linq.JToken token) raw = token.ToString();
@@ -330,6 +328,42 @@ namespace CraftingSystem
                 }
             }
             return raw;
+        }
+    }
+
+    /// <summary>
+    /// Text stored in a language file: one field per locale supported by the game.
+    /// Callers use <see cref="GetText"/> so adding a language to a JSON file does not
+    /// require any code change.
+    /// </summary>
+    public abstract class LocalizedText
+    {
+        public string enGB;
+        public string ruRU;
+        public string deDE;
+        public string frFR;
+        public string zhCN;
+        public string esES;
+        public string ptBR;
+        public string itIT;
+
+        public string GetText(string locale)
+        {
+            string text;
+            switch (locale)
+            {
+                case "ruRU": text = ruRU; break;
+                case "deDE": text = deDE; break;
+                case "frFR": text = frFR; break;
+                case "zhCN": text = zhCN; break;
+                case "esES": text = esES; break;
+                case "ptBR": text = ptBR; break;
+                case "itIT": text = itIT; break;
+                default: text = null; break;
+            }
+
+            if (!string.IsNullOrEmpty(text)) return text;
+            return enGB ?? "";
         }
     }
 }

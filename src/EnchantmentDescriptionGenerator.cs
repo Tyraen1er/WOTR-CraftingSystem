@@ -128,14 +128,7 @@ namespace CraftingSystem
 
         private static string GetLocalizedTemplate(DescriptionTemplate template)
         {
-            string currentLocale = LocalizationManager.CurrentLocale.ToString();
-            
-            if (currentLocale == "frFR" && !string.IsNullOrEmpty(template.frFR))
-                return template.frFR;
-            if (currentLocale == "ruRU" && !string.IsNullOrEmpty(template.ruRU))
-                return template.ruRU;
-                
-            return template.enGB; // Fallback to English
+            return template.GetText(LocalizationManager.CurrentLocale.ToString());
         }
 
         private static string ResolveTemplate(string template, object comp, BlueprintScriptableObject parentBp)

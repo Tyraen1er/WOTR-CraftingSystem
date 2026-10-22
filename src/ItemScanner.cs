@@ -248,21 +248,8 @@ namespace CraftingSystem
                                             if (costField != null) costField.SetValue(bp, 50);
 
                                             // Set localized display name and description
-                                            string locale = "enGB";
-                                            try { locale = Kingmaker.Localization.LocalizationManager.CurrentLocale.ToString(); } catch { }
-
-                                            string suffix = " (Blank)";
-                                            string blankDesc = "A simple, non-magical accessory, ready for custom enchantments.";
-                                            if (locale == "frFR")
-                                            {
-                                                suffix = " (Vierge)";
-                                                blankDesc = "Un accessoire simple et non magique, prêt à recevoir des enchantements personnalisés.";
-                                            }
-                                            else if (locale == "ruRU")
-                                            {
-                                                suffix = " (Чистый)";
-                                                blankDesc = "Простой немагический аксессуар, готовый к наложению зачарований.";
-                                            }
+                                            string suffix = Helpers.GetString("ui_blank_suffix", " (Blank)");
+                                            string blankDesc = Helpers.GetString("ui_blank_desc", "A simple, non-magical accessory, ready for custom enchantments.");
 
                                             string originalName = vanillaBp.Name;
                                             if (string.IsNullOrEmpty(originalName)) originalName = vanillaBp.name;
@@ -382,21 +369,8 @@ namespace CraftingSystem
                                     if (costField != null) costField.SetValue(bp, 50);
 
                                     // Set localized display name and description
-                                    string locale = "enGB";
-                                    try { locale = Kingmaker.Localization.LocalizationManager.CurrentLocale.ToString(); } catch { }
-
-                                    string suffix = " (Blank)";
-                                    string blankDesc = "A simple, non-magical accessory, ready for custom enchantments.";
-                                    if (locale == "frFR")
-                                    {
-                                        suffix = " (Vierge)";
-                                        blankDesc = "Un accessoire simple et non magique, prêt à recevoir des enchantements personnalisés.";
-                                    }
-                                    else if (locale == "ruRU")
-                                    {
-                                        suffix = " (Чистый)";
-                                        blankDesc = "Простой немагический аксессуар, готовый к наложению зачарований.";
-                                    }
+                                    string suffix = Helpers.GetString("ui_blank_suffix", " (Blank)");
+                                    string blankDesc = Helpers.GetString("ui_blank_desc", "A simple, non-magical accessory, ready for custom enchantments.");
 
                                     string originalName = vanillaBp.Name;
                                     if (string.IsNullOrEmpty(originalName)) originalName = vanillaBp.name;

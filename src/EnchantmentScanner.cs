@@ -23,13 +23,10 @@ using Kingmaker.Blueprints.JsonSystem.Converters;
 
 namespace CraftingSystem
 {
-    public class DescriptionTemplate
+    public class DescriptionTemplate : LocalizedText
     {
         [JsonProperty("COMP_TYPE")]
         public string ComponentType;
-        public string enGB;
-        public string frFR;
-        public string ruRU;
     }
 
     public class EnchantmentData

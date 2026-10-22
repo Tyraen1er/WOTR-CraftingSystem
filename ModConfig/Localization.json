@@ -3,1759 +3,2132 @@
         "ui_param_spell": {
             "enGB": "Spell",
             "frFR": "Sort",
-            "ruRU": "Заклинание"
+            "ruRU": "Заклинание",
+            "zhCN": "法术"
         },
         "ui_param_casterlevel": {
             "enGB": "Caster Level",
             "frFR": "Niveau de lanceur",
-            "ruRU": "Уровень заклинателя"
+            "ruRU": "Уровень заклинателя",
+            "zhCN": "施法者等级"
         },
         "ui_param_spelllevel": {
             "enGB": "Spell Level",
             "frFR": "Niveau de sort",
-            "ruRU": "Уровень заклинания"
+            "ruRU": "Уровень заклинания",
+            "zhCN": "法术等级"
         },
         "ui_param_dc": {
             "enGB": "DC",
             "frFR": "DD",
-            "ruRU": "Сложность (СЛ)"
+            "ruRU": "Сложность (СЛ)",
+            "zhCN": "DC"
         },
         "ui_select_spell_placeholder": {
             "enGB": "Select a spell...",
             "frFR": "Sélectionner un sort...",
-            "ruRU": "Выберите заклинание..."
+            "ruRU": "Выберите заклинание...",
+            "zhCN": "选择一个法术"
         },
         "ui_category": {
             "enGB": "Category:",
             "frFR": "Catégorie :",
-            "ruRU": "Категория:"
+            "ruRU": "Категория:",
+            "zhCN": "类别"
         },
         "ui_cat_all": {
             "enGB": "All",
             "frFR": "Tout",
-            "ruRU": "Все"
+            "ruRU": "Все",
+            "zhCN": "全部"
         },
         "ui_cat_ring": {
             "enGB": "Rings",
             "frFR": "Anneaux",
-            "ruRU": "Кольца"
+            "ruRU": "Кольца",
+            "zhCN": "戒指"
         },
         "ui_cat_neck_amulet": {
             "enGB": "Necklaces/Amulets",
             "frFR": "Colliers/Amulettes",
-            "ruRU": "Амулеты/Ожерелья"
+            "ruRU": "Амулеты/Ожерелья",
+            "zhCN": "项链与护身符"
         },
         "ui_cat_belt": {
             "enGB": "Belts",
             "frFR": "Ceintures",
-            "ruRU": "Пояса"
+            "ruRU": "Пояса",
+            "zhCN": "腰带"
         },
         "ui_cat_boots": {
             "enGB": "Boots/Feet",
             "frFR": "Bottes/Pieds",
-            "ruRU": "Обувь/Сапоги"
+            "ruRU": "Обувь/Сапоги",
+            "zhCN": "靴子"
         },
         "ui_cat_gloves": {
             "enGB": "Gloves/Hands",
             "frFR": "Gants/Mains",
-            "ruRU": "Перчатки/Рукавицы"
+            "ruRU": "Перчатки/Рукавицы",
+            "zhCN": "手套"
         },
         "ui_cat_glasses": {
             "enGB": "Glasses/Goggles",
             "frFR": "Lunettes/Lentilles",
-            "ruRU": "Очки"
+            "ruRU": "Очки",
+            "zhCN": "眼镜与护目镜"
         },
         "ui_cat_helmet_headband": {
             "enGB": "Helmets/Headbands",
             "frFR": "Casques/Diadèmes",
-            "ruRU": "Шлемы/Ободки"
+            "ruRU": "Шлемы/Ободки",
+            "zhCN": "头盔与头带"
         },
         "ui_cat_cape": {
             "enGB": "Capes/Cloaks",
             "frFR": "Capes",
-            "ruRU": "Плащи"
+            "ruRU": "Плащи",
+            "zhCN": "斗篷与披风"
         },
         "ui_cat_bracers": {
             "enGB": "Bracers/Wrists",
             "frFR": "Bracelets/Poignets",
-            "ruRU": "Наручи"
+            "ruRU": "Наручи",
+            "zhCN": "护腕"
         },
         "ui_cat_robe": {
             "enGB": "Robes/Shirts",
             "frFR": "Robes/Chemises",
-            "ruRU": "Рясы/Рубашки"
+            "ruRU": "Рясы/Рубашки",
+            "zhCN": "长袍与衬衫"
         },
         "ui_search": {
             "enGB": "Search",
             "frFR": "Rechercher",
-            "ruRU": "Поиск"
+            "ruRU": "Поиск",
+            "zhCN": "搜索"
         },
         "ui_filter_all": {
             "enGB": "Show All",
             "frFR": "Tout afficher",
-            "ruRU": "Показать все"
+            "ruRU": "Показать все",
+            "zhCN": "显示全部"
         },
         "ui_no_item_match": {
             "enGB": "(No items match the current filters)",
             "frFR": "(Aucun objet ne correspond aux filtres)",
-            "ruRU": "(Нет предметов, соответствующих фильтрам)"
+            "ruRU": "(Нет предметов, соответствующих фильтрам)",
+            "zhCN": "(没有物品符合当前筛选条件)"
         },
         "ui_section_management": {
             "enGB": "WORKSHOP MANAGEMENT",
             "frFR": "GESTION DE L'ATELIER",
-            "ruRU": "УПРАВЛЕНИЕ МАСТЕРСКОЙ"
+            "ruRU": "УПРАВЛЕНИЕ МАСТЕРСКОЙ",
+            "zhCN": "工坊管理"
         },
         "ui_section_forge": {
             "enGB": "FORGE: EQUIPMENT CREATION",
             "frFR": "FORGE : CRÉATION D'ÉQUIPEMENT",
-            "ruRU": "КУЗНИЦА: СОЗДАНИЕ СНАРЯЖЕНИЯ"
+            "ruRU": "КУЗНИЦА: СОЗДАНИЕ СНАРЯЖЕНИЯ",
+            "zhCN": "锻造：装备制作"
         },
         "ui_section_magic": {
             "enGB": "ARCANE ARTS: MAGIC ITEMS",
             "frFR": "ARTS ARCANES : OBJETS MAGIQUES",
-            "ruRU": "АРКАННЫЕ ИСКУССТВА: МАГИЧЕСКИЕ ПРЕДМЕТЫ"
+            "ruRU": "АРКАННЫЕ ИСКУССТВА: МАГИЧЕСКИЕ ПРЕДМЕТЫ",
+            "zhCN": "奥术艺术：魔法物品"
         },
         "ui_desc_inventory": {
             "enGB": "Modify and upgrade your existing items",
             "frFR": "Modifier et améliorer vos objets existants",
-            "ruRU": "Изменяйте и улучшайте существующие предметы"
+            "ruRU": "Изменяйте и улучшайте существующие предметы",
+            "zhCN": "修改并升级你的现有物品"
         },
         "ui_title_main_menu": {
             "enGB": "Crafting System - Main Menu",
             "frFR": "Système de Craft - Menu Principal",
-            "ruRU": "Система ремесла - Главное меню"
+            "ruRU": "Система ремесла - Главное меню",
+            "zhCN": "制作系统 - 主菜单"
         },
         "ui_menu_inventory": {
             "enGB": "Workshop Inventory (Modify existing items)",
             "frFR": "Inventaire de l'Atelier (Modifier objets existants)",
-            "ruRU": "Инвентарь мастерской (Изменить предметы)"
+            "ruRU": "Инвентарь мастерской (Изменить предметы)",
+            "zhCN": "工坊库存（修改现有物品）"
         },
         "ui_menu_create_weapon": {
             "enGB": "Create Weapon",
             "frFR": "Créer une Arme",
-            "ruRU": "Создать оружие"
+            "ruRU": "Создать оружие",
+            "zhCN": "制作武器"
         },
         "ui_menu_create_armor": {
             "enGB": "Create Armor",
             "frFR": "Créer une Armure",
-            "ruRU": "Создать доспех"
+            "ruRU": "Создать доспех",
+            "zhCN": "制作护甲"
         },
         "ui_menu_create_accessory": {
             "enGB": "Create Accessory",
             "frFR": "Créer un Accessoire",
-            "ruRU": "Создать аксессуар"
+            "ruRU": "Создать аксессуар",
+            "zhCN": "制作饰品"
         },
         "ui_menu_create_rod": {
             "enGB": "Create Metamagic Rod",
             "frFR": "Créer un Sceptre Métamagique",
-            "ruRU": "Создать метамагический жезл"
+            "ruRU": "Создать метамагический жезл",
+            "zhCN": "制作超魔权杖"
         },
         "ui_grade_lesser": {
             "enGB": "Lesser (Lvl 1-3)",
             "frFR": "Mineur (Niv. 1-3)",
-            "ruRU": "Малый (Ур. 1-3)"
+            "ruRU": "Малый (Ур. 1-3)",
+            "zhCN": "初级（1-3环）"
         },
         "ui_grade_normal": {
             "enGB": "Normal (Lvl 1-6)",
             "frFR": "Normal (Niv. 1-6)",
-            "ruRU": "Обычный (Ур. 1-6)"
+            "ruRU": "Обычный (Ур. 1-6)",
+            "zhCN": "普通（1-6环）"
         },
         "ui_grade_greater": {
             "enGB": "Greater (Lvl 1-9)",
             "frFR": "Supérieur (Niv. 1-9)",
-            "ruRU": "Большой (Ур. 1-9)"
+            "ruRU": "Большой (Ур. 1-9)",
+            "zhCN": "高级（1-9环）"
         },
         "ui_grade_lesser_desc": {
             "enGB": "This rod can be used with spells of 3rd level or lower.",
             "frFR": "Ce sceptre peut être utilisé avec des sorts de niveau 3 ou moins.",
-            "ruRU": "Этот скипетр можно использовать с заклинаниями 3-го уровня или ниже."
+            "ruRU": "Этот скипетр можно использовать с заклинаниями 3-го уровня или ниже.",
+            "zhCN": "该权杖可用于3环或更低环阶的法术。"
         },
         "ui_grade_normal_desc": {
             "enGB": "This rod can be used with spells of 6th level or lower.",
             "frFR": "Ce sceptre peut être utilisé avec des sorts de niveau 6 ou moins.",
-            "ruRU": "Этот скипетр можно использовать с заклинаниями 6-го уровня или ниже."
+            "ruRU": "Этот скипетр можно использовать с заклинаниями 6-го уровня или ниже.",
+            "zhCN": "该权杖可用于6环或更低环阶的法术。"
         },
         "ui_grade_greater_desc": {
             "enGB": "This rod can be used with spells of 9th level or lower.",
             "frFR": "Ce sceptre peut être utilisé avec des sorts de niveau 9 ou moins.",
-            "ruRU": "Этот скипетр можно использовать с заклинаниями 9-го уровня или ниже."
+            "ruRU": "Этот скипетр можно использовать с заклинаниями 9-го уровня или ниже.",
+            "zhCN": "该权杖可用于9环或更低环阶的法术。"
         },
         "ui_desc_metamagic_rod": {
             "enGB": "This rod grants its wielder the ability to apply the following metamagic effects to spells: <b>{Metamagic}</b>. It can be used <b>{Charges}</b> times per day. {GradeDesc}",
             "frFR": "Ce sceptre permet à son porteur d'appliquer les effets de métamagie suivants à ses sorts : <b>{Metamagic}</b>. Il peut être utilisé <b>{Charges}</b> fois par jour. {GradeDesc}",
-            "ruRU": "Этот скипетр позволяет владельцу применять к заклинаниям следующие эффекты метамагии: <b>{Metamagic}</b>. Его можно использовать <b>{Charges}</b> раз в день. {GradeDesc}"
+            "ruRU": "Этот скипетр позволяет владельцу применять к заклинаниям следующие эффекты метамагии: <b>{Metamagic}</b>. Его можно использовать <b>{Charges}</b> раз в день. {GradeDesc}",
+            "zhCN": "该权杖使其持有者能够对法术应用以下超魔效果：<b>{Metamagic}</b>。每天可使用 <b>{Charges}</b> 次。{GradeDesc}"
         },
         "ui_menu_create_wand": {
             "enGB": "Create Wand",
             "frFR": "Créer une Baguette",
-            "ruRU": "Создать магическую палочку"
+            "ruRU": "Создать магическую палочку",
+            "zhCN": "制作魔杖"
         },
         "ui_menu_create_scroll": {
             "enGB": "Create Scroll",
             "frFR": "Créer un Parchemin",
-            "ruRU": "Создать свиток"
+            "ruRU": "Создать свиток",
+            "zhCN": "制作卷轴"
         },
         "ui_warning_forge_active": {
             "enGB": "FORGE: This equipment is currently being modified!",
             "frFR": "FORGE : Cet équipement est en cours de modification !",
-            "ruRU": "КУЗНИЦА: Это снаряжение в данный момент модифицируется!"
+            "ruRU": "КУЗНИЦА: Это снаряжение в данный момент модифицируется!",
+            "zhCN": "锻造：该装备当前正在修改中！"
         },
         "ui_loot_workshop_title": {
             "enGB": "Workshop",
             "frFR": "Atelier",
-            "ruRU": "Мастерская"
+            "ruRU": "Мастерская",
+            "zhCN": "工坊"
         },
         "ui_success_created_chest": {
             "enGB": "Success! Item created and delivered to the <b>Workshop Chest</b>.",
             "frFR": "Succès ! Objet créé et livré dans le <b>Coffre de l'Atelier</b>.",
-            "ruRU": "Успех! Предмет создан и доставлен в <b>Сундук мастерской</b>."
+            "ruRU": "Успех! Предмет создан и доставлен в <b>Сундук мастерской</b>.",
+            "zhCN": "成功！物品已制作并送至<b>工坊宝箱</b>。"
         },
         "ui_loot_enchantment_subtitle": {
             "enGB": "Enchantment",
             "frFR": "Enchantement",
-            "ruRU": "Зачарование"
+            "ruRU": "Зачарование",
+            "zhCN": "附魔"
         },
         "ui_btn_prev": {
             "enGB": "<<",
             "frFR": "<<",
-            "ruRU": "<<"
+            "ruRU": "<<",
+            "zhCN": "<<"
         },
         "ui_btn_next": {
             "enGB": ">>",
             "frFR": ">>",
-            "ruRU": ">>"
+            "ruRU": ">>",
+            "zhCN": ">>"
         },
         "ui_btn_close_x": {
             "enGB": "X",
             "frFR": "X",
-            "ruRU": "X"
+            "ruRU": "X",
+            "zhCN": "X"
         },
         "ui_pagination_items_per_page": {
             "enGB": "Items/Page: ",
             "frFR": "Items/Page : ",
-            "ruRU": "Предм./стр.: "
+            "ruRU": "Предм./стр.: ",
+            "zhCN": "每页物品："
         },
         "ui_pagination_page": {
             "enGB": "Page ",
             "frFR": "Page ",
-            "ruRU": "Страница "
+            "ruRU": "Страница ",
+            "zhCN": "页码 "
         },
         "ui_pagination_items": {
             "enGB": "items",
             "frFR": "objets",
-            "ruRU": "предм."
+            "ruRU": "предм.",
+            "zhCN": "件物品"
         },
         "ui_btn_back_to_list": {
             "enGB": "<< Back to list",
             "frFR": "<< Retour à la liste",
-            "ruRU": "<< К списку"
+            "ruRU": "<< К списку",
+            "zhCN": "<< 返回列表"
         },
         "ui_custom_queued_title": {
             "enGB": "Custom Selection in queue:",
             "frFR": "Sélection personnalisée en attente :",
-            "ruRU": "Пользовательский выбор в очереди:"
+            "ruRU": "Пользовательский выбор в очереди:",
+            "zhCN": "队列中的自定义选择："
         },
         "ui_no_custom_models": {
             "enGB": "No enchantment models found.",
             "frFR": "Aucun modèle d'enchantement trouvé.",
-            "ruRU": "Модели зачарований не найдены."
+            "ruRU": "Модели зачарований не найдены.",
+            "zhCN": "未找到自定义附魔模型。"
         },
         "ui_btn_configure": {
             "enGB": "Configure",
             "frFR": "Configurer",
-            "ruRU": "Настроить"
+            "ruRU": "Настроить",
+            "zhCN": "配置"
         },
         "ui_configuring_model": {
             "enGB": "Cheats: <b>{0}</b>",
             "frFR": "Triches : <b>{0}</b>",
-            "ruRU": "Читы: <b>{0}</b>"
+            "ruRU": "Читы: <b>{0}</b>",
+            "zhCN": "正在配置：<b>{0}</b>"
         },
         "ui_selection_total_custom": {
             "enGB": "Selection: +{0} \u2014 Service Cost: {1} gp / ~{2} d",
             "frFR": "Sélection : +{0} \u2014 Coût du Service : {1} po / ~{2} j",
-            "ruRU": "Выбор: +{0} \u2014 Стоимость услуги: {1} gp / ~{2} дн."
+            "ruRU": "Выбор: +{0} \u2014 Стоимость услуги: {1} gp / ~{2} дн.",
+            "zhCN": "选择：+{0} — 服务费用：{1} 金币 / 约 {2} 天"
         },
         "ui_param_element": {
             "enGB": "Element",
             "frFR": "Élément",
-            "ruRU": "Стихия"
+            "ruRU": "Стихия",
+            "zhCN": "元素"
         },
         "ui_param_value": {
             "enGB": "Value",
             "frFR": "Valeur",
-            "ruRU": "Значение"
+            "ruRU": "Значение",
+            "zhCN": "数值"
         },
         "ui_btn_add_to_selection": {
             "enGB": "Add to selection",
             "frFR": "Ajouter à la sélection",
-            "ruRU": "Добавить в выбор"
+            "ruRU": "Добавить в выбор",
+            "zhCN": "添加到选择"
         },
         "ui_custom_todo_more": {
             "enGB": "TODO: there are more custom enchants to come in next releases",
             "frFR": "TODO : d'autres enchantements personnalisés arriveront dans les prochaines versions",
-            "ruRU": "TODO: в следующих выпусках появится больше пользовательских чар"
+            "ruRU": "TODO: в следующих выпусках появится больше пользовательских чар",
+            "zhCN": "计划添加更多自定义附魔。欢迎在 Nexus 页面或通过 GitHub issue 提出建议！"
         },
         "ui_desc_needed": {
             "enGB": "TODO: Description needed for this enchantment.",
             "frFR": "TODO : Description manquante pour cet enchantement.",
-            "ruRU": "TODO: требуется описание для этого зачарования."
+            "ruRU": "TODO: требуется описание для этого зачарования.",
+            "zhCN": "待办：此附魔缺少描述。"
         },
         "ui_desc_weapon_enhancement": {
             "enGB": "Enhancement bonus: +{0}",
             "frFR": "Bonus d'altération : +{0}",
-            "ruRU": "Бонус усиления: +{0}"
+            "ruRU": "Бонус усиления: +{0}",
+            "zhCN": "增强加值：+{0}"
         },
         "ui_desc_armor_enhancement": {
             "enGB": "Enhancement bonus: +{0}",
             "frFR": "Bonus d'altération : +{0}",
-            "ruRU": "Бонус усиления: +{0}"
+            "ruRU": "Бонус усиления: +{0}",
+            "zhCN": "增强加值：+{0}"
         },
         "ui_desc_generic_enhancement": {
             "enGB": "Enhancement bonus: +{0}",
             "frFR": "Bonus d'altération : +{0}",
-            "ruRU": "Бонус усиления: +{0}"
+            "ruRU": "Бонус усиления: +{0}",
+            "zhCN": "增强加值：+{0}"
         },
         "ui_desc_resistance": {
             "enGB": "{0} resistance: {1}",
             "frFR": "Résistance à {0} : {1}",
-            "ruRU": "Сопротивление {0}: {1}"
+            "ruRU": "Сопротивление {0}: {1}",
+            "zhCN": "{0}抗力：{1}"
         },
         "ui_enum_value": {
             "enGB": "Value ",
             "frFR": "Valeur ",
-            "ruRU": "Значение "
+            "ruRU": "Значение ",
+            "zhCN": "数值 "
         },
         "ui_btn_yes": {
             "enGB": "Yes",
             "frFR": "Oui",
-            "ruRU": "Да"
+            "ruRU": "Да",
+            "zhCN": "是"
         },
         "ui_btn_no": {
             "enGB": "No",
             "frFR": "Non",
-            "ruRU": "Нет"
+            "ruRU": "Нет",
+            "zhCN": "否"
         },
         "ui_none": {
             "enGB": "None",
             "frFR": "Aucun",
-            "ruRU": "Нет"
+            "ruRU": "Нет",
+            "zhCN": "无"
         },
-        "ui_enum_Empower": { "enGB": "Empower", "frFR": "Quintessence des sorts", "ruRU": "Усиление" },
-        "ui_enum_Maximize": { "enGB": "Maximize", "frFR": "Extension d'effet", "ruRU": "Максимизация" },
-        "ui_enum_Quicken": { "enGB": "Quicken", "frFR": "Incantation rapide", "ruRU": "Ускорение" },
-        "ui_enum_Extend": { "enGB": "Extend", "frFR": "Extension de durée", "ruRU": "Продление" },
-        "ui_enum_Reach": { "enGB": "Reach", "frFR": "Extension de portée", "ruRU": "Дальнобойность" },
-        "ui_enum_Persistent": { "enGB": "Persistent", "frFR": "Sort persistant", "ruRU": "Настойчивость" },
-        "ui_enum_Selective": { "enGB": "Selective", "frFR": "Sort sélectif", "ruRU": "Избирательность" },
-        "ui_enum_Bolstered": { "enGB": "Bolstered", "frFR": "Sort renforcé", "ruRU": "Укрепление" },
-        "ui_enum_Piercing": { "enGB": "Piercing", "frFR": "Sort perçant", "ruRU": "Пробивание" },
-        "ui_enum_Intensified": { "enGB": "Intensified", "frFR": "Sort intense", "ruRU": "Интенсификация" },
-        "ui_enum_CompletelyNormal": { "enGB": "Completely Normal", "frFR": "Totalement normal", "ruRU": "Совершенно обычный" },
-        "ui_enum_Heighten": { "enGB": "Heighten", "frFR": "Augmentation", "ruRU": "Повышение" },
+        "ui_enum_Empower": { "enGB": "Empower", "frFR": "Quintessence des sorts", "ruRU": "Усиление", "zhCN": "法术强效" },
+        "ui_enum_Maximize": { "enGB": "Maximize", "frFR": "Extension d'effet", "ruRU": "Максимизация", "zhCN": "法术极效" },
+        "ui_enum_Quicken": { "enGB": "Quicken", "frFR": "Incantation rapide", "ruRU": "Ускорение", "zhCN": "法术瞬发" },
+        "ui_enum_Extend": { "enGB": "Extend", "frFR": "Extension de durée", "ruRU": "Продление", "zhCN": "法术延时" },
+        "ui_enum_Reach": { "enGB": "Reach", "frFR": "Extension de portée", "ruRU": "Дальнобойность", "zhCN": "法术增距" },
+        "ui_enum_Persistent": { "enGB": "Persistent", "frFR": "Sort persistant", "ruRU": "Настойчивость", "zhCN": "法术顽强" },
+        "ui_enum_Selective": { "enGB": "Selective", "frFR": "Sort sélectif", "ruRU": "Избирательность", "zhCN": "法术甄选" },
+        "ui_enum_Bolstered": { "enGB": "Bolstered", "frFR": "Sort renforcé", "ruRU": "Укрепление", "zhCN": "法术增效" },
+        "ui_enum_Piercing": { "enGB": "Piercing", "frFR": "Sort perçant", "ruRU": "Пробивание", "zhCN": "法术洞穿" },
+        "ui_enum_Intensified": { "enGB": "Intensified", "frFR": "Sort intense", "ruRU": "Интенсификация", "zhCN": "法术加剧" },
+        "ui_enum_CompletelyNormal": { "enGB": "Completely Normal", "frFR": "Totalement normal", "ruRU": "Совершенно обычный", "zhCN": "超正常法术" },
+        "ui_enum_Heighten": { "enGB": "Heighten", "frFR": "Augmentation", "ruRU": "Повышение", "zhCN": "法术升阶" },
         "ui_type_weapon": {
             "enGB": "Weapon",
             "frFR": "Arme",
-            "ruRU": "Оружие"
+            "ruRU": "Оружие",
+            "zhCN": "武器"
         },
         "ui_type_armor": {
             "enGB": "Armor",
             "frFR": "Armure",
-            "ruRU": "Доспех"
+            "ruRU": "Доспех",
+            "zhCN": "护甲"
         },
         "ui_type_other": {
             "enGB": "Other",
             "frFR": "Autre",
-            "ruRU": "Другое"
+            "ruRU": "Другое",
+            "zhCN": "其他"
         },
         "ui_cost_bp": {
             "enGB": "Cost: {0} BP",
             "frFR": "Coût : {0} BP",
-            "ruRU": "Цена: {0} ОС"
+            "ruRU": "Цена: {0} ОС",
+            "zhCN": "费用：{0} 建造点数(BP)"
         },
         "ui_filter_weapons": {
             "enGB": " Weapons",
             "frFR": " Armes",
-            "ruRU": " Оружие"
+            "ruRU": " Оружие",
+            "zhCN": " 武器"
         },
         "ui_filter_armors": {
             "enGB": " Armors",
             "frFR": " Armures",
-            "ruRU": " Доспехи"
+            "ruRU": " Доспехи",
+            "zhCN": " 护甲"
         },
         "ui_filter_others": {
             "enGB": " Wondrous",
             "frFR": " Merveilleux",
-            "ruRU": " Диковинки"
+            "ruRU": " Диковинки",
+            "zhCN": " 奇物"
         },
         "ui_time_done": {
             "enGB": "Done",
             "frFR": "Terminé",
-            "ruRU": "Готово"
+            "ruRU": "Готово",
+            "zhCN": "已完成"
         },
         "ui_time_days_hours": {
             "enGB": "{0} day(s) and {1} hour(s)",
             "frFR": "{0} jour(s) et {1} heure(s)",
-            "ruRU": "{0} дн. и {1} ч."
+            "ruRU": "{0} дн. и {1} ч.",
+            "zhCN": "{0} 天 {1} 小时"
         },
         "ui_time_days": {
             "enGB": "{0} day(s)",
             "frFR": "{0} jour(s)",
-            "ruRU": "{0} дн."
+            "ruRU": "{0} дн.",
+            "zhCN": "{0} 天"
         },
         "ui_time_hours": {
             "enGB": "{0} hour(s)",
             "frFR": "{0} heure(s)",
-            "ruRU": "{0} ч."
+            "ruRU": "{0} ч.",
+            "zhCN": "{0} 小时"
         },
         "ui_time_less_than_hour": {
             "enGB": "Less than an hour",
             "frFR": "Moins d'une heure",
-            "ruRU": "Меньше часа"
+            "ruRU": "Меньше часа",
+            "zhCN": "不到一小时"
         },
         "ui_tab_standard": {
             "enGB": "Available Enchantments",
             "frFR": "Enchantements disponibles",
-            "ruRU": "Доступные зачарования"
+            "ruRU": "Доступные зачарования",
+            "zhCN": "可用附魔"
         },
         "ui_tab_custom": {
             "enGB": "Custom Enchantments",
             "frFR": "Enchantements personnalisés",
-            "ruRU": "Особые зачарования"
+            "ruRU": "Особые зачарования",
+            "zhCN": "自定义附魔"
         },
         "ui_custom_todo_more": {
             "enGB": "More custom enchantments are planned. Suggest yours on the Nexus page or via a GitHub issue!",
             "frFR": "D'autres enchantements personnalisés sont prévus. Proposez les vôtres sur la page Nexus ou via une issue GitHub !",
-            "ruRU": "Планируется больше пользовательских чар. Предлагайте свои на странице Nexus или через GitHub issue!"
+            "ruRU": "Планируется больше пользовательских чар. Предлагайте свои на странице Nexus или через GitHub issue!",
+            "zhCN": "计划添加更多自定义附魔。欢迎在 Nexus 页面或通过 GitHub issue 提出建议！"
         },
         "ui_no_custom_models": {
             "enGB": "No custom enchantment models found.",
             "frFR": "Aucun modèle d'enchantement personnalisé trouvé.",
-            "ruRU": "Модели особых зачарований не найдены."
+            "ruRU": "Модели особых зачарований не найдены.",
+            "zhCN": "未找到自定义附魔模型。"
         },
         "ui_custom_enchantment_placeholder": {
             "enGB": "Custom Enchantment",
             "frFR": "Enchantement personnalisé",
-            "ruRU": "Особое зачарование"
+            "ruRU": "Особое зачарование",
+            "zhCN": "自定义附魔"
         },
         "err_no_spell_selected": {
             "enGB": "You must select a spell first.",
             "frFR": "Vous devez d'abord sélectionner un sort.",
-            "ruRU": "Сначала выберите заклинание."
+            "ruRU": "Сначала выберите заклинание.",
+            "zhCN": "你必须先选择一个法术。"
         },
         "err_no_enchant_selected": {
             "enGB": "No enchantment selected.",
             "frFR": "Aucun enchantement sélectionné.",
-            "ruRU": "Зачарование не выбрано."
+            "ruRU": "Зачарование не выбрано.",
+            "zhCN": "未选择任何附魔。"
         },
         "err_not_enough_gold": {
             "enGB": "You don't have enough gold to start the selected projects.",
             "frFR": "Vous n'avez pas assez d'or pour lancer tous les projets sélectionnés.",
-            "ruRU": "У вас недостаточно золота для запуска выбранных проектов."
+            "ruRU": "У вас недостаточно золота для запуска выбранных проектов.",
+            "zhCN": "你的金币不足，无法启动所选项目。"
         },
         "err_require_plus_one": {
             "enGB": "Equipment must have (or receive simultaneously) an 'Enhancement' (+1) before receiving special enchantments.",
             "frFR": "Un équipement doit posséder (ou recevoir simultanément) une 'Altération' (+1) avant de recevoir des enchantements spéciaux.",
-            "ruRU": "Снаряжение должно иметь (или получить одновременно) 'Усиление' (+1) перед получением особых зачарований."
+            "ruRU": "Снаряжение должно иметь (или получить одновременно) 'Усиление' (+1) перед получением особых зачарований.",
+            "zhCN": "跑团规则：装备在接受特殊附魔前，必须拥有至少 +1 的“增强加值”。"
         },
         "err_limit_total": {
             "enGB": "Total power limit exceeded (max +{0}).",
             "frFR": "Limite de puissance totale dépassée (max +{0}).",
-            "ruRU": "Превышен лимит общей силы (макс. +{0})."
+            "ruRU": "Превышен лимит общей силы (макс. +{0}).",
+            "zhCN": "超出总能力上限（最大 +{0}）。"
         },
         "err_limit_enhancement": {
             "enGB": "Pure enhancement limit exceeded (max +{0}).",
             "frFR": "Limite d'altération pure dépassée (max +{0}).",
-            "ruRU": "Превышен лимит чистого усиления (макс. +{0})."
+            "ruRU": "Превышен лимит чистого усиления (макс. +{0}).",
+            "zhCN": "超出纯增强加值上限（最大 +{0}）。"
         },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab6": {
             "enGB": "« I have work to entrust to your craftsmen. »",
             "frFR": "« J'ai du travail à confier à vos artisans. »",
-            "ruRU": "«У меня есть работа, которую я хочу доверить вашим мастерам.»"
+            "ruRU": "«У меня есть работа, которую я хочу доверить вашим мастерам.»",
+            "zhCN": "“我有工作要委托给你的工匠。”"
         },
         "storyteller_wilcer_contact_key": {
             "enGB": "« I would like you to contact Quartermaster Wilcer Garms for me. »",
             "frFR": "« Je souhaiterais que vous contactiez le quartier-maître Wilcer Garms pour moi. »",
-            "ruRU": "«Я бы хотел, чтобы вы связались с интендантом Уилцером Гармсом для меня.»"
+            "ruRU": "«Я бы хотел, чтобы вы связались с интендантом Уилцером Гармсом для меня.»",
+            "zhCN": "“我想请你帮我联系军需官怀尔瑟·格阿姆斯。”"
         },
         "storyteller_wilcer_reply_key": {
             "enGB": "« Yes, I think I know who that is. What would you like me to tell him? »",
             "frFR": "« Oui, je pense savoir de qui il s'agit. Que voulez-vous que je lui transmette ? »",
-            "ruRU": "«Да, я кажется знаю, кто это. Что вы хотите, чтобы я ему передал?»"
+            "ruRU": "«Да, я кажется знаю, кто это. Что вы хотите, чтобы я ему передал?»",
+            "zhCN": "“是的，我知道他是谁。你想让我转告他什么？”"
         },
         "storyteller_wilcer_workshop_key": {
             "enGB": "« It's about an item from his workshop. »",
             "frFR": "« C'est à propos d'un objet de son atelier. »",
-            "ruRU": "«Это насчет предмета из его мастерской.»"
+            "ruRU": "«Это насчет предмета из его мастерской.»",
+            "zhCN": "“是关于他工坊里的一件物品。”"
         },
         "storyteller_wilcer_enchant_key": {
             "enGB": "« I would like him to have a piece of equipment enchanted. »",
             "frFR": "« Je voudrais qu'il fasse enchanter une pièce d'équipement »",
-            "ruRU": "«Я бы хотел, чтобы он зачаровал часть снаряжения.»"
+            "ruRU": "«Я бы хотел, чтобы он зачаровал часть снаряжения.»",
+            "zhCN": "“我想让他帮忙给一件装备附魔。”"
         },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab7": {
             "enGB": "« Of course, the Quartermaster's office is here for that. What is it about exactly? »",
             "frFR": "« Bien sûr, l'Intendance est là pour ça. De quoi s'agit-il précisément ? »",
-            "ruRU": "«Разумеется, интендантская служба для того и существует. В чем именно заключается ваш вопрос?»"
+            "ruRU": "«Разумеется, интендантская служба для того и существует. В чем именно заключается ваш вопрос?»",
+            "zhCN": "“当然，军需官办公室就是为此设立的。具体是什么事？”"
         },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab8": {
             "enGB": "« Here is some equipment they should take care of. »",
             "frFR": "« Voici un équipement dont ils doivent s'occuper. »",
-            "ruRU": "«Вот снаряжение, о котором им следует позаботиться.»"
+            "ruRU": "«Вот снаряжение, о котором им следует позаботиться.»",
+            "zhCN": "“这里有一些需要他们处理的装备。”"
         },
         "fa3e1f7d4e3347bdaeb88a1b6c8baab9": {
             "enGB": "« I would like to modify some equipment I already entrusted to you. »",
             "frFR": "« J'aimerais modifier un équipement que je vous ai confié. »",
-            "ruRU": "«Я бы хотел улучшить вещи, которое уже передал вам.»"
+            "ruRU": "«Я бы хотел улучшить вещи, которое уже передал вам.»",
+            "zhCN": "“我想修改之前已经委托给你们的一些装备。”"
         },
         "fa3e1f7d4e3347bdaeba8a1b6c8baab1": {
             "enGB": "« Forget about it. »",
             "frFR": "« Oubliez ça. »",
-            "ruRU": "«Забудьте об этом. »"
+            "ruRU": "«Забудьте об этом. »",
+            "zhCN": "“算了，当我没说。”"
         },
         "fa3e1f7d4e3347bdaeba8a1b6c8baab2": {
             "enGB": "« I'm listening. Show me the equipment in question, I'll see that it's sent to the best specialists in Mendev. »",
             "frFR": "« Je vous écoute. Montrez-moi l'équipement en question, je m'occuperai de le transmettre aux meilleurs spécialistes du Mendev. »",
-            "ruRU": "«Я слушаю. Покажите мне это вещи, я прослежу, чтобы его отправили к лучшим специалистам в Мендев.»"
+            "ruRU": "«Я слушаю. Покажите мне это вещи, я прослежу, чтобы его отправили к лучшим специалистам в Мендев.»",
+            "zhCN": "“我听着呢。把相关装备拿给我看看，我会负责将它送给蒙蒂夫最好的专家。”"
         },
         "dialog_cue_stored_item": {
             "enGB": "« Very well, let's take a look at your stash. What enchants do you want on those items? »",
             "frFR": "« Très bien, inspectons votre réserve. Quels enchantements souhaitez-vous appliquer à ces objets ? »",
-            "ruRU": "«Что ж, давайте взглянем на ваши запасы. Какие чары вы хотите наложить на эти предметы?.»"
+            "ruRU": "«Что ж, давайте взглянем на ваши запасы. Какие чары вы хотите наложить на эти предметы?.»",
+            "zhCN": "“很好，让我们看看你的储藏箱。你想在这些物品上施加什么附魔？”"
         },
         "fa3e1f7d4e3347bdaeba8a1b6c8baab3": {
             "enGB": "« As you wish. Anything else? »",
             "frFR": "« Entendu. Je reste à votre disposition si vous changez d'avis. Autre chose ? »",
-            "ruRU": "«Как пожелаете. Что-нибудь еще? »"
+            "ruRU": "«Как пожелаете. Что-нибудь еще? »",
+            "zhCN": "“如你所愿。还有别的事吗？”"
         },
         "ui_title_workshop": {
             "enGB": "Workshop",
             "frFR": "Atelier",
-            "ruRU": "Мастерская"
+            "ruRU": "Мастерская",
+            "zhCN": "工坊"
         },
         "ui_title_config": {
             "enGB": "Configuration",
             "frFR": "Configuration",
-            "ruRU": "Конфигурация"
+            "ruRU": "Конфигурация",
+            "zhCN": "配置"
         },
         "ui_title_details": {
             "enGB": "Details: ",
             "frFR": "Détails : ",
-            "ruRU": "Подробно: "
+            "ruRU": "Подробно: ",
+            "zhCN": "详情："
         },
         "ui_title_select": {
             "enGB": "Item Selection",
             "frFR": "Sélection d'objet",
-            "ruRU": "Выбор объекта"
+            "ruRU": "Выбор объекта",
+            "zhCN": "物品选择"
         },
         "ui_feedback_renamed": {
             "enGB": "The item has been renamed!",
             "frFR": "L'objet a été renommé !",
-            "ruRU": "Предмет был переименован!"
+            "ruRU": "Предмет был переименован!",
+            "zhCN": "物品已重命名！"
         },
         "ui_feedback_autoname_gen": {
             "enGB": "Automatic name generated.",
             "frFR": "Nom automatique généré.",
-            "ruRU": "Автогенерация имени."
+            "ruRU": "Автогенерация имени.",
+            "zhCN": "已生成自动命名。"
         },
         "log_project_started": {
             "enGB": "<color=#E2C675>[Workshop]</color> <b>{0}</b> has been ordered for <b>{1} gp</b>.",
             "frFR": "<color=#E2C675>[Atelier]</color> <b>{0}</b> a été commandé pour <b>{1} po</b>.",
-            "ruRU": "<color=#E2C675>[Workshop]</color> <b>{0}</b> был заказан за <b>{1} gp</b>."
+            "ruRU": "<color=#E2C675>[Workshop]</color> <b>{0}</b> был заказан за <b>{1} gp</b>.",
+            "zhCN": "<color=#E2C675>[工坊]</color> 已订购 <b>{0}</b>，花费 <b>{1} 金币</b>。"
         },
         "ui_feedback_projects_started": {
             "enGB": "Projects started: {0} enchantment(s).",
             "frFR": "Projets lancés : {0} enchantement(s).",
-            "ruRU": "Запущено проектов: {0} зачарования(s)."
+            "ruRU": "Запущено проектов: {0} зачарования(s).",
+            "zhCN": "项目已启动：{0} 项附魔。"
         },
         "ui_feedback_no_funds": {
             "enGB": "Unexpected error: insufficient funds at the time of payment.",
             "frFR": "Erreur inattendue : fonds insuffisants au moment du paiement.",
-            "ruRU": "Непредвиденная ошибка: на момент оплаты недостаточно средств."
+            "ruRU": "Непредвиденная ошибка: на момент оплаты недостаточно средств.",
+            "zhCN": "意外错误：付款时资金不足。"
         },
         "ui_btn_back": {
             "enGB": "<< BACK",
             "frFR": "<< RETOUR",
-            "ruRU": "<< НАЗАД"
+            "ruRU": "<< НАЗАД",
+            "zhCN": "<< 返回"
         },
         "ui_btn_cheats": {
             "enGB": "Cheats",
             "frFR": "Triches",
-            "ruRU": "Читы"
+            "ruRU": "Читы",
+            "zhCN": "作弊"
         },
         "ui_btn_info": {
             "enGB": "Information",
             "frFR": "Informations",
-            "ruRU": "Информация"
+            "ruRU": "Информация",
+            "zhCN": "信息"
         },
         "ui_info_title": {
             "enGB": "Crafting Rules (TTRPG)",
             "frFR": "Règles d'Artisanat (JDR)",
-            "ruRU": "Правила создания (TTRPG)"
+            "ruRU": "Правила создания (TTRPG)",
+            "zhCN": "制作规则（跑团规则）"
         },
         "ui_info_text": {
             "enGB": "This interface is designed to allow you to enchant your equipment according to the official tabletop roleplaying rules (Pathfinder 1st Edition).\n\n<b>The rules:</b>\n\nGenerally speaking, the more complex and powerful the requested enchantment, the higher its price and crafting time. The number of days required is always 1/1000 of the calculated price (see official rules for detailed formulas).\n\nWeapons and armor can only be enchanted if they already possess a minimum +1 enhancement bonus.\n\nEach enchantment has a certain \"weight.\" Weapons and armor cannot exceed a total weight of 10 by combining their different enchantments. The total weight of the selected enchantments is indicated at the bottom left (enchantment weight). Other items have no limitation.\n\nAn enchantment is designed to be applied to specific pieces of equipment (slot column). However, the rules allow bypassing this limitation by applying a penalty factor of 1.5.\n\nAll these limitations can be bypassed in the \"cheats\" tab if you wish.",
             "frFR": "Cette interface est conçue pour vous permettre d’enchanter votre équipement selon les règles officielles du jeu de rôle papier (Pathfinder 1ère édition).\n\n<b>Les règles :</b>\n\nDe façon générale, plus l’enchantement demandé est complexe et puissant et plus son prix et son temps de fabrication augmentent. Le nombre de jours nécessaires est toujours 1/1000 du prix calculé (voir les règles officielles pour les formules détaillées).\n\nLes armes et armures ne peuvent être enchantées qu’à la condition de posséder déjà un bonus de +1 d’altération minimum.\n\nChaque enchantement possède un certain « poids ». Les armes et armures ne peuvent pas dépasser un poids total de 10 en cumulant leurs différents enchantements. Le poids total des enchantements sélectionnés est indiqué en bas à gauche (poids des enchantements). Les autres items n’ont pas de limitation.\n\nUn enchantement est conçu pour être appliqué sur des pièces d’équipement spécifiques (colonne emplacement). Les règles permettent toutefois de contourner cette limitation en appliquant alors un facteur de pénalité de 1,5.\n\nToutes ces limitations peuvent être contournées dans l’onglet « Triches » si vous le désirez.",
-            "ruRU": "Этот интерфейс разработан, чтобы вы могли зачаровывать свое снаряжение в соответствии с официальными правилами настольной ролевой игры (Pathfinder 1-й редакции).\n\n<b>Правила:</b>\n\nВ целом, чем сложнее и мощнее запрашиваемое зачарование, тем выше его цена и время изготовления. Количество необходимых дней всегда составляет 1/1000 от рассчитанной цены (подробные формулы см. в официальных правилах).\n\nОружие и доспехи могут быть зачарованы только в том случае, если они уже имеют бонус усиления как минимум +1.\n\nКаждое зачарование имеет определенный «вес». Оружие и доспехи не могут превышать общий вес 10 при сочетании их различных зачарований. Общий вес выбранных зачарований указан внизу слева (вес зачарований). У других предметов ограничений нет.\n\nЗачарование предназначено для применения к конкретным предметам экипировки (колонка «слот»). Однако правила позволяют обойти это ограничение, применив штрафной коэффициент 1,5.\n\nВсе эти ограничения можно обойти на вкладке «читы», если вы того пожелаете."
+            "ruRU": "Этот интерфейс разработан, чтобы вы могли зачаровывать свое снаряжение в соответствии с официальными правилами настольной ролевой игры (Pathfinder 1-й редакции).\n\n<b>Правила:</b>\n\nВ целом, чем сложнее и мощнее запрашиваемое зачарование, тем выше его цена и время изготовления. Количество необходимых дней всегда составляет 1/1000 от рассчитанной цены (подробные формулы см. в официальных правилах).\n\nОружие и доспехи могут быть зачарованы только в том случае, если они уже имеют бонус усиления как минимум +1.\n\nКаждое зачарование имеет определенный «вес». Оружие и доспехи не могут превышать общий вес 10 при сочетании их различных зачарований. Общий вес выбранных зачарований указан внизу слева (вес зачарований). У других предметов ограничений нет.\n\nЗачарование предназначено для применения к конкретным предметам экипировки (колонка «слот»). Однако правила позволяют обойти это ограничение, применив штрафной коэффициент 1,5.\n\nВсе эти ограничения можно обойти на вкладке «читы», если вы того пожелаете.",
+            "zhCN": "此界面旨在让你能够按照官方桌面角色扮演规则（开拓者一版 / Pathfinder 1E）为你的装备附魔。\n\n<b>规则说明：</b>\n\n通常来说，所请求的附魔越复杂强大，其价格与制作时间就越高。所需天数固定为计算所得价格的 1/1000（详细公式请参阅官方规则）。\n\n武器和护甲只有在已拥有至少 +1 增强加值的前提下才能被附魔。\n\n每种附魔都有一定的“权重”。武器和护甲的各项附魔组合后的总权重不得超过 10。所选附魔的总权重显示在左下方（附魔权重）。其他物品不受此限制。\n\n附魔原本设计用于特定的装备部位（部位列）。不过，规则允许通过施加 1.5 倍惩罚系数来绕过此限制。\n\n如果你愿意，所有这些限制都可以在“作弊”选项卡中忽略。"
         },
         "ui_no_item_stashed": {
             "enGB": "\n   (No item is stored in the workshop)",
             "frFR": "\n   (Aucun objet n'est stocké dans l'atelier)",
-            "ruRU": "\n   (В мастерской нет предметов)"
+            "ruRU": "\n   (В мастерской нет предметов)",
+            "zhCN": "\n   (工坊中未存放任何物品)"
         },
         "ui_in_forge": {
             "enGB": " (In forge...)",
             "frFR": " (En forge...)",
-            "ruRU": " (В кузне...)"
+            "ruRU": " (В кузне...)",
+            "zhCN": " (锻造中...)"
         },
         "ui_wilcer_working": {
             "enGB": "<b>WILCER IS CURRENTLY WORKING ON THIS ITEM</b>",
             "frFR": "<b>WILCER EST EN TRAIN DE TRAVAILLER SUR CET OBJET</b>",
-            "ruRU": "<b>СЕЙЧАС ВИЛЬСЕР РАБОТАЕТ НАД ЭТИМ ТОВАРОМ</b>"
+            "ruRU": "<b>СЕЙЧАС ВИЛЬСЕР РАБОТАЕТ НАД ЭТИМ ТОВАРОМ</b>",
+            "zhCN": "<b>威尔瑟当前正在加工此物品</b>"
         },
         "ui_time_remaining": {
             "enGB": "Estimated remaining time: {0:F1} days",
             "frFR": "Temps restant estimé : {0:F1} jours",
-            "ruRU": "Примерное оставшееся время: {0:F1} суток"
+            "ruRU": "Примерное оставшееся время: {0:F1} суток",
+            "zhCN": "预计剩余时间：{0:F1} 天"
         },
         "ui_btn_close_ui": {
             "enGB": "Close Interface",
             "frFR": "Fermer l'interface",
-            "ruRU": "Закрыть интерфейс"
+            "ruRU": "Закрыть интерфейс",
+            "zhCN": "关闭界面"
         },
         "ui_special_action_rename": {
             "enGB": "Special Action: Rename item (Free)",
             "frFR": "Action Spéciale : Renommer l'objet (Gratuit)",
-            "ruRU": "Спец. действие: Переименовать предмет (Бесплатно)"
+            "ruRU": "Спец. действие: Переименовать предмет (Бесплатно)",
+            "zhCN": "特殊操作：重命名物品（免费）"
         },
         "ui_btn_rename": {
             "enGB": "Rename",
             "frFR": "Renommer",
-            "ruRU": "Переименовать"
+            "ruRU": "Переименовать",
+            "zhCN": "重命名"
         },
         "ui_btn_auto": {
             "enGB": "Auto",
             "frFR": "Auto",
-            "ruRU": "Авто"
+            "ruRU": "Авто",
+            "zhCN": "自动"
         },
         "ui_btn_change_icon": {
             "enGB": "Change Icon",
             "frFR": "Changer l'icône",
-            "ruRU": "Изменить иконку"
+            "ruRU": "Изменить иконку",
+            "zhCN": "更换图标"
         },
         "ui_btn_change_description": {
             "enGB": "Edit Description",
             "frFR": "Éditer Description",
-            "ruRU": "Изменить описание"
+            "ruRU": "Изменить описание",
+            "zhCN": "编辑描述"
         },
         "ui_title_edit_description": {
             "enGB": "Edit Item Description",
             "frFR": "Éditer la description de l'objet",
-            "ruRU": "Изменить описание предмета"
+            "ruRU": "Изменить описание предмета",
+            "zhCN": "编辑物品描述"
         },
         "ui_btn_save": {
             "enGB": "Save",
             "frFR": "Sauvegarder",
-            "ruRU": "Сохранить"
+            "ruRU": "Сохранить",
+            "zhCN": "保存"
         },
         "ui_btn_cancel": {
             "enGB": "Cancel",
             "frFR": "Annuler",
-            "ruRU": "Отмена"
+            "ruRU": "Отмена",
+            "zhCN": "取消"
         },
         "ui_feedback_description_changed": {
             "enGB": "Description updated!",
             "frFR": "Description mise à jour !",
-            "ruRU": "Описание обновлено!"
+            "ruRU": "Описание обновлено!",
+            "zhCN": "描述已更新！"
         },
         "ui_btn_reset_icon": {
             "enGB": "Reset",
             "frFR": "Réinitialiser",
-            "ruRU": "Сбросить"
+            "ruRU": "Сбросить",
+            "zhCN": "重置"
         },
         "ui_icon_browser_title": {
             "enGB": "Select a new icon",
             "frFR": "Choisir une nouvelle icône",
-            "ruRU": "Выберите новую иконку"
+            "ruRU": "Выберите новую иконку",
+            "zhCN": "选择新图标"
         },
         "ui_btn_select": {
             "enGB": "Select",
             "frFR": "Sélectionner",
-            "ruRU": "Выбрать"
+            "ruRU": "Выбрать",
+            "zhCN": "选择"
         },
         "ui_applied_enchants": {
             "enGB": "Applied Enchantments:",
             "frFR": "Enchantements appliqués :",
-            "ruRU": "Применённые зачарования:"
+            "ruRU": "Применённые зачарования:",
+            "zhCN": "已应用的附魔："
         },
         "ui_no_magic_enchants": {
             "enGB": "<i>(No magic enchantment)</i>",
             "frFR": "<i>(Aucun enchantement magique)</i>",
-            "ruRU": "<i>(Отсутствуют чары на предмете)</i>"
+            "ruRU": "<i>(Отсутствуют чары на предмете)</i>",
+            "zhCN": "<i>(无魔法附魔)</i>"
         },
         "ui_btn_remove": {
             "enGB": "Remove",
             "frFR": "Retirer",
-            "ruRU": "Снять"
+            "ruRU": "Снять",
+            "zhCN": "移除"
         },
         "ui_btn_cant_remove": {
             "enGB": "Can't remove",
             "frFR": "Obligatoire",
-            "ruRU": "Нельзя снять"
+            "ruRU": "Нельзя снять",
+            "zhCN": "无法移除"
         },
         "ui_available_enchants": {
             "enGB": "Available Enchantments:",
             "frFR": "Enchantements disponibles :",
-            "ruRU": "Доступные зачарования:"
+            "ruRU": "Доступные зачарования:",
+            "zhCN": "可用附魔："
         },
         "ui_filter_weapons": {
             "enGB": " Weapons",
             "frFR": " Armes",
-            "ruRU": "Оружие"
+            "ruRU": "Оружие",
+            "zhCN": " 武器"
         },
         "ui_filter_armors": {
             "enGB": " Armors",
             "frFR": " Armures",
-            "ruRU": "Броня"
+            "ruRU": "Броня",
+            "zhCN": " 护甲"
         },
         "ui_filter_others": {
             "enGB": " Wondrous",
             "frFR": " Merveilleux",
-            "ruRU": " Диковинки"
+            "ruRU": " Диковинки",
+            "zhCN": " 奇物"
         },
         "ui_search_label": {
             "enGB": "Search: ",
             "frFR": "Recherche : ",
-            "ruRU": "Поиск: "
+            "ruRU": "Поиск: ",
+            "zhCN": "搜索："
         },
         "ui_filter_active_btn": {
             "enGB": "Filters ({0}) \u25bc",
             "frFR": "Filtres ({0}) \u25bc",
-            "ruRU": "Фильтр ({0}) \u25bc"
+            "ruRU": "Фильтр ({0}) \u25bc",
+            "zhCN": "筛选 ({0}) ▼"
         },
         "ui_filter_all_btn": {
             "enGB": "Filters (All) \u25bc",
             "frFR": "Filtres (Tous) \u25bc",
-            "ruRU": "Фильтр (Все) \u25bc"
+            "ruRU": "Фильтр (Все) \u25bc",
+            "zhCN": "筛选 (全部) ▼"
         },
         "ui_filter_check_all": {
             "enGB": "Check All",
             "frFR": "Tout cocher",
-            "ruRU": "Выбрать все"
+            "ruRU": "Выбрать все",
+            "zhCN": "全选"
         },
         "ui_filter_uncheck_all": {
             "enGB": "Uncheck All",
             "frFR": "Tout décocher",
-            "ruRU": "Сброс"
+            "ruRU": "Сброс",
+            "zhCN": "取消全选"
         },
         "ui_filter_none_active": {
             "enGB": " <i>(No filter active = Show all)</i>",
             "frFR": " <i>(Aucun filtre actif = Tout afficher)</i>",
-            "ruRU": " <i>(Фильтр не выбран = Показать всё)</i>"
+            "ruRU": " <i>(Фильтр не выбран = Показать всё)</i>",
+            "zhCN": " <i>(无激活筛选 = 显示全部)</i>"
         },
         "ui_scan_in_progress": {
             "enGB": "Scan in progress \u2014 no enchantment available for now.",
             "frFR": "Scan en cours \u2014 aucun enchantement disponible pour l'instant.",
-            "ruRU": "Сканирование продолжается \u2014 на данный момент зачарование недоступно."
+            "ruRU": "Сканирование продолжается \u2014 на данный момент зачарование недоступно.",
+            "zhCN": "扫描进行中 — 当前无可用附魔。"
         },
         "ui_current_level": {
             "enGB": "Enchantment weight: {0}/{1}",
             "frFR": "Poids des enchantements : {0}/{1}",
-            "ruRU": "Вес зачарования: {0}/{1}"
+            "ruRU": "Вес зачарования: {0}/{1}",
+            "zhCN": "附魔权重：{0}/{1}"
         },
         "ui_selection_total": {
             "enGB": "Selection: +{0} \u2014 Service Cost: {1} gp / ~{2} d",
             "frFR": "Sélection : +{0} \u2014 Coût du Service : {1} po / ~{2} j",
-            "ruRU": "Выбор: +{0} \u2014 Стоимость услуги: {1} gp / ~{2} дн."
+            "ruRU": "Выбор: +{0} \u2014 Стоимость услуги: {1} gp / ~{2} дн.",
+            "zhCN": "选择：+{0} — 服务费用：{1} 金币 / 约 {2} 天"
         },
         "ui_btn_validate_selection": {
             "enGB": "Confirm Selection",
             "frFR": "Valider la sélection",
-            "ruRU": "Подтвердите выбор"
+            "ruRU": "Подтвердите выбор",
+            "zhCN": "确认选择"
         },
         "ui_btn_cancel_selection": {
             "enGB": "Cancel Selection",
             "frFR": "Annuler la sélection",
-            "ruRU": "Отмена выбора"
+            "ruRU": "Отмена выбора",
+            "zhCN": "取消选择"
         },
         "ui_settings_title": {
             "enGB": "Workshop Settings",
             "frFR": "Réglages de l'Atelier",
-            "ruRU": "Настройки Мастерской"
+            "ruRU": "Настройки Мастерской",
+            "zhCN": "工坊设置"
         },
         "ui_settings_cost_mult": {
             "enGB": " Cost Multiplier: ",
             "frFR": " Multiplicateur de coût : ",
-            "ruRU": " Коэффициент затрат: "
+            "ruRU": " Коэффициент затрат: ",
+            "zhCN": " 费用倍率："
         },
         "ui_settings_instant_craft": {
             "enGB": "Instant Crafting",
             "frFR": "Fabrication Instantanée",
-            "ruRU": "Мгновенное создание"
+            "ruRU": "Мгновенное создание",
+            "zhCN": "瞬间制作"
         },
         "ui_settings_potion_restrictions": {
             "enGB": " Apply TTRPG restrictions on potions",
             "frFR": " Appliquer les restrictions TTRPG sur les potions",
-            "ruRU": " Применять ограничения TTRPG для зелий"
+            "ruRU": " Применять ограничения TTRPG для зелий",
+            "zhCN": " 对药水应用跑团规则限制"
         },
         "ui_settings_scroll_restrictions": {
             "enGB": " Apply TTRPG restrictions on scrolls",
             "frFR": " Appliquer les restrictions TTRPG sur les parchemins",
-            "ruRU": " Применять ограничения TTRPG для свитков"
+            "ruRU": " Применять ограничения TTRPG для свитков",
+            "zhCN": " 对卷轴应用跑团规则限制"
         },
         "ui_settings_wand_restrictions": {
             "enGB": " Apply TTRPG restrictions on wands",
             "frFR": " Appliquer les restrictions TTRPG sur les baguettes",
-            "ruRU": " Применять ограничения TTRPG для палочек"
+            "ruRU": " Применять ограничения TTRPG для палочек",
+            "zhCN": " 对魔杖应用跑团规则限制"
         },
         "ui_feedback_all_forges_done": {
             "enGB": "All active forging projects have been completed instantly!",
             "frFR": "Toutes les forges en cours ont été terminées instantanément !",
-            "ruRU": "Все текущие проекты по ковке были завершены в кратчайшие сроки!"
+            "ruRU": "Все текущие проекты по ковке были завершены в кратчайшие сроки!",
+            "zhCN": "所有进行中的锻造项目已瞬间完成！"
         },
         "ui_settings_enforce_limit": {
             "enGB": " Enforce Bonus Limits (Pathfinder)",
             "frFR": " Appliquer les limites de bonus (Pathfinder)",
-            "ruRU": " Внедрение ограничений на бонусы (Pathfinder)"
+            "ruRU": " Внедрение ограничений на бонусы (Pathfinder)",
+            "zhCN": " 强制遵循加值上限（开拓者规则）"
         },
         "ui_settings_max_enhancement": {
             "enGB": " Max Enhancement: +{0}",
             "frFR": " Max Altération : +{0}",
-            "ruRU": " Максимальное усиление: +{0}"
+            "ruRU": " Максимальное усиление: +{0}",
+            "zhCN": " 最大增强加值：+{0}"
         },
         "ui_settings_max_total": {
             "enGB": " Max Total: +{0}",
             "frFR": " Max Total : +{0}",
-            "ruRU": " Максимальный лимит: +{0}"
+            "ruRU": " Максимальный лимит: +{0}",
+            "zhCN": " 最大总计：+{0}"
         },
         "ui_settings_require_plus_one": {
             "enGB": " TTRPG Prerequisite: At least +1 Enhancement to apply any enchants",
             "frFR": " Prérequis du JDR : +1 Altération minimum pour pouvoir enchanter",
-            "ruRU": " Предварительное условие для настольной игры: как минимум +1 улучшение для применения любых зачарований"
+            "ruRU": " Предварительное условие для настольной игры: как минимум +1 улучшение для применения любых зачарований",
+            "zhCN": " 跑团规则前置条件：必须至少拥有 +1 增强加值才能附加附魔"
         },
         "ui_settings_slot_penalty": {
             "enGB": " Apply Slot Penalty (x1.5)",
             "frFR": " Appliquer la pénalité d'emplacement (x1.5)",
-            "ruRU": " Применить штраф за слот (x1,5)"
+            "ruRU": " Применить штраф за слот (x1,5)",
+            "zhCN": " 应用部位惩罚 (x1.5)"
         },
         "ui_settings_enable_epic": {
             "enGB": " Enable Epic Multiplier",
             "frFR": " Activer le multiplicateur Épique",
-            "ruRU": " Включить эпический множитель"
+            "ruRU": " Включить эпический множитель",
+            "zhCN": " 启用史诗倍率"
         },
         "ui_settings_epic_multiplier": {
             "enGB": " Epic Multiplier: x{0:F1}",
             "frFR": " Multiplicateur Épique : x{0:F1}",
-            "ruRU": " Эпический множитель: x{0:F1}"
+            "ruRU": " Эпический множитель: x{0:F1}",
+            "zhCN": " 史诗倍率：x{0:F1}"
         },
         "ui_settings_source_display": {
             "enGB": "Source display:",
             "frFR": "Affichage des sources :",
-            "ruRU": "Отображение источника:"
+            "ruRU": "Отображение источника:",
+            "zhCN": "来源显示："
         },
         "ui_settings_source_all": {
             "enGB": "All",
             "frFR": "Tout",
-            "ruRU": "Все"
+            "ruRU": "Все",
+            "zhCN": "全部"
         },
         "ui_settings_source_ttrpg": {
             "enGB": "TTRPG (TTRPG enchantments only)",
             "frFR": "TTRPG (Uniquement les enchantements du TTRPG)",
-            "ruRU": "TTRPG (Только зачарования по правилам настольной игры)"
+            "ruRU": "TTRPG (Только зачарования по правилам настольной игры)",
+            "zhCN": "跑团规则（仅跑团附魔）"
         },
         "ui_settings_source_owlcat": {
             "enGB": "Owlcat (All generic in-game enchantments)",
             "frFR": "Owlcat (Tous les enchantements génériques du jeu)",
-            "ruRU": "Owlcat (Все стандартные внутриигровые зачарования)"
+            "ruRU": "Owlcat (Все стандартные внутриигровые зачарования)",
+            "zhCN": "猫头鹰（所有游戏通用附魔）"
         },
         "ui_settings_source_owlcatplus": {
             "enGB": "Owlcat+ (All game enchantments, including unique items)",
             "frFR": "Owlcat+ (Tous les enchantements du jeu, y compris les items uniques)",
-            "ruRU": "Owlcat+ (Все игровые зачарования, включая уникальные предметы)"
+            "ruRU": "Owlcat+ (Все игровые зачарования, включая уникальные предметы)",
+            "zhCN": "猫头鹰+（所有游戏附魔，包括独特物品）"
         },
         "ui_settings_source_mods": {
             "enGB": "Mod (All non-base game enchantments)",
             "frFR": "Mod (Tous les enchantements ne provenant pas du jeu)",
-            "ruRU": "Mod (Все зачарования, не входящие в базовую игру)"
+            "ruRU": "Mod (Все зачарования, не входящие в базовую игру)",
+            "zhCN": "Mod（所有非本体游戏附魔）"
         },
         "ui_settings_source_all_desc": {
             "enGB": "Show all",
             "frFR": "Tout afficher",
-            "ruRU": "Показать всё"
+            "ruRU": "Показать всё",
+            "zhCN": "显示全部"
         },
         "ui_settings_diagnostic": {
             "enGB": "Diagnostic Tools:",
             "frFR": "Outils de diagnostique :",
-            "ruRU": "Инструменты диагностики:"
+            "ruRU": "Инструменты диагностики:",
+            "zhCN": "诊断工具："
         },
         "ui_settings_force_sync": {
             "enGB": "Force Synchronization (Full Scan)",
             "frFR": "Forcer la synchronisation (Scan intégral)",
-            "ruRU": "Принудительная синхронизация (Полное сканирование)"
+            "ruRU": "Принудительная синхронизация (Полное сканирование)",
+            "zhCN": "强制同步（完整扫描）"
         },
         "ui_unknown_enchant_name": {
             "enGB": "Unknown Enchantment",
             "frFR": "Enchantement inconnu",
-            "ruRU": "Неизвестное зачарование"
+            "ruRU": "Неизвестное зачарование",
+            "zhCN": "未知附魔"
         },
         "ui_sync_success": {
             "enGB": "Sync successful ({0} enchantments).",
             "frFR": "Sync réussie ({0} enchantements).",
-            "ruRU": "Синхронизация успешна ({0} зачарований)."
+            "ruRU": "Синхронизация успешна ({0} зачарований).",
+            "zhCN": "同步成功（{0} 个附魔）。"
         },
         "ui_btn_ok": {
             "enGB": "OK",
             "frFR": "OK",
-            "ruRU": "ОК"
+            "ruRU": "ОК",
+            "zhCN": "确定"
         },
         "ui_btn_workshop_short": {
             "enGB": "Workshop",
             "frFR": "Atelier",
-            "ruRU": "Мастерская"
+            "ruRU": "Мастерская",
+            "zhCN": "工坊"
         },
         "ui_cat_untyped": {
             "enGB": "Untyped",
             "frFR": "Sans catégorie",
-            "ruRU": "Нетипичный"
+            "ruRU": "Нетипичный",
+            "zhCN": "未分类"
         },
         "ui_currency_gp": {
             "enGB": "gp",
             "frFR": "po",
-            "ruRU": "gp"
+            "ruRU": "gp",
+            "zhCN": "金币"
         },
         "ui_time_days_short": {
             "enGB": "d",
             "frFR": "j",
-            "ruRU": "d"
+            "ruRU": "d",
+            "zhCN": "天"
         },
         "err_require_plus_one": {
             "enGB": "TTRPG rules: Equipment must have at least an 'Enhancement' (+1) before receiving special enchantments.",
             "frFR": "Règles JDR : Un équipement doit posséder au moins une 'Altération' (+1) avant de recevoir des enchantements spéciaux.",
-            "ruRU": "Правила настольной ролевой игры: Снаряжение должно иметь как минимум «Улучшение» (+1), прежде чем получать особые зачарования."
+            "ruRU": "Правила настольной ролевой игры: Снаряжение должно иметь как минимум «Улучшение» (+1), прежде чем получать особые зачарования.",
+            "zhCN": "跑团规则：装备在接受特殊附魔前，必须拥有至少 +1 的“增强加值”。"
         },
         "err_limit_total": {
             "enGB": "Total power limit exceeded (max +{0}).",
             "frFR": "Limite de puissance totale dépassée (max +{0}).",
-            "ruRU": "Превышен лимит общей мощности (max +{0})."
+            "ruRU": "Превышен лимит общей мощности (max +{0}).",
+            "zhCN": "超出总能力上限（最大 +{0}）。"
         },
         "err_limit_enhancement": {
             "enGB": "Pure enhancement limit exceeded (max +{0}).",
             "frFR": "Limite d'altération pure dépassée (max +{0}).",
-            "ruRU": "Превышен предел чистого усиления (max +{0})."
+            "ruRU": "Превышен предел чистого усиления (max +{0}).",
+            "zhCN": "超出纯增强加值上限（最大 +{0}）。"
         },
         "ui_sync_in_progress": {
             "enGB": "Synchronization in progress...",
             "frFR": "Synchronisation en cours...",
-            "ruRU": "Идёт синхронизация..."
+            "ruRU": "Идёт синхронизация...",
+            "zhCN": "同步进行中..."
         },
         "ui_sync_waiting": {
             "enGB": "Waiting for synchronization...",
             "frFR": "En attente de synchronisation...",
-            "ruRU": "Ожидание синхронизации..."
+            "ruRU": "Ожидание синхронизации...",
+            "zhCN": "等待同步..."
         },
         "ui_sync_json_loaded": {
             "enGB": "JSON loaded ({0} entries).",
             "frFR": "JSON chargé ({0} entrées).",
-            "ruRU": "JSON загружен ({0} записей)."
+            "ruRU": "JSON загружен ({0} записей).",
+            "zhCN": "已加载 JSON（{0} 条）。"
         },
         "ui_sync_json_error": {
             "enGB": "JSON Error: {0}",
             "frFR": "Erreur JSON : {0}",
-            "ruRU": "Ошибка JSON: {0}"
+            "ruRU": "Ошибка JSON: {0}",
+            "zhCN": "JSON 错误：{0}"
         },
         "ui_sync_finalize_error": {
             "enGB": "Finalization failed: {0}",
             "frFR": "Échec finalisation : {0}",
-            "ruRU": "Сбой завершения: {0}"
+            "ruRU": "Сбой завершения: {0}",
+            "zhCN": "最终处理失败：{0}"
         },
         "ui_scan_initializing": {
             "enGB": "Initializing unified scan...",
             "frFR": "Initialisation du scan unifié...",
-            "ruRU": "Инициализация единого сканирования..."
+            "ruRU": "Инициализация единого сканирования...",
+            "zhCN": "正在初始化统一扫描..."
         },
         "ui_scan_blueprints_in_progress": {
             "enGB": "Scanning blueprints...",
             "frFR": "Analyse des blueprints...",
-            "ruRU": "Сканирование чертежей..."
+            "ruRU": "Сканирование чертежей...",
+            "zhCN": "正在扫描蓝图..."
         },
         "ui_scan_spells_in_progress": {
             "enGB": "Scanning blueprints for spells...",
             "frFR": "Analyse des blueprints pour les sorts...",
-            "ruRU": "Сканирование чертежей для заклинаний..."
+            "ruRU": "Сканирование чертежей для заклинаний...",
+            "zhCN": "正在扫描法术蓝图..."
         },
         "ui_scan_processing": {
             "enGB": "Processing blueprints: {0}/{1}",
             "frFR": "Traitement des blueprints : {0}/{1}",
-            "ruRU": "Обработка чертежей: {0}/{1}"
+            "ruRU": "Обработка чертежей: {0}/{1}",
+            "zhCN": "正在处理蓝图：{0}/{1}"
         },
         "ui_scan_finalizing": {
             "enGB": "Finalizing data registration...",
             "frFR": "Finalisation de l'enregistrement des données...",
-            "ruRU": "Завершение регистрации данных..."
+            "ruRU": "Завершение регистрации данных...",
+            "zhCN": "正在完成数据注册..."
         },
         "ui_scan_completed": {
             "enGB": "Scan completed.",
             "frFR": "Scan terminé.",
-            "ruRU": "Сканирование завершено."
+            "ruRU": "Сканирование завершено.",
+            "zhCN": "扫描完成。"
         },
         "ui_scan_warning": {
             "enGB": "This scan only happens once per session.",
             "frFR": "Ce scan ne se produit qu'une fois par session.",
-            "ruRU": "Это сканирование происходит только один раз за сессию."
+            "ruRU": "Это сканирование происходит только один раз за сессию.",
+            "zhCN": "此扫描每个游戏会话仅执行一次。"
         },
         "ui_cat_ring": {
             "enGB": "Rings",
             "frFR": "Anneaux",
-            "ruRU": "Кольца"
+            "ruRU": "Кольца",
+            "zhCN": "戒指"
         },
         "ui_cat_neck_amulet": {
             "enGB": "Necklaces & Amulets",
             "frFR": "Colliers & Amulettes",
-            "ruRU": "Амулеты и ожерелья"
+            "ruRU": "Амулеты и ожерелья",
+            "zhCN": "项链与护身符"
         },
         "ui_cat_belt": {
             "enGB": "Belts",
             "frFR": "Ceintures",
-            "ruRU": "Пояса"
+            "ruRU": "Пояса",
+            "zhCN": "腰带"
         },
         "ui_cat_boots": {
             "enGB": "Boots",
             "frFR": "Bottes",
-            "ruRU": "Обувь"
+            "ruRU": "Обувь",
+            "zhCN": "靴子"
         },
         "ui_cat_gloves": {
             "enGB": "Gloves & Gauntlets",
             "frFR": "Gants",
-            "ruRU": "Перчатки"
+            "ruRU": "Перчатки",
+            "zhCN": "手套"
         },
         "ui_cat_glasses": {
             "enGB": "Glasses & Goggles",
             "frFR": "Lunettes",
-            "ruRU": "Очки"
+            "ruRU": "Очки",
+            "zhCN": "眼镜与护目镜"
         },
         "ui_cat_helmet_headband": {
             "enGB": "Helmets & Headbands",
             "frFR": "Casques & Diadèmes",
-            "ruRU": "Шлемы и обручи"
+            "ruRU": "Шлемы и обручи",
+            "zhCN": "头盔与头带"
         },
         "ui_cat_cape": {
             "enGB": "Cloaks & Capes",
             "frFR": "Capes",
-            "ruRU": "Плащи"
+            "ruRU": "Плащи",
+            "zhCN": "斗篷与披风"
         },
         "ui_cat_bracers": {
             "enGB": "Bracers",
             "frFR": "Bracelets",
-            "ruRU": "Наручи"
+            "ruRU": "Наручи",
+            "zhCN": "护腕"
         },
         "ui_cat_robe": {
             "enGB": "Robes & Shirts",
             "frFR": "Robes & Chemises",
-            "ruRU": "Робы и рубашки"
+            "ruRU": "Робы и рубашки",
+            "zhCN": "长袍与衬衫"
         },
         "ui_cat_accessory": {
             "enGB": "Accessories",
             "frFR": "Accessoires",
-            "ruRU": "Аксессуары"
+            "ruRU": "Аксессуары",
+            "zhCN": "饰品"
         },
         "ui_sync_error_index": {
             "enGB": "Failed: Game index inaccessible.",
             "frFR": "Échec : Index du jeu inaccessible.",
-            "ruRU": "Ошибка: Индекс игры недоступен."
+            "ruRU": "Ошибка: Индекс игры недоступен.",
+            "zhCN": "失败：游戏索引不可访问。"
         },
         "ui_sync_integration": {
             "enGB": "Integration and filtering of overrides (JSON)...",
             "frFR": "Intégration et filtrage des surcharges (JSON)...",
-            "ruRU": "Интеграция и фильтрация переопределений (JSON)..."
+            "ruRU": "Интеграция и фильтрация переопределений (JSON)...",
+            "zhCN": "整合并过滤覆盖项 (JSON)..."
         },
         "ui_sync_scanner_progress": {
             "enGB": "Multithreaded binary scanner: {0} / {1} processed...",
             "frFR": "Scanner binaire multithread : {0} / {1} traités...",
-            "ruRU": "Многопоточный бинарный сканер: {0} / {1} обработано ..."
+            "ruRU": "Многопоточный бинарный сканер: {0} / {1} обработано ...",
+            "zhCN": "多线程二进制扫描器：已处理 {0} / {1}..."
         },
         "ui_pagination_info": {
             "enGB": "Page {0} / {1} ({2} items)",
             "frFR": "Page {0} / {1} ({2} objets)",
-            "ruRU": "Страница {0} / {1} ({2} предм.)"
+            "ruRU": "Страница {0} / {1} ({2} предм.)",
+            "zhCN": "第 {0} / {1} 页（{2} 件物品）"
         },
         "ui_pagination_goto": {
             "enGB": "Go to: ",
             "frFR": "Aller à : ",
-            "ruRU": "Перейти: "
+            "ruRU": "Перейти: ",
+            "zhCN": "前往："
         },
         "ui_btn_go": {
             "enGB": "Go",
             "frFR": "Ok",
-            "ruRU": "Ок"
+            "ruRU": "Ок",
+            "zhCN": "前往"
         },
         "ui_description_autogen_prefix": {
             "enGB": "<i>[auto-generated]</i>\n",
             "frFR": "<i>[auto-généré]</i>\n",
-            "ruRU": "<i>[авто-генерация]</i>\n"
+            "ruRU": "<i>[авто-генерация]</i>\n",
+            "zhCN": "<i>[自动生成]</i>\n"
         },
         "ui_slot_armor": {
             "enGB": "Armor",
             "frFR": "Armure",
-            "ruRU": "Броня"
+            "ruRU": "Броня",
+            "zhCN": "护甲"
         },
         "ui_slot_shield": {
             "enGB": "Shield",
             "frFR": "Bouclier",
-            "ruRU": "Щит"
+            "ruRU": "Щит",
+            "zhCN": "盾牌"
         },
         "ui_slot_weapon": {
             "enGB": "Weapon",
             "frFR": "Arme",
-            "ruRU": "Оружие"
+            "ruRU": "Оружие",
+            "zhCN": "武器"
         },
         "ui_slot_belt": {
             "enGB": "Belt",
             "frFR": "Ceinture",
-            "ruRU": "Пояс"
+            "ruRU": "Пояс",
+            "zhCN": "腰带"
         },
         "ui_slot_body": {
             "enGB": "Body",
             "frFR": "Corps",
-            "ruRU": "Тело"
+            "ruRU": "Тело",
+            "zhCN": "身体"
         },
         "ui_slot_chest": {
             "enGB": "Chest",
             "frFR": "Torse",
-            "ruRU": "Грудь"
+            "ruRU": "Грудь",
+            "zhCN": "胸部"
         },
         "ui_slot_eyes": {
             "enGB": "Eyes",
             "frFR": "Yeux",
-            "ruRU": "Глаза"
+            "ruRU": "Глаза",
+            "zhCN": "眼部"
         },
         "ui_slot_feet": {
             "enGB": "Feet",
             "frFR": "Pieds",
-            "ruRU": "Ноги"
+            "ruRU": "Ноги",
+            "zhCN": "足部"
         },
         "ui_slot_gloves": {
             "enGB": "Hands",
             "frFR": "Mains",
-            "ruRU": "Руки"
+            "ruRU": "Руки",
+            "zhCN": "手部"
         },
         "ui_slot_head": {
             "enGB": "Head",
             "frFR": "Tête",
-            "ruRU": "Голова"
+            "ruRU": "Голова",
+            "zhCN": "头部"
         },
         "ui_slot_headband": {
             "enGB": "Headband",
             "frFR": "Bandeau",
-            "ruRU": "Ободок"
+            "ruRU": "Ободок",
+            "zhCN": "头带"
         },
         "ui_slot_neck": {
             "enGB": "Neck",
             "frFR": "Cou",
-            "ruRU": "Шея"
+            "ruRU": "Шея",
+            "zhCN": "颈部"
         },
         "ui_slot_shoulders": {
             "enGB": "Shoulders",
             "frFR": "Épaules",
-            "ruRU": "Плащ"
+            "ruRU": "Плащ",
+            "zhCN": "肩部"
         },
         "ui_slot_ring": {
             "enGB": "Ring",
             "frFR": "Anneau",
-            "ruRU": "Кольцо"
+            "ruRU": "Кольцо",
+            "zhCN": "戒指"
         },
         "ui_slot_wrist": {
             "enGB": "Wrists",
             "frFR": "Poignets",
-            "ruRU": "Наручи"
+            "ruRU": "Наручи",
+            "zhCN": "腕部"
         },
         "ui_slot_other": {
             "enGB": "Wondrous",
             "frFR": "Merveilleux",
-            "ruRU": "Прочее"
+            "ruRU": "Прочее",
+            "zhCN": "奇物"
         },
         "ui_btn_description": {
             "enGB": "Description",
             "frFR": "Description",
-            "ruRU": "Описание"
+            "ruRU": "Описание",
+            "zhCN": "描述"
         },
         "ui_umm_title": {
             "enGB": "Workshop Configuration",
             "frFR": "Configuration de la Forge",
-            "ruRU": "Конфигурация Кузницы"
+            "ruRU": "Конфигурация Кузницы",
+            "zhCN": "工坊配置"
         },
         "ui_umm_vanilla": {
             "enGB": "Workshop Interface (Vanilla)",
             "frFR": "Interface de l'Atelier (Vanilla)",
-            "ruRU": "Интерфейс Мастерской (Ванильный)"
+            "ruRU": "Интерфейс Мастерской (Ванильный)",
+            "zhCN": "工坊界面（原版风格）"
         },
         "ui_umm_imgui": {
             "enGB": "Enchantment Menu (IMGUI)",
             "frFR": "Menu d'enchantement (IMGUI)",
-            "ruRU": "Меню зачарования (IMGUI)"
+            "ruRU": "Меню зачарования (IMGUI)",
+            "zhCN": "附魔菜单 (IMGUI)"
         },
         "ui_umm_open_now": {
             "enGB": "Open Now",
             "frFR": "Ouvrir maintenant",
-            "ruRU": "Открыть сейчас"
+            "ruRU": "Открыть сейчас",
+            "zhCN": "立即打开"
         },
         "ui_umm_shortcut": {
             "enGB": "Shortcut",
             "frFR": "Raccourci",
-            "ruRU": "Клавиша"
+            "ruRU": "Клавиша",
+            "zhCN": "快捷键"
         },
         "ui_umm_window_width": {
             "enGB": "IMGUI Window Width",
             "frFR": "Largeur de la fenêtre IMGUI",
-            "ruRU": "Ширина окна IMGUI"
+            "ruRU": "Ширина окна IMGUI",
+            "zhCN": "IMGUI 窗口宽度"
         },
         "ui_umm_window_height": {
             "enGB": "IMGUI Window Height",
             "frFR": "Hauteur de la fenêtre IMGUI",
-            "ruRU": "Высота окна IMGUI"
+            "ruRU": "Высота окна IMGUI",
+            "zhCN": "IMGUI 窗口高度"
         },
         "ui_umm_scale_modifier": {
             "enGB": "Scale Modifier",
             "frFR": "Modificateur de scale",
-            "ruRU": "Модификатор масштаба"
+            "ruRU": "Модификатор масштаба",
+            "zhCN": "缩放倍率"
         },
         "ui_tooltip_magical_powers": {
             "enGB": "Magical Powers:",
             "frFR": "Pouvoirs magiques :",
-            "ruRU": "Магические свойства:"
+            "ruRU": "Магические свойства:",
+            "zhCN": "魔法能力："
         },
         "ui_abadar_warning_title": {
             "enGB": "<b><color=red>WARNING: CHEATS & EXPERIMENTAL OPTIONS</color></b>",
             "frFR": "<b><color=red>ATTENTION : OPTIONS DE TRICHE ET EXPÉRIMENTALES</color></b>",
-            "ruRU": "<b><color=red>ВНИМАНИЕ: ЧИТЫ И ЭКСПЕРИМЕНТАЛЬНЫЕ ОПЦИИ</color></b>"
+            "ruRU": "<b><color=red>ВНИМАНИЕ: ЧИТЫ И ЭКСПЕРИМЕНТАЛЬНЫЕ ОПЦИИ</color></b>",
+            "zhCN": "<b><color=red>警告：作弊与实验性选项</color></b>"
         },
         "ui_abadar_warning": {
             "enGB": "Abadar, god of law, commerce, and cities, watches you with severity.\n\nAre you sure you want to access this menu?\n\n\nSuch an action may cause severe imbalances in the global economy of your adventure.",
             "frFR": "Abadar, dieu des lois, du commerce et des cités, vous regarde avec sévérité.\n\nÊtes-vous certain de vouloir accéder à ce menu ?\n\n\nCela risque de provoquer de graves déséquilibres dans l'économie globale de votre aventure.",
-            "ruRU": "Абадар, бог законов, торговли и городов, сурово взирает на вас.\n\nВы уверены, что хотите войти в это меню?\n\n\nЭто может привести к серьезному дисбалансу в общей экономике вашего приключения."
+            "ruRU": "Абадар, бог законов, торговли и городов, сурово взирает на вас.\n\nВы уверены, что хотите войти в это меню?\n\n\nЭто может привести к серьезному дисбалансу в общей экономике вашего приключения.",
+            "zhCN": "法律、商业与城市之神阿巴达尔正严厉地注视着你。\n\n你确定要进入此菜单吗？\n\n\n此操作可能会严重破坏你冒险中的整体经济平衡。"
         },
         "ui_btn_yes_proceed": {
             "enGB": "Yes, Proceed",
             "frFR": "Oui, continuer",
-            "ruRU": "Да, продолжить"
+            "ruRU": "Да, продолжить",
+            "zhCN": "是，继续"
         },
         "ui_btn_no_cancel": {
             "enGB": "No, Go Back",
             "frFR": "Non, revenir en arrière",
-            "ruRU": "Нет, вернуться"
+            "ruRU": "Нет, вернуться",
+            "zhCN": "否，返回"
         },
         "ui_header_name": {
             "enGB": "Name",
             "frFR": "Nom",
-            "ruRU": "Имя"
+            "ruRU": "Имя",
+            "zhCN": "名称"
         },
         "ui_header_slot_affinity": {
             "enGB": "Slot Affinity",
             "frFR": "Affinité d'emplacement",
-            "ruRU": "Сродство к ячейке"
+            "ruRU": "Сродство к ячейке",
+            "zhCN": "部位契合度"
         },
         "ui_header_cost": {
             "enGB": "Cost / Time",
             "frFR": "Coût / Temps",
-            "ruRU": "Стоимость / Время"
+            "ruRU": "Стоимость / Время",
+            "zhCN": "费用 / 时间"
         },
         "ui_menu_create_potion": {
             "enGB": "Create Potion",
             "frFR": "Créer une Potion",
-            "ruRU": "Создать зелье"
+            "ruRU": "Создать зелье",
+            "zhCN": "制作药水"
         },
         "ui_page_forge_title": {
             "enGB": "{0}",
             "frFR": "{0}",
-            "ruRU": "{0}"
+            "ruRU": "{0}",
+            "zhCN": "{0}"
         },
         "ui_page_magic_title": {
             "enGB": "{0}",
             "frFR": "{0}",
-            "ruRU": "{0}"
+            "ruRU": "{0}",
+            "zhCN": "{0}"
         },
         "ui_no_items_found": {
             "enGB": "No items found. Please run a scan.",
             "frFR": "Aucun objet trouvé. Veuillez lancer un scan.",
-            "ruRU": "Предметы не найдены. Пожалуйста, запустите сканирование."
+            "ruRU": "Предметы не найдены. Пожалуйста, запустите сканирование.",
+            "zhCN": "未找到任何物品。请运行扫描。"
         },
         "ui_btn_buy": {
             "enGB": "BUY",
             "frFR": "ACHETER",
-            "ruRU": "КУПИТЬ"
+            "ruRU": "КУПИТЬ",
+            "zhCN": "购买"
         },
         "ui_spell_level": {
             "enGB": "Spell Level",
             "frFR": "Niveau de sort",
-            "ruRU": "Уровень заклинания"
+            "ruRU": "Уровень заклинания",
+            "zhCN": "法术等级"
         },
         "ui_caster_level": {
             "enGB": "Caster Level",
             "frFR": "Niveau de lanceur",
-            "ruRU": "Уровень заклинателя"
+            "ruRU": "Уровень заклинателя",
+            "zhCN": "施法者等级"
         },
         "ui_total_cost": {
             "enGB": "Total Cost",
             "frFR": "Coût Total",
-            "ruRU": "Общая стоимость"
+            "ruRU": "Общая стоимость",
+            "zhCN": "总费用"
         },
         "ui_craft_button": {
             "enGB": "CRAFT",
             "frFR": "FABRIQUER",
-            "ruRU": "СОЗДАТЬ"
+            "ruRU": "СОЗДАТЬ",
+            "zhCN": "制作"
         },
         "ui_menu_weapon_workshop": {
             "enGB": "Weapon Workshop",
             "frFR": "Atelier d'Armes",
-            "ruRU": "Мастерская оружия"
+            "ruRU": "Мастерская оружия",
+            "zhCN": "武器工坊"
         },
         "ui_menu_armor_workshop": {
             "enGB": "Armor Workshop",
             "frFR": "Atelier d'Armures",
-            "ruRU": "Мастерская доспехов"
+            "ruRU": "Мастерская доспехов",
+            "zhCN": "护甲工坊"
         },
         "ui_menu_accessory_workshop": {
             "enGB": "Accessory Workshop",
             "frFR": "Atelier d'Accessoires",
-            "ruRU": "Мастерская аксессуаров"
+            "ruRU": "Мастерская аксессуаров",
+            "zhCN": "饰品工坊"
         },
         "ui_item_cost": {
             "enGB": "Cost: {0} GP",
             "frFR": "Coût : {0} po",
-            "ruRU": "Цена: {0} gp"
+            "ruRU": "Цена: {0} gp",
+            "zhCN": "费用：{0} 金币"
         },
         "ui_success_purchased": {
             "enGB": "<color=green>Success!</color> Purchased: {0}",
             "frFR": "<color=green>Succès !</color> Acheté : {0}",
-            "ruRU": "<color=green>Успех!</color> Куплено: {0}"
+            "ruRU": "<color=green>Успех!</color> Куплено: {0}",
+            "zhCN": "<color=green>成功！</color> 已购买：{0}"
         },
         "ui_err_not_enough_gold_need": {
             "enGB": "<color=red>Not enough gold!</color> (Need {0} GP)",
             "frFR": "<color=red>Pas assez d'or !</color> (Besoin de {0} po)",
-            "ruRU": "<color=red>Недостаточно золота!</color> (Требуется {0} gp)"
+            "ruRU": "<color=red>Недостаточно золота!</color> (Требуется {0} gp)",
+            "zhCN": "<color=red>金币不足！</color>（需要 {0} 金币）"
         },
         "ui_menu_wand_workshop": {
             "enGB": "Wand Workshop",
             "frFR": "Atelier de Baguettes",
-            "ruRU": "Мастерская палочек"
+            "ruRU": "Мастерская палочек",
+            "zhCN": "魔杖工坊"
         },
         "ui_menu_potion_workshop": {
             "enGB": "Potion Workshop",
             "frFR": "Atelier de Potions",
-            "ruRU": "Мастерская зелий"
+            "ruRU": "Мастерская зелий",
+            "zhCN": "药水工坊"
         },
         "ui_menu_scroll_workshop": {
             "enGB": "Scroll Workshop",
             "frFR": "Atelier de Parchemins",
-            "ruRU": "Мастерская свитков"
+            "ruRU": "Мастерская свитков",
+            "zhCN": "卷轴工坊"
         },
         "ui_lvl_format": {
             "enGB": "Lvl {0} - {1}",
             "frFR": "Niv {0} - {1}",
-            "ruRU": "Ур. {0} - {1}"
+            "ruRU": "Ур. {0} - {1}",
+            "zhCN": "{0}环 - {1}"
         },
         "ui_err_rod_not_found": {
             "enGB": "<color=red><b>ERROR:</b> Metamagic Rod model (007) not found.</color>",
             "frFR": "<color=red><b>ERREUR :</b> Modèle de Sceptre métamagique (007) non trouvé.</color>",
-            "ruRU": "<color=red><b>ОШИБКА:</b> Модель метамагического жезла (007) не найдена.</color>"
+            "ruRU": "<color=red><b>ОШИБКА:</b> Модель метамагического жезла (007) не найдена.</color>",
+            "zhCN": "<color=red><b>错误：</b>未找到超魔权杖模型 (007)。</color>"
         },
         "ui_err_check_config": {
             "enGB": "Ensure CustomEnchants.json is correctly loaded and contains ID 007.",
             "frFR": "Assurez-vous que CustomEnchants.json est correctement chargé et contient l'ID 007.",
-            "ruRU": "Убедитесь, что CustomEnchants.json правильно загружен и содержит ID 007."
+            "ruRU": "Убедитесь, что CustomEnchants.json правильно загружен и содержит ID 007.",
+            "zhCN": "请确保 CustomEnchants.json 已正确加载并包含 ID 007。"
         },
         "ui_btn_force_reload": {
             "enGB": "Force Reload Config",
             "frFR": "Forcer le rechargement de la config",
-            "ruRU": "Принудительная перезагрузка конфигурации"
+            "ruRU": "Принудительная перезагрузка конфигурации",
+            "zhCN": "强制重载配置"
         },
         "ui_available_spells": {
             "enGB": "Available Spells:",
             "frFR": "Sorts disponibles :",
-            "ruRU": "Доступные заклинания:"
+            "ruRU": "Доступные заклинания:",
+            "zhCN": "可用法术："
         },
         "ui_configuration": {
             "enGB": "Configuration:",
             "frFR": "Configuration :",
-            "ruRU": "Конфигурация:"
+            "ruRU": "Конфигурация:",
+            "zhCN": "配置："
         },
         "ui_school": {
             "enGB": "School",
             "frFR": "École",
-            "ruRU": "Школа"
+            "ruRU": "Школа",
+            "zhCN": "学派"
         },
         "ui_classes": {
             "enGB": "Classes",
             "frFR": "Classes",
-            "ruRU": "Классы"
+            "ruRU": "Классы",
+            "zhCN": "职业"
         },
         "ui_btn_craft_scroll": {
             "enGB": "CRAFT SCROLL",
             "frFR": "FABRIQUER PARCHEMIN",
-            "ruRU": "СОЗДАТЬ СВИТОК"
+            "ruRU": "СОЗДАТЬ СВИТОК",
+            "zhCN": "制作卷轴"
         },
         "ui_success_created": {
             "enGB": "<color=green>Success!</color> Created: {0}",
             "frFR": "<color=green>Succès !</color> Créé : {0}",
-            "ruRU": "<color=green>Успех!</color> Создано: {0}"
+            "ruRU": "<color=green>Успех!</color> Создано: {0}",
+            "zhCN": "<color=green>成功！</color> 已制作：{0}"
         },
         "ui_select_spell_hint": {
             "enGB": "Select a spell from the list to begin.",
             "frFR": "Sélectionnez un sort dans la liste pour commencer.",
-            "ruRU": "Выберите заклинание из списка, чтобы начать."
+            "ruRU": "Выберите заклинание из списка, чтобы начать.",
+            "zhCN": "从列表中选择一个法术以开始。"
         },
         "ui_filter_all": {
             "enGB": "Show All",
             "frFR": "Tout afficher",
-            "ruRU": "Показать всё"
+            "ruRU": "Показать всё",
+            "zhCN": "显示全部"
         },
         "ui_no_item_match": {
             "enGB": "(No items match the current filters)",
             "frFR": "(Aucun objet ne correspond aux filtres)",
-            "ruRU": "(Нет предметов, соответствующих фильтрам)"
+            "ruRU": "(Нет предметов, соответствующих фильтрам)",
+            "zhCN": "(没有物品符合当前筛选条件)"
         },
         "ui_selection_total_summary": {
             "enGB": "Selection: +{0} \u2014 Total: {1} gp / ~{2} d",
             "frFR": "Sélection : +{0} \u2014 Total : {1} po / ~{2} j",
-            "ruRU": "Выбор: +{0} \u2014 Всего: {1} gp / ~{2} дн."
+            "ruRU": "Выбор: +{0} \u2014 Всего: {1} gp / ~{2} дн.",
+            "zhCN": "选择：+{0} — 总计：{1} 金币 / 约 {2} 天"
         },
         "ui_metamagic_slot": {
             "enGB": "Slot",
             "frFR": "Emplacement",
-            "ruRU": "Слот"
+            "ruRU": "Слот",
+            "zhCN": "部位"
         },
         "ui_btn_add_metamagic": {
             "enGB": "Add Metamagic",
             "frFR": "Ajouter métamagie",
-            "ruRU": "Добавить метамагию"
+            "ruRU": "Добавить метамагию",
+            "zhCN": "添加超魔"
         },
         "ui_btn_create_item": {
             "enGB": "Craft this item",
             "frFR": "Fabriquer cet objet",
-            "ruRU": "Создать этот предмет"
+            "ruRU": "Создать этот предмет",
+            "zhCN": "制作此物品"
         },
         "ui_section_basics": {
             "enGB": "Basic Parameters",
             "frFR": "Paramètres de base",
-            "ruRU": "Основные параметры"
+            "ruRU": "Основные параметры",
+            "zhCN": "基础参数"
         },
         "ui_section_metamagic": {
             "enGB": "Metamagic Configuration",
             "frFR": "Configuration de la Métamagie",
-            "ruRU": "Настройка метамагии"
+            "ruRU": "Настройка метамагии",
+            "zhCN": "超魔配置"
         },
         "ui_param_element": {
             "enGB": "Element",
             "frFR": "Élément",
-            "ruRU": "Стихия"
+            "ruRU": "Стихия",
+            "zhCN": "元素"
         },
         "ui_param_value": {
             "enGB": "Value",
             "frFR": "Valeur",
-            "ruRU": "Значение"
+            "ruRU": "Значение",
+            "zhCN": "数值"
         },
         "ui_param_bonus": {
             "enGB": "Bonus",
             "frFR": "Bonus",
-            "ruRU": "Бонус"
+            "ruRU": "Бонус",
+            "zhCN": "加值"
         },
         "ui_param_stat": {
             "enGB": "Stat",
             "frFR": "Statistique",
-            "ruRU": "Характеристика"
+            "ruRU": "Характеристика",
+            "zhCN": "属性"
         },
         "ui_param_descriptor": {
             "enGB": "Descriptor",
             "frFR": "Type de bonus",
-            "ruRU": "Тип бонуса"
+            "ruRU": "Тип бонуса",
+            "zhCN": "描述符"
         },
         "ui_param_metamagic": {
             "enGB": "Metamagic",
             "frFR": "Métamagie",
-            "ruRU": "Метамагия"
+            "ruRU": "Метамагия",
+            "zhCN": "超魔"
         },
         "ui_param_grade": {
             "enGB": "Grade",
             "frFR": "Puissance",
-            "ruRU": "Ранг"
+            "ruRU": "Ранг",
+            "zhCN": "品阶"
         },
         "ui_param_charges": {
             "enGB": "Charges",
             "frFR": "Charges",
-            "ruRU": "Заряды"
+            "ruRU": "Заряды",
+            "zhCN": "使用次数"
         },
         "ui_param_heighten_level": {
             "enGB": "Heighten level",
             "frFR": "Niveau de Quintessence",
-            "ruRU": "Уровень метамагии"
+            "ruRU": "Уровень метамагии",
+            "zhCN": "升阶环阶"
         },
         "ui_param_metamagic2": {
             "enGB": "Metamagic 2",
             "frFR": "Métamagie 2",
-            "ruRU": "Метамагия 2"
+            "ruRU": "Метамагия 2",
+            "zhCN": "超魔 2"
         },
         "ui_param_metamagic3": {
             "enGB": "Metamagic 3",
             "frFR": "Métamagie 3",
-            "ruRU": "Метамагия 3"
+            "ruRU": "Метамагия 3",
+            "zhCN": "超魔 3"
         },
         "ui_param_school": {
             "enGB": "School",
             "frFR": "École",
-            "ruRU": "Школа"
+            "ruRU": "Школа",
+            "zhCN": "学派"
         },
         "ui_param_type": {
             "enGB": "Type",
             "frFR": "Type",
-            "ruRU": "Тип"
+            "ruRU": "Тип",
+            "zhCN": "类型"
         },
         "ui_param_alignment": {
             "enGB": "Alignment",
             "frFR": "Alignement",
-            "ruRU": "Мировоззрение"
+            "ruRU": "Мировоззрение",
+            "zhCN": "阵营"
         },
         "ui_param_bonusdc": {
             "enGB": "Bonus DC",
             "frFR": "Bonus au DD",
-            "ruRU": "Бонус к сложности"
+            "ruRU": "Бонус к сложности",
+            "zhCN": "DC加值"
         },
         "ui_param_range": {
             "enGB": "Range",
             "frFR": "Portée",
-            "ruRU": "Дистанция"
+            "ruRU": "Дистанция",
+            "zhCN": "距离"
         },
         "ui_enum_strength": {
             "enGB": "Strength",
             "frFR": "Force",
-            "ruRU": "Сила"
+            "ruRU": "Сила",
+            "zhCN": "力量"
         },
         "ui_enum_dexterity": {
             "enGB": "Dexterity",
             "frFR": "Dextérité",
-            "ruRU": "Ловкость"
+            "ruRU": "Ловкость",
+            "zhCN": "敏捷"
         },
         "ui_enum_constitution": {
             "enGB": "Constitution",
             "frFR": "Constitution",
-            "ruRU": "Выносливость"
+            "ruRU": "Выносливость",
+            "zhCN": "体质"
         },
         "ui_enum_intelligence": {
             "enGB": "Intelligence",
             "frFR": "Intelligence",
-            "ruRU": "Интеллект"
+            "ruRU": "Интеллект",
+            "zhCN": "智力"
         },
         "ui_enum_wisdom": {
             "enGB": "Wisdom",
             "frFR": "Sagesse",
-            "ruRU": "Мудрость"
+            "ruRU": "Мудрость",
+            "zhCN": "感知"
         },
         "ui_enum_charisma": {
             "enGB": "Charisma",
             "frFR": "Charisme",
-            "ruRU": "Харизма"
+            "ruRU": "Харизма",
+            "zhCN": "魅力"
         },
         "ui_enum_ac": {
             "enGB": "AC",
             "frFR": "CA",
-            "ruRU": "КБ"
+            "ruRU": "КБ",
+            "zhCN": "AC"
         },
         "ui_enum_none": {
             "enGB": "None",
             "frFR": "Aucun(e)",
-            "ruRU": "Нет"
+            "ruRU": "Нет",
+            "zhCN": "无"
         },
         "ui_configuring_model": {
             "enGB": "Configuring: <b>{0}</b>",
             "frFR": "Configuration : <b>{0}</b>",
-            "ruRU": "Настройка: <b>{0}</b>"
+            "ruRU": "Настройка: <b>{0}</b>",
+            "zhCN": "正在配置：<b>{0}</b>"
         },
         "ui_btn_dump_all": {
             "enGB": "Dump Base Items for Analysis (ModPath/Dumps/)",
             "frFR": "Dump des Items de Base pour Analyse (ModPath/Dumps/)",
-            "ruRU": "Дамп базовых предметов для анализа (ModPath/Dumps/)"
+            "ruRU": "Дамп базовых предметов для анализа (ModPath/Dumps/)",
+            "zhCN": "转储基础物品用于分析 (ModPath/Dumps/)"
         },
         "ui_feedback_dump_done": {
             "enGB": "Base items dump finished! Check the 'Dumps' folder in mod directory.",
             "frFR": "Export des items de base terminé ! Consultez le dossier 'Dumps' dans le répertoire du mod.",
-            "ruRU": "Дамп базовых предметов завершен! Проверьте папку 'Dumps' в каталоге мода."
+            "ruRU": "Дамп базовых предметов завершен! Проверьте папку 'Dumps' в каталоге мода.",
+            "zhCN": "基础物品导出完成！请查看 Mod 目录中的 'Dumps' 文件夹。"
         },
         "ui_btn_auto_name": {
             "enGB": "Auto",
             "frFR": "Auto",
-            "ruRU": "Авто"
+            "ruRU": "Авто",
+            "zhCN": "自动"
         },
         "ui_btn_buy_inventory": {
             "enGB": "INVENTORY",
             "frFR": "INVENTAIRE",
-            "ruRU": "ИНВЕНТАРЬ"
+            "ruRU": "ИНВЕНТАРЬ",
+            "zhCN": "背包"
         },
         "ui_btn_buy_workshop": {
             "enGB": "WORKSHOP",
             "frFR": "ATELIER",
-            "ruRU": "МАСТЕРСКАЯ"
+            "ruRU": "МАСТЕРСКАЯ",
+            "zhCN": "工坊"
         },
         "ui_btn_cancel": {
             "enGB": "Cancel",
             "frFR": "Annuler",
-            "ruRU": "Отмена"
+            "ruRU": "Отмена",
+            "zhCN": "取消"
         },
         "ui_btn_primary_weapon": {
             "enGB": "Primary Weapon",
             "frFR": "Arme principale",
-            "ruRU": "Основное оружие"
+            "ruRU": "Основное оружие",
+            "zhCN": "主手武器"
         },
         "ui_btn_rename_action": {
             "enGB": "Rename",
             "frFR": "Renommer",
-            "ruRU": "Переименовать"
+            "ruRU": "Переименовать",
+            "zhCN": "重命名"
         },
         "ui_btn_secondary_weapon": {
             "enGB": "Secondary Weapon",
             "frFR": "Arme secondaire",
-            "ruRU": "Вторичное оружие"
+            "ruRU": "Вторичное оружие",
+            "zhCN": "副手武器"
         },
         "ui_double_weapon_choice": {
             "enGB": "Double weapons are considered as 2 distinct weapons, choose which part you want to enchant",
             "frFR": "Le jeu considère que les armes doubles sont 2 armes distinctes, choisissez quelle partie souhaitez-vous enchanter",
-            "ruRU": "Двойное оружие считается как 2 разных оружия, выберите, какую часть вы хотите зачаровать"
+            "ruRU": "Двойное оружие считается как 2 разных оружия, выберите, какую часть вы хотите зачаровать",
+            "zhCN": "双头武器被视为两把独立的武器，请选择你想附魔的部分"
         },
         "ui_enhancement_level": {
             "enGB": "Enhancement Level:",
             "frFR": "Niveau d'altération :",
-            "ruRU": "Уровень усиления:"
+            "ruRU": "Уровень усиления:",
+            "zhCN": "增强等级："
         },
         "ui_gp_format": {
             "enGB": "<color=yellow>{0} GP</color>",
             "frFR": "<color=yellow>{0} po</color>",
-            "ruRU": "<color=yellow>{0} gp</color>"
+            "ruRU": "<color=yellow>{0} gp</color>",
+            "zhCN": "<color=yellow>{0} 金币</color>"
         },
         "ui_success_purchased_box": {
             "enGB": "<color=green>Success!</color> {0} added to workshop.",
             "frFR": "<color=green>Succès !</color> {0} ajouté à l'établi.",
-            "ruRU": "<color=green>Успех!</color> {0} добавлен в мастерскую."
+            "ruRU": "<color=green>Успех!</color> {0} добавлен в мастерскую.",
+            "zhCN": "<color=green>成功！</color> {0} 已添加至工坊。"
         },
         "ui_success_purchased_inv": {
             "enGB": "<color=green>Success!</color> {0} added to inventory.",
             "frFR": "<color=green>Succès !</color> {0} ajouté à l'inventaire.",
-            "ruRU": "<color=green>Успех!</color> {0} добавлен в инвентарь."
+            "ruRU": "<color=green>Успех!</color> {0} добавлен в инвентарь.",
+            "zhCN": "<color=green>成功！</color> {0} 已添加至背包。"
         },
         "ui_epic_tag": {
             "enGB": " (Epic)",
             "frFR": " (Épique)",
-            "ruRU": " (Эпик)"
+            "ruRU": " (Эпик)",
+            "zhCN": " (史诗)"
         },
         "ui_settings_models_loaded": {
             "enGB": "Custom Models Loaded: {0}",
             "frFR": "Modèles personnalisés chargés : {0}",
-            "ruRU": "Загружено пользовательских моделей: {0}"
+            "ruRU": "Загружено пользовательских моделей: {0}",
+            "zhCN": "已加载自定义模型：{0}"
         },
         "ui_err_generate_item": {
             "enGB": "Error: Could not generate item data.",
             "frFR": "Erreur : Impossible de générer les données de l'objet.",
-            "ruRU": "Ошибка: не удалось сгенерировать данные предмета."
+            "ruRU": "Ошибка: не удалось сгенерировать данные предмета.",
+            "zhCN": "错误：无法生成物品数据。"
         },
         "ui_param_maxlevel": {
             "enGB": "Max Spell Level",
             "frFR": "Niveau sort max.",
-            "ruRU": "Макс. уровень заклинания"
+            "ruRU": "Макс. уровень заклинания",
+            "zhCN": "最大法术环阶"
         },
         "ui_param_metamagic": {
             "enGB": "Metamagic",
             "frFR": "Métamagie",
-            "ruRU": "Метамагия"
+            "ruRU": "Метамагия",
+            "zhCN": "超魔"
         },
         "ui_charges": {
             "enGB": "Charges",
             "frFR": "Charges",
-            "ruRU": "Заряды"
+            "ruRU": "Заряды",
+            "zhCN": "使用次数"
         },
         "ui_category": {
             "enGB": "Category",
             "frFR": "Catégorie",
-            "ruRU": "Категория"
+            "ruRU": "Категория",
+            "zhCN": "类别"
         },
         "ui_cat_all": {
             "enGB": "All",
             "frFR": "Toutes",
-            "ruRU": "Все"
+            "ruRU": "Все",
+            "zhCN": "全部"
         },
         "ui_cat_ring": {
             "enGB": "Rings",
             "frFR": "Anneaux",
-            "ruRU": "Кольца"
+            "ruRU": "Кольца",
+            "zhCN": "戒指"
         },
         "ui_cat_neck_amulet": {
             "enGB": "Necklaces & Amulets",
             "frFR": "Colliers & Amulettes",
-            "ruRU": "Ожерелья и Амулеты"
+            "ruRU": "Ожерелья и Амулеты",
+            "zhCN": "项链与护身符"
         },
         "ui_cat_belt": {
             "enGB": "Belts",
             "frFR": "Ceintures",
-            "ruRU": "Пояса"
+            "ruRU": "Пояса",
+            "zhCN": "腰带"
         },
         "ui_cat_boots": {
             "enGB": "Boots",
             "frFR": "Bottes",
-            "ruRU": "Сапоги"
+            "ruRU": "Сапоги",
+            "zhCN": "靴子"
         },
         "ui_cat_gloves": {
             "enGB": "Gloves",
             "frFR": "Gants",
-            "ruRU": "Перчатки"
+            "ruRU": "Перчатки",
+            "zhCN": "手套"
         },
         "ui_cat_glasses": {
             "enGB": "Glasses & Goggles",
             "frFR": "Lunettes & Visières",
-            "ruRU": "Очки и Линзы"
+            "ruRU": "Очки и Линзы",
+            "zhCN": "眼镜与护目镜"
         },
         "ui_cat_helmet_headband": {
             "enGB": "Helmets & Headbands",
             "frFR": "Casques & Bandeaux",
-            "ruRU": "Шлемы и Ободки"
+            "ruRU": "Шлемы и Ободки",
+            "zhCN": "头盔与头带"
         },
         "ui_cat_cape": {
             "enGB": "Capes & Cloaks",
             "frFR": "Capes & Manteaux",
-            "ruRU": "Плащи и Накидки"
+            "ruRU": "Плащи и Накидки",
+            "zhCN": "斗篷与披风"
         },
         "ui_cat_bracers": {
             "enGB": "Bracers",
             "frFR": "Bracelets & Brassards",
-            "ruRU": "Наручи"
+            "ruRU": "Наручи",
+            "zhCN": "护腕"
         },
         "ui_cat_robe": {
             "enGB": "Robes & Shirts",
             "frFR": "Robes & Chemises",
-            "ruRU": "Мантии и Рубашки"
+            "ruRU": "Мантии и Рубашки",
+            "zhCN": "长袍与衬衫"
         },
         "ui_item_blank_belt_name": {
             "enGB": "Simple Belt",
             "frFR": "Ceinture simple",
-            "ruRU": "Простой пояс"
+            "ruRU": "Простой пояс",
+            "zhCN": "简易腰带"
         },
         "ui_item_blank_belt_desc": {
             "enGB": "A simple, non-magical leather belt, ready for custom enchantments.",
             "frFR": "Une ceinture en cuir simple et non magique, prête à recevoir des enchantements personnalisés.",
-            "ruRU": "Простой немагический кожаный пояс, готовый к наложению особых зачарований."
+            "ruRU": "Простой немагический кожаный пояс, готовый к наложению особых зачарований.",
+            "zhCN": "一条普通的非魔法皮质腰带，已准备好接受自定义附魔。"
         },
         "ui_item_blank_gloves_name": {
             "enGB": "Simple Gloves",
             "frFR": "Gants simples",
-            "ruRU": "Простые перчатки"
+            "ruRU": "Простые перчатки",
+            "zhCN": "简易手套"
         },
         "ui_item_blank_gloves_desc": {
             "enGB": "Simple, non-magical leather gloves, ready for custom enchantments.",
             "frFR": "Des gants en cuir simples et non magiques, prêts à recevoir des enchantements personnalisés.",
-            "ruRU": "Простые немагические кожаные перчатки, готовые к наложению особых зачарований."
+            "ruRU": "Простые немагические кожаные перчатки, готовые к наложению особых зачарований.",
+            "zhCN": "一副普通的非魔法皮质手套，已准备好接受自定义附魔。"
         },
         "ui_item_blank_glasses_name": {
             "enGB": "Simple Goggles",
             "frFR": "Lunettes simples",
-            "ruRU": "Простые очки"
+            "ruRU": "Простые очки",
+            "zhCN": "简易护目镜"
         },
         "ui_item_blank_glasses_desc": {
             "enGB": "Simple, non-magical lenses, ready for custom enchantments.",
             "frFR": "Des lunettes simples et non magiques, prêtes à recevoir des enchantements personnalisés.",
-            "ruRU": "Простые немагические очки, готовые к наложению особых зачарований."
+            "ruRU": "Простые немагические очки, готовые к наложению особых зачарований.",
+            "zhCN": "一副普通的非魔法镜片，已准备好接受自定义附魔。"
+        },
+        "ui_spellcasting_desc": {
+            "enGB": "Grants the wielder the ability to cast the spell <b>{0}</b> <b>{1}</b> times per day (Caster Level <b>{2}</b>, DC <b>{3}</b>).",
+            "frFR": "Confère la capacité de lancer le sort <b>{0}</b> <b>{1}</b> fois par jour (Niveau de lanceur : <b>{2}</b>, DD : <b>{3}</b>).",
+            "ruRU": "Дарует возможность разыгрывать заклинание <b>{0}</b> <b>{1}</b> раз в день (Уровень заклинателя <b>{2}</b>, СЛ <b>{3}</b>).",
+            "zhCN": "赋予佩戴者每日 <b>{1}</b> 次施放法术 <b>{0}</b> 的能力（施法者等级 <b>{2}</b>，DC <b>{3}</b>）。"
+        },
+        "ui_spellcasting_name": {
+            "enGB": "{0} ({1}/day, CL {2}, DC {3})",
+            "frFR": "{0} ({1}/jour, NLS {2}, DD {3})",
+            "ruRU": "{0} ({1}/день, УКС {2}, СЛ {3})",
+            "zhCN": "{0}（{1}次/天，CL {2}，DC {3}）"
+        },
+        "ui_blank_suffix": {
+            "enGB": " (Blank)",
+            "frFR": " (Vierge)",
+            "ruRU": " (Чистый)",
+            "zhCN": "（空白）"
+        },
+        "ui_blank_desc": {
+            "enGB": "A simple, non-magical accessory, ready for custom enchantments.",
+            "frFR": "Un accessoire simple et non magique, prêt à recevoir des enchantements personnalisés.",
+            "ruRU": "Простой немагический аксессуар, готовый к наложению зачарований.",
+            "zhCN": "一件简单、非魔法的饰品，可用于附加自定义附魔。"
         }
     }
 }

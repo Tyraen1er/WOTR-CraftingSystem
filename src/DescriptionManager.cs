@@ -131,20 +131,7 @@ namespace CraftingSystem
             int cl = paramValues.Count > 6 ? paramValues[6] : 1;
             int dc = paramValues.Count > 8 ? paramValues[8] : 10;
 
-            string currentLocale = LocalizationManager.CurrentLocale.ToString();
-            
-            if (currentLocale == "frFR")
-            {
-                return $"Confère la capacité de lancer le sort <b>{spellName}</b> <b>{charges}</b> fois par jour (Niveau de lanceur : <b>{cl}</b>, DD : <b>{dc}</b>).";
-            }
-            else if (currentLocale == "ruRU")
-            {
-                return $"Дарует возможность разыгрывать заклинание <b>{spellName}</b> <b>{charges}</b> раз в день (Уровень заклинателя <b>{cl}</b>, СЛ <b>{dc}</b>).";
-            }
-            else
-            {
-                return $"Grants the wielder the ability to cast the spell <b>{spellName}</b> <b>{charges}</b> times per day (Caster Level <b>{cl}</b>, DC <b>{dc}</b>).";
-            }
+            return string.Format(Helpers.GetString("ui_spellcasting_desc", "Grants the wielder the ability to cast the spell <b>{0}</b> <b>{1}</b> times per day (Caster Level <b>{2}</b>, DC <b>{3}</b>)."), spellName, charges, cl, dc);
         }
 
         private static string GenerateSpellcastingDisplayName(List<int> paramValues)
@@ -163,20 +150,7 @@ namespace CraftingSystem
             int cl = paramValues.Count > 6 ? paramValues[6] : 1;
             int dc = paramValues.Count > 8 ? paramValues[8] : 10;
 
-            string currentLocale = LocalizationManager.CurrentLocale.ToString();
-            
-            if (currentLocale == "frFR")
-            {
-                return $"{spellName} ({charges}/jour, NLS {cl}, DD {dc})";
-            }
-            else if (currentLocale == "ruRU")
-            {
-                return $"{spellName} ({charges}/день, УКС {cl}, СЛ {dc})";
-            }
-            else
-            {
-                return $"{spellName} ({charges}/day, CL {cl}, DC {dc})";
-            }
+            return string.Format(Helpers.GetString("ui_spellcasting_name", "{0} ({1}/day, CL {2}, DC {3})"), spellName, charges, cl, dc);
         }
     }
 }

@@ -14,7 +14,7 @@ Write-Host "[2/4] Validate ModConfig/CustomEnchants.json..." -ForegroundColor Ye
 Get-Content "ModConfig/CustomEnchants.json" -Raw | ConvertFrom-Json | Out-Null
 
 Write-Host "[3/4] Validate ModConfig/Localization.json..." -ForegroundColor Yellow
-Get-Content "ModConfig/Localization.json" -Raw | ConvertFrom-Json | Out-Null
+Get-Content "ModConfig/Localization.json" -Raw -Encoding UTF8 | ConvertFrom-Json | Out-Null
 
 Write-Host "[4/4] Validate JSON formulas..." -ForegroundColor Yellow
 python validate_enchantment_formulas.py
